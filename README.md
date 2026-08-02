@@ -6,7 +6,7 @@ El proyecto integra datos reales de movilidad (Encuesta de Movilidad de Bogotá 
 
 ## Equipo
 
-| Integrante | 
+| Integrantes | 
 |---|
 | Samuel Esteban Campos |
 | Erick Salazar Suárez |
@@ -18,18 +18,22 @@ El proyecto integra datos reales de movilidad (Encuesta de Movilidad de Bogotá 
 ## Estructura del repositorio
 
 src/pipeline/ → Módulos del pipeline ETL (extracción, transformación, carga)
+
 src/simulation/ → Scripts de configuración y ejecución de SUMO
+
 tests/ → Pruebas unitarias (pytest)
+
 data/raw/ → Datos originales (enlace a Drive, no versionados)
+
 data/processed/ → Archivos SUMO generados (.net.xml, .od, .rou.xml, .vtype.xml)
+
 docs/ → SPMP, SRS, SDD, Plan de Pruebas, Informe Final
+
 notebooks/ → Exploración de datos (Jupyter)
 
 ## Instalación
 
 ```bash
-git clone https://github.com/<usuario>/movilidad-sumo-usaquen.git
-cd movilidad-sumo-usaquen
 python3 -m venv venv
 source venv/bin/activate       # En Windows: venv\Scripts\activate
 pip install -r requirements.txt
