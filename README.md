@@ -41,6 +41,22 @@ pip install -r requirements.txt
 
 Requiere además tener instalado **SUMO 1.19+** ([sumo.dlr.de](https://sumo.dlr.de/docs/Downloads.php)) con `netconvert` y `duarouter` disponibles en el PATH.
 
+## Ejecutar pruebas
+
+El proyecto usa `pytest` para pruebas unitarias. Con el entorno virtual activado:
+
+```bash
+pytest tests/
+```
+
+Para ver también el porcentaje de cobertura de código:
+
+```bash
+pytest tests/ --cov=src --cov-report=term-missing
+```
+
+Las pruebas se ejecutan automáticamente en cada `push` o `pull request` mediante GitHub Actions (ver `.github/workflows/tests.yml`). El resultado de cada ejecución puede consultarse en la pestaña **Actions** del repositorio.
+
 ## Metodología
 
 El proyecto sigue un modelo de ciclo de vida híbrido: **CRISP-DM** para las fases de datos (Fase 1-2) y **Scrum** para la construcción del escenario de simulación (Fase 3), 
