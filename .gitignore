@@ -1,0 +1,19 @@
+# Datos (no se versionan, van en Google Drive)
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# Entorno Python
+venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+
+# SUMO
+*.xml.bak
+
+# Sistema
+.DS_Store
+.vscode/
+.idea/
