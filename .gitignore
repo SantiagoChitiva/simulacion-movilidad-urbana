@@ -23,5 +23,6 @@ __pycache__/
 *.egg-info/
 
 # Cache
+**/cache/
 **/.cache/
 **/.ipynb_checkpoints/
