@@ -19,7 +19,7 @@ __pycache__/
 .vscode/
 .idea/
 
-# *.egg-info directorio compilado resulado del pyproject.toml
+# *.egg-info directorio compilado resultado del pyproject.toml
 *.egg-info/
 
 # Cache
