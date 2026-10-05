@@ -6,7 +6,10 @@ from fastapi import Depends, FastAPI, HTTPException, Query
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field, model_validator
 
-from etl.sumo.configuration import DEFAULT_SCENARIO, MAX_VIAJES, ScenarioPaths
+from etl.sumo.configuration import CACHE_DIR, DEFAULT_SCENARIO, MAX_VIAJES, ScenarioPaths
+from etl.sumo.intersecciones import (
+    HORAS_VENTANA, Semaforo, a_feature, catalogo, con_volumenes, volumenes,
+)
 from etl.sumo.demanda import (
     INFO_MODOS, PRESETS, DemandaConfig, Preset, cargar_dia, cargar_ventana, conteos_preset,
 )
@@ -119,6 +122,16 @@ def crear_simulacion(solicitud: SolicitudSimulacion, gestor: Gestor) -> dict:
     return asdict(gestor.crear(demanda, solicitud.semilla))
 
 
+@app.post("/simulaciones/{run_id}/cancelar", status_code=202)
+def cancelar_simulacion(run_id: str, gestor: Gestor) -> dict:
+    """Cancela una simulación en cola o en curso; borra sus archivos salvo el estado."""
+    _corrida(gestor, run_id)
+    try:
+        return asdict(gestor.cancelar(run_id))
+    except ValueError as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
+
+
 @app.get("/simulaciones")
 def listar_simulaciones(gestor: Gestor) -> list[dict]:
     return [asdict(c) for c in gestor.listar()]
@@ -127,6 +140,54 @@ def listar_simulaciones(gestor: Gestor) -> list[dict]:
 @app.get("/simulaciones/{run_id}")
 def obtener_simulacion(run_id: str, gestor: Gestor) -> dict:
     return asdict(_corrida(gestor, run_id))
+
+
+# ---------------------------------------------------------- intersecciones
+
+@lru_cache(maxsize=1)
+def _semaforos() -> dict[str, Semaforo]:
+    paths = ScenarioPaths.from_name(DEFAULT_SCENARIO)
+    lista = catalogo(paths.net, CACHE_DIR / "semaforos.json", paths.nombres_vias)
+    return {s.id: s for s in lista}
+
+
+def _volumenes_corrida(gestor: GestorCorridas, run_id: str | None):
+    """Volúmenes por edge de la corrida pedida (None = la corrida por defecto)."""
+    if run_id is None:
+        paths = ScenarioPaths.from_name(DEFAULT_SCENARIO)
+    else:
+        corrida = _corrida(gestor, run_id)
+        if corrida.estado != "terminado":
+            raise HTTPException(status_code=409, detail=f"La simulación está en estado '{corrida.estado}'")
+        paths = gestor.paths(run_id)
+    if not paths.vehroute.is_file():
+        return None
+    return volumenes(paths.vehroute, paths.vehroute.with_name("volumenes.json"))
+
+
+@app.get("/intersecciones")
+def listar_intersecciones(gestor: Gestor, run_id: str | None = None) -> dict:
+    """Intersecciones semaforizadas como GeoJSON de puntos, con el volumen de la corrida."""
+    vols = _volumenes_corrida(gestor, run_id)
+    return {
+        "type": "FeatureCollection",
+        "features": [a_feature(con_volumenes(s, vols)) for s in _semaforos().values()],
+    }
+
+
+@app.get("/intersecciones/{tl_id}")
+def obtener_interseccion(tl_id: str, gestor: Gestor, run_id: str | None = None) -> dict:
+    """Ficha de una intersección: accesos, programa del semáforo y volúmenes simulados."""
+    semaforo = _semaforos().get(tl_id)
+    if semaforo is None:
+        raise HTTPException(status_code=404, detail=f"No existe la intersección '{tl_id}'")
+    vols = _volumenes_corrida(gestor, run_id)
+    return {
+        **asdict(con_volumenes(semaforo, vols)),
+        "horas_ventana": HORAS_VENTANA,
+        "nota_volumenes": None if vols is not None else "La corrida no tiene vehroute-output: sin volúmenes.",
+        "nota_programa": "Programa generado por netconvert a partir de OpenStreetMap; no es el programa real de la Secretaría de Movilidad.",
+    }
 
 
 @app.get("/simulaciones/{run_id}/kepler-trips")

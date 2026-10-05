@@ -9,7 +9,9 @@ description = "Servicio de Simulacion, puente entre SUMO y los datos de entrada 
 requires-python = ">=3.11"
 dependencies = [
   "fastapi[standard]==0.136.3",
-  "eclipse-sumo==1.27.1"
+  "eclipse-sumo==1.27.1",
+  "traci==1.27.1",   # controla SUMO para medir el avance y cancelar (trae sumolib)
+  "pyproj==3.8.0"    # coordenadas de la red SUMO (UTM) a lon/lat
 ]
 
 [project.optional-dependencies]

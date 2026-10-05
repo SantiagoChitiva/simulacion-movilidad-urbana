@@ -11,12 +11,15 @@ Cada vehículo/persona es un LineString con coordenadas [lon, lat, z, t]:
 import json
 import math
 import re
+import threading
 import xml.etree.ElementTree as ET
 from collections import Counter
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+
+from .proceso import OnAvance, revisar_cancelacion
 
 # SUMO a veces escribe x=inf, y=inf, z=-1073741824 en posiciones que no puede
 # convertir a lon/lat: por encima de este valor absoluto z se considera inválida
@@ -115,12 +118,29 @@ def reduce_points(pts: list[tuple], step: float, angle_thr: float) -> list[tuple
 
 # --------------------------------------------------------------- lectura
 
-def read_entities(fcd_path: Path, stats: KeplerTripsStats) -> dict[str, _Entidad]:
+def read_entities(
+    fcd_path: Path,
+    stats: KeplerTripsStats,
+    on_avance: OnAvance | None = None,
+    cancelar: threading.Event | None = None,
+) -> dict[str, _Entidad]:
     """Agrupa los puntos del FCD por entidad, descartando posiciones inválidas."""
     entidades: dict[str, _Entidad] = {}
-    root: ET.Element | None = None
+    with open(fcd_path, "rb") as f:
+        tamano = max(fcd_path.stat().st_size, 1)
+        _leer_timesteps(f, entidades, stats, lambda: f.tell() / tamano, on_avance, cancelar)
+    stats.entidades = len(entidades)
+    return entidades
 
-    for event, elem in ET.iterparse(fcd_path, events=("start", "end")):
+
+_TIMESTEPS_ENTRE_AVISOS = 200
+
+
+def _leer_timesteps(f, entidades, stats, fraccion_leida, on_avance, cancelar) -> None:
+    root: ET.Element | None = None
+    timesteps = 0
+
+    for event, elem in ET.iterparse(f, events=("start", "end")):
         if event == "start":
             if root is None:
                 root = elem          # <fcd-export>
@@ -128,6 +148,12 @@ def read_entities(fcd_path: Path, stats: KeplerTripsStats) -> dict[str, _Entidad
 
         if elem.tag != "timestep":
             continue
+
+        timesteps += 1
+        if timesteps % _TIMESTEPS_ENTRE_AVISOS == 0:
+            revisar_cancelacion(cancelar)
+            if on_avance is not None:
+                on_avance(fraccion_leida())
 
         t = float(elem.get("time", 0))
         for child in elem:
@@ -152,9 +178,6 @@ def read_entities(fcd_path: Path, stats: KeplerTripsStats) -> dict[str, _Entidad
         elem.clear()
         if root is not None:
             root.clear()
-
-    stats.entidades = len(entidades)
-    return entidades
 
 
 # --------------------------------------------------------------- GeoJSON
@@ -190,7 +213,15 @@ def _feature(
     }
 
 
-def convert_fcd_to_kepler_trips(config: KeplerTripsConfig) -> KeplerTripsResult:
+# La lectura del FCD es casi todo el trabajo; reducir y escribir es el resto
+_PESO_LECTURA = 0.9
+
+
+def convert_fcd_to_kepler_trips(
+    config: KeplerTripsConfig,
+    on_avance: OnAvance | None = None,
+    cancelar: threading.Event | None = None,
+) -> KeplerTripsResult:
     if not config.fcd_path.is_file():
         raise FileNotFoundError(f"No existe el archivo FCD: {config.fcd_path}")
     if config.step <= 0:
@@ -200,8 +231,10 @@ def convert_fcd_to_kepler_trips(config: KeplerTripsConfig) -> KeplerTripsResult:
         datetime.strptime(config.base_date, "%Y-%m-%d").replace(tzinfo=timezone.utc).timestamp()
     )
 
+    avance_lectura = (lambda f: on_avance(f * _PESO_LECTURA)) if on_avance else None
     stats = KeplerTripsStats()
-    entidades = read_entities(config.fcd_path, stats)
+    entidades = read_entities(config.fcd_path, stats, avance_lectura, cancelar)
+    revisar_cancelacion(cancelar)
 
     all_z = [p[4] for ent in entidades.values() for p in ent.pts]
     has_z = config.include_z and any(z != 0 for z in all_z)
@@ -231,4 +264,6 @@ def convert_fcd_to_kepler_trips(config: KeplerTripsConfig) -> KeplerTripsResult:
     with open(config.output_path, "w", encoding="utf-8") as out:
         json.dump({"type": "FeatureCollection", "features": features}, out, separators=(",", ":"))
 
+    if on_avance is not None:
+        on_avance(1.0)
     return KeplerTripsResult(config.output_path, stats)

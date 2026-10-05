@@ -9,6 +9,9 @@ DEFAULT_SCENARIO = "default"
 # Corridas lanzadas desde la API: simulation-service/runs/<run_id>/ (ignorado por git)
 RUNS_DIR = SUMO_DIR.parents[2] / "runs"
 
+# Datos derivados de la red que conviene no recalcular (ignorado por git)
+CACHE_DIR = SUMO_DIR.parents[2] / "cache"
+
 # Ventana horaria de la simulación (segundos desde las 00:00)
 HORA_INI = 7 * 3600
 HORA_FIN = 10 * 3600
@@ -32,6 +35,7 @@ class ScenarioPaths:
     tsv: Path
     net: Path
     taz: Path
+    nombres_vias: Path   # id de vía OSM -> nombre (la red no trae nombres de calles)
     sumocfg_template: Path
     run_dir: Path        # donde se escriben los archivos generados
     trips: Path
@@ -41,6 +45,7 @@ class ScenarioPaths:
     geojson: Path   # salida del conversor
     kepler_trips: Path   # trips (LineString) para la capa Trip de kepler.gl
     statistics: Path
+    vehroute: Path       # rutas recorridas: base de los volúmenes por acceso
     sumo_log: Path
 
     @classmethod
@@ -53,6 +58,7 @@ class ScenarioPaths:
             tsv=root / "viajes_usaquen_internos.tsv",
             net=root / "usaquen_3d.net.xml",   # red con elevación: SUMO escribe z en el FCD
             taz=root / "usaquen.taz.xml",
+            nombres_vias=root / "nombres_vias.json",
             sumocfg_template=root / "usaquen-sim.sumocfg",
             run_dir=run_dir,
             trips=run_dir / "usaquen_am_multimodal.trips.xml",
@@ -62,6 +68,7 @@ class ScenarioPaths:
             geojson=output / "usaquen_am.fcd.geojson",
             kepler_trips=output / "usaquen_am.kepler.geojson",
             statistics=output / "usaquen_am.statistics.xml",
+            vehroute=output / "usaquen_am.vehroute.xml",
             sumo_log=output / "usaquen_am.sumo.log"
         )
 

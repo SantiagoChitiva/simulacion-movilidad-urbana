@@ -1,6 +1,6 @@
 # Propuesta: módulo de intersecciones, semaforización y vista 3D
 
-Estado: análisis y diseño, **sin implementar**. Fecha: 2026-10-05.
+Estado: **fase A implementada** (catálogo de intersecciones semaforizadas con ficha en el visor); fases B–F diseñadas en la [sección 7](#7-diseño-de-implementación-de-las-fases-bf). Fecha: 2026-10-05.
 
 Este documento responde a dos preguntas del equipo:
 
@@ -167,7 +167,7 @@ Las filas en arreglo (`id, tipo, lon, lat, z, ángulo, velocidad`) reducen el ta
 
 | Fase | Entregable | Notas y riesgos |
 |---|---|---|
-| A. Catálogo | `GET /intersecciones` (GeoJSON) desde la red SUMO + OSM, y una capa en el visor con ficha de evidencia | Los clústeres de netconvert (`cluster_…`) agrupan varios nodos OSM; hay que mapearlos. |
+| A. Catálogo ✅ | `GET /intersecciones` (GeoJSON) desde la red SUMO + OSM, y una capa en el visor con ficha de evidencia | **Hecho.** Los clústeres de netconvert (`GS_cluster_…`) se manejan por `tlLogic`; los nombres de calle salen del OSM porque la red no los trae. |
 | B. Recorte y demanda | Subred por bbox + `cutRoutes.py` desde la corrida elegida | Verificar `cutRoutes` con personas, y que los bordes del recorte no generen inserciones en cola. |
 | C. Semáforos | Leer y editar programas, Webster (`tlsCycleAdaptation.py`), tipo actuado, agregar o quitar semáforo | Los 220 programas actuales son los de netconvert, no los reales: la línea base "hoy" es una aproximación. |
 | D. Comparación | Corridas headless en lote, métricas y Condiciones A/B/C indicativas | Reutiliza `GestorCorridas`. Definir el período de calentamiento. |
@@ -176,3 +176,76 @@ Las filas en arreglo (`id, tipo, lon, lat, z, ángulo, velocidad`) reducen el ta
 | Previo recomendado | Regenerar la red con `--crossings.guess` (pasos peatonales) | Sin cruces peatonales, la fase peatonal y la espera de peatones en el semáforo no se pueden modelar bien. Hay que volver a correr la ciudad. |
 
 Orden sugerido: A → B → C → E (para tener pronto el flujo completo con 3D) → D → F.
+
+## 7. Diseño de implementación de las fases B–F
+
+### Lo que ya existe y se reutiliza
+
+| Pieza | Dónde | Para qué sirve en las fases siguientes |
+|---|---|---|
+| Catálogo de semáforos (fase A) | `etl/sumo/intersecciones.py`, `GET /intersecciones[/{id}]` | Para cada `tlLogic`: accesos, fases, la relación `linkIndex → acceso y giro` (`enlaces`) y los volúmenes por acceso de cualquier corrida. Es la base de la vista 3D y de la edición de programas. |
+| SUMO controlado por TraCI | `etl/sumo/simulation.py` (`_run_traci`) | Ya se avanza la simulación por saltos con `traci.connect` y un puerto libre. Una sesión 3D es lo mismo, con saltos de 1 paso y lectura de posiciones. |
+| Cola de corridas con avance y cancelación | `api/jobs.py` (`GestorCorridas`) | Las corridas comparativas (fase D) son corridas más pequeñas con la misma cola, el mismo avance y la misma cancelación. |
+| Corridas aisladas | `ScenarioPaths.from_name(name, run_id)`, `escribir_sumocfg_corrida` | Cada escenario de intersección vive en `runs/<id>/` con su propio sumocfg. |
+| Rutas recorridas | `vehroute-output` de cada corrida | Es la entrada de `cutRoutes.py` (fase B). |
+
+### Fase B: recorte de la zona y su demanda
+
+- **Nuevo `etl/sumo/subred.py`.**
+  - `recortar_red(net, centro_lonlat, radio_m, destino)` corre `netconvert -s <net> --keep-edges.in-geo-boundary <bbox> --geometry.remove false -o zona.net.xml`. Conserva z y los `tlLogic` dentro del recorte.
+  - `recortar_demanda(zona_net, corrida, destino)` corre `tools/route/cutRoutes.py <zona.net.xml> <vehroute.xml> <rou.xml de la corrida> -o zona.rou.xml --orig-net <net> -d keep.walk`.
+    - Del `vehroute` salen los vehículos con sus tiempos reales de paso, y del `.rou.xml` de duarouter las personas con sus caminatas.
+    - Con `--orig-net`, cutRoutes recalcula la hora de entrada a la zona.
+- **API:** `POST /intersecciones/{id}/escenarios {run_id, radio_m}` crea el escenario de la zona. Es una corrida corta de la cola y deja en `runs/<id>/` la subred, la demanda recortada y un sumocfg con ventana de calentamiento.
+- **Aceptación:**
+  - Los conteos por acceso de la zona coinciden (±5 %) con los volúmenes de la ficha.
+  - No hay vehículos bloqueados en los bordes del recorte.
+
+### Fase C: programas de semáforo
+
+- **Nuevo `etl/sumo/programas_tls.py`.**
+  - `leer_programa(net, tl_id)` lee el programa; ya existe en el catálogo como `fases`.
+  - `escribir_programa(tl_id, fases, tipo, offset) -> additional.xml` escribe `<tlLogic programID="usuario">`. La red no se toca: el programa entra como archivo adicional en el sumocfg.
+  - `webster(volumenes_por_acceso, fases)` calcula el ciclo y el reparto de verdes con los volúmenes de la ficha. También se puede usar `tools/tlsCycleAdaptation.py` sobre la demanda recortada.
+  - `agregar_semaforo(zona_net, nodo)` corre `netconvert --tls.set <nodo>` sobre la subred.
+- **API:** `GET/PUT /intersecciones/{id}/programas/{programa}`, con validación (las fases deben cubrir todos los `linkIndex`; amarillo ≥ 3 s).
+- **Pantalla** (pestaña Intersección → "Configurar"): tabla de fases editable, con duración y color por acceso como en la ficha actual, y botones "Webster" y "Restaurar original".
+
+### Fase D: comparación
+
+- **API:** `POST /intersecciones/{id}/comparaciones {escenario, programas: [...]}` encola N corridas de la zona, una por programa, con la misma demanda y la misma semilla.
+- **Métricas, por programa:**
+  - demora media y tiempo perdido por modo y por acceso (`tripinfo`);
+  - cola máxima por carril (`queue-output`);
+  - espera peatonal (`personinfo`);
+  - vehículos atendidos por hora y teleports.
+
+  Además, las Condiciones A/B/C del Manual 2024 evaluadas con los volúmenes simulados, marcadas como indicativas: 3 h simuladas contra las 8 h que pide el Manual.
+- **Pantalla:** "Comparar", con una tabla y barras por métrica (el programa original como referencia).
+
+### Fase E: vista 3D en vivo
+
+- **Nuevo `api/sesion3d.py`.**
+  - `POST /intersecciones/{id}/sesiones {escenario, programa}` levanta SUMO de la zona con TraCI. Es el mismo patrón que `_run_traci`, pero con pasos de 1 s y suscripciones (`vehicle.subscribe`, `person.subscribe`, `trafficlight.subscribe`).
+  - `WS /sesiones/{sid}` envía un mensaje por paso en el formato de la sección 5.5. Recibe `{pausa}`, `{velocidad}` y `{fase}`/`{programa}`, que se aplican con `trafficlight.setPhase` / `setProgram`.
+  - Máximo 2 sesiones a la vez; una sesión se cierra si nadie la mira por 2 min.
+- **`GET /sesiones/{sid}/geometria`:** carriles (`shape` con z → lon/lat con la misma proyección del catálogo), el área del cruce y la posición de cada `linkIndex` en la línea de pare, para dibujar los semáforos.
+- **Frontend:** una vista "3D" con `DeckGL` y `react-map-gl/maplibre`, que ya vienen en `node_modules` con kepler:
+  - `PathLayer` para los carriles;
+  - `ScenegraphLayer` para autos, motos, buses, bicis y personas (modelos glTF con licencia abierta);
+  - `ColumnLayer` o `SimpleMeshLayer` para los semáforos, con su color de estado.
+
+  Las posiciones se interpolan entre mensajes para que el movimiento se vea continuo.
+- **Aceptación:** con 300 entidades se mantienen 30 fps, y los cambios de luz en la vista coinciden con el paso de SUMO.
+
+### Fase F: priorización
+
+- **POIs** (colegios, salud, paraderos): una consulta Overpass acotada a Usaquén, guardada en `data/raw/`.
+- **Puntaje abierto** con los pesos de `criteria.md` §3.2 de Barranquilla y sus reglas duras (300 m entre semáforos; glorietas y desniveles excluidos).
+- **Validación** contra los 220 cruces ya semaforizados, como el backtest de Barranquilla.
+
+### Riesgos transversales
+
+- **Pasos peatonales:** la red no los tiene (`--crossings.guess`). Sin ellos no hay fase peatonal ni espera de peatones en el semáforo; conviene regenerar la red antes de la fase D.
+- **Programas de la línea base:** son los de netconvert. Si la Secretaría de Movilidad publica tiempos reales, se cargan como `programID="real"` con la misma herramienta de la fase C.
+- **Calidad de los nombres:** 12 de los 220 semáforos quedan sin nombre de calle, porque OSM no lo trae para sus vías.
