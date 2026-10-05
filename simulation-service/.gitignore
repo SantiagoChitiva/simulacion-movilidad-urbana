@@ -1,0 +1,9 @@
+.venv
+.pytest_cache/
+__pycache__
+simulation_service.egg-info/
+
+# se ignoran archivos generados por el ETL
+*rou*.xml
+*trips.xml
+output/

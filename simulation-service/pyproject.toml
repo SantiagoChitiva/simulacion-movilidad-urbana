@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "simulation-service"
+version = "0.1.0"
+description = "Servicio de Simulacion, puente entre SUMO y los datos de entrada y salida"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi[standard]==0.136.3",
+  "eclipse-sumo==1.27.1"
+]
+
+[project.optional-dependencies]
+test = ["pytest==9.1.1"]
+dev = ["simulation-service[test]"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["test"]
