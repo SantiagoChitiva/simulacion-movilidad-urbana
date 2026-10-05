@@ -5,7 +5,7 @@
     xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/sumoConfiguration.xsd">
 
     <input>
-        <net-file value="usaquen.net.xml"/>
+        <net-file value="usaquen_3d.net.xml"/>
         <route-files value="usaquen_am_multimodal.rou.xml"/>
         <additional-files value="usaquen.taz.xml"/>
     </input>
@@ -20,6 +20,8 @@
 
         <fcd-output value="output/fcd.xml"/>
         <fcd-output.geo value="true"/>
+        <!-- FCD cada 2 s: con la demanda completa a 1 s pesa varios GB -->
+        <device.fcd.period value="2"/>
 
         <vehroute-output value="output/vehroute.xml"/>
         <vehroute-output.exit-times value="true"/>
@@ -28,9 +30,7 @@
         <summary-output.period value="300"/>
 
         <statistic-output value="output/statistics.xml"/>
-
-        <emission-output value="output/emissions.xml"/>
-        <emission-output.geo value="true"/>
+        <!-- sin emission-output: con la demanda completa pesa ~2 GB y no se usa -->
     </output>
 
     <time>

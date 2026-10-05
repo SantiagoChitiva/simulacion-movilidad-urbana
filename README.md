@@ -57,6 +57,15 @@ pytest tests/ --cov=src --cov-report=term-missing
 
 Las pruebas se ejecutan automáticamente en cada `push` o `pull request` mediante GitHub Actions (ver `.github/workflows/tests.yml`). El resultado de cada ejecución puede consultarse en la pestaña **Actions** del repositorio.
 
+## Visualización (kepler.gl)
+
+`kepler/` contiene el visor web (Vite + React + kepler.gl). Anima los trayectos de la simulación con la capa Trip, coloreados por modo. Los datos los pide a la API de `simulation-service` (`/api/kepler-trips`, con proxy a `localhost:8000`).
+
+1. Correr el pipeline y la API (ver `simulation-service/README.md`):
+   `python -m etl.etl` y luego `uvicorn api.api:app`.
+2. En `kepler/`, copiar `.env.example` a `.env` y poner el token de Mapbox (`VITE_MAPBOX_TOKEN`).
+3. `npm install` y `npm run dev`. Abrir la URL que muestra Vite (por defecto `http://localhost:5173`).
+
 ## Metodología
 
 El proyecto sigue un modelo de ciclo de vida híbrido: **CRISP-DM** para las fases de datos (Fase 1-2) y **Scrum** para la construcción del escenario de simulación (Fase 3), 

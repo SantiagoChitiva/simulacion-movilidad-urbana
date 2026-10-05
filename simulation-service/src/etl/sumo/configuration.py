@@ -25,6 +25,7 @@ class ScenarioPaths:
     sumocfg: Path
     fcd: Path       # salida de SUMO
     geojson: Path   # salida del conversor
+    kepler_trips: Path   # trips (LineString) para la capa Trip de kepler.gl
     sumo_log: Path
 
     @classmethod
@@ -34,12 +35,13 @@ class ScenarioPaths:
         return cls(
             root=root,
             tsv=root / "viajes_usaquen_internos.tsv",
-            net=root / "usaquen.net.xml",
+            net=root / "usaquen_3d.net.xml",   # red con elevación: SUMO escribe z en el FCD
             taz=root / "usaquen.taz.xml",
             trips=root / "usaquen_am_multimodal.trips.xml",
             routes=root / "usaquen_am_multimodal.rou.xml",
             sumocfg=root / "usaquen-sim.sumocfg",
             fcd=output / "usaquen_am.fcd.xml",   # con el prefijo del sumocfg
             geojson=output / "usaquen_am.fcd.geojson",
+            kepler_trips=output / "usaquen_am.kepler.geojson",
             sumo_log=output / "usaquen_am.sumo.log"
         )

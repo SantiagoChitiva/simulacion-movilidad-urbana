@@ -1,6 +1,6 @@
 import csv
 import xml.etree.ElementTree as ET
-from collections.abc import Iterator
+from collections.abc import Iterable, Iterator
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -144,7 +144,7 @@ def _add_trip(root: ET.Element, trip_id: str, trip: TripRecord) -> None:
         _add_person_walk(root, trip_id, trip)
 
 
-def _build_xml(trips: Iterator[TripRecord], stats: TripGenerationStats) -> ET.ElementTree:
+def _build_xml(trips: Iterable[TripRecord], stats: TripGenerationStats) -> ET.ElementTree:
     root = _create_root()
     _add_vtypes(root)
 
@@ -173,7 +173,12 @@ def generate_trips(config: TripGenerationConfig) -> TripGenerationResult:
         raise FileNotFoundError(f"No existe el TSV de viajes: {config.tsv_path}")
 
     stats = TripGenerationStats()
-    tree = _build_xml(read_trips(config, stats), stats)
+    # El TSV no viene ordenado por hora_ini_seg y duarouter conserva el orden del
+    # .trips.xml; SUMO descarta (no reordena) todo depart menor al máximo ya leído
+    # ("Route file should be sorted by departure time, ignoring ..."). Por eso se
+    # ordena aquí: sorted es estable, así que empates conservan el orden del TSV.
+    trips = sorted(read_trips(config, stats), key=lambda t: t.depart)
+    tree = _build_xml(trips, stats)
 
     config.output_path.parent.mkdir(parents=True, exist_ok=True)
     tree.write(config.output_path, encoding="UTF-8", xml_declaration=True)
