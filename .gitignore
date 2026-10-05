@@ -1,8 +1,6 @@
 # Datos (no se versionan, van en Google Drive)
 data/raw/*
-data/processed/*
 !data/raw/.gitkeep
-!data/processed/.gitkeep
 
 # Entorno Python
 venv/
