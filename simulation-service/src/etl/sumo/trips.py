@@ -1,13 +1,18 @@
 import csv
 import xml.etree.ElementTree as ET
+from collections import Counter
 from collections.abc import Iterable, Iterator
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from .configuration import HORA_FIN, HORA_INI, MAX_COPIAS
 from .enums.survey_mode import SurveyMode
 from .enums.transport_mode import TransportMode
 from .vtypes import VTYPES
+
+if TYPE_CHECKING:
+    from .demanda import DemandaConfig
 
 XSI = "http://www.w3.org/2001/XMLSchema-instance"
 ROUTES_XSD = "http://sumo.dlr.de/xsd/routes_file.xsd"
@@ -20,6 +25,7 @@ class TripGenerationConfig:
     hora_ini: int = HORA_INI
     hora_fin: int = HORA_FIN
     max_copias: int = MAX_COPIAS
+    demanda: "DemandaConfig | None" = None   # None = demanda de la encuesta tal cual
 
 
 @dataclass
@@ -32,6 +38,7 @@ class TripGenerationStats:
     viajes_generados: int = 0
     vehiculos_generados: int = 0
     personas_generadas: int = 0
+    por_modo: Counter = field(default_factory=Counter)
 
 
 @dataclass(frozen=True)
@@ -42,6 +49,8 @@ class TripRecord:
     copies: int
     origin_taz: str
     destination_taz: str
+    duracion_min: float | None = None   # duración reportada en la encuesta
+    fexp: float = 1.0                   # factor de expansión sin tope
 
 
 @dataclass(frozen=True)
@@ -52,12 +61,22 @@ class TripGenerationResult:
 
 # ---------------------------------------------------------------- lectura
 
-def _parse_copies(raw: str | None, max_copias: int) -> int:
+def _parse_fexp(raw: str | None) -> float:
     try:
-        fexp = float(raw) if raw else 1.0
+        return float(raw) if raw else 1.0
     except ValueError:
-        fexp = 1.0
-    return min(max(round(fexp), 1), max_copias)
+        return 1.0
+
+
+def _parse_copies(raw: str | None, max_copias: int) -> int:
+    return min(max(round(_parse_fexp(raw)), 1), max_copias)
+
+
+def _parse_duracion(raw: str | None) -> float | None:
+    try:
+        return float(raw) if raw else None
+    except ValueError:
+        return None
 
 
 def read_trips(config: TripGenerationConfig, stats: TripGenerationStats) -> Iterator[TripRecord]:
@@ -88,6 +107,8 @@ def read_trips(config: TripGenerationConfig, stats: TripGenerationStats) -> Iter
                 copies=_parse_copies(row.get("fexp_vj"), config.max_copias),
                 origin_taz=row["zat_ori"].strip(),
                 destination_taz=row["zat_des"].strip(),
+                duracion_min=_parse_duracion(row.get("duracion_min")),
+                fexp=_parse_fexp(row.get("fexp_vj")),
             )
 
 
@@ -151,6 +172,7 @@ def _build_xml(trips: Iterable[TripRecord], stats: TripGenerationStats) -> ET.El
     for trip in trips:
         for _ in range(trip.copies):
             stats.viajes_generados += 1
+            stats.por_modo[trip.mode.value] += 1
 
             if trip.mode.is_vehicle:
                 stats.vehiculos_generados += 1
@@ -173,11 +195,18 @@ def generate_trips(config: TripGenerationConfig) -> TripGenerationResult:
         raise FileNotFoundError(f"No existe el TSV de viajes: {config.tsv_path}")
 
     stats = TripGenerationStats()
+    registros = list(read_trips(config, stats))
+
+    if config.demanda is not None:
+        # import diferido: demanda.py importa este módulo
+        from .demanda import asignar, cargar_dia
+        registros = asignar(registros, cargar_dia(config.tsv_path), config.demanda)
+
     # El TSV no viene ordenado por hora_ini_seg y duarouter conserva el orden del
     # .trips.xml; SUMO descarta (no reordena) todo depart menor al máximo ya leído
     # ("Route file should be sorted by departure time, ignoring ..."). Por eso se
     # ordena aquí: sorted es estable, así que empates conservan el orden del TSV.
-    trips = sorted(read_trips(config, stats), key=lambda t: t.depart)
+    trips = sorted(registros, key=lambda t: t.depart)
     tree = _build_xml(trips, stats)
 
     config.output_path.parent.mkdir(parents=True, exist_ok=True)

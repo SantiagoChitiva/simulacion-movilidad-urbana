@@ -1,11 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { Provider, useDispatch } from 'react-redux';
 import { taskMiddleware } from 'react-palm/tasks';
 import keplerGlReducer from '@kepler.gl/reducers';
-import { addDataToMap } from '@kepler.gl/actions';
+import { addDataToMap, removeDataset } from '@kepler.gl/actions';
 import { processGeojson } from '@kepler.gl/processors';
 import KeplerGl from '@kepler.gl/components';
+import { urlTrips } from './api';
+import PanelDemanda from './components/PanelDemanda';
 
 const reducers = combineReducers({
   keplerGl: keplerGlReducer,
@@ -83,45 +85,69 @@ const buildConfig = (colors) => ({
   },
 });
 
-function Map() {
+function Map({ tripsUrl, label }) {
   const dispatch = useDispatch();
+  const [aviso, setAviso] = useState(null);
 
   useEffect(() => {
-    // generado por el pipeline (python -m etl.etl) y servido por la API
-    fetch('/api/kepler-trips')
+    let cancelado = false;
+    setAviso('Cargando trips…');
+    // trips generados por el pipeline y servidos por la API
+    fetch(tripsUrl)
       .then((res) => {
         if (!res.ok) throw new Error(`API ${res.status}: ¿corriste el pipeline y la API?`);
         return res.json();
       })
       .then((geojson) => {
+        if (cancelado) return;
+        dispatch(removeDataset(DATASET_ID)); // reemplaza la corrida anterior, si había
         dispatch(
           addDataToMap({
             datasets: {
-              info: { label: 'Simulación SUMO – Usaquén', id: DATASET_ID },
+              info: { label, id: DATASET_ID },
               data: processGeojson(geojson),
             },
             options: { centerMap: false, readOnly: false },
             config: buildConfig(modeColorRange(geojson)),
           })
         );
+        setAviso(null);
       })
-      .catch((err) => console.error('No se pudieron cargar los trips:', err));
-  }, [dispatch]);
+      .catch((err) => {
+        console.error('No se pudieron cargar los trips:', err);
+        if (!cancelado) setAviso(`No se pudieron cargar los trips: ${err.message}`);
+      });
+    return () => {
+      cancelado = true;
+    };
+  }, [dispatch, tripsUrl, label]);
 
   return (
-    <KeplerGl
-      id="map"
-      mapboxApiAccessToken={import.meta.env.VITE_MAPBOX_TOKEN}
-      width={window.innerWidth}
-      height={window.innerHeight}
-    />
+    <>
+      <KeplerGl
+        id="map"
+        mapboxApiAccessToken={import.meta.env.VITE_MAPBOX_TOKEN}
+        width={window.innerWidth}
+        height={window.innerHeight}
+      />
+      {aviso && <div className="aviso-carga">{aviso}</div>}
+    </>
   );
 }
 
 export default function App() {
+  // corrida que se muestra en el mapa: null = la del pipeline por defecto
+  const [corrida, setCorrida] = useState(null);
+  const cargarCorrida = useCallback((c) => setCorrida(c), []);
+
+  const label = corrida
+    ? `Simulación ${new Date(corrida.creada).toLocaleString('es-CO')} (${corrida.preset})`
+    : 'Simulación SUMO – Usaquén';
+
   return (
     <Provider store={store}>
-      <Map />
+      <Map tripsUrl={urlTrips(corrida?.id)} label={label} />
+      <PanelDemanda corridaCargada={corrida?.id} onCargarCorrida={cargarCorrida} />
     </Provider>
   );
 }
