@@ -17,7 +17,10 @@ pip install -e ".[dev]"
 
 ## Ejecutar
 
-**ETL** (TSV → trips → duarouter → SUMO → GeoJSON). La simulación tarda varios minutos.
+**ETL** (TSV → trips → duarouter → SUMO → GeoJSON). La simulación tarda varios minutos. Corre sobre la red 3D (`usaquen_3d.net.xml`), así que el FCD trae la altura `z`. Genera dos GeoJSON en `scenarios/default/output/`:
+
+- `usaquen_am.fcd.geojson`: un punto por entidad y timestep.
+- `usaquen_am.kepler.geojson`: un `LineString` `[lon, lat, z, unix_t]` por vehículo o persona, para la capa Trip de kepler.gl (`../kepler`).
 
 ```bash
 python -m etl.etl
@@ -30,6 +33,7 @@ uvicorn api.api:app --reload
 ```
 
 - `GET http://localhost:8000/simulation-output` devuelve los primeros 3 registros del GeoJSON (`?limit=10` para más).
+- `GET http://localhost:8000/kepler-trips` devuelve el GeoJSON de trips completo; lo consume el visor de `../kepler`.
 - Documentación interactiva en `http://localhost:8000/docs`.
 
 **Tests**
@@ -52,7 +56,8 @@ src/
         ├── trips.py             # TSV → trips.xml
         ├── duarouter.py         # trips.xml → rou.xml
         ├── simulation.py        # ejecuta SUMO
-        └── fcd.py               # FCD → GeoJSON
+        ├── fcd.py               # FCD → GeoJSON de puntos
+        └── kepler.py            # FCD → GeoJSON de trips (kepler.gl)
 test/                    # tests con pytest
 ```
 
