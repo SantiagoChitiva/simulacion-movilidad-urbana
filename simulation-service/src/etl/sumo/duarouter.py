@@ -1,7 +1,10 @@
 import shutil
 import subprocess
+import threading
 from dataclasses import dataclass
 from pathlib import Path
+
+from .proceso import OnAvance, avance_ventana, ejecutar, ultimo_depart
 
 class DuarouterError(RuntimeError):
     """duarouter no está disponible o terminó con error."""
@@ -41,7 +44,12 @@ class DuarouterResult:
     stderr: str   # aquí salen los warnings de rutas no encontradas
 
 
-def run_duarouter(config: DuarouterConfig, timeout: float | None = None) -> DuarouterResult:
+def run_duarouter(
+    config: DuarouterConfig,
+    timeout: float | None = None,
+    on_avance: OnAvance | None = None,
+    cancelar: threading.Event | None = None,
+) -> DuarouterResult:
     executable = shutil.which("duarouter")
     if executable is None:
         raise DuarouterError(
@@ -54,11 +62,19 @@ def run_duarouter(config: DuarouterConfig, timeout: float | None = None) -> Duar
 
     config.output_file.parent.mkdir(parents=True, exist_ok=True)
 
-    result = subprocess.run(
+    config.output_file.unlink(missing_ok=True)   # que el sondeo no lea una corrida anterior
+
+    def sondear() -> float | None:
+        # duarouter escribe las rutas en orden de salida: el último depart marca el avance
+        t = ultimo_depart(config.output_file)
+        return None if t is None else avance_ventana(t)
+
+    result = ejecutar(
         [executable, *config.to_args()],
-        capture_output=True,
-        text=True,
         timeout=timeout,
+        sondear=sondear,
+        on_avance=on_avance,
+        cancelar=cancelar,
     )
 
     if result.returncode != 0:

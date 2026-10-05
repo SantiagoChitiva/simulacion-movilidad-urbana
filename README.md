@@ -91,7 +91,7 @@ python -m etl.etl               # corrida por defecto (encuesta), 10–15 min
 uvicorn api.api:app             # API en http://localhost:8000
 ```
 
-En Windows, `eclipse-sumo` trae rutas de más de 260 caracteres. Si `pip install` falla, habilita las rutas largas de Windows o instala SUMO aparte y usa `pip install --no-deps -e .` más `fastapi[standard]` y `pytest`.
+En Windows, `eclipse-sumo` trae rutas de más de 260 caracteres. Si `pip install` falla, habilita las rutas largas de Windows o instala SUMO aparte y usa `pip install --no-deps -e .` más `fastapi[standard]==0.136.3 traci==1.27.1 pyproj==3.8.0 pytest`.
 
 **Visor** (Node 20+):
 
@@ -102,7 +102,12 @@ npm install
 npm run dev                     # http://localhost:5173
 ```
 
-En el panel de la derecha se elige el escenario, se ajustan los viajes por actor vial (con los botones −/+ o escribiendo el número), se aplica una escala global y se ejecuta la simulación. El panel muestra el avance y, al terminar, carga la nueva corrida en el mapa. Las corridas anteriores quedan en el selector "Corridas".
+En el visor:
+
+- **Pestaña "Demanda"** (panel derecho): se elige el escenario, se ajustan los viajes por actor vial (con los botones −/+ o escribiendo el número), se aplica una escala global y se ejecuta la simulación. Las corridas anteriores quedan en el selector "Corridas".
+- **Tarjeta de actividad** (esquina inferior derecha): muestra la simulación en curso con una barra de progreso real por etapa, el tiempo transcurrido y una estimación del restante. Desde ahí se puede **cancelar**. Al terminar, la corrida se carga sola en el mapa, con su propia barra de descarga, que también se puede cancelar.
+- **Leyenda** (arriba al centro): el color de cada actor vial de la corrida cargada y el botón **Semáforos**, que muestra las 220 intersecciones semaforizadas.
+- **Pestaña "Intersección":** al hacer clic en un semáforo del mapa se abre su ficha. Muestra sus calles, sus accesos con el volumen simulado en la corrida cargada y su programa (fases con la luz de cada acceso). Es la fase A del [módulo de semáforos y vista 3D](docs/propuesta-semaforizacion-3d.md).
 
 ## Ejecutar pruebas
 

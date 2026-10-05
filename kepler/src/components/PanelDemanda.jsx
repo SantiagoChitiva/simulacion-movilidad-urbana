@@ -1,17 +1,8 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import {
-  ESTADOS_FINALES,
-  ETIQUETA_ESTADO,
-  crearSimulacion,
-  listarSimulaciones,
-  obtenerModos,
-  obtenerPresets,
-  obtenerSimulacion,
-} from '../api';
+import React, { useEffect, useMemo, useState } from 'react';
+import { obtenerPresets } from '../api';
 
 const PASO = 50;
 const MAX_VIAJES = 100000; // mismo tope que configuration.MAX_VIAJES en la API
-const INTERVALO_CONSULTA_MS = 5000;
 
 const GRUPOS = [
   ['particulares', 'Vehículos particulares'],
@@ -23,11 +14,6 @@ const GRUPOS = [
 
 const numero = (n) => n.toLocaleString('es-CO');
 const suma = (obj) => Object.values(obj).reduce((a, b) => a + b, 0);
-
-const duracion = (desde) => {
-  const s = Math.max(0, Math.round((Date.now() - new Date(desde).getTime()) / 1000));
-  return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
-};
 
 function FilaModo({ modo, valor, onCambio }) {
   const fijar = (v) => onCambio(Math.max(0, Math.round(Number.isFinite(v) ? v : 0)));
@@ -55,60 +41,33 @@ function FilaModo({ modo, valor, onCambio }) {
   );
 }
 
-export default function PanelDemanda({ corridaCargada, onCargarCorrida }) {
-  const [abierto, setAbierto] = useState(true);
-  const [modos, setModos] = useState([]);
+/** Parámetros de demanda: preset, viajes por actor vial, escala y semilla; historial de corridas. */
+export default function PanelDemanda({ modos, historial, corridaCargada, enCurso, error, onEjecutar, onVerCorrida }) {
   const [presets, setPresets] = useState([]);
+  const [errorPresets, setErrorPresets] = useState(null);
   const [presetId, setPresetId] = useState('encuesta');
   const [conteos, setConteos] = useState({});
   const [escala, setEscala] = useState(100);
   const [semilla, setSemilla] = useState('');
-  const [activa, setActiva] = useState(null); // corrida en curso (o la última lanzada)
-  const [historial, setHistorial] = useState([]);
-  const [error, setError] = useState(null);
-  const [, setTic] = useState(0); // refresca el tiempo transcurrido
+
+  useEffect(() => {
+    obtenerPresets()
+      .then((p) => {
+        setPresets(p);
+        setConteos({ ...p.find((x) => x.id === 'encuesta').conteos });
+      })
+      .catch((e) => setErrorPresets(`No se pudo conectar con la API: ${e.message}`));
+  }, []);
 
   const preset = presets.find((p) => p.id === presetId);
   const total = suma(conteos);
   const modificado = preset && modos.some((m) => (conteos[m.id] ?? 0) !== (preset.conteos[m.id] ?? 0));
-  const enCurso = activa && !ESTADOS_FINALES.has(activa.estado);
 
-  const refrescarHistorial = useCallback(
-    () => listarSimulaciones().then(setHistorial).catch((e) => setError(e.message)),
-    []
-  );
-
-  // carga inicial: modos, presets e historial (retoma una corrida que siga en curso)
-  useEffect(() => {
-    Promise.all([obtenerModos(), obtenerPresets(), listarSimulaciones()])
-      .then(([m, p, h]) => {
-        setModos(m);
-        setPresets(p);
-        setConteos({ ...p.find((x) => x.id === 'encuesta').conteos });
-        setHistorial(h);
-        const pendiente = h.find((c) => !ESTADOS_FINALES.has(c.estado));
-        if (pendiente) setActiva(pendiente);
-      })
-      .catch((e) => setError(`No se pudo conectar con la API: ${e.message}`));
-  }, []);
-
-  // consulta el estado de la corrida en curso
-  useEffect(() => {
-    if (!enCurso) return undefined;
-    const id = setInterval(() => {
-      setTic((t) => t + 1);
-      obtenerSimulacion(activa.id)
-        .then((c) => {
-          setActiva(c);
-          if (ESTADOS_FINALES.has(c.estado)) {
-            refrescarHistorial();
-            if (c.estado === 'terminado') onCargarCorrida(c);
-          }
-        })
-        .catch((e) => setError(e.message));
-    }, INTERVALO_CONSULTA_MS);
-    return () => clearInterval(id);
-  }, [enCurso, activa?.id, onCargarCorrida, refrescarHistorial]);
+  const subtotales = useMemo(() => {
+    const s = {};
+    for (const m of modos) s[m.grupo] = (s[m.grupo] ?? 0) + (conteos[m.id] ?? 0);
+    return s;
+  }, [modos, conteos]);
 
   const elegirPreset = (id) => {
     setPresetId(id);
@@ -123,7 +82,7 @@ export default function PanelDemanda({ corridaCargada, onCargarCorrida }) {
       setConteos({ ...Object.fromEntries(modos.map((m) => [m.id, 0])), ...c.conteos });
       setSemilla(c.semilla ?? '');
     }
-    onCargarCorrida(c);
+    onVerCorrida(c);
   };
 
   const aplicarEscala = () => {
@@ -132,44 +91,18 @@ export default function PanelDemanda({ corridaCargada, onCargarCorrida }) {
     setEscala(100);
   };
 
-  const ejecutar = () => {
-    setError(null);
-    crearSimulacion({
+  const ejecutar = () =>
+    onEjecutar({
       preset: presetId,
       conteos: Object.fromEntries(Object.entries(conteos).filter(([, v]) => v > 0)),
       semilla: semilla === '' ? null : Number(semilla),
-    })
-      .then((c) => {
-        setActiva(c);
-        refrescarHistorial();
-      })
-      .catch((e) => setError(e.message));
-  };
+    });
 
-  const subtotales = useMemo(() => {
-    const s = {};
-    for (const m of modos) s[m.grupo] = (s[m.grupo] ?? 0) + (conteos[m.id] ?? 0);
-    return s;
-  }, [modos, conteos]);
-
-  if (!abierto) {
-    return (
-      <button type="button" className="pd-abrir" onClick={() => setAbierto(true)}>
-        Demanda
-      </button>
-    );
-  }
+  const nota = modos.find((m) => m.nota)?.nota;
 
   return (
-    <aside className="pd-panel" aria-label="Parámetros de demanda">
-      <header className="pd-encabezado">
-        <h2>Demanda de la simulación</h2>
-        <button type="button" className="pd-cerrar" onClick={() => setAbierto(false)} aria-label="Plegar panel">
-          ›
-        </button>
-      </header>
-
-      {error && <p className="pd-error">{error}</p>}
+    <div className="pd-contenido">
+      {(errorPresets || error) && <p className="pd-error">{errorPresets || error}</p>}
 
       <section>
         <h3>Escenario</h3>
@@ -216,7 +149,7 @@ export default function PanelDemanda({ corridaCargada, onCargarCorrida }) {
             </div>
           );
         })}
-        {modos.some((m) => m.nota) && <p className="pd-nota">* {modos.find((m) => m.nota).nota}</p>}
+        {nota && <p className="pd-nota">* {nota}</p>}
         <div className={`pd-total ${total > MAX_VIAJES ? 'excedido' : ''}`}>
           <span>Total</span>
           <span>{numero(total)}</span>
@@ -243,31 +176,14 @@ export default function PanelDemanda({ corridaCargada, onCargarCorrida }) {
         className="pd-ejecutar"
         onClick={ejecutar}
         disabled={enCurso || total < 1 || total > MAX_VIAJES || !modos.length}
+        title={enCurso ? 'Espera a que termine o cancela la simulación en curso' : undefined}
       >
         {enCurso ? 'Simulación en curso…' : 'Ejecutar simulación'}
       </button>
 
-      {activa && (
-        <div className={`pd-estado ${activa.estado}`}>
-          <strong>{ETIQUETA_ESTADO[activa.estado] ?? activa.estado}</strong>
-          {enCurso && <span> · {duracion(activa.creada)} (una corrida completa tarda 10–15 min)</span>}
-          {activa.estado === 'error' && <p>{activa.error}</p>}
-          {activa.estado === 'terminado' && activa.resultado && (
-            <p>
-              {numero(activa.resultado.viajes_generados)} viajes generados ·{' '}
-              {numero(activa.resultado.vehiculos_insertados ?? 0)} vehículos insertados ·{' '}
-              {numero(activa.resultado.trips_kepler)} trips en el mapa
-            </p>
-          )}
-        </div>
-      )}
-
       <section>
         <h3>Corridas</h3>
-        <select
-          value={corridaCargada ?? ''}
-          onChange={(e) => verCorrida(e.target.value)}
-        >
+        <select value={corridaCargada ?? ''} onChange={(e) => verCorrida(e.target.value)} aria-label="Corrida en el mapa">
           <option value="">Corrida por defecto (pipeline)</option>
           {historial
             .filter((c) => c.estado === 'terminado')
@@ -279,6 +195,6 @@ export default function PanelDemanda({ corridaCargada, onCargarCorrida }) {
             ))}
         </select>
       </section>
-    </aside>
+    </div>
   );
 }

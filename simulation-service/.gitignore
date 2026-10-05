@@ -9,3 +9,5 @@ simulation_service.egg-info/
 output/
 # corridas lanzadas desde la API (src/api/jobs.py)
 runs/
+# catálogo de semáforos y otros derivados de la red
+cache/
