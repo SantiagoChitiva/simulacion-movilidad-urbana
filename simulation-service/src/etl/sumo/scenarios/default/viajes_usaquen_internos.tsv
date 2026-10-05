@@ -1,0 +1,2581 @@
+zat_ori	zat_des	hora_ini_seg	hora_ini_hhmmss	duracion_min	modo_principal_agrupado	motivo_viaje	fexp_vj
+77	73	25440.0	07:04:00	98.0	TRANSPORTE PÚBLICO	 A buscar trabajo	1.8
+73	58	43440.0	12:04:00	101.0	TRANSPORTE PÚBLICO	 A regresar al hogar	1.8
+25	153	46800.0	13:00:00	30.0	AUTO	 A trabajar	63.7
+153	25	61200.0	17:00:00	45.0	AUTO	 A regresar al hogar	63.7
+51	55	45600.0	12:40:00	20.0	BICICLETA	 A trabajar	206.0
+55	51	70800.0	19:40:00	20.0	BICICLETA	 A regresar al hogar	206.0
+83	56	43200.0	12:00:00	15.0	A PIE > 15 MIN	 A realizar algún trámite personal	787.9
+56	83	46800.0	13:00:00	15.0	A PIE > 15 MIN	 A regresar al hogar	787.9
+83	83	57660.0	16:01:00	3.0	A PIE <15 MIN	 A realizar algún trámite personal	787.9
+83	83	58200.0	16:10:00	10.0	A PIE <15 MIN	 A regresar al hogar	787.9
+54	54	21600.0	06:00:00	10.0	A PIE <15 MIN	 A acompañar a alguien sin remuneración	212.4
+54	54	22680.0	06:18:00	7.0	A PIE <15 MIN	 A regresar al hogar	212.4
+20	56	54000.0	15:00:00	40.0	TRANSPORTE PÚBLICO	 A visitar a alguien	87.4
+56	20	66600.0	18:30:00	60.0	TRANSPORTE PÚBLICO	 A regresar al hogar	87.4
+20	56	54000.0	15:00:00	40.0	TRANSPORTE PÚBLICO	 A visitar a alguien	87.4
+56	20	67620.0	18:47:00	43.0	TRANSPORTE PÚBLICO	 A regresar al hogar	87.4
+56	83	25200.0	07:00:00	35.0	A PIE > 15 MIN	 A trabajar	106.2
+83	54	62700.0	17:25:00	35.0	A PIE > 15 MIN	 A trabajar	106.2
+25	154	28800.0	08:00:00	45.0	TAXI OCUPADO	 A realizar compras	64.2
+154	25	36000.0	10:00:00	3.0	TAXI OCUPADO	 A regresar al hogar	64.2
+87	76	36000.0	10:00:00	30.0	A PIE > 15 MIN	 A realizar compras	107.3
+76	87	61560.0	17:06:00	40.0	A PIE > 15 MIN	 A regresar al hogar	107.3
+155	88	25560.0	07:06:00	50.0	TRANSPORTE PÚBLICO	 A realizar compras	279.9
+88	155	45600.0	12:40:00	42.0	TRANSPORTE PÚBLICO	 A regresar al hogar	279.9
+25	88	25200.0	07:00:00	50.0	AUTO	 A asuntos médicos personales	100.5
+88	25	72600.0	20:10:00	50.0	AUTO	 A regresar al hogar	100.5
+154	56	32400.0	09:00:00	20.0	A PIE > 15 MIN	 A visitar a alguien	263.4
+56	154	42000.0	11:40:00	20.0	A PIE > 15 MIN	 A regresar al hogar	263.4
+58	54	52200.0	14:30:00	32.0	A PIE > 15 MIN	 A realizar algún trámite personal	108.3
+54	58	54300.0	15:05:00	35.0	A PIE > 15 MIN	 A regresar al hogar	108.3
+58	75	21600.0	06:00:00	120.0	BICICLETA	 A trabajar	113.5
+75	58	64800.0	18:00:00	30.0	BICICLETA	 A regresar al hogar	113.5
+58	86	27000.0	07:30:00	30.0	BICICLETA	 A trabajar	113.5
+86	58	65100.0	18:05:00	30.0	BICICLETA	 A regresar al hogar	113.5
+58	75	43200.0	12:00:00	30.0	ESPECIAL OCUPADO	 A Estudiar	113.5
+75	58	63540.0	17:39:00	33.0	ESPECIAL OCUPADO	 A regresar al hogar	113.5
+58	56	22140.0	06:09:00	30.0	ESPECIAL OCUPADO	 A trabajar	107.5
+56	58	43320.0	12:02:00	33.0	TAXI OCUPADO	 A regresar al hogar	107.5
+58	57	33000.0	09:10:00	23.0	A PIE > 15 MIN	 A asistir actividad de tipo religioso y/o culto	107.5
+57	58	39780.0	11:03:00	23.0	A PIE > 15 MIN	 A regresar al hogar	107.5
+59	60	29400.0	08:10:00	20.0	BICICLETA	 A realizar algún trámite personal	107.2
+60	59	36900.0	10:15:00	18.0	BICICLETA	 A regresar al hogar	107.2
+59	87	54900.0	15:15:00	90.0	TRANSPORTE PÚBLICO	 A Estudiar	107.2
+87	59	69600.0	19:20:00	35.0	TRANSPORTE PÚBLICO	 A regresar al hogar	107.2
+58	851	21180.0	05:53:00	62.0	TRANSPORTE PÚBLICO	 A llevar y/o dejar algo	111.7
+851	58	57600.0	16:00:00	59.0	TRANSPORTE PÚBLICO	 A regresar al hogar	111.7
+77	77	25200.0	07:00:00	60.0	AUTO	 A trabajar	787.7
+77	77	52800.0	14:40:00	60.0	AUTO	 A regresar al hogar	787.7
+52	52	50100.0	13:55:00	25.0	A PIE > 15 MIN	 A regresar al hogar	209.6
+59	76	26820.0	07:27:00	122.0	TRANSPORTE PÚBLICO	 A asuntos médicos personales	102.5
+76	59	37560.0	10:26:00	125.0	TRANSPORTE PÚBLICO	 A regresar al hogar	102.5
+57	52	25200.0	07:00:00	60.0	TAXI OCUPADO	 A asuntos médicos personales	111.9
+52	57	32400.0	09:00:00	60.0	A PIE > 15 MIN	 A regresar al hogar	111.9
+25	87	64800.0	18:00:00	47.0	TRANSPORTE PÚBLICO	 A visitar a alguien	67.8
+18	14	54000.0	15:00:00	40.0	TRANSPORTE PÚBLICO	 A realizar compras	59.1
+14	18	59400.0	16:30:00	3.0	A PIE <15 MIN	 A regresar al hogar	59.1
+13	52	50400.0	14:00:00	40.0	TRANSPORTE PÚBLICO	 A asuntos médicos personales	299.8
+52	13	58620.0	16:17:00	43.0	TRANSPORTE PÚBLICO	 A regresar al hogar	299.8
+12	11	46800.0	13:00:00	10.0	A PIE <15 MIN	 A realizar compras	345.9
+11	12	48600.0	13:30:00	10.0	A PIE <15 MIN	 A regresar al hogar	345.9
+26	52	21600.0	06:00:00	20.0	A PIE > 15 MIN	 A Estudiar	66.3
+52	26	50400.0	14:00:00	25.0	A PIE > 15 MIN	 A regresar al hogar	66.3
+57	57	34200.0	09:30:00	15.0	A PIE > 15 MIN	 A realizar compras	113.9
+57	57	36000.0	10:00:00	20.0	A PIE > 15 MIN	 A regresar al hogar	113.9
+57	12	25200.0	07:00:00	60.0	TAXI OCUPADO	 A trabajar	113.9
+12	57	64800.0	18:00:00	70.0	TAXI OCUPADO	 A regresar al hogar	113.9
+57	14	25200.0	07:00:00	72.0	TAXI OCUPADO	 A trabajar	113.9
+14	57	65100.0	18:05:00	75.0	TAXI OCUPADO	 A regresar al hogar	113.9
+23	26	46800.0	13:00:00	30.0	A PIE > 15 MIN	 A realizar compras	223.0
+26	23	52200.0	14:30:00	30.0	A PIE > 15 MIN	 A regresar al hogar	223.0
+14	56	63000.0	17:30:00	30.0	A PIE > 15 MIN	 A Estudiar	257.0
+56	14	77400.0	21:30:00	30.0	A PIE > 15 MIN	 A regresar al hogar	257.0
+14	155	21600.0	06:00:00	30.0	A PIE > 15 MIN	 A Estudiar	257.0
+155	14	46800.0	13:00:00	30.0	A PIE > 15 MIN	 A regresar al hogar	257.0
+52	52	19800.0	05:30:00	60.0	TRANSPORTE ESCOLAR	 A Estudiar	180.5
+52	52	48420.0	13:27:00	63.0	TRANSPORTE ESCOLAR	 A regresar al hogar	180.5
+20	13	25200.0	07:00:00	10.0	BICICLETA	 A trabajar	70.4
+13	20	62400.0	17:20:00	9.0	BICICLETA	 A regresar al hogar	70.4
+20	14	21600.0	06:00:00	20.0	A PIE > 15 MIN	 A trabajar	70.4
+14	20	57600.0	16:00:00	25.0	A PIE > 15 MIN	 A regresar al hogar	70.4
+20	152	23400.0	06:30:00	30.0	TRANSPORTE PÚBLICO	 A trabajar	70.4
+152	20	61200.0	17:00:00	35.0	TRANSPORTE PÚBLICO	 A regresar al hogar	70.4
+20	14	23400.0	06:30:00	30.0	BICICLETA	 A trabajar	70.4
+14	20	64800.0	18:00:00	30.0	BICICLETA	 A regresar al hogar	70.4
+60	75	39600.0	11:00:00	20.0	A PIE > 15 MIN	 A realizar algún trámite personal	79.2
+75	60	64200.0	17:50:00	10.0	A PIE <15 MIN	 A regresar al hogar	79.2
+52	23	63000.0	17:30:00	45.0	A PIE > 15 MIN	 A regresar al hogar	286.6
+23	52	54000.0	15:00:00	80.0	A PIE > 15 MIN	 A acompañar a alguien sin remuneración	286.6
+52	23	63000.0	17:30:00	45.0	A PIE > 15 MIN	 A regresar al hogar	286.6
+63	25	36600.0	10:10:00	34.0	AUTO	 A visitar a alguien	477.9
+25	53	41400.0	11:30:00	17.0	AUTO	 A acompañar a alguien sin remuneración	477.9
+53	25	45000.0	12:30:00	40.0	AUTO	 A visitar a alguien	477.9
+83	81	43200.0	12:00:00	25.0	AUTO	 A realizar algún trámite personal	593.1
+81	83	64800.0	18:00:00	60.0	AUTO	 A regresar al hogar	593.1
+83	75	43200.0	12:00:00	25.0	AUTO	 A realizar algún trámite personal	593.1
+75	83	66900.0	18:35:00	25.0	AUTO	 A regresar al hogar	593.1
+153	153	21600.0	06:00:00	90.0	BICICLETA	 A llevar y/o dejar algo	91.7
+20	71	24000.0	06:40:00	20.0	MOTO	 A trabajar	71.6
+71	20	57600.0	16:00:00	30.0	MOTO	 A regresar al hogar	71.6
+20	11	21600.0	06:00:00	40.0	TRANSPORTE PÚBLICO	 A trabajar	71.6
+11	20	64800.0	18:00:00	40.0	TRANSPORTE PÚBLICO	 A regresar al hogar	71.6
+20	56	24300.0	06:45:00	15.0	A PIE > 15 MIN	 A Estudiar	71.6
+56	20	54900.0	15:15:00	15.0	A PIE > 15 MIN	 A regresar al hogar	71.6
+20	56	22500.0	06:15:00	35.0	A PIE > 15 MIN	 A Estudiar	71.6
+56	20	63000.0	17:30:00	20.0	A PIE > 15 MIN	 A regresar al hogar	71.6
+154	153	31500.0	08:45:00	35.0	TRANSPORTE PÚBLICO	 A trabajar	181.2
+153	154	75600.0	21:00:00	35.0	TRANSPORTE PÚBLICO	 A regresar al hogar	181.2
+20	12	19800.0	05:30:00	91.0	TRANSPORTE PÚBLICO	 A trabajar	86.6
+12	20	42960.0	11:56:00	94.0	TRANSPORTE PÚBLICO	 A regresar al hogar	86.6
+25	25	52800.0	14:40:00	10.0	A PIE <15 MIN	 A regresar al hogar	85.7
+20	87	64800.0	18:00:00	70.0	TRANSPORTE PÚBLICO	 A trabajar	80.0
+59	59	39660.0	11:01:00	9.0	A PIE <15 MIN	 A realizar compras	100.1
+59	59	41400.0	11:30:00	10.0	A PIE <15 MIN	 A regresar al hogar	100.1
+53	52	41400.0	11:30:00	20.0	A PIE > 15 MIN	 A asuntos médicos personales	206.7
+52	53	68400.0	19:00:00	20.0	A PIE > 15 MIN	 A regresar al hogar	206.7
+24	54	19800.0	05:30:00	20.0	BICICLETA	 A Estudiar	225.9
+54	24	48600.0	13:30:00	30.0	BICICLETA	 A regresar al hogar	225.9
+24	54	19800.0	05:30:00	20.0	MOTO	 A Estudiar	225.9
+54	24	43200.0	12:00:00	80.0	TRANSPORTE ESCOLAR	 A regresar al hogar	225.9
+13	11	39600.0	11:00:00	40.0	BICICLETA	 A trabajar	318.1
+11	13	74100.0	20:35:00	40.0	BICICLETA	 A regresar al hogar	318.1
+154	153	19800.0	05:30:00	20.0	A PIE > 15 MIN	 A trabajar	181.9
+153	154	41400.0	11:30:00	20.0	A PIE > 15 MIN	 A regresar al hogar	181.9
+59	77	21600.0	06:00:00	30.0	A PIE > 15 MIN	 A trabajar	108.9
+59	77	25200.0	07:00:00	60.0	TRANSPORTE PÚBLICO	 A Estudiar	108.9
+77	59	59220.0	16:27:00	63.0	TRANSPORTE PÚBLICO	 A regresar al hogar	108.9
+23	60	28800.0	08:00:00	12.0	AUTO	 A asuntos médicos personales	257.3
+60	23	34200.0	09:30:00	30.0	TRANSPORTE PÚBLICO	 A regresar al hogar	257.3
+23	59	28800.0	08:00:00	10.0	AUTO	 A acompañar a alguien sin remuneración	257.3
+59	23	76740.0	21:19:00	41.0	AUTO	 A regresar al hogar	257.3
+14	13	23400.0	06:30:00	15.0	A PIE > 15 MIN	 A asuntos médicos personales	303.6
+55	14	57420.0	15:57:00	63.0	TRANSPORTE PÚBLICO	 A regresar al hogar	303.6
+13	13	22680.0	06:18:00	32.0	A PIE > 15 MIN	 A llevar y/o dejar algo	243.3
+13	13	25980.0	07:13:00	32.0	A PIE > 15 MIN	 A regresar al hogar	243.3
+58	155	30600.0	08:30:00	64.0	TRANSPORTE PÚBLICO	 A trabajar	94.3
+155	58	59220.0	16:27:00	62.0	TRANSPORTE PÚBLICO	 A regresar al hogar	94.3
+154	154	23400.0	06:30:00	10.0	A PIE <15 MIN	 A acompañar a alguien sin remuneración	2.7
+154	154	24000.0	06:40:00	11.0	A PIE <15 MIN	 A regresar al hogar	2.7
+154	88	34200.0	09:30:00	20.0	TRANSPORTE PÚBLICO	 A realizar algún trámite personal	2.7
+88	154	41400.0	11:30:00	33.0	TRANSPORTE PÚBLICO	 A regresar al hogar	2.7
+154	154	53400.0	14:50:00	11.0	A PIE <15 MIN	 A acompañar a alguien sin remuneración	2.7
+154	154	54120.0	15:02:00	10.0	A PIE <15 MIN	 A regresar al hogar	2.7
+53	60	28800.0	08:00:00	30.0	TRANSPORTE PÚBLICO	 A trabajar	195.0
+60	53	57600.0	16:00:00	30.0	TRANSPORTE PÚBLICO	 A regresar al hogar	195.0
+53	851	32400.0	09:00:00	20.0	MOTO	 A trabajar	195.0
+851	53	70200.0	19:30:00	30.0	MOTO	 A regresar al hogar	195.0
+11	24	42600.0	11:50:00	10.0	A PIE <15 MIN	 A acompañar a alguien sin remuneración	453.8
+24	11	43320.0	12:02:00	10.0	A PIE <15 MIN	 A regresar al hogar	453.8
+11	147	44400.0	12:20:00	50.0	TRANSPORTE PÚBLICO	 A realizar algún trámite personal	453.8
+147	11	53400.0	14:50:00	45.0	TRANSPORTE PÚBLICO	 A regresar al hogar	453.8
+11	24	61500.0	17:05:00	10.0	A PIE <15 MIN	 A acompañar a alguien sin remuneración	453.8
+24	11	62400.0	17:20:00	20.0	A PIE > 15 MIN	 A regresar al hogar	453.8
+11	24	42600.0	11:50:00	10.0	A PIE <15 MIN	 A Estudiar	453.8
+24	11	62400.0	17:20:00	20.0	A PIE > 15 MIN	 A regresar al hogar	453.8
+11	25	42600.0	11:50:00	10.0	A PIE <15 MIN	 A Estudiar	453.8
+25	11	62400.0	17:20:00	20.0	A PIE > 15 MIN	 A regresar al hogar	453.8
+56	53	30000.0	08:20:00	40.0	TAXI OCUPADO	 A realizar compras	88.8
+53	56	48540.0	13:29:00	43.0	TAXI OCUPADO	 A regresar al hogar	88.8
+57	62	25200.0	07:00:00	60.0	MOTO	 A trabajar	115.8
+62	57	61200.0	17:00:00	71.0	MOTO	 A regresar al hogar	115.8
+57	12	25200.0	07:00:00	65.0	TRANSPORTE PÚBLICO	 A trabajar	115.8
+12	57	63000.0	17:30:00	50.0	TRANSPORTE PÚBLICO	 A regresar al hogar	115.8
+56	61	19800.0	05:30:00	30.0	A PIE > 15 MIN	 A trabajar	104.7
+61	53	61200.0	17:00:00	30.0	A PIE > 15 MIN	 A trabajar	104.7
+56	56	23400.0	06:30:00	30.0	TRANSPORTE ESCOLAR	 A Estudiar	104.7
+56	56	53820.0	14:57:00	33.0	TRANSPORTE ESCOLAR	 A regresar al hogar	104.7
+20	151	21600.0	06:00:00	75.0	TRANSPORTE PÚBLICO	 A Estudiar	69.3
+151	20	68400.0	19:00:00	30.0	TRANSPORTE PÚBLICO	 A regresar al hogar	69.3
+60	12	27000.0	07:30:00	30.0	TRANSPORTE PÚBLICO	 A trabajar	103.3
+12	60	66600.0	18:30:00	30.0	TRANSPORTE PÚBLICO	 A regresar al hogar	103.3
+13	13	48600.0	13:30:00	10.0	A PIE <15 MIN	 A visitar a alguien	310.9
+13	13	60600.0	16:50:00	10.0	A PIE <15 MIN	 A regresar al hogar	310.9
+13	13	43200.0	12:00:00	45.0	AUTO	 A trabajar	310.9
+13	13	72900.0	20:15:00	45.0	AUTO	 A regresar al hogar	310.9
+154	146	23340.0	06:29:00	123.0	TRANSPORTE PÚBLICO	 A trabajar	207.2
+146	154	55680.0	15:28:00	126.0	TRANSPORTE PÚBLICO	 A regresar al hogar	207.2
+58	56	26700.0	07:25:00	25.0	MOTO	 A trabajar	2.2
+56	58	61440.0	17:04:00	25.0	MOTO	 A regresar al hogar	2.2
+18	25	43200.0	12:00:00	20.0	TAXI OCUPADO	 A realizar compras	58.3
+60	147	28800.0	08:00:00	34.0	AUTO	 A trabajar	134.4
+147	60	57660.0	16:01:00	34.0	AUTO	 A regresar al hogar	134.4
+20	16	37200.0	10:20:00	85.0	A PIE > 15 MIN	 A realizar compras	82.4
+16	20	46500.0	12:55:00	85.0	A PIE > 15 MIN	 A regresar al hogar	82.4
+7	11	27000.0	07:30:00	30.0	BICICLETA	 A trabajar	6.6
+11	7	64800.0	18:00:00	30.0	BICICLETA	 A regresar al hogar	6.6
+7	24	28800.0	08:00:00	40.0	BICICLETA	 A trabajar	6.6
+24	7	64200.0	17:50:00	40.0	BICICLETA	 A regresar al hogar	6.6
+58	56	34440.0	09:34:00	7.0	A PIE <15 MIN	 A trabajar	1.6
+56	58	62880.0	17:28:00	7.0	A PIE <15 MIN	 A regresar al hogar	1.6
+14	51	25200.0	07:00:00	10.0	A PIE <15 MIN	 A trabajar	245.8
+51	14	58800.0	16:20:00	10.0	A PIE <15 MIN	 A regresar al hogar	245.8
+25	153	21600.0	06:00:00	75.0	AUTO	 A trabajar	70.1
+153	25	64500.0	17:55:00	75.0	AUTO	 A regresar al hogar	70.1
+154	55	41400.0	11:30:00	30.0	TRANSPORTE PÚBLICO	 A asuntos médicos personales	253.8
+55	154	48600.0	13:30:00	21.0	TRANSPORTE PÚBLICO	 A regresar al hogar	253.8
+88	88	25200.0	07:00:00	30.0	MOTO	 A trabajar	200.4
+13	155	25200.0	07:00:00	60.0	TRANSPORTE PÚBLICO	 A trabajar	259.8
+155	13	57420.0	15:57:00	63.0	TRANSPORTE PÚBLICO	 A regresar al hogar	259.8
+52	51	25200.0	07:00:00	30.0	TRANSPORTE PÚBLICO	 A trabajar	224.2
+51	52	59400.0	16:30:00	30.0	A PIE > 15 MIN	 A regresar al hogar	224.2
+52	52	22500.0	06:15:00	10.0	A PIE <15 MIN	 A Estudiar	224.2
+52	52	37800.0	10:30:00	15.0	A PIE > 15 MIN	 A Estudiar	218.4
+52	52	65700.0	18:15:00	15.0	A PIE > 15 MIN	 A regresar al hogar	218.4
+58	58	39600.0	11:00:00	34.0	A PIE > 15 MIN	 A realizar compras	100.8
+58	56	42300.0	11:45:00	7.0	A PIE <15 MIN	 A realizar compras	100.8
+56	58	45960.0	12:46:00	7.0	A PIE <15 MIN	 A regresar al hogar	100.8
+55	86	57600.0	16:00:00	30.0	TRANSPORTE PÚBLICO	 A trabajar	226.3
+12	53	28800.0	08:00:00	30.0	TRANSPORTE PÚBLICO	 A realizar algún trámite personal	309.1
+53	52	37800.0	10:30:00	10.0	A PIE <15 MIN	 A realizar algún trámite personal	309.1
+52	12	50400.0	14:00:00	60.0	TRANSPORTE PÚBLICO	 A regresar al hogar	309.1
+152	152	20400.0	05:40:00	40.0	AUTO	 A Estudiar	119.9
+57	57	25200.0	07:00:00	7.0	A PIE <15 MIN	 A realizar compras	109.1
+57	57	25740.0	07:09:00	5.0	A PIE <15 MIN	 A regresar al hogar	109.1
+59	55	32400.0	09:00:00	20.0	A PIE > 15 MIN	 A realizar compras	106.1
+55	59	39600.0	11:00:00	10.0	TAXI OCUPADO	 A regresar al hogar	106.1
+57	55	34200.0	09:30:00	30.0	A PIE > 15 MIN	 A realizar actividades físicas y/o deportivas	114.9
+55	57	41400.0	11:30:00	70.0	A PIE > 15 MIN	 A regresar al hogar	114.9
+57	57	36300.0	10:05:00	123.0	A PIE > 15 MIN	 A llevar y/o dejar algo	114.9
+57	57	83100.0	23:05:00	123.0	A PIE > 15 MIN	 A regresar al hogar	114.9
+60	59	64800.0	18:00:00	15.0	ESPECIAL OCUPADO	 A realizar algún trámite personal	92.4
+59	69	66600.0	18:30:00	30.0	ESPECIAL OCUPADO	 A realizar algún trámite personal	92.4
+69	71	68700.0	19:05:00	10.0	A PIE <15 MIN	 A realizar algún trámite personal	92.4
+71	60	72900.0	20:15:00	30.0	ESPECIAL OCUPADO	 A regresar al hogar	92.4
+60	59	27000.0	07:30:00	75.0	ESPECIAL OCUPADO	 A realizar algún trámite personal	92.4
+60	57	23400.0	06:30:00	15.0	ESPECIAL OCUPADO	 A Estudiar	92.4
+57	60	55800.0	15:30:00	15.0	ESPECIAL OCUPADO	 A regresar al hogar	92.4
+7	1016	36000.0	10:00:00	20.0	A PIE > 15 MIN	 A realizar actividades físicas y/o deportivas	6.4
+1016	7	37200.0	10:20:00	70.0	A PIE > 15 MIN	 A regresar al hogar	6.4
+7	1016	36000.0	10:00:00	20.0	A PIE > 15 MIN	 A realizar actividades físicas y/o deportivas	6.4
+1016	7	40200.0	11:10:00	20.0	A PIE > 15 MIN	 A regresar al hogar	6.4
+12	13	42300.0	11:45:00	15.0	BICICLETA	 A Estudiar	271.7
+13	12	64800.0	18:00:00	15.0	BICICLETA	 A regresar al hogar	271.7
+58	24	23820.0	06:37:00	105.0	TRANSPORTE PÚBLICO	 A llevar y/o dejar algo	109.7
+24	58	42060.0	11:41:00	108.0	TRANSPORTE PÚBLICO	 A regresar al hogar	109.7
+154	154	39600.0	11:00:00	4.0	A PIE <15 MIN	 A realizar actividades recreativas y culturales	2.2
+154	154	61200.0	17:00:00	6.0	A PIE <15 MIN	 A regresar al hogar	2.2
+83	56	23400.0	06:30:00	30.0	A PIE > 15 MIN	 A Estudiar	628.3
+56	83	45000.0	12:30:00	40.0	A PIE > 15 MIN	 A regresar al hogar	628.3
+147	76	54000.0	15:00:00	40.0	A PIE > 15 MIN	 A trabajar	230.9
+54	54	40800.0	11:20:00	5.0	A PIE <15 MIN	 A trabajar	212.8
+54	54	77100.0	21:25:00	5.0	A PIE <15 MIN	 A regresar al hogar	212.8
+26	12	28800.0	08:00:00	15.0	MOTO	 A trabajar	78.6
+12	26	63900.0	17:45:00	15.0	MOTO	 A regresar al hogar	78.6
+58	56	21600.0	06:00:00	27.0	INFORMAL	 A trabajar	1.8
+56	58	64560.0	17:56:00	27.0	A PIE > 15 MIN	 A regresar al hogar	1.8
+54	58	36000.0	10:00:00	20.0	AUTO	 A realizar compras	346.8
+58	77	38700.0	10:45:00	15.0	AUTO	 A realizar compras	346.8
+77	75	40500.0	11:15:00	10.0	AUTO	 A realizar compras	346.8
+75	54	47160.0	13:06:00	14.0	AUTO	 A regresar al hogar	346.8
+54	58	36000.0	10:00:00	20.0	AUTO	 A realizar compras	346.8
+58	77	38700.0	10:45:00	15.0	AUTO	 A realizar compras	346.8
+77	75	40500.0	11:15:00	10.0	AUTO	 A realizar compras	346.8
+75	54	47760.0	13:16:00	14.0	AUTO	 A regresar al hogar	346.8
+53	53	32400.0	09:00:00	10.0	OTRO	 A realizar actividades físicas y/o deportivas	190.4
+53	53	61500.0	17:05:00	10.0	OTRO	 A regresar al hogar	190.4
+58	53	23400.0	06:30:00	30.0	TRANSPORTE PÚBLICO	 A asuntos médicos personales	107.8
+53	58	30000.0	08:20:00	40.0	TRANSPORTE PÚBLICO	 A regresar al hogar	107.8
+13	52	23400.0	06:30:00	15.0	TRANSPORTE ESCOLAR	 A Estudiar	318.6
+52	13	53820.0	14:57:00	18.0	TRANSPORTE ESCOLAR	 A regresar al hogar	318.6
+7	956	39600.0	11:00:00	15.0	A PIE > 15 MIN	 A trabajar	6.1
+956	7	43200.0	12:00:00	60.0	A PIE > 15 MIN	 A regresar al hogar	6.1
+7	956	59400.0	16:30:00	3.0	A PIE <15 MIN	 A trabajar	6.1
+956	7	64800.0	18:00:00	3.0	A PIE <15 MIN	 A regresar al hogar	6.1
+57	56	29220.0	08:07:00	157.0	TRANSPORTE PÚBLICO	 A realizar algún trámite personal	108.9
+56	57	39900.0	11:05:00	100.0	TRANSPORTE PÚBLICO	 A regresar al hogar	108.9
+58	62	48600.0	13:30:00	15.0	BICICLETA	 A realizar algún trámite personal	109.2
+62	58	50400.0	14:00:00	20.0	BICICLETA	 A regresar al hogar	109.2
+58	58	39720.0	11:02:00	8.0	A PIE <15 MIN	 A realizar compras	109.2
+58	58	40500.0	11:15:00	10.0	A PIE <15 MIN	 A regresar al hogar	109.2
+58	58	54060.0	15:01:00	10.0	A PIE <15 MIN	 A realizar compras	109.2
+58	58	55260.0	15:21:00	9.0	A PIE <15 MIN	 A regresar al hogar	109.2
+13	73	32400.0	09:00:00	67.0	INFORMAL	 A Estudiar	234.2
+73	13	51600.0	14:20:00	70.0	INFORMAL	 A regresar al hogar	234.2
+54	52	37800.0	10:30:00	30.0	A PIE > 15 MIN	 A realizar actividades físicas y/o deportivas	329.7
+52	54	41040.0	11:24:00	6.0	A PIE <15 MIN	 A regresar al hogar	329.7
+54	76	65040.0	18:04:00	16.0	AUTO	 A visitar a alguien	329.7
+76	54	76200.0	21:10:00	20.0	AUTO	 A regresar al hogar	329.7
+54	75	64800.0	18:00:00	20.0	AUTO	 A visitar a alguien	329.7
+75	54	76200.0	21:10:00	20.0	AUTO	 A regresar al hogar	329.7
+154	154	39600.0	11:00:00	20.0	A PIE > 15 MIN	 A realizar compras	216.5
+154	154	44100.0	12:15:00	11.0	A PIE <15 MIN	 A regresar al hogar	216.5
+54	70	25200.0	07:00:00	20.0	MOTO	 A trabajar	180.5
+70	54	54600.0	15:10:00	20.0	MOTO	 A regresar al hogar	180.5
+54	52	46800.0	13:00:00	15.0	A PIE > 15 MIN	 A realizar compras	180.5
+52	54	51300.0	14:15:00	15.0	A PIE > 15 MIN	 A regresar al hogar	180.5
+23	12	24000.0	06:40:00	20.0	A PIE > 15 MIN	 A Estudiar	230.0
+12	23	54000.0	15:00:00	20.0	A PIE > 15 MIN	 A regresar al hogar	230.0
+51	56	24600.0	06:50:00	10.0	A PIE <15 MIN	 A realizar actividades físicas y/o deportivas	205.3
+56	51	25200.0	07:00:00	10.0	A PIE <15 MIN	 A regresar al hogar	205.3
+58	59	25260.0	07:01:00	34.0	A PIE > 15 MIN	 A realizar actividades recreativas y culturales	104.1
+59	58	46800.0	13:00:00	30.0	INFORMAL	 A regresar al hogar	104.1
+60	71	33600.0	09:20:00	30.0	A PIE > 15 MIN	 A trabajar	105.8
+71	60	39600.0	11:00:00	35.0	A PIE > 15 MIN	 A regresar al hogar	105.8
+60	155	36000.0	10:00:00	35.0	TRANSPORTE PÚBLICO	 A trabajar	105.8
+155	60	68400.0	19:00:00	45.0	TRANSPORTE PÚBLICO	 A regresar al hogar	105.8
+12	12	57600.0	16:00:00	4.0	BICICLETA	 A trabajar	259.9
+12	12	79200.0	22:00:00	4.0	BICICLETA	 A regresar al hogar	259.9
+7	153	21600.0	06:00:00	50.0	TRANSPORTE PÚBLICO	 A Estudiar	6.1
+153	7	51240.0	14:14:00	53.0	TRANSPORTE PÚBLICO	 A regresar al hogar	6.1
+59	60	32700.0	09:05:00	10.0	A PIE <15 MIN	 A realizar actividades físicas y/o deportivas	129.2
+60	59	34800.0	09:40:00	30.0	A PIE > 15 MIN	 A regresar al hogar	129.2
+57	22	21600.0	06:00:00	46.0	BICICLETA	 A trabajar	89.8
+22	57	59400.0	16:30:00	46.0	BICICLETA	 A regresar al hogar	89.8
+11	11	61200.0	17:00:00	10.0	BICICLETA	 A visitar a alguien	230.8
+11	11	71400.0	19:50:00	10.0	BICICLETA	 A regresar al hogar	230.8
+57	52	34200.0	09:30:00	15.0	AUTO	 A realizar algún trámite personal	102.1
+52	57	40500.0	11:15:00	15.0	AUTO	 A regresar al hogar	102.1
+154	54	25200.0	07:00:00	60.0	TRANSPORTE PÚBLICO	 A trabajar	206.3
+54	154	61200.0	17:00:00	3.0	TRANSPORTE PÚBLICO	 A regresar al hogar	206.3
+14	75	41400.0	11:30:00	40.0	TRANSPORTE PÚBLICO	 A trabajar	239.8
+75	14	76620.0	21:17:00	43.0	TRANSPORTE PÚBLICO	 A regresar al hogar	239.8
+14	59	39600.0	11:00:00	45.0	INFORMAL	 A Estudiar	239.8
+59	14	65520.0	18:12:00	48.0	INFORMAL	 A regresar al hogar	239.8
+52	52	25800.0	07:10:00	10.0	A PIE <15 MIN	 A trabajar	216.8
+52	52	64800.0	18:00:00	10.0	A PIE <15 MIN	 A regresar al hogar	216.8
+52	52	41400.0	11:30:00	15.0	A PIE > 15 MIN	 A trabajar	216.8
+52	52	75600.0	21:00:00	15.0	A PIE > 15 MIN	 A regresar al hogar	216.8
+25	156	22500.0	06:15:00	40.0	MOTO	 A trabajar	65.4
+156	25	64800.0	18:00:00	30.0	MOTO	 A regresar al hogar	65.4
+854	54	28800.0	08:00:00	30.0	MOTO	 A trabajar	92.5
+54	854	68400.0	19:00:00	30.0	MOTO	 A regresar al hogar	92.5
+154	852	36000.0	10:00:00	20.0	MOTO	 A trabajar	220.4
+852	154	65220.0	18:07:00	20.0	MOTO	 A regresar al hogar	220.4
+154	852	36000.0	10:00:00	20.0	MOTO	 A trabajar	220.4
+852	154	65220.0	18:07:00	20.0	MOTO	 A regresar al hogar	220.4
+13	51	23400.0	06:30:00	20.0	A PIE > 15 MIN	 A Estudiar	315.5
+51	13	51000.0	14:10:00	20.0	A PIE > 15 MIN	 A regresar al hogar	315.5
+58	51	22500.0	06:15:00	53.0	A PIE > 15 MIN	 A acompañar a alguien sin remuneración	112.3
+51	58	30900.0	08:35:00	53.0	A PIE > 15 MIN	 A regresar al hogar	112.3
+24	11	43200.0	12:00:00	30.0	A PIE > 15 MIN	 A acompañar a alguien sin remuneración	293.8
+11	24	45120.0	12:32:00	18.0	A PIE > 15 MIN	 A regresar al hogar	293.8
+24	11	56400.0	15:40:00	18.0	A PIE > 15 MIN	 A acompañar a alguien sin remuneración	293.8
+11	24	57600.0	16:00:00	30.0	A PIE > 15 MIN	 A regresar al hogar	293.8
+24	11	43200.0	12:00:00	30.0	A PIE > 15 MIN	 A Estudiar	293.8
+11	24	57600.0	16:00:00	30.0	A PIE > 15 MIN	 A regresar al hogar	293.8
+58	52	36840.0	10:14:00	23.0	INFORMAL	 A realizar algún trámite personal	110.5
+52	58	50040.0	13:54:00	23.0	A PIE > 15 MIN	 A regresar al hogar	110.5
+58	11	25800.0	07:10:00	59.0	A PIE > 15 MIN	 A acompañar a alguien sin remuneración	109.2
+11	58	45660.0	12:41:00	59.0	A PIE > 15 MIN	 A regresar al hogar	109.2
+56	56	28800.0	08:00:00	20.0	A PIE > 15 MIN	 A trabajar	92.5
+56	56	67740.0	18:49:00	20.0	A PIE > 15 MIN	 A regresar al hogar	92.5
+52	52	21600.0	06:00:00	15.0	A PIE > 15 MIN	 A Estudiar	177.7
+52	52	44100.0	12:15:00	15.0	A PIE > 15 MIN	 A regresar al hogar	177.7
+52	51	21600.0	06:00:00	15.0	A PIE > 15 MIN	 A Estudiar	177.7
+51	52	44100.0	12:15:00	15.0	A PIE > 15 MIN	 A regresar al hogar	177.7
+52	56	23400.0	06:30:00	30.0	A PIE > 15 MIN	 A Estudiar	176.0
+56	52	44100.0	12:15:00	30.0	A PIE > 15 MIN	 A regresar al hogar	176.0
+59	59	28800.0	08:00:00	15.0	BICICLETA	 A trabajar	91.3
+59	59	69300.0	19:15:00	15.0	BICICLETA	 A regresar al hogar	91.3
+20	87	32400.0	09:00:00	15.0	AUTO	 A trabajar	63.4
+20	75	26400.0	07:20:00	70.0	TRANSPORTE PÚBLICO	 A trabajar	63.4
+58	21	36000.0	10:00:00	30.0	A PIE > 15 MIN	 A realizar algún trámite personal	111.8
+21	58	45900.0	12:45:00	45.0	A PIE > 15 MIN	 A regresar al hogar	111.8
+58	156	30780.0	08:33:00	7.0	TAXI OCUPADO	 A asuntos médicos personales	107.3
+156	58	41640.0	11:34:00	7.0	TAXI OCUPADO	 A regresar al hogar	107.3
+154	75	27900.0	07:45:00	20.0	BICICLETA	 A trabajar	198.4
+75	154	66600.0	18:30:00	30.0	BICICLETA	 A regresar al hogar	198.4
+154	75	54000.0	15:00:00	20.0	BICICLETA	 A trabajar	198.4
+75	154	66600.0	18:30:00	30.0	BICICLETA	 A regresar al hogar	198.4
+154	56	32400.0	09:00:00	36.0	BICICLETA	 A trabajar	206.8
+56	154	56280.0	15:38:00	36.0	BICICLETA	 A regresar al hogar	206.8
+154	11	32040.0	08:54:00	62.0	TAXI OCUPADO	 A visitar a alguien	258.8
+11	154	57300.0	15:55:00	65.0	TAXI OCUPADO	 A regresar al hogar	258.8
+154	77	27000.0	07:30:00	60.0	TRANSPORTE PÚBLICO	 A trabajar	1.9
+77	154	54060.0	15:01:00	63.0	TRANSPORTE PÚBLICO	 A regresar al hogar	1.9
+147	147	21600.0	06:00:00	50.0	TRANSPORTE PÚBLICO	 A trabajar	5.7
+147	7	62220.0	17:17:00	53.0	TRANSPORTE PÚBLICO	 A regresar al hogar	5.7
+83	83	27000.0	07:30:00	15.0	AUTO	 A realizar compras	783.3
+83	83	27900.0	07:45:00	15.0	AUTO	 A regresar al hogar	783.3
+25	55	36000.0	10:00:00	27.0	BICICLETA	 A trabajar	65.6
+55	25	56700.0	15:45:00	15.0	BICICLETA	 A regresar al hogar	65.6
+56	53	30660.0	08:31:00	19.0	OTRO	 A trabajar	107.5
+53	56	46560.0	12:56:00	19.0	OTRO	 A regresar al hogar	107.5
+56	55	18900.0	05:15:00	38.0	ESPECIAL OCUPADO	 A trabajar	107.5
+55	56	48240.0	13:24:00	41.0	ESPECIAL OCUPADO	 A regresar al hogar	107.5
+57	23	27900.0	07:45:00	15.0	TAXI OCUPADO	 A asuntos médicos personales	108.5
+23	57	36300.0	10:05:00	61.0	TAXI OCUPADO	 A regresar al hogar	108.5
+57	155	18300.0	05:05:00	76.0	AUTO	 A trabajar	108.5
+155	57	64800.0	18:00:00	82.0	AUTO	 A regresar al hogar	108.5
+57	57	37800.0	10:30:00	5.0	A PIE <15 MIN	 A realizar compras	112.7
+57	57	38100.0	10:35:00	5.0	A PIE <15 MIN	 A regresar al hogar	112.7
+52	54	23400.0	06:30:00	15.0	A PIE > 15 MIN	 A Estudiar	205.7
+54	52	43200.0	12:00:00	15.0	A PIE > 15 MIN	 A regresar al hogar	205.7
+52	54	23400.0	06:30:00	30.0	A PIE > 15 MIN	 A trabajar	205.7
+54	52	61200.0	17:00:00	30.0	A PIE > 15 MIN	 A regresar al hogar	205.7
+56	153	21600.0	06:00:00	25.0	MOTO	 A trabajar	87.4
+153	56	70500.0	19:35:00	25.0	MOTO	 A regresar al hogar	87.4
+83	83	37800.0	10:30:00	10.0	A PIE <15 MIN	 A realizar compras	872.2
+83	83	39600.0	11:00:00	10.0	A PIE <15 MIN	 A regresar al hogar	872.2
+23	53	25200.0	07:00:00	20.0	A PIE > 15 MIN	 A trabajar	233.2
+53	23	77400.0	21:30:00	17.0	A PIE > 15 MIN	 A regresar al hogar	233.2
+25	52	23400.0	06:30:00	75.0	AUTO	 A trabajar	84.8
+52	25	60300.0	16:45:00	75.0	AUTO	 A regresar al hogar	84.8
+26	25	24600.0	06:50:00	20.0	TRANSPORTE PÚBLICO	 A trabajar	127.9
+25	25	57900.0	16:05:00	20.0	TRANSPORTE PÚBLICO	 A realizar compras	127.9
+52	52	20400.0	05:40:00	25.0	BICICLETA	 A Estudiar	214.1
+52	52	41700.0	11:35:00	25.0	BICICLETA	 A regresar al hogar	214.1
+58	155	27000.0	07:30:00	35.0	TRANSPORTE PÚBLICO	 A trabajar	110.3
+155	58	70200.0	19:30:00	30.0	TRANSPORTE PÚBLICO	 A regresar al hogar	110.3
+58	58	46800.0	13:00:00	35.0	A PIE > 15 MIN	 A visitar a alguien	112.8
+58	58	64800.0	18:00:00	30.0	A PIE > 15 MIN	 A regresar al hogar	112.8
+88	854	18300.0	05:05:00	115.0	TRANSPORTE PÚBLICO	 A trabajar	112.8
+854	58	64800.0	18:00:00	78.0	TRANSPORTE PÚBLICO	 A regresar al hogar	112.8
+58	75	25200.0	07:00:00	30.0	MOTO	 A trabajar	112.8
+75	58	72000.0	20:00:00	41.0	MOTO	 A regresar al hogar	112.8
+58	58	46800.0	13:00:00	30.0	A PIE > 15 MIN	 A visitar a alguien	112.8
+58	58	65100.0	18:05:00	15.0	A PIE > 15 MIN	 A regresar al hogar	112.8
+58	155	21600.0	06:00:00	110.0	TRANSPORTE PÚBLICO	 A trabajar	112.8
+155	58	64800.0	18:00:00	90.0	TRANSPORTE PÚBLICO	 A regresar al hogar	112.8
+20	21	25200.0	07:00:00	5.0	A PIE <15 MIN	 A trabajar	125.2
+21	16	54900.0	15:15:00	15.0	AUTO	 A llevar y/o dejar algo	125.2
+16	52	58500.0	16:15:00	80.0	AUTO	 A llevar y/o dejar algo	125.2
+52	21	64800.0	18:00:00	60.0	AUTO	 A llevar y/o dejar algo	125.2
+21	20	72000.0	20:00:00	5.0	A PIE <15 MIN	 A regresar al hogar	125.2
+20	56	23400.0	06:30:00	20.0	A PIE > 15 MIN	 A trabajar	125.2
+56	20	50400.0	14:00:00	20.0	A PIE > 15 MIN	 A regresar al hogar	125.2
+20	86	23400.0	06:30:00	30.0	BICICLETA	 A trabajar	125.2
+86	20	59400.0	16:30:00	30.0	BICICLETA	 A regresar al hogar	125.2
+20	146	36000.0	10:00:00	45.0	MOTO	 A trabajar	125.2
+146	20	61200.0	17:00:00	60.0	MOTO	 A regresar al hogar	125.2
+20	69	25200.0	07:00:00	30.0	MOTO	 A trabajar	125.2
+69	20	57600.0	16:00:00	40.0	MOTO	 A regresar al hogar	125.2
+20	56	23400.0	06:30:00	20.0	A PIE > 15 MIN	 A Estudiar	125.2
+56	20	50400.0	14:00:00	20.0	A PIE > 15 MIN	 A regresar al hogar	125.2
+20	21	25200.0	07:00:00	10.0	A PIE <15 MIN	 A acompañar a alguien sin remuneración	59.3
+20	21	25200.0	07:00:00	5.0	A PIE <15 MIN	 A Estudiar	59.3
+21	20	55500.0	15:25:00	5.0	A PIE <15 MIN	 A regresar al hogar	59.3
+13	13	41400.0	11:30:00	30.0	TRANSPORTE PÚBLICO	 A Estudiar	260.8
+13	13	64620.0	17:57:00	33.0	TRANSPORTE PÚBLICO	 A regresar al hogar	260.8
+12	77	30000.0	08:20:00	40.0	BICICLETA	 A trabajar	233.0
+77	12	59400.0	16:30:00	30.0	BICICLETA	 A regresar al hogar	233.0
+154	154	18900.0	05:15:00	60.0	TRANSPORTE PÚBLICO	 A trabajar	207.2
+154	154	51300.0	14:15:00	64.0	TRANSPORTE PÚBLICO	 A regresar al hogar	207.2
+14	87	28800.0	08:00:00	40.0	BICICLETA	 A trabajar	300.9
+87	14	69600.0	19:20:00	40.0	BICICLETA	 A regresar al hogar	300.9
+87	87	28800.0	08:00:00	40.0	BICICLETA	 A trabajar	300.9
+87	14	69600.0	19:20:00	40.0	BICICLETA	 A regresar al hogar	300.9
+14	13	23400.0	06:30:00	10.0	BICICLETA	 A Estudiar	300.9
+13	14	41400.0	11:30:00	10.0	A PIE <15 MIN	 A regresar al hogar	300.9
+16	13	23400.0	06:30:00	10.0	BICICLETA	 A Estudiar	300.9
+13	14	41400.0	11:30:00	10.0	A PIE <15 MIN	 A regresar al hogar	300.9
+55	55	25800.0	07:10:00	13.0	A PIE <15 MIN	 A trabajar	81.1
+55	55	59400.0	16:30:00	10.0	A PIE <15 MIN	 A regresar al hogar	81.1
+60	153	45300.0	12:35:00	113.0	TRANSPORTE PÚBLICO	 A realizar algún trámite personal	103.3
+153	60	52440.0	14:34:00	126.0	TAXI OCUPADO	 A regresar al hogar	103.3
+56	11	28800.0	08:00:00	60.0	TRANSPORTE PÚBLICO	 A trabajar	92.5
+11	56	68220.0	18:57:00	63.0	TAXI OCUPADO	 A regresar al hogar	92.5
+56	59	23400.0	06:30:00	60.0	TRANSPORTE PÚBLICO	 A trabajar	89.7
+59	56	59220.0	16:27:00	63.0	TRANSPORTE PÚBLICO	 A regresar al hogar	89.7
+55	54	27000.0	07:30:00	15.0	BICICLETA	 A trabajar	55.9
+54	55	34200.0	09:30:00	15.0	BICICLETA	 A regresar al hogar	55.9
+55	59	39900.0	11:05:00	10.0	BICICLETA	 A acompañar a alguien sin remuneración	55.9
+59	55	40500.0	11:15:00	15.0	BICICLETA	 A regresar al hogar	55.9
+55	54	57600.0	16:00:00	15.0	BICICLETA	 A trabajar	55.9
+54	55	64800.0	18:00:00	15.0	BICICLETA	 A regresar al hogar	55.9
+55	59	21600.0	06:00:00	10.0	BICICLETA	 A Estudiar	55.9
+59	55	40500.0	11:15:00	15.0	BICICLETA	 A regresar al hogar	55.9
+55	56	21600.0	06:00:00	10.0	BICICLETA	 A Estudiar	55.9
+56	55	40500.0	11:15:00	15.0	BICICLETA	 A regresar al hogar	55.9
+24	51	39600.0	11:00:00	30.0	TAXI OCUPADO	 A realizar algún trámite personal	261.0
+51	24	48600.0	13:30:00	50.0	TRANSPORTE PÚBLICO	 A regresar al hogar	261.0
+58	56	23760.0	06:36:00	4.0	AUTO	 A acompañar a alguien sin remuneración	105.5
+56	58	24000.0	06:40:00	10.0	AUTO	 A regresar al hogar	105.5
+154	55	14400.0	04:00:00	10.0	AUTO	 A realizar compras	206.3
+55	154	64800.0	18:00:00	20.0	AUTO	 A regresar al hogar	206.3
+154	56	12600.0	03:30:00	30.0	AUTO	 A realizar compras	206.3
+56	154	66000.0	18:20:00	3.0	AUTO	 A regresar al hogar	206.3
+154	56	14400.0	04:00:00	10.0	AUTO	 A realizar compras	206.3
+56	154	64200.0	17:50:00	10.0	AUTO	 A regresar al hogar	206.3
+154	56	14400.0	04:00:00	10.0	AUTO	 A realizar compras	206.3
+56	154	64800.0	18:00:00	20.0	AUTO	 A regresar al hogar	206.3
+59	60	26400.0	07:20:00	33.0	A PIE > 15 MIN	 A trabajar	106.5
+60	59	70200.0	19:30:00	25.0	A PIE > 15 MIN	 A regresar al hogar	106.5
+56	69	31200.0	08:40:00	70.0	AUTO	 A realizar algún trámite personal	103.3
+69	56	48300.0	13:25:00	70.0	AUTO	 A regresar al hogar	103.3
+60	60	21600.0	06:00:00	75.0	TRANSPORTE ESCOLAR	 A Estudiar	107.9
+60	60	51300.0	14:15:00	75.0	TRANSPORTE ESCOLAR	 A regresar al hogar	107.9
+83	147	28800.0	08:00:00	50.0	TRANSPORTE PÚBLICO	 A trabajar	797.3
+147	83	54000.0	15:00:00	60.0	TRANSPORTE PÚBLICO	 A regresar al hogar	797.3
+83	83	59400.0	16:30:00	4.0	A PIE <15 MIN	 A realizar compras	797.3
+83	83	59940.0	16:39:00	4.0	A PIE <15 MIN	 A regresar al hogar	797.3
+20	52	31200.0	08:40:00	20.0	BICICLETA	 A trabajar	69.8
+54	25	36000.0	10:00:00	60.0	A PIE > 15 MIN	 A realizar actividades físicas y/o deportivas	253.6
+25	54	41400.0	11:30:00	60.0	A PIE > 15 MIN	 A regresar al hogar	253.6
+56	56	21600.0	06:00:00	17.0	A PIE > 15 MIN	 A llevar y/o dejar algo	106.1
+56	56	33180.0	09:13:00	17.0	A PIE > 15 MIN	 A regresar al hogar	106.1
+56	56	21660.0	06:01:00	16.0	A PIE > 15 MIN	 A Estudiar	106.1
+56	56	54840.0	15:14:00	16.0	A PIE > 15 MIN	 A regresar al hogar	106.1
+24	75	42000.0	11:40:00	50.0	TRANSPORTE PÚBLICO	 A trabajar	294.7
+75	24	63000.0	17:30:00	180.0	TRANSPORTE PÚBLICO	 A regresar al hogar	294.7
+24	52	19200.0	05:20:00	55.0	TRANSPORTE ESCOLAR	 A Estudiar	294.7
+52	24	41400.0	11:30:00	75.0	TRANSPORTE ESCOLAR	 A regresar al hogar	294.7
+24	11	21600.0	06:00:00	5.0	A PIE <15 MIN	 A Estudiar	294.7
+11	24	42600.0	11:50:00	40.0	A PIE > 15 MIN	 A regresar al hogar	294.7
+13	13	28800.0	08:00:00	10.0	A PIE <15 MIN	 A trabajar	298.5
+13	13	78600.0	21:50:00	10.0	A PIE <15 MIN	 A regresar al hogar	298.5
+13	13	32400.0	09:00:00	20.0	INFORMAL	 A trabajar	298.5
+13	13	65220.0	18:07:00	23.0	INFORMAL	 A regresar al hogar	298.5
+14	13	23400.0	06:30:00	60.0	TRANSPORTE PÚBLICO	 A asuntos médicos personales	303.6
+13	14	35820.0	09:57:00	63.0	TRANSPORTE PÚBLICO	 A regresar al hogar	303.6
+14	158	14400.0	04:00:00	60.0	TRANSPORTE PÚBLICO	 A trabajar	303.6
+158	14	53820.0	14:57:00	63.0	TRANSPORTE PÚBLICO	 A regresar al hogar	303.6
+14	13	21600.0	06:00:00	15.0	A PIE > 15 MIN	 A Estudiar	303.6
+59	52	54900.0	15:15:00	40.0	BICICLETA	 A realizar algún trámite personal	106.1
+52	59	58560.0	16:16:00	40.0	BICICLETA	 A regresar al hogar	106.1
+59	52	36000.0	10:00:00	60.0	A PIE > 15 MIN	 A realizar compras	125.9
+52	59	43200.0	12:00:00	60.0	A PIE > 15 MIN	 A regresar al hogar	125.9
+53	86	54000.0	15:00:00	40.0	TRANSPORTE PÚBLICO	 A Estudiar	167.1
+86	53	68400.0	19:00:00	60.0	TRANSPORTE PÚBLICO	 A regresar al hogar	167.1
+7	11	19800.0	05:30:00	30.0	ESPECIAL OCUPADO	 A Estudiar	5.2
+11	7	43320.0	12:02:00	33.0	ESPECIAL OCUPADO	 A regresar al hogar	5.2
+20	56	37800.0	10:30:00	10.0	BICICLETA	 A trabajar	88.3
+56	20	82200.0	22:50:00	10.0	BICICLETA	 A regresar al hogar	88.3
+20	56	43200.0	12:00:00	5.0	MOTO	 A trabajar	88.3
+56	20	86100.0	23:55:00	4.0	MOTO	 A regresar al hogar	88.3
+20	56	43200.0	12:00:00	5.0	MOTO	 A Estudiar	88.3
+56	20	61200.0	17:00:00	20.0	A PIE > 15 MIN	 A regresar al hogar	88.3
+20	56	43200.0	12:00:00	5.0	MOTO	 A Estudiar	88.3
+56	20	61200.0	17:00:00	20.0	A PIE > 15 MIN	 A regresar al hogar	88.3
+58	52	37800.0	10:30:00	87.0	TAXI OCUPADO	 A realizar compras	103.0
+52	58	49200.0	13:40:00	139.0	TAXI OCUPADO	 A regresar al hogar	103.0
+26	56	18000.0	05:00:00	10.0	A PIE <15 MIN	 A realizar actividades físicas y/o deportivas	97.9
+56	26	21600.0	06:00:00	30.0	A PIE > 15 MIN	 A regresar al hogar	97.9
+26	11	61200.0	17:00:00	20.0	A PIE > 15 MIN	 A realizar actividades físicas y/o deportivas	97.9
+11	26	63000.0	17:30:00	20.0	A PIE > 15 MIN	 A regresar al hogar	97.9
+23	52	21600.0	06:00:00	60.0	TRANSPORTE PÚBLICO	 A trabajar	233.2
+52	23	64800.0	18:00:00	90.0	TRANSPORTE PÚBLICO	 A regresar al hogar	233.2
+25	52	26100.0	07:15:00	10.0	MOTO	 A Estudiar	85.0
+52	25	50940.0	14:09:00	10.0	MOTO	 A regresar al hogar	85.0
+24	11	64800.0	18:00:00	30.0	A PIE > 15 MIN	 A Estudiar	308.0
+11	24	79200.0	22:00:00	30.0	A PIE > 15 MIN	 A regresar al hogar	308.0
+24	11	43200.0	12:00:00	30.0	A PIE > 15 MIN	 A Estudiar	308.0
+11	24	61200.0	17:00:00	30.0	A PIE > 15 MIN	 A regresar al hogar	308.0
+20	57	21600.0	06:00:00	6.0	A PIE <15 MIN	 A trabajar	84.5
+57	20	63000.0	17:30:00	6.0	A PIE <15 MIN	 A regresar al hogar	84.5
+20	57	21600.0	06:00:00	3.0	A PIE <15 MIN	 A trabajar	84.5
+57	20	64800.0	18:00:00	40.0	A PIE > 15 MIN	 A regresar al hogar	84.5
+52	53	28800.0	08:00:00	5.0	A PIE <15 MIN	 A trabajar	198.8
+53	52	64500.0	17:55:00	5.0	A PIE <15 MIN	 A regresar al hogar	198.8
+14	13	23400.0	06:30:00	15.0	A PIE > 15 MIN	 A acompañar a alguien sin remuneración	302.3
+13	14	24600.0	06:50:00	15.0	A PIE > 15 MIN	 A regresar al hogar	302.3
+14	81	45000.0	12:30:00	30.0	MOTO	 A trabajar	302.3
+81	14	73800.0	20:30:00	30.0	MOTO	 A regresar al hogar	302.3
+14	14	23400.0	06:30:00	15.0	A PIE > 15 MIN	 A Estudiar	302.3
+14	14	43200.0	12:00:00	15.0	A PIE > 15 MIN	 A regresar al hogar	302.3
+14	13	23400.0	06:30:00	3.0	A PIE <15 MIN	 A Estudiar	302.3
+13	13	24300.0	06:45:00	3.0	A PIE <15 MIN	 A Estudiar	302.3
+14	13	23400.0	06:30:00	15.0	A PIE > 15 MIN	 A Estudiar	302.3
+13	14	43200.0	12:00:00	15.0	A PIE > 15 MIN	 A regresar al hogar	302.3
+56	73	25200.0	07:00:00	71.0	TRANSPORTE PÚBLICO	 A realizar algún trámite personal	88.9
+73	56	45960.0	12:46:00	74.0	TRANSPORTE PÚBLICO	 A regresar al hogar	88.9
+58	852	18000.0	05:00:00	60.0	TRANSPORTE PÚBLICO	 A asuntos médicos personales	112.0
+852	58	25200.0	07:00:00	130.0	TRANSPORTE PÚBLICO	 A regresar al hogar	112.0
+13	56	18000.0	05:00:00	40.0	TRANSPORTE PÚBLICO	 A trabajar	300.4
+56	13	51420.0	14:17:00	43.0	TRANSPORTE PÚBLICO	 A regresar al hogar	300.4
+58	147	27000.0	07:30:00	45.0	TRANSPORTE PÚBLICO	 A trabajar	106.6
+147	58	66600.0	18:30:00	60.0	TRANSPORTE PÚBLICO	 A regresar al hogar	106.6
+58	155	43200.0	12:00:00	20.0	MOTO	 A realizar algún trámite personal	114.3
+155	58	45600.0	12:40:00	20.0	MOTO	 A regresar al hogar	114.3
+58	155	23400.0	06:30:00	55.0	TRANSPORTE PÚBLICO	 A trabajar	114.3
+155	58	59700.0	16:35:00	50.0	TRANSPORTE PÚBLICO	 A regresar al hogar	114.3
+83	60	28860.0	08:01:00	15.0	A PIE > 15 MIN	 A trabajar	826.7
+60	83	36000.0	10:00:00	15.0	A PIE > 15 MIN	 A regresar al hogar	826.7
+83	60	50400.0	14:00:00	77.0	A PIE > 15 MIN	 A realizar compras	826.7
+60	83	55800.0	15:30:00	15.0	A PIE > 15 MIN	 A regresar al hogar	826.7
+57	57	14400.0	04:00:00	20.0	A PIE > 15 MIN	 A trabajar	134.9
+57	57	25500.0	07:05:00	20.0	A PIE > 15 MIN	 A regresar al hogar	134.9
+57	57	47160.0	13:06:00	14.0	A PIE <15 MIN	 A trabajar	134.9
+57	57	59640.0	16:34:00	26.0	A PIE > 15 MIN	 A regresar al hogar	134.9
+58	56	27660.0	07:41:00	113.0	TAXI OCUPADO	 A realizar algún trámite personal	110.8
+56	58	34980.0	09:43:00	123.0	A PIE > 15 MIN	 A regresar al hogar	110.8
+144	147	55800.0	15:30:00	20.0	AUTO	 A asuntos médicos personales	89.3
+155	147	54000.0	15:00:00	30.0	AUTO	 A asuntos médicos personales	89.3
+24	7	36000.0	10:00:00	15.0	A PIE > 15 MIN	 A realizar compras	287.2
+7	24	40500.0	11:15:00	15.0	A PIE > 15 MIN	 A regresar al hogar	287.2
+57	75	32400.0	09:00:00	41.0	TRANSPORTE PÚBLICO	 A asuntos médicos personales	122.7
+75	57	43200.0	12:00:00	32.0	TRANSPORTE PÚBLICO	 A regresar al hogar	122.7
+57	56	52200.0	14:30:00	16.0	TRANSPORTE PÚBLICO	 A realizar compras	122.7
+56	57	54420.0	15:07:00	23.0	TRANSPORTE PÚBLICO	 A regresar al hogar	122.7
+58	55	34800.0	09:40:00	15.0	A PIE > 15 MIN	 A realizar algún trámite personal	112.6
+55	58	40200.0	11:10:00	20.0	A PIE > 15 MIN	 A regresar al hogar	112.6
+60	60	25200.0	07:00:00	45.0	TRANSPORTE PÚBLICO	 A trabajar	91.3
+60	60	70200.0	19:30:00	40.0	TRANSPORTE PÚBLICO	 A regresar al hogar	91.3
+13	77	24000.0	06:40:00	80.0	TRANSPORTE PÚBLICO	 A trabajar	309.9
+77	13	58020.0	16:07:00	83.0	TRANSPORTE PÚBLICO	 A regresar al hogar	309.9
+13	13	24000.0	06:40:00	10.0	A PIE <15 MIN	 A Estudiar	309.9
+13	13	49800.0	13:50:00	10.0	A PIE <15 MIN	 A regresar al hogar	309.9
+13	13	24000.0	06:40:00	10.0	A PIE <15 MIN	 A Estudiar	309.9
+13	13	49800.0	13:50:00	10.0	A PIE <15 MIN	 A regresar al hogar	309.9
+52	52	50400.0	14:00:00	15.0	A PIE > 15 MIN	 A acompañar a alguien sin remuneración	195.9
+52	54	53100.0	14:45:00	15.0	A PIE > 15 MIN	 A regresar al hogar	195.9
+54	52	54000.0	15:00:00	75.0	A PIE > 15 MIN	 A acompañar a alguien sin remuneración	195.9
+7	12	23880.0	06:38:00	6.0	MOTO	 A acompañar a alguien sin remuneración	5.3
+12	7	25200.0	07:00:00	168.0	MOTO	 A regresar al hogar	5.3
+7	12	23400.0	06:30:00	6.0	MOTO	 A Estudiar	5.3
+12	7	54000.0	15:00:00	30.0	TRANSPORTE PÚBLICO	 A regresar al hogar	5.3
+58	56	51300.0	14:15:00	25.0	TRANSPORTE PÚBLICO	 A acompañar a alguien sin remuneración	105.9
+56	58	53100.0	14:45:00	44.0	INFORMAL	 A regresar al hogar	105.9
+58	23	14400.0	04:00:00	60.0	TRANSPORTE PÚBLICO	 A trabajar	111.5
+23	58	53760.0	14:56:00	64.0	INFORMAL	 A regresar al hogar	111.5
+58	154	45180.0	12:33:00	17.0	TRANSPORTE PÚBLICO	 A llevar y/o dejar algo	137.3
+154	58	47100.0	13:05:00	47.0	TRANSPORTE PÚBLICO	 A regresar al hogar	137.3
+58	56	54000.0	15:00:00	15.0	A PIE > 15 MIN	 A acompañar a alguien sin remuneración	137.3
+56	58	54900.0	15:15:00	15.0	A PIE > 15 MIN	 A regresar al hogar	137.3
+58	56	21900.0	06:05:00	10.0	A PIE <15 MIN	 A Estudiar	137.3
+56	58	48000.0	13:20:00	20.0	A PIE > 15 MIN	 A regresar al hogar	137.3
+58	72	21600.0	06:00:00	50.0	BICICLETA	 A trabajar	90.4
+72	854	63600.0	17:40:00	50.0	BICICLETA	 A regresar al hogar	90.4
+20	16	30600.0	08:30:00	20.0	TRANSPORTE PÚBLICO	 A trabajar	69.0
+16	20	51600.0	14:20:00	10.0	TRANSPORTE PÚBLICO	 A regresar al hogar	69.0
+20	16	54000.0	15:00:00	10.0	TRANSPORTE PÚBLICO	 A trabajar	69.0
+16	20	63000.0	17:30:00	15.0	TRANSPORTE PÚBLICO	 A regresar al hogar	69.0
+7	13	68700.0	19:05:00	55.0	TRANSPORTE PÚBLICO	 A regresar al hogar	288.7
+13	75	19800.0	05:30:00	50.0	TRANSPORTE PÚBLICO	 A trabajar	288.7
+75	13	65400.0	18:10:00	50.0	TRANSPORTE PÚBLICO	 A regresar al hogar	288.7
+57	57	50400.0	14:00:00	3.0	A PIE <15 MIN	 A realizar compras	103.6
+57	57	50820.0	14:07:00	3.0	A PIE <15 MIN	 A regresar al hogar	103.6
+52	52	18000.0	05:00:00	60.0	OTRO	 A trabajar	220.9
+52	52	46800.0	13:00:00	60.0	OTRO	 A regresar al hogar	220.9
+52	52	23400.0	06:30:00	10.0	A PIE <15 MIN	 A Estudiar	220.9
+52	52	43500.0	12:05:00	10.0	A PIE <15 MIN	 A regresar al hogar	220.9
+52	52	23400.0	06:30:00	10.0	A PIE <15 MIN	 A Estudiar	220.9
+52	52	43500.0	12:05:00	10.0	A PIE <15 MIN	 A regresar al hogar	220.9
+58	14	18000.0	05:00:00	20.0	MOTO	 A trabajar	112.4
+14	58	64800.0	18:00:00	20.0	MOTO	 A regresar al hogar	112.4
+58	56	41400.0	11:30:00	15.0	INFORMAL	 A asuntos médicos personales	112.4
+56	58	46800.0	13:00:00	40.0	INFORMAL	 A regresar al hogar	112.4
+22	11	34200.0	09:30:00	20.0	A PIE > 15 MIN	 A realizar compras	271.0
+11	22	36000.0	10:00:00	20.0	A PIE > 15 MIN	 A regresar al hogar	271.0
+22	11	23400.0	06:30:00	15.0	BICICLETA	 A Estudiar	271.0
+11	22	54000.0	15:00:00	15.0	BICICLETA	 A regresar al hogar	271.0
+22	11	23400.0	06:30:00	15.0	BICICLETA	 A Estudiar	271.0
+11	22	54000.0	15:00:00	15.0	A PIE > 15 MIN	 A regresar al hogar	271.0
+57	57	45000.0	12:30:00	7.0	A PIE <15 MIN	 A realizar compras	111.5
+57	57	45540.0	12:39:00	3.0	A PIE <15 MIN	 A regresar al hogar	111.5
+13	13	36000.0	10:00:00	10.0	TRANSPORTE PÚBLICO	 A trabajar	261.9
+13	13	53220.0	14:47:00	13.0	TRANSPORTE PÚBLICO	 A regresar al hogar	261.9
+87	86	27000.0	07:30:00	62.0	AUTO	 A Estudiar	88.3
+86	87	48720.0	13:32:00	3.0	AUTO	 A regresar al hogar	88.3
+16	26	46800.0	13:00:00	180.0	AUTO	 A regresar al hogar	64.6
+24	11	30600.0	08:30:00	30.0	A PIE > 15 MIN	 A trabajar	375.0
+11	24	39600.0	11:00:00	30.0	A PIE > 15 MIN	 A regresar al hogar	375.0
+24	11	55800.0	15:30:00	30.0	A PIE > 15 MIN	 A trabajar	375.0
+11	24	64800.0	18:00:00	30.0	A PIE > 15 MIN	 A regresar al hogar	375.0
+59	54	22980.0	06:23:00	51.0	A PIE > 15 MIN	 A trabajar	108.7
+54	54	27300.0	07:35:00	51.0	A PIE > 15 MIN	 A trabajar	108.7
+59	155	51660.0	14:21:00	40.0	TRANSPORTE PÚBLICO	 A llevar y/o dejar algo	108.7
+155	59	63660.0	17:41:00	40.0	TRANSPORTE PÚBLICO	 A regresar al hogar	108.7
+154	154	37800.0	10:30:00	15.0	A PIE > 15 MIN	 A realizar compras	256.6
+154	154	39600.0	11:00:00	15.0	A PIE > 15 MIN	 A regresar al hogar	256.6
+23	852	25200.0	07:00:00	30.0	BICICLETA	 A trabajar	235.1
+852	23	52200.0	14:30:00	30.0	BICICLETA	 A regresar al hogar	235.1
+23	153	25200.0	07:00:00	60.0	TRANSPORTE PÚBLICO	 A trabajar	235.1
+153	23	43200.0	12:00:00	60.0	TRANSPORTE PÚBLICO	 A regresar al hogar	235.1
+58	52	32400.0	09:00:00	54.0	INFORMAL	 A asuntos médicos personales	89.7
+52	58	36360.0	10:06:00	54.0	A PIE > 15 MIN	 A regresar al hogar	89.7
+54	53	25200.0	07:00:00	15.0	TAXI OCUPADO	 A asuntos médicos personales	271.4
+53	54	36720.0	10:12:00	18.0	TAXI OCUPADO	 A regresar al hogar	271.4
+58	60	30000.0	08:20:00	20.0	A PIE > 15 MIN	 A realizar algún trámite personal	104.8
+60	58	34200.0	09:30:00	40.0	A PIE > 15 MIN	 A regresar al hogar	104.8
+18	56	57840.0	16:04:00	39.0	A PIE > 15 MIN	 A realizar algún trámite personal	77.1
+20	56	46800.0	13:00:00	10.0	A PIE <15 MIN	 A trabajar	86.6
+56	20	67800.0	18:50:00	10.0	A PIE <15 MIN	 A regresar al hogar	86.6
+20	56	23400.0	06:30:00	10.0	TRANSPORTE ESCOLAR	 A Estudiar	86.6
+56	20	67800.0	18:50:00	10.0	TRANSPORTE ESCOLAR	 A regresar al hogar	86.6
+13	13	25200.0	07:00:00	20.0	A PIE > 15 MIN	 A trabajar	259.8
+13	13	63600.0	17:40:00	20.0	A PIE > 15 MIN	 A regresar al hogar	259.8
+13	14	34200.0	09:30:00	10.0	A PIE <15 MIN	 A realizar compras	297.1
+14	13	35520.0	09:52:00	10.0	A PIE <15 MIN	 A regresar al hogar	297.1
+52	26	39600.0	11:00:00	35.0	TRANSPORTE PÚBLICO	 A trabajar	297.1
+26	13	78720.0	21:52:00	38.0	TRANSPORTE PÚBLICO	 A regresar al hogar	297.1
+7	11	32400.0	09:00:00	20.0	BICICLETA	 A realizar compras	6.4
+11	7	34800.0	09:40:00	20.0	BICICLETA	 A regresar al hogar	6.4
+52	62	21600.0	06:00:00	60.0	TRANSPORTE ESCOLAR	 A Estudiar	219.3
+62	52	50220.0	13:57:00	63.0	TRANSPORTE ESCOLAR	 A regresar al hogar	219.3
+25	52	33300.0	09:15:00	30.0	A PIE > 15 MIN	 A realizar algún trámite personal	81.6
+52	25	48600.0	13:30:00	20.0	TRANSPORTE PÚBLICO	 A regresar al hogar	81.6
+25	52	51600.0	14:20:00	25.0	TRANSPORTE PÚBLICO	 A realizar algún trámite personal	81.6
+52	25	54600.0	15:10:00	110.0	A PIE > 15 MIN	 A regresar al hogar	81.6
+56	53	28800.0	08:00:00	22.0	TAXI OCUPADO	 A realizar algún trámite personal	91.9
+53	56	48900.0	13:35:00	25.0	TAXI OCUPADO	 A regresar al hogar	91.9
+14	52	36000.0	10:00:00	10.0	A PIE <15 MIN	 A asistir actividad de tipo religioso y/o culto	279.6
+52	14	55260.0	15:21:00	10.0	A PIE <15 MIN	 A regresar al hogar	279.6
+58	75	36000.0	10:00:00	27.0	TRANSPORTE PÚBLICO	 A trabajar	109.5
+75	58	68400.0	19:00:00	30.0	TRANSPORTE PÚBLICO	 A regresar al hogar	109.5
+58	59	32520.0	09:02:00	19.0	A PIE > 15 MIN	 A realizar compras	92.4
+59	58	34200.0	09:30:00	30.0	A PIE > 15 MIN	 A regresar al hogar	92.4
+58	59	36000.0	10:00:00	22.0	A PIE > 15 MIN	 A realizar compras	92.4
+59	58	37920.0	10:32:00	28.0	A PIE > 15 MIN	 A regresar al hogar	92.4
+58	58	68400.0	19:00:00	23.0	A PIE > 15 MIN	 A realizar compras	92.4
+58	58	70500.0	19:35:00	25.0	A PIE > 15 MIN	 A regresar al hogar	92.4
+59	12	23400.0	06:30:00	10.0	TRANSPORTE PÚBLICO	 A trabajar	103.6
+12	59	59400.0	16:30:00	50.0	TRANSPORTE PÚBLICO	 A regresar al hogar	103.6
+52	52	19800.0	05:30:00	15.0	A PIE > 15 MIN	 A trabajar	160.7
+52	52	45900.0	12:45:00	15.0	A PIE > 15 MIN	 A regresar al hogar	160.7
+52	52	23400.0	06:30:00	15.0	A PIE > 15 MIN	 A Estudiar	160.7
+52	52	44100.0	12:15:00	15.0	A PIE > 15 MIN	 A regresar al hogar	160.7
+58	144	27000.0	07:30:00	30.0	MOTO	 A trabajar	115.3
+144	58	66600.0	18:30:00	30.0	MOTO	 A regresar al hogar	115.3
+154	154	39600.0	11:00:00	10.0	A PIE <15 MIN	 A realizar compras	252.7
+154	154	40800.0	11:20:00	10.0	A PIE <15 MIN	 A regresar al hogar	252.7
+146	81	55800.0	15:30:00	60.0	AUTO	 A realizar algún trámite personal	97.3
+13	147	28860.0	08:01:00	134.0	TRANSPORTE PÚBLICO	 A buscar trabajo	308.5
+147	13	38580.0	10:43:00	137.0	TRANSPORTE PÚBLICO	 A regresar al hogar	308.5
+59	12	24300.0	06:45:00	40.0	AUTO	 A trabajar	89.7
+12	59	67500.0	18:45:00	40.0	AUTO	 A regresar al hogar	89.7
+53	63	36000.0	10:00:00	12.0	MOTO	 A trabajar	208.0
+63	53	71340.0	19:49:00	11.0	MOTO	 A regresar al hogar	208.0
+20	155	32400.0	09:00:00	45.0	TRANSPORTE PÚBLICO	 A asuntos médicos personales	68.7
+155	20	42120.0	11:42:00	48.0	TRANSPORTE PÚBLICO	 A regresar al hogar	68.7
+58	55	37800.0	10:30:00	20.0	A PIE > 15 MIN	 A asuntos médicos personales	105.6
+55	58	51600.0	14:20:00	63.0	A PIE > 15 MIN	 A regresar al hogar	105.6
+13	55	46800.0	13:00:00	20.0	ESPECIAL OCUPADO	 A Estudiar	253.0
+55	13	78000.0	21:40:00	20.0	A PIE > 15 MIN	 A regresar al hogar	253.0
+12	11	27000.0	07:30:00	30.0	A PIE > 15 MIN	 A realizar actividades físicas y/o deportivas	273.3
+11	12	34200.0	09:30:00	30.0	A PIE > 15 MIN	 A regresar al hogar	273.3
+154	147	27000.0	07:30:00	30.0	TRANSPORTE PÚBLICO	 A trabajar	273.4
+147	154	66600.0	18:30:00	40.0	TRANSPORTE PÚBLICO	 A regresar al hogar	273.4
+7	25	19800.0	05:30:00	30.0	TRANSPORTE PÚBLICO	 A trabajar	6.5
+25	7	55620.0	15:27:00	33.0	TRANSPORTE PÚBLICO	 A regresar al hogar	6.5
+58	14	24240.0	06:44:00	62.0	BICICLETA	 A trabajar	91.0
+14	58	63780.0	17:43:00	65.0	TRANSPORTE PÚBLICO	 A regresar al hogar	91.0
+58	52	31800.0	08:50:00	45.0	A PIE > 15 MIN	 A visitar a alguien	91.0
+52	58	47100.0	13:05:00	48.0	TRANSPORTE PÚBLICO	 A regresar al hogar	91.0
+58	52	48600.0	13:30:00	35.0	INFORMAL	 A asuntos médicos personales	106.2
+52	58	53880.0	14:58:00	35.0	A PIE > 15 MIN	 A regresar al hogar	106.2
+58	52	25200.0	07:00:00	35.0	AUTO	 A trabajar	109.5
+52	58	56700.0	15:45:00	35.0	AUTO	 A regresar al hogar	109.5
+53	52	63000.0	17:30:00	30.0	A PIE > 15 MIN	 A asistir actividad de tipo religioso y/o culto	164.7
+52	53	68400.0	19:00:00	20.0	A PIE > 15 MIN	 A regresar al hogar	164.7
+53	86	46800.0	13:00:00	50.0	TRANSPORTE PÚBLICO	 A realizar algún trámite personal	164.7
+86	53	64800.0	18:00:00	40.0	TRANSPORTE PÚBLICO	 A regresar al hogar	164.7
+57	57	51600.0	14:20:00	20.0	A PIE > 15 MIN	 A realizar compras	107.0
+57	57	53400.0	14:50:00	10.0	A PIE <15 MIN	 A regresar al hogar	107.0
+57	57	36000.0	10:00:00	15.0	A PIE > 15 MIN	 A realizar compras	107.0
+57	57	39000.0	10:50:00	15.0	A PIE > 15 MIN	 A regresar al hogar	107.0
+19	154	25200.0	07:00:00	60.0	TRANSPORTE PÚBLICO	 A trabajar	71.4
+154	19	61200.0	17:00:00	60.0	TRANSPORTE PÚBLICO	 A regresar al hogar	71.4
+53	25	27000.0	07:30:00	30.0	A PIE > 15 MIN	 A asistir actividad de tipo religioso y/o culto	82.6
+25	25	38700.0	10:45:00	30.0	A PIE > 15 MIN	 A regresar al hogar	82.6
+51	52	25200.0	07:00:00	10.0	MOTO	 A trabajar	249.4
+52	51	49800.0	13:50:00	10.0	MOTO	 A regresar al hogar	249.4
+51	52	26400.0	07:20:00	15.0	A PIE > 15 MIN	 A trabajar	249.4
+52	51	62100.0	17:15:00	15.0	A PIE > 15 MIN	 A regresar al hogar	249.4
+59	155	26400.0	07:20:00	25.0	BICICLETA	 A trabajar	107.1
+155	59	63000.0	17:30:00	20.0	BICICLETA	 A regresar al hogar	107.1
+58	147	37080.0	10:18:00	63.0	AUTO	 A asuntos médicos personales	106.9
+147	58	44460.0	12:21:00	63.0	AUTO	 A regresar al hogar	106.9
+58	147	37080.0	10:18:00	64.0	AUTO	 A asuntos médicos personales	106.9
+147	58	44580.0	12:23:00	64.0	AUTO	 A regresar al hogar	106.9
+20	55	22500.0	06:15:00	15.0	A PIE > 15 MIN	 A trabajar	56.5
+55	20	56700.0	15:45:00	15.0	A PIE > 15 MIN	 A regresar al hogar	56.5
+24	11	28800.0	08:00:00	15.0	MOTO	 A trabajar	235.1
+11	24	79200.0	22:00:00	15.0	MOTO	 A regresar al hogar	235.1
+20	155	21600.0	06:00:00	25.0	BICICLETA	 A trabajar	71.7
+155	20	59400.0	16:30:00	30.0	BICICLETA	 A regresar al hogar	71.7
+57	56	22140.0	06:09:00	76.0	TRANSPORTE PÚBLICO	 A trabajar	106.7
+56	57	54540.0	15:09:00	79.0	TRANSPORTE PÚBLICO	 A regresar al hogar	106.7
+24	11	39600.0	11:00:00	20.0	A PIE > 15 MIN	 A realizar compras	321.8
+11	24	48600.0	13:30:00	20.0	A PIE > 15 MIN	 A regresar al hogar	321.8
+53	53	28800.0	08:00:00	20.0	A PIE > 15 MIN	 A trabajar	161.5
+53	53	38400.0	10:40:00	20.0	A PIE > 15 MIN	 A regresar al hogar	161.5
+20	11	25200.0	07:00:00	10.0	MOTO	 A acompañar a alguien sin remuneración	113.1
+11	21	25800.0	07:10:00	10.0	MOTO	 A trabajar	113.1
+20	20	64260.0	17:51:00	7.0	MOTO	 A regresar al hogar	113.1
+20	11	25200.0	07:00:00	10.0	MOTO	 A Estudiar	113.1
+11	20	61200.0	17:00:00	25.0	A PIE > 15 MIN	 A regresar al hogar	113.1
+59	86	20700.0	05:45:00	25.0	AUTO	 A trabajar	151.4
+58	56	25200.0	07:00:00	60.0	A PIE > 15 MIN	 A realizar actividades recreativas y culturales	107.0
+56	58	43200.0	12:00:00	18.0	A PIE > 15 MIN	 A regresar al hogar	107.0
+154	851	26100.0	07:15:00	37.0	TRANSPORTE PÚBLICO	 A trabajar	211.2
+851	154	61380.0	17:03:00	32.0	TRANSPORTE PÚBLICO	 A regresar al hogar	211.2
+58	13	21600.0	06:00:00	60.0	TRANSPORTE PÚBLICO	 A trabajar	105.3
+13	58	73200.0	20:20:00	30.0	TRANSPORTE PÚBLICO	 A regresar al hogar	105.3
+58	155	36600.0	10:10:00	20.0	MOTO	 A trabajar	105.3
+155	58	66600.0	18:30:00	30.0	MOTO	 A regresar al hogar	105.3
+53	52	54000.0	15:00:00	10.0	A PIE <15 MIN	 A realizar algún trámite personal	197.7
+52	53	62400.0	17:20:00	12.0	A PIE <15 MIN	 A regresar al hogar	197.7
+59	59	32400.0	09:00:00	10.0	A PIE <15 MIN	 A realizar compras	89.7
+59	59	34800.0	09:40:00	15.0	A PIE > 15 MIN	 A regresar al hogar	89.7
+57	56	23280.0	06:28:00	82.0	TRANSPORTE PÚBLICO	 A asuntos médicos personales	108.8
+56	57	41340.0	11:29:00	82.0	A PIE > 15 MIN	 A regresar al hogar	108.8
+57	56	21660.0	06:01:00	15.0	A PIE > 15 MIN	 A acompañar a alguien sin remuneración	90.7
+56	57	22560.0	06:16:00	22.0	A PIE > 15 MIN	 A regresar al hogar	90.7
+57	56	39600.0	11:00:00	15.0	A PIE > 15 MIN	 A acompañar a alguien sin remuneración	90.7
+56	57	40560.0	11:16:00	24.0	A PIE > 15 MIN	 A regresar al hogar	90.7
+57	56	61320.0	17:02:00	17.0	A PIE > 15 MIN	 A acompañar a alguien sin remuneración	90.7
+56	57	62400.0	17:20:00	20.0	A PIE > 15 MIN	 A regresar al hogar	90.7
+52	52	23520.0	06:32:00	13.0	BICICLETA	 A trabajar	246.3
+17	52	52200.0	14:30:00	30.0	BICICLETA	 A acompañar a alguien sin remuneración	246.3
+52	52	41400.0	11:30:00	15.0	A PIE > 15 MIN	 A trabajar	246.3
+26	52	32400.0	09:00:00	15.0	A PIE > 15 MIN	 A realizar compras	77.0
+52	26	35100.0	09:45:00	15.0	A PIE > 15 MIN	 A regresar al hogar	77.0
+26	25	52200.0	14:30:00	10.0	A PIE <15 MIN	 A realizar compras	77.0
+25	26	54600.0	15:10:00	10.0	A PIE <15 MIN	 A regresar al hogar	77.0
+26	56	49500.0	13:45:00	35.0	TRANSPORTE PÚBLICO	 A trabajar	77.0
+56	26	72000.0	20:00:00	15.0	TRANSPORTE ESCOLAR	 A regresar al hogar	77.0
+58	13	29280.0	08:08:00	32.0	BICICLETA	 A asuntos médicos personales	105.6
+13	58	42420.0	11:47:00	35.0	TRANSPORTE PÚBLICO	 A regresar al hogar	105.6
+57	51	23940.0	06:39:00	79.0	TRANSPORTE PÚBLICO	 A realizar algún trámite personal	106.2
+51	57	38340.0	10:39:00	82.0	TRANSPORTE PÚBLICO	 A regresar al hogar	106.2
+59	59	69000.0	19:10:00	13.0	A PIE <15 MIN	 A trabajar	106.2
+59	59	70200.0	19:30:00	20.0	A PIE > 15 MIN	 A regresar al hogar	106.2
+59	155	25800.0	07:10:00	45.0	TRANSPORTE PÚBLICO	 A trabajar	106.2
+155	59	67800.0	18:50:00	40.0	TRANSPORTE PÚBLICO	 A regresar al hogar	106.2
+53	53	28800.0	08:00:00	5.0	A PIE <15 MIN	 A realizar actividades físicas y/o deportivas	192.7
+53	53	32400.0	09:00:00	5.0	A PIE <15 MIN	 A regresar al hogar	192.7
+53	153	21000.0	05:50:00	33.0	TRANSPORTE PÚBLICO	 A trabajar	192.7
+153	53	57600.0	16:00:00	15.0	A PIE > 15 MIN	 A regresar al hogar	192.7
+13	79	36000.0	10:00:00	55.0	INFORMAL	 A Estudiar	244.2
+79	13	48720.0	13:32:00	58.0	INFORMAL	 A regresar al hogar	244.2
+59	25	36000.0	10:00:00	30.0	BICICLETA	 A trabajar	103.3
+25	59	72000.0	20:00:00	30.0	BICICLETA	 A regresar al hogar	103.3
+23	11	21600.0	06:00:00	15.0	A PIE > 15 MIN	 A trabajar	229.6
+11	23	23400.0	06:30:00	15.0	A PIE > 15 MIN	 A regresar al hogar	229.6
+7	10	21600.0	06:00:00	15.0	A PIE > 15 MIN	 A trabajar	5.5
+10	7	54900.0	15:15:00	15.0	A PIE > 15 MIN	 A regresar al hogar	5.5
+7	7	21480.0	05:58:00	17.0	A PIE > 15 MIN	 A trabajar	5.5
+7	7	64140.0	17:49:00	17.0	A PIE > 15 MIN	 A regresar al hogar	5.5
+58	56	30000.0	08:20:00	20.0	A PIE > 15 MIN	 A trabajar	103.7
+58	58	34200.0	09:30:00	9.0	A PIE <15 MIN	 A realizar compras	103.7
+57	54	57600.0	16:00:00	30.0	A PIE > 15 MIN	 A realizar algún trámite personal	108.4
+54	57	61200.0	17:00:00	30.0	A PIE > 15 MIN	 A regresar al hogar	108.4
+10	6	26400.0	07:20:00	10.0	A PIE <15 MIN	 A realizar algún trámite personal	63.7
+11	16	41400.0	11:30:00	30.0	A PIE > 15 MIN	 A trabajar	219.5
+16	11	75600.0	21:00:00	30.0	A PIE > 15 MIN	 A regresar al hogar	219.5
+58	54	22680.0	06:18:00	24.0	A PIE > 15 MIN	 A Estudiar	116.4
+58	54	22740.0	06:19:00	27.0	A PIE > 15 MIN	 A Estudiar	116.4
+154	155	54060.0	15:01:00	23.0	A PIE > 15 MIN	 A trabajar	205.4
+154	155	32460.0	09:01:00	13.0	TAXI OCUPADO	 A asuntos médicos personales	205.4
+155	154	44280.0	12:18:00	16.0	TAXI OCUPADO	 A regresar al hogar	205.4
+153	55	26100.0	07:15:00	18.0	TRANSPORTE PÚBLICO	 A llevar y/o dejar algo	110.6
+55	58	33360.0	09:16:00	19.0	A PIE > 15 MIN	 A regresar al hogar	110.6
+154	87	23400.0	06:30:00	30.0	A PIE > 15 MIN	 A trabajar	185.8
+87	154	61200.0	17:00:00	30.0	A PIE > 15 MIN	 A regresar al hogar	185.8
+154	851	25800.0	07:10:00	35.0	BICICLETA	 A trabajar	185.8
+851	154	64800.0	18:00:00	30.0	BICICLETA	 A regresar al hogar	185.8
+26	26	32400.0	09:00:00	10.0	A PIE <15 MIN	 A realizar compras	75.4
+26	26	36900.0	10:15:00	15.0	A PIE > 15 MIN	 A regresar al hogar	75.4
+26	852	30600.0	08:30:00	30.0	TRANSPORTE PÚBLICO	 A asuntos médicos personales	84.7
+852	25	36000.0	10:00:00	40.0	TRANSPORTE PÚBLICO	 A realizar algún trámite personal	84.7
+25	26	39300.0	10:55:00	5.0	A PIE <15 MIN	 A regresar al hogar	84.7
+53	52	54000.0	15:00:00	15.0	A PIE > 15 MIN	 A acompañar a alguien sin remuneración	190.9
+52	53	58500.0	16:15:00	3.0	A PIE <15 MIN	 A regresar al hogar	190.9
+53	52	54000.0	15:00:00	15.0	A PIE > 15 MIN	 A asuntos médicos personales	190.9
+52	53	58500.0	16:15:00	15.0	A PIE > 15 MIN	 A regresar al hogar	190.9
+60	72	54000.0	15:00:00	15.0	A PIE > 15 MIN	 A realizar compras	82.6
+72	60	57600.0	16:00:00	15.0	A PIE > 15 MIN	 A regresar al hogar	82.6
+88	60	80100.0	22:15:00	25.0	AUTO	 A regresar al hogar	82.6
+23	11	39600.0	11:00:00	20.0	A PIE > 15 MIN	 A realizar compras	328.6
+11	23	49200.0	13:40:00	20.0	A PIE > 15 MIN	 A regresar al hogar	328.6
+23	82	57600.0	16:00:00	90.0	TRANSPORTE PÚBLICO	 A acompañar a alguien sin remuneración	328.6
+82	23	66600.0	18:30:00	60.0	TRANSPORTE PÚBLICO	 A regresar al hogar	328.6
+23	76	57600.0	16:00:00	90.0	TRANSPORTE PÚBLICO	 A asuntos médicos personales	328.6
+76	23	66600.0	18:30:00	60.0	TRANSPORTE PÚBLICO	 A regresar al hogar	328.6
+55	57	32400.0	09:00:00	5.0	A PIE <15 MIN	 A realizar algún trámite personal	65.6
+57	55	36900.0	10:15:00	5.0	A PIE <15 MIN	 A regresar al hogar	65.6
+58	56	29220.0	08:07:00	65.0	INFORMAL	 A realizar algún trámite personal	105.2
+56	58	42300.0	11:45:00	68.0	TRANSPORTE PÚBLICO	 A regresar al hogar	105.2
+7	155	21600.0	06:00:00	120.0	BICICLETA	 A trabajar	5.3
+155	7	61560.0	17:06:00	120.0	BICICLETA	 A regresar al hogar	5.3
+58	852	22320.0	06:12:00	112.0	TRANSPORTE PÚBLICO	 A trabajar	1.8
+852	58	59640.0	16:34:00	115.0	TRANSPORTE PÚBLICO	 A regresar al hogar	1.8
+26	52	37800.0	10:30:00	10.0	A PIE <15 MIN	 A realizar algún trámite personal	63.0
+52	26	39000.0	10:50:00	10.0	A PIE <15 MIN	 A regresar al hogar	63.0
+53	53	46800.0	13:00:00	6.0	A PIE <15 MIN	 A realizar compras	192.1
+53	53	48300.0	13:25:00	6.0	A PIE <15 MIN	 A regresar al hogar	192.1
+53	52	23400.0	06:30:00	15.0	A PIE > 15 MIN	 A Estudiar	192.1
+52	53	51300.0	14:15:00	15.0	A PIE > 15 MIN	 A regresar al hogar	192.1
+53	51	23400.0	06:30:00	15.0	A PIE > 15 MIN	 A Estudiar	192.1
+51	53	51300.0	14:15:00	15.0	A PIE > 15 MIN	 A regresar al hogar	192.1
+154	155	43440.0	12:04:00	183.0	A PIE > 15 MIN	 A Estudiar	279.0
+155	86	61020.0	16:57:00	63.0	A PIE > 15 MIN	 A Estudiar	279.0
+23	151	16200.0	04:30:00	30.0	MOTO	 A trabajar	269.7
+151	23	61200.0	17:00:00	25.0	MOTO	 A regresar al hogar	269.7
+60	83	34200.0	09:30:00	15.0	A PIE > 15 MIN	 A realizar compras	79.8
+83	60	37200.0	10:20:00	40.0	A PIE > 15 MIN	 A regresar al hogar	79.8
+57	62	16200.0	04:30:00	40.0	MOTO	 A Estudiar	111.1
+62	57	73800.0	20:30:00	58.0	MOTO	 A regresar al hogar	111.1
+12	13	46620.0	12:57:00	33.0	INFORMAL	 A regresar al hogar	255.3
+19	56	30600.0	08:30:00	26.0	BICICLETA	 A trabajar	62.9
+19	11	33240.0	09:14:00	46.0	TRANSPORTE PÚBLICO	 A realizar algún trámite personal	62.9
+11	19	44940.0	12:29:00	51.0	TRANSPORTE PÚBLICO	 A regresar al hogar	62.9
+12	12	18000.0	05:00:00	5.0	A PIE <15 MIN	 A trabajar	346.6
+12	12	39600.0	11:00:00	5.0	A PIE <15 MIN	 A regresar al hogar	346.6
+12	11	43200.0	12:00:00	20.0	A PIE > 15 MIN	 A realizar actividades físicas y/o deportivas	346.6
+11	12	46800.0	13:00:00	30.0	A PIE > 15 MIN	 A regresar al hogar	346.6
+13	12	25200.0	07:00:00	60.0	INFORMAL	 A trabajar	301.2
+12	13	61020.0	16:57:00	63.0	INFORMAL	 A regresar al hogar	301.2
+13	79	21600.0	06:00:00	70.0	TRANSPORTE PÚBLICO	 A trabajar	301.2
+79	13	61320.0	17:02:00	73.0	TRANSPORTE PÚBLICO	 A regresar al hogar	301.2
+13	21	25200.0	07:00:00	60.0	TRANSPORTE ESCOLAR	 A Estudiar	301.2
+21	13	52020.0	14:27:00	63.0	TRANSPORTE ESCOLAR	 A regresar al hogar	301.2
+59	52	22140.0	06:09:00	87.0	TRANSPORTE PÚBLICO	 A asuntos médicos personales	102.3
+52	59	36480.0	10:08:00	90.0	TRANSPORTE PÚBLICO	 A regresar al hogar	102.3
+55	55	22200.0	06:10:00	30.0	A PIE > 15 MIN	 A acompañar a alguien sin remuneración	118.8
+55	55	24000.0	06:40:00	20.0	A PIE > 15 MIN	 A regresar al hogar	118.8
+55	55	52200.0	14:30:00	30.0	A PIE > 15 MIN	 A acompañar a alguien sin remuneración	118.8
+55	74	54000.0	15:00:00	30.0	TAXI OCUPADO	 A acompañar a alguien sin remuneración	118.8
+74	56	63000.0	17:30:00	30.0	TAXI OCUPADO	 A visitar a alguien	118.8
+56	55	67800.0	18:50:00	10.0	A PIE <15 MIN	 A regresar al hogar	118.8
+55	55	22200.0	06:10:00	30.0	A PIE > 15 MIN	 A Estudiar	118.8
+55	74	54000.0	15:00:00	30.0	TAXI OCUPADO	 A Estudiar	118.8
+74	56	63600.0	17:40:00	20.0	TAXI OCUPADO	 A visitar a alguien	118.8
+56	55	67800.0	18:50:00	10.0	A PIE <15 MIN	 A regresar al hogar	118.8
+26	77	27000.0	07:30:00	50.0	TRANSPORTE PÚBLICO	 A realizar algún trámite personal	65.5
+77	26	37800.0	10:30:00	60.0	TRANSPORTE PÚBLICO	 A regresar al hogar	65.5
+58	55	36000.0	10:00:00	20.0	A PIE > 15 MIN	 A asuntos médicos personales	104.5
+55	58	41400.0	11:30:00	20.0	A PIE > 15 MIN	 A regresar al hogar	104.5
+58	854	41400.0	11:30:00	11.0	A PIE <15 MIN	 A realizar compras	104.5
+854	58	43500.0	12:05:00	24.0	A PIE > 15 MIN	 A regresar al hogar	104.5
+53	25	25200.0	07:00:00	7.0	TAXI OCUPADO	 A trabajar	197.0
+25	53	75600.0	21:00:00	20.0	A PIE > 15 MIN	 A regresar al hogar	197.0
+53	25	25200.0	07:00:00	7.0	TAXI OCUPADO	 A trabajar	197.0
+25	53	75600.0	21:00:00	20.0	A PIE > 15 MIN	 A regresar al hogar	197.0
+54	54	36000.0	10:00:00	20.0	A PIE > 15 MIN	 A realizar compras	251.3
+54	54	37500.0	10:25:00	20.0	A PIE > 15 MIN	 A regresar al hogar	251.3
+61	55	23700.0	06:35:00	5.0	A PIE <15 MIN	 A Estudiar	202.1
+55	61	54000.0	15:00:00	5.0	A PIE <15 MIN	 A regresar al hogar	202.1
+154	155	27000.0	07:30:00	30.0	A PIE > 15 MIN	 A acompañar a alguien sin remuneración	2.3
+155	154	28800.0	08:00:00	29.0	A PIE > 15 MIN	 A regresar al hogar	2.3
+154	155	52200.0	14:30:00	30.0	A PIE > 15 MIN	 A acompañar a alguien sin remuneración	2.3
+155	154	54120.0	15:02:00	30.0	A PIE > 15 MIN	 A regresar al hogar	2.3
+7	7	25200.0	07:00:00	5.0	A PIE <15 MIN	 A trabajar	5.6
+7	7	60900.0	16:55:00	5.0	A PIE <15 MIN	 A regresar al hogar	5.6
+58	63	30000.0	08:20:00	124.0	TRANSPORTE PÚBLICO	 A asuntos médicos personales	107.7
+63	58	40800.0	11:20:00	127.0	TRANSPORTE PÚBLICO	 A regresar al hogar	107.7
+58	55	22140.0	06:09:00	15.0	A PIE > 15 MIN	 A asuntos médicos personales	227.0
+55	58	34440.0	09:34:00	15.0	A PIE > 15 MIN	 A regresar al hogar	227.0
+58	59	35580.0	09:53:00	13.0	A PIE <15 MIN	 A realizar compras	227.0
+59	58	36420.0	10:07:00	13.0	A PIE <15 MIN	 A regresar al hogar	227.0
+58	59	39840.0	11:04:00	15.0	A PIE > 15 MIN	 A realizar compras	227.0
+59	58	41040.0	11:24:00	13.0	A PIE <15 MIN	 A regresar al hogar	227.0
+58	854	47100.0	13:05:00	8.0	INFORMAL	 A realizar algún trámite personal	227.0
+854	58	62760.0	17:26:00	12.0	INFORMAL	 A regresar al hogar	227.0
+54	54	36600.0	10:10:00	5.0	A PIE <15 MIN	 A visitar a alguien	260.3
+54	54	70200.0	19:30:00	40.0	A PIE > 15 MIN	 A regresar al hogar	260.3
+7	16	36000.0	10:00:00	10.0	MOTO	 A realizar compras	6.1
+16	7	37200.0	10:20:00	11.0	MOTO	 A regresar al hogar	6.1
+7	956	72000.0	20:00:00	10.0	MOTO	 A visitar a alguien	6.1
+956	7	75000.0	20:50:00	10.0	MOTO	 A regresar al hogar	6.1
+154	86	46860.0	13:01:00	19.0	TAXI OCUPADO	 A realizar compras	260.5
+86	154	54000.0	15:00:00	40.0	TAXI OCUPADO	 A regresar al hogar	260.5
+154	155	49500.0	13:45:00	30.0	A PIE > 15 MIN	 A realizar algún trámite personal	213.2
+155	154	54000.0	15:00:00	48.0	A PIE > 15 MIN	 A regresar al hogar	213.2
+146	20	54600.0	15:10:00	120.0	A PIE > 15 MIN	 A regresar al hogar	95.1
+20	11	22200.0	06:10:00	15.0	A PIE > 15 MIN	 A Estudiar	95.1
+11	20	50400.0	14:00:00	15.0	A PIE > 15 MIN	 A regresar al hogar	95.1
+20	144	21600.0	06:00:00	40.0	BICICLETA	 A trabajar	95.1
+144	20	57600.0	16:00:00	40.0	BICICLETA	 A regresar al hogar	95.1
+20	11	43200.0	12:00:00	60.0	A PIE > 15 MIN	 A Estudiar	95.1
+11	20	61200.0	17:00:00	60.0	A PIE > 15 MIN	 A regresar al hogar	95.1
+58	22	33300.0	09:15:00	25.0	A PIE > 15 MIN	 A trabajar	106.3
+22	58	55800.0	15:30:00	15.0	A PIE > 15 MIN	 A regresar al hogar	106.3
+155	87	25860.0	07:11:00	103.0	TRANSPORTE PÚBLICO	 A acompañar a alguien sin remuneración	334.5
+87	155	36000.0	10:00:00	106.0	TRANSPORTE PÚBLICO	 A regresar al hogar	334.5
+155	155	25320.0	07:02:00	21.0	A PIE > 15 MIN	 A asistir actividad de tipo religioso y/o culto	334.5
+155	155	34740.0	09:39:00	21.0	A PIE > 15 MIN	 A regresar al hogar	334.5
+53	15	32400.0	09:00:00	30.0	BICICLETA	 A trabajar	197.0
+15	53	37800.0	10:30:00	30.0	BICICLETA	 A regresar al hogar	197.0
+57	852	25200.0	07:00:00	60.0	TRANSPORTE PÚBLICO	 A realizar algún trámite personal	123.1
+852	57	29640.0	08:14:00	73.0	TRANSPORTE PÚBLICO	 A regresar al hogar	123.1
+57	52	50400.0	14:00:00	20.0	TRANSPORTE PÚBLICO	 A realizar algún trámite personal	123.1
+52	57	52800.0	14:40:00	30.0	TRANSPORTE PÚBLICO	 A regresar al hogar	123.1
+60	75	22680.0	06:18:00	73.0	AUTO	 A asuntos médicos personales	102.2
+75	75	28200.0	07:50:00	73.0	AUTO	 A asuntos médicos personales	102.2
+60	147	21900.0	06:05:00	120.0	AUTO	 A acompañar a alguien sin remuneración	102.2
+147	60	32820.0	09:07:00	120.0	AUTO	 A regresar al hogar	102.2
+59	60	43800.0	12:10:00	10.0	A PIE <15 MIN	 A realizar compras	106.9
+60	59	46800.0	13:00:00	20.0	A PIE > 15 MIN	 A regresar al hogar	106.9
+58	56	32520.0	09:02:00	40.0	A PIE > 15 MIN	 A realizar compras	178.4
+56	58	36660.0	10:11:00	10.0	A PIE <15 MIN	 A regresar al hogar	178.4
+58	56	50400.0	14:00:00	11.0	A PIE <15 MIN	 A realizar compras	178.4
+56	58	54600.0	15:10:00	20.0	A PIE > 15 MIN	 A regresar al hogar	178.4
+20	52	36000.0	10:00:00	30.0	A PIE > 15 MIN	 A realizar actividades recreativas y culturales	57.3
+59	55	22500.0	06:15:00	10.0	A PIE <15 MIN	 A Estudiar	90.0
+55	59	47100.0	13:05:00	10.0	A PIE <15 MIN	 A regresar al hogar	90.0
+13	11	39900.0	11:05:00	13.0	TRANSPORTE PÚBLICO	 A realizar compras	248.8
+11	13	45840.0	12:44:00	136.0	INFORMAL	 A regresar al hogar	248.8
+13	13	16200.0	04:30:00	64.0	TRANSPORTE ESCOLAR	 A trabajar	248.8
+13	13	72240.0	20:04:00	67.0	TRANSPORTE ESCOLAR	 A regresar al hogar	248.8
+18	55	14400.0	04:00:00	60.0	TRANSPORTE PÚBLICO	 A asuntos médicos personales	86.2
+55	18	57600.0	16:00:00	60.0	TRANSPORTE PÚBLICO	 A regresar al hogar	86.2
+18	54	21600.0	06:00:00	60.0	TRANSPORTE PÚBLICO	 A Estudiar	86.2
+54	18	64800.0	18:00:00	40.0	TRANSPORTE PÚBLICO	 A regresar al hogar	86.2
+18	15	22800.0	06:20:00	30.0	A PIE > 15 MIN	 A Estudiar	86.2
+15	18	42000.0	11:40:00	40.0	A PIE > 15 MIN	 A regresar al hogar	86.2
+54	153	36000.0	10:00:00	30.0	AUTO	 A asuntos médicos personales	246.0
+153	54	46800.0	13:00:00	30.0	AUTO	 A regresar al hogar	246.0
+54	147	36000.0	10:00:00	30.0	AUTO	 A acompañar a alguien sin remuneración	246.0
+147	54	46800.0	13:00:00	30.0	AUTO	 A regresar al hogar	246.0
+52	153	22800.0	06:20:00	30.0	TRANSPORTE PÚBLICO	 A trabajar	201.2
+153	52	59220.0	16:27:00	33.0	TRANSPORTE PÚBLICO	 A regresar al hogar	201.2
+56	56	25200.0	07:00:00	30.0	TRANSPORTE PÚBLICO	 A trabajar	89.7
+56	56	64620.0	17:57:00	33.0	TRANSPORTE PÚBLICO	 A regresar al hogar	89.7
+154	87	25200.0	07:00:00	20.0	TAXI OCUPADO	 A acompañar a alguien sin remuneración	1.9
+87	154	41400.0	11:30:00	71.0	A PIE > 15 MIN	 A regresar al hogar	1.9
+7	11	42120.0	11:42:00	18.0	A PIE > 15 MIN	 A Estudiar	5.6
+11	7	65760.0	18:16:00	14.0	A PIE <15 MIN	 A regresar al hogar	5.6
+26	52	21600.0	06:00:00	30.0	A PIE > 15 MIN	 A realizar compras	56.5
+52	26	27000.0	07:30:00	30.0	A PIE > 15 MIN	 A regresar al hogar	56.5
+57	82	32400.0	09:00:00	64.0	TAXI OCUPADO	 A asuntos médicos personales	101.8
+82	57	44460.0	12:21:00	67.0	TAXI OCUPADO	 A regresar al hogar	101.8
+53	54	39600.0	11:00:00	20.0	A PIE > 15 MIN	 A acompañar a alguien sin remuneración	162.9
+54	53	45000.0	12:30:00	20.0	A PIE > 15 MIN	 A regresar al hogar	162.9
+53	54	39600.0	11:00:00	20.0	A PIE > 15 MIN	 A asuntos médicos personales	162.9
+54	53	45000.0	12:30:00	20.0	A PIE > 15 MIN	 A regresar al hogar	162.9
+57	56	20400.0	05:40:00	15.0	A PIE > 15 MIN	 A trabajar	107.2
+56	57	53100.0	14:45:00	15.0	A PIE > 15 MIN	 A regresar al hogar	107.2
+58	26	25500.0	07:05:00	206.0	TRANSPORTE PÚBLICO	 A realizar algún trámite personal	112.3
+26	58	39900.0	11:05:00	209.0	TRANSPORTE PÚBLICO	 A regresar al hogar	112.3
+25	53	24000.0	06:40:00	35.0	BICICLETA	 A trabajar	85.0
+53	25	60900.0	16:55:00	35.0	BICICLETA	 A regresar al hogar	85.0
+25	1014	21000.0	05:50:00	45.0	TRANSPORTE ESCOLAR	 A Estudiar	81.9
+1014	25	54720.0	15:12:00	48.0	TRANSPORTE ESCOLAR	 A regresar al hogar	81.9
+57	56	54000.0	15:00:00	23.0	A PIE > 15 MIN	 A realizar compras	102.0
+56	57	62100.0	17:15:00	30.0	A PIE > 15 MIN	 A regresar al hogar	102.0
+59	59	50700.0	14:05:00	26.0	A PIE > 15 MIN	 A realizar compras	108.9
+59	59	56520.0	15:42:00	26.0	A PIE > 15 MIN	 A regresar al hogar	108.9
+23	155	25200.0	07:00:00	75.0	TRANSPORTE PÚBLICO	 A trabajar	268.9
+155	23	64800.0	18:00:00	60.0	TRANSPORTE PÚBLICO	 A regresar al hogar	268.9
+59	59	22800.0	06:20:00	10.0	A PIE <15 MIN	 A Estudiar	92.1
+59	59	47580.0	13:13:00	40.0	A PIE > 15 MIN	 A regresar al hogar	92.1
+59	854	22800.0	06:20:00	15.0	AUTO	 A Estudiar	92.1
+854	59	51360.0	14:16:00	15.0	AUTO	 A regresar al hogar	92.1
+11	61	25200.0	07:00:00	60.0	TRANSPORTE PÚBLICO	 A trabajar	226.1
+61	11	66600.0	18:30:00	50.0	TRANSPORTE PÚBLICO	 A regresar al hogar	226.1
+26	959	22200.0	06:10:00	10.0	BICICLETA	 A acompañar a alguien sin remuneración	65.5
+959	26	22800.0	06:20:00	10.0	BICICLETA	 A regresar al hogar	65.5
+26	24	39600.0	11:00:00	20.0	A PIE > 15 MIN	 A acompañar a alguien sin remuneración	65.5
+24	26	40800.0	11:20:00	25.0	A PIE > 15 MIN	 A regresar al hogar	65.5
+26	24	64800.0	18:00:00	20.0	A PIE > 15 MIN	 A acompañar a alguien sin remuneración	65.5
+24	26	66000.0	18:20:00	25.0	A PIE > 15 MIN	 A regresar al hogar	65.5
+26	24	39600.0	11:00:00	20.0	A PIE > 15 MIN	 A Estudiar	65.5
+24	26	66000.0	18:20:00	25.0	A PIE > 15 MIN	 A regresar al hogar	65.5
+26	24	22200.0	06:10:00	10.0	A PIE <15 MIN	 A Estudiar	65.5
+24	26	40800.0	11:20:00	25.0	A PIE > 15 MIN	 A regresar al hogar	65.5
+54	60	34200.0	09:30:00	10.0	A PIE <15 MIN	 A realizar compras	299.8
+60	69	36000.0	10:00:00	50.0	TAXI OCUPADO	 A asuntos médicos personales	299.8
+69	54	41940.0	11:39:00	21.0	TRANSPORTE PÚBLICO	 A regresar al hogar	299.8
+54	60	34200.0	09:30:00	10.0	A PIE <15 MIN	 A realizar compras	299.8
+7	52	36000.0	10:00:00	15.0	A PIE > 15 MIN	 A trabajar	5.6
+52	7	67500.0	18:45:00	15.0	A PIE > 15 MIN	 A regresar al hogar	5.6
+83	52	36000.0	10:00:00	30.0	TRANSPORTE PÚBLICO	 A trabajar	884.6
+52	83	67200.0	18:40:00	30.0	TRANSPORTE PÚBLICO	 A regresar al hogar	884.6
+77	86	25200.0	07:00:00	15.0	A PIE > 15 MIN	 A Estudiar	897.1
+86	77	60420.0	16:47:00	15.0	A PIE > 15 MIN	 A regresar al hogar	897.1
+53	52	46800.0	13:00:00	20.0	A PIE > 15 MIN	 A realizar compras	191.2
+59	53	28800.0	08:00:00	30.0	A PIE > 15 MIN	 A asuntos médicos personales	100.3
+53	59	33300.0	09:15:00	30.0	A PIE > 15 MIN	 A regresar al hogar	100.3
+59	53	36000.0	10:00:00	40.0	A PIE > 15 MIN	 A asuntos médicos personales	100.3
+53	59	42300.0	11:45:00	45.0	A PIE > 15 MIN	 A regresar al hogar	100.3
+154	852	54000.0	15:00:00	15.0	AUTO	 A realizar compras	194.2
+852	154	58200.0	16:10:00	15.0	AUTO	 A regresar al hogar	194.2
+154	154	36000.0	10:00:00	10.0	A PIE <15 MIN	 A realizar compras	285.9
+154	154	36780.0	10:13:00	19.0	A PIE > 15 MIN	 A regresar al hogar	285.9
+154	15	25200.0	07:00:00	40.0	BICICLETA	 A trabajar	285.9
+15	154	61200.0	17:00:00	50.0	BICICLETA	 A regresar al hogar	285.9
+23	11	23400.0	06:30:00	30.0	A PIE > 15 MIN	 A acompañar a alguien sin remuneración	221.2
+11	23	25200.0	07:00:00	15.0	A PIE > 15 MIN	 A regresar al hogar	221.2
+23	11	53100.0	14:45:00	15.0	A PIE > 15 MIN	 A acompañar a alguien sin remuneración	221.2
+11	23	54000.0	15:00:00	30.0	A PIE > 15 MIN	 A regresar al hogar	221.2
+23	11	23400.0	06:30:00	30.0	A PIE > 15 MIN	 A Estudiar	221.2
+11	23	54000.0	15:00:00	30.0	A PIE > 15 MIN	 A regresar al hogar	221.2
+55	56	21600.0	06:00:00	15.0	A PIE > 15 MIN	 A acompañar a alguien sin remuneración	56.3
+56	55	22500.0	06:15:00	15.0	A PIE > 15 MIN	 A regresar al hogar	56.3
+55	56	39600.0	11:00:00	15.0	A PIE > 15 MIN	 A acompañar a alguien sin remuneración	56.3
+56	55	40500.0	11:15:00	15.0	A PIE > 15 MIN	 A regresar al hogar	56.3
+55	57	50400.0	14:00:00	15.0	A PIE > 15 MIN	 A acompañar a alguien sin remuneración	56.3
+57	55	51300.0	14:15:00	15.0	A PIE > 15 MIN	 A regresar al hogar	56.3
+55	57	58500.0	16:15:00	15.0	A PIE > 15 MIN	 A acompañar a alguien sin remuneración	56.3
+57	55	59400.0	16:30:00	15.0	A PIE > 15 MIN	 A regresar al hogar	56.3
+55	56	21600.0	06:00:00	15.0	A PIE > 15 MIN	 A Estudiar	56.3
+56	55	40500.0	11:15:00	15.0	A PIE > 15 MIN	 A regresar al hogar	56.3
+55	57	50400.0	14:00:00	15.0	A PIE > 15 MIN	 A realizar actividades recreativas y culturales	56.3
+57	55	59400.0	16:30:00	15.0	A PIE > 15 MIN	 A regresar al hogar	56.3
+55	56	21600.0	06:00:00	15.0	A PIE > 15 MIN	 A Estudiar	56.3
+56	55	40500.0	11:15:00	15.0	A PIE > 15 MIN	 A regresar al hogar	56.3
+55	57	50400.0	14:00:00	15.0	A PIE > 15 MIN	 A realizar actividades recreativas y culturales	56.3
+57	55	59400.0	16:30:00	15.0	A PIE > 15 MIN	 A regresar al hogar	56.3
+58	58	45000.0	12:30:00	6.0	A PIE <15 MIN	 A realizar compras	90.2
+58	58	45600.0	12:40:00	4.0	A PIE <15 MIN	 A regresar al hogar	90.2
+154	147	31200.0	08:40:00	39.0	A PIE > 15 MIN	 A realizar compras	203.4
+147	154	43380.0	12:03:00	39.0	A PIE > 15 MIN	 A regresar al hogar	203.4
+56	55	23400.0	06:30:00	10.0	BICICLETA	 A trabajar	90.3
+55	56	67800.0	18:50:00	10.0	BICICLETA	 A regresar al hogar	90.3
+56	56	22560.0	06:16:00	4.0	A PIE <15 MIN	 A trabajar	90.3
+56	56	53820.0	14:57:00	4.0	A PIE <15 MIN	 A regresar al hogar	90.3
+852	852	30600.0	08:30:00	30.0	AUTO	 A trabajar	341.1
+852	956	61200.0	17:00:00	30.0	AUTO	 A regresar al hogar	341.1
+956	12	24300.0	06:45:00	15.0	A PIE > 15 MIN	 A Estudiar	341.1
+12	956	54000.0	15:00:00	30.0	A PIE > 15 MIN	 A regresar al hogar	341.1
+55	26	28800.0	08:00:00	135.0	AUTO	 A realizar compras	80.1
+26	55	42300.0	11:45:00	20.0	AUTO	 A regresar al hogar	80.1
+55	26	36000.0	10:00:00	15.0	AUTO	 A realizar compras	80.1
+26	55	42300.0	11:45:00	20.0	AUTO	 A regresar al hogar	80.1
+55	55	50400.0	14:00:00	10.0	A PIE <15 MIN	 A realizar compras	85.7
+55	55	52200.0	14:30:00	10.0	A PIE <15 MIN	 A regresar al hogar	85.7
+55	70	33000.0	09:10:00	15.0	ESPECIAL OCUPADO	 A realizar algún trámite personal	102.3
+70	55	46800.0	13:00:00	20.0	ESPECIAL OCUPADO	 A regresar al hogar	102.3
+55	12	20700.0	05:45:00	35.0	TRANSPORTE ESCOLAR	 A Estudiar	102.3
+12	55	55800.0	15:30:00	30.0	TRANSPORTE ESCOLAR	 A regresar al hogar	102.3
+55	10	39600.0	11:00:00	70.0	TRANSPORTE PÚBLICO	 A visitar a alguien	100.5
+10	55	50400.0	14:00:00	60.0	TRANSPORTE PÚBLICO	 A regresar al hogar	100.5
+55	55	26400.0	07:20:00	5.0	A PIE <15 MIN	 A Estudiar	83.3
+55	55	56400.0	15:40:00	3.0	A PIE <15 MIN	 A regresar al hogar	83.3
+55	53	39600.0	11:00:00	30.0	A PIE > 15 MIN	 A realizar compras	97.9
+53	55	43800.0	12:10:00	40.0	A PIE > 15 MIN	 A regresar al hogar	97.9
+55	60	79200.0	22:00:00	10.0	AUTO	 A realizar algún trámite personal	85.8
+60	55	82800.0	23:00:00	10.0	AUTO	 A regresar al hogar	85.8
+87	153	48600.0	13:30:00	15.0	AUTO	 A trabajar	129.7
+87	153	28800.0	08:00:00	50.0	TRANSPORTE PÚBLICO	 A trabajar	101.7
+956	13	21600.0	06:00:00	14.0	A PIE <15 MIN	 A trabajar	347.8
+13	956	61200.0	17:00:00	10.0	A PIE <15 MIN	 A regresar al hogar	347.8
+55	155	21600.0	06:00:00	45.0	TRANSPORTE PÚBLICO	 A trabajar	86.3
+155	55	63000.0	17:30:00	50.0	TRANSPORTE PÚBLICO	 A regresar al hogar	86.3
+956	151	28800.0	08:00:00	120.0	MOTO	 A trabajar	337.5
+151	956	36300.0	10:05:00	120.0	MOTO	 A regresar al hogar	337.5
+956	88	28800.0	08:00:00	60.0	TAXI OCUPADO	 A asuntos médicos personales	356.7
+88	956	32700.0	09:05:00	175.0	TAXI OCUPADO	 A regresar al hogar	356.7
+956	86	23400.0	06:30:00	90.0	TRANSPORTE PÚBLICO	 A trabajar	379.3
+86	956	54000.0	15:00:00	90.0	TRANSPORTE PÚBLICO	 A regresar al hogar	379.3
+956	154	14400.0	04:00:00	170.0	TRANSPORTE PÚBLICO	 A trabajar	372.4
+154	956	65100.0	18:05:00	158.0	A PIE > 15 MIN	 A regresar al hogar	372.4
+956	54	29760.0	08:16:00	74.0	A PIE > 15 MIN	 A Estudiar	372.4
+54	956	46680.0	12:58:00	47.0	A PIE > 15 MIN	 A regresar al hogar	372.4
+956	11	29100.0	08:05:00	55.0	A PIE > 15 MIN	 A Estudiar	372.4
+11	956	33060.0	09:11:00	199.0	A PIE > 15 MIN	 A regresar al hogar	372.4
+956	10	29100.0	08:05:00	62.0	BICICLETA	 A realizar algún trámite personal	356.0
+10	956	40080.0	11:08:00	211.0	AUTO	 A regresar al hogar	356.0
+852	7	36000.0	10:00:00	30.0	AUTO	 A realizar algún trámite personal	310.5
+87	146	52140.0	14:29:00	21.0	BICICLETA	 A asuntos médicos personales	89.1
+54	52	39600.0	11:00:00	15.0	BICICLETA	 A trabajar	259.3
+52	54	72000.0	20:00:00	15.0	BICICLETA	 A regresar al hogar	259.3
+54	52	36000.0	10:00:00	20.0	A PIE > 15 MIN	 A realizar compras	245.8
+52	54	40200.0	11:10:00	10.0	A PIE <15 MIN	 A regresar al hogar	245.8
+54	52	54000.0	15:00:00	15.0	BICICLETA	 A realizar algún trámite personal	245.8
+52	54	58200.0	16:10:00	20.0	BICICLETA	 A regresar al hogar	245.8
+88	850	28800.0	08:00:00	25.0	AUTO	 A realizar actividades físicas y/o deportivas	88.7
+850	88	40500.0	11:15:00	30.0	AUTO	 A regresar al hogar	88.7
+88	852	36000.0	10:00:00	25.0	AUTO	 A realizar algún trámite personal	106.9
+852	88	39600.0	11:00:00	31.0	AUTO	 A regresar al hogar	106.9
+54	147	25800.0	07:10:00	30.0	AUTO	 A trabajar	260.3
+147	54	63000.0	17:30:00	40.0	AUTO	 A regresar al hogar	260.3
+54	87	25800.0	07:10:00	30.0	AUTO	 A trabajar	260.3
+87	54	63000.0	17:30:00	40.0	AUTO	 A regresar al hogar	260.3
+88	852	32400.0	09:00:00	20.0	AUTO	 A trabajar	88.8
+87	147	54120.0	15:02:00	21.0	A PIE > 15 MIN	 A realizar compras	113.1
+147	87	72240.0	20:04:00	28.0	A PIE > 15 MIN	 A regresar al hogar	113.1
+88	76	37800.0	10:30:00	30.0	A PIE > 15 MIN	 A realizar algún trámite personal	84.3
+76	88	40500.0	11:15:00	45.0	A PIE > 15 MIN	 A regresar al hogar	84.3
+88	88	36000.0	10:00:00	15.0	A PIE > 15 MIN	 A trabajar	84.3
+88	88	46800.0	13:00:00	10.0	A PIE <15 MIN	 A regresar al hogar	84.3
+87	63	26520.0	07:22:00	18.0	AUTO	 A trabajar	124.4
+54	79	28800.0	08:00:00	60.0	AUTO	 A trabajar	265.7
+79	54	54600.0	15:10:00	75.0	AUTO	 A regresar al hogar	265.7
+54	155	34200.0	09:30:00	70.0	TRANSPORTE PÚBLICO	 A trabajar	265.7
+155	54	63600.0	17:40:00	51.0	TRANSPORTE PÚBLICO	 A regresar al hogar	265.7
+54	87	28800.0	08:00:00	60.0	AUTO	 A trabajar	261.7
+87	54	57600.0	16:00:00	60.0	AUTO	 A regresar al hogar	261.7
+54	852	25200.0	07:00:00	60.0	AUTO	 A trabajar	250.3
+852	54	52200.0	14:30:00	230.0	AUTO	 A regresar al hogar	250.3
+25	75	36000.0	10:00:00	30.0	AUTO	 A realizar algún trámite personal	83.2
+75	25	38100.0	10:35:00	235.0	AUTO	 A regresar al hogar	83.2
+25	25	22800.0	06:20:00	5.0	BICICLETA	 A Estudiar	83.2
+25	25	23400.0	06:30:00	10.0	BICICLETA	 A regresar al hogar	83.2
+25	25	22800.0	06:20:00	5.0	BICICLETA	 A Estudiar	83.2
+25	25	23400.0	06:30:00	10.0	BICICLETA	 A regresar al hogar	83.2
+25	155	25200.0	07:00:00	60.0	MOTO	 A trabajar	102.3
+155	25	29100.0	08:05:00	85.0	MOTO	 A regresar al hogar	102.3
+25	25	24300.0	06:45:00	5.0	BICICLETA	 A Estudiar	102.3
+25	25	24900.0	06:55:00	35.0	BICICLETA	 A regresar al hogar	102.3
+25	25	36000.0	10:00:00	10.0	A PIE <15 MIN	 A realizar actividades recreativas y culturales	102.3
+25	25	36900.0	10:15:00	60.0	A PIE > 15 MIN	 A regresar al hogar	102.3
+25	55	22500.0	06:15:00	30.0	AUTO	 A Estudiar	100.2
+55	25	67800.0	18:50:00	30.0	TRANSPORTE PÚBLICO	 A regresar al hogar	100.2
+25	55	23400.0	06:30:00	15.0	TRANSPORTE PÚBLICO	 A trabajar	83.7
+55	25	48600.0	13:30:00	192.0	TRANSPORTE PÚBLICO	 A regresar al hogar	83.7
+25	147	36000.0	10:00:00	5.0	A PIE <15 MIN	 A realizar actividades físicas y/o deportivas	85.5
+147	25	39600.0	11:00:00	5.0	A PIE <15 MIN	 A regresar al hogar	85.5
+25	852	28800.0	08:00:00	33.0	TRANSPORTE PÚBLICO	 A trabajar	85.5
+852	25	64800.0	18:00:00	60.0	TRANSPORTE PÚBLICO	 A regresar al hogar	85.5
+25	25	28800.0	08:00:00	185.0	A PIE > 15 MIN	 A realizar actividades físicas y/o deportivas	85.5
+25	25	43200.0	12:00:00	46.0	A PIE > 15 MIN	 A regresar al hogar	85.5
+25	25	24000.0	06:40:00	20.0	BICICLETA	 A acompañar a alguien sin remuneración	83.2
+25	25	25260.0	07:01:00	20.0	BICICLETA	 A regresar al hogar	83.2
+25	22	24000.0	06:40:00	20.0	BICICLETA	 A Estudiar	83.2
+22	25	68700.0	19:05:00	25.0	BICICLETA	 A regresar al hogar	83.2
+25	25	24000.0	06:40:00	20.0	BICICLETA	 A Estudiar	83.2
+25	25	54000.0	15:00:00	20.0	BICICLETA	 A regresar al hogar	83.2
+25	851	20400.0	05:40:00	50.0	TRANSPORTE PÚBLICO	 A asuntos médicos personales	82.6
+851	25	34200.0	09:30:00	45.0	TRANSPORTE PÚBLICO	 A regresar al hogar	82.6
+25	851	20400.0	05:40:00	50.0	TRANSPORTE PÚBLICO	 A asuntos médicos personales	82.6
+851	25	34200.0	09:30:00	60.0	TRANSPORTE PÚBLICO	 A regresar al hogar	82.6
+54	54	23400.0	06:30:00	45.0	TRANSPORTE ESCOLAR	 A Estudiar	210.4
+54	54	50400.0	14:00:00	60.0	TRANSPORTE ESCOLAR	 A regresar al hogar	210.4
+54	54	32400.0	09:00:00	15.0	A PIE > 15 MIN	 A trabajar	272.3
+54	54	46800.0	13:00:00	15.0	A PIE > 15 MIN	 A regresar al hogar	272.3
+25	851	45000.0	12:30:00	75.0	AUTO	 A visitar a alguien	100.8
+851	25	56700.0	15:45:00	45.0	AUTO	 A regresar al hogar	100.8
+25	11	63600.0	17:40:00	20.0	A PIE > 15 MIN	 A asistir actividad de tipo religioso y/o culto	79.6
+11	25	68460.0	19:01:00	14.0	A PIE <15 MIN	 A regresar al hogar	79.6
+54	52	50400.0	14:00:00	25.0	A PIE > 15 MIN	 A realizar algún trámite personal	253.1
+52	54	55800.0	15:30:00	30.0	A PIE > 15 MIN	 A regresar al hogar	253.1
+25	155	28800.0	08:00:00	20.0	OTRO	 A trabajar	103.2
+155	25	62100.0	17:15:00	30.0	OTRO	 A regresar al hogar	103.2
+75	87	36900.0	10:15:00	15.0	MOTO	 A trabajar	120.7
+25	25	25200.0	07:00:00	75.0	TRANSPORTE PÚBLICO	 A realizar algún trámite personal	79.9
+25	25	30000.0	08:20:00	220.0	TRANSPORTE PÚBLICO	 A regresar al hogar	79.9
+58	26	28800.0	08:00:00	75.0	A PIE > 15 MIN	 A realizar actividades físicas y/o deportivas	130.0
+26	25	36900.0	10:15:00	75.0	A PIE > 15 MIN	 A visitar a alguien	130.0
+58	851	32400.0	09:00:00	198.0	MOTO	 A trabajar	136.4
+851	58	50700.0	14:05:00	139.0	MOTO	 A regresar al hogar	136.4
+58	69	28800.0	08:00:00	30.0	TAXI OCUPADO	 A realizar algún trámite personal	136.4
+69	58	41400.0	11:30:00	60.0	TAXI OCUPADO	 A regresar al hogar	136.4
+58	26	50400.0	14:00:00	20.0	A PIE > 15 MIN	 A realizar compras	108.6
+26	58	54060.0	15:01:00	19.0	A PIE > 15 MIN	 A regresar al hogar	108.6
+25	25	23400.0	06:30:00	15.0	BICICLETA	 A Estudiar	104.3
+25	25	54000.0	15:00:00	20.0	BICICLETA	 A regresar al hogar	104.3
+25	24	39600.0	11:00:00	30.0	A PIE > 15 MIN	 A realizar algún trámite personal	104.3
+24	25	50400.0	14:00:00	30.0	A PIE > 15 MIN	 A regresar al hogar	104.3
+25	22	24300.0	06:45:00	15.0	A PIE > 15 MIN	 A Estudiar	101.2
+22	25	54600.0	15:10:00	20.0	A PIE > 15 MIN	 A regresar al hogar	101.2
+25	25	46800.0	13:00:00	10.0	A PIE <15 MIN	 A llevar y/o dejar algo	98.3
+25	25	48000.0	13:20:00	10.0	A PIE <15 MIN	 A regresar al hogar	98.3
+25	75	26400.0	07:20:00	30.0	BICICLETA	 A trabajar	98.3
+75	25	61200.0	17:00:00	40.0	BICICLETA	 A regresar al hogar	98.3
+25	87	37800.0	10:30:00	30.0	AUTO	 A acompañar a alguien sin remuneración	84.2
+87	25	50400.0	14:00:00	30.0	AUTO	 A regresar al hogar	84.2
+25	87	37800.0	10:30:00	30.0	AUTO	 A asuntos médicos personales	84.2
+87	25	50400.0	14:00:00	30.0	AUTO	 A regresar al hogar	84.2
+25	55	26100.0	07:15:00	15.0	TRANSPORTE ESCOLAR	 A Estudiar	84.2
+55	25	55800.0	15:30:00	30.0	TRANSPORTE ESCOLAR	 A regresar al hogar	84.2
+25	55	26100.0	07:15:00	15.0	TRANSPORTE ESCOLAR	 A Estudiar	84.2
+55	25	55800.0	15:30:00	30.0	TRANSPORTE ESCOLAR	 A regresar al hogar	84.2
+25	25	24600.0	06:50:00	5.0	AUTO	 A acompañar a alguien sin remuneración	101.6
+25	25	25320.0	07:02:00	8.0	AUTO	 A regresar al hogar	101.6
+25	25	24900.0	06:55:00	5.0	AUTO	 A Estudiar	101.6
+25	25	54000.0	15:00:00	20.0	A PIE > 15 MIN	 A regresar al hogar	101.6
+25	25	24900.0	06:55:00	5.0	AUTO	 A Estudiar	101.6
+25	25	54000.0	15:00:00	20.0	A PIE > 15 MIN	 A regresar al hogar	101.6
+25	25	36900.0	10:15:00	15.0	A PIE > 15 MIN	 A llevar y/o dejar algo	100.2
+25	25	38400.0	10:40:00	10.0	A PIE <15 MIN	 A regresar al hogar	100.2
+25	22	21600.0	06:00:00	25.0	A PIE > 15 MIN	 A Estudiar	100.2
+22	25	54000.0	15:00:00	25.0	A PIE > 15 MIN	 A regresar al hogar	100.2
+25	25	27000.0	07:30:00	20.0	AUTO	 A realizar actividades físicas y/o deportivas	65.2
+25	25	36000.0	10:00:00	15.0	AUTO	 A regresar al hogar	65.2
+25	52	30600.0	08:30:00	25.0	AUTO	 A realizar algún trámite personal	91.6
+25	52	30300.0	08:25:00	30.0	AUTO	 A realizar algún trámite personal	91.6
+25	25	76020.0	21:07:00	3.0	AUTO	 A visitar a alguien	91.6
+25	25	77100.0	21:25:00	54.0	AUTO	 A regresar al hogar	91.6
+148	147	19800.0	05:30:00	90.0	TRANSPORTE PÚBLICO	 A trabajar	1.5
+86	850	32400.0	09:00:00	30.0	AUTO	 A trabajar	200.0
+87	87	36540.0	10:09:00	66.0	A PIE > 15 MIN	 A realizar actividades físicas y/o deportivas	85.6
+87	87	48600.0	13:30:00	40.0	A PIE > 15 MIN	 A regresar al hogar	85.6
+87	87	36480.0	10:08:00	22.0	A PIE > 15 MIN	 A realizar compras	73.1
+87	87	38700.0	10:45:00	165.0	A PIE > 15 MIN	 A regresar al hogar	73.1
+87	87	25680.0	07:08:00	22.0	A PIE > 15 MIN	 A realizar actividades físicas y/o deportivas	104.0
+87	87	33300.0	09:15:00	25.0	A PIE > 15 MIN	 A regresar al hogar	104.0
+87	87	36180.0	10:03:00	37.0	A PIE > 15 MIN	 A realizar compras	106.0
+87	87	45000.0	12:30:00	40.0	A PIE > 15 MIN	 A regresar al hogar	106.0
+53	851	63000.0	17:30:00	45.0	AUTO	 A realizar actividades recreativas y culturales	157.1
+54	851	63000.0	17:30:00	45.0	AUTO	 A realizar actividades recreativas y culturales	157.1
+86	852	27000.0	07:30:00	30.0	MOTO	 A trabajar	122.5
+852	86	59400.0	16:30:00	70.0	MOTO	 A regresar al hogar	122.5
+86	73	23400.0	06:30:00	60.0	TRANSPORTE ESCOLAR	 A Estudiar	122.5
+73	86	55800.0	15:30:00	60.0	TRANSPORTE ESCOLAR	 A regresar al hogar	122.5
+147	149	36000.0	10:00:00	30.0	AUTO	 A realizar compras	443.9
+149	147	38100.0	10:35:00	25.0	AUTO	 A regresar al hogar	443.9
+86	153	33540.0	09:19:00	18.0	A PIE > 15 MIN	 A realizar compras	148.9
+153	86	34800.0	09:40:00	33.0	A PIE > 15 MIN	 A regresar al hogar	148.9
+86	82	36120.0	10:02:00	10.0	TAXI OCUPADO	 A asuntos médicos personales	189.6
+82	86	39840.0	11:04:00	210.0	TAXI OCUPADO	 A regresar al hogar	189.6
+86	82	36000.0	10:00:00	12.0	TAXI OCUPADO	 A acompañar a alguien sin remuneración	189.6
+82	86	39780.0	11:03:00	13.0	TAXI OCUPADO	 A regresar al hogar	189.6
+86	86	33660.0	09:21:00	108.0	A PIE > 15 MIN	 A realizar actividades recreativas y culturales	147.3
+86	86	40920.0	11:22:00	8.0	A PIE <15 MIN	 A regresar al hogar	147.3
+86	77	39900.0	11:05:00	16.0	AUTO	 A realizar algún trámite personal	149.7
+77	72	43560.0	12:06:00	85.0	AUTO	 A realizar algún trámite personal	149.7
+72	147	51900.0	14:25:00	66.0	AUTO	 A realizar algún trámite personal	149.7
+147	86	58800.0	16:20:00	14.0	AUTO	 A regresar al hogar	149.7
+86	77	39600.0	11:00:00	21.0	AUTO	 A realizar algún trámite personal	149.7
+77	72	47220.0	13:07:00	26.0	AUTO	 A realizar algún trámite personal	149.7
+72	147	54000.0	15:00:00	38.0	AUTO	 A realizar compras	149.7
+147	86	57600.0	16:00:00	27.0	AUTO	 A regresar al hogar	149.7
+86	86	34200.0	09:30:00	15.0	A PIE > 15 MIN	 A Estudiar	182.1
+86	82	48600.0	13:30:00	25.0	A PIE > 15 MIN	 A realizar actividades recreativas y culturales	182.1
+82	86	64800.0	18:00:00	30.0	A PIE > 15 MIN	 A regresar al hogar	182.1
+86	86	32880.0	09:08:00	7.0	A PIE <15 MIN	 A Estudiar	127.7
+86	86	39600.0	11:00:00	14.0	A PIE <15 MIN	 A regresar al hogar	127.7
+146	86	79200.0	22:00:00	30.0	ESPECIAL OCUPADO	 A regresar al hogar	159.2
+86	86	46800.0	13:00:00	15.0	A PIE > 15 MIN	 A realizar compras	125.6
+86	86	60120.0	16:42:00	18.0	A PIE > 15 MIN	 A regresar al hogar	125.6
+86	86	46800.0	13:00:00	10.0	A PIE <15 MIN	 A realizar compras	125.6
+86	86	60300.0	16:45:00	15.0	A PIE > 15 MIN	 A regresar al hogar	125.6
+87	852	32400.0	09:00:00	20.0	A PIE > 15 MIN	 A realizar algún trámite personal	107.5
+852	87	35400.0	09:50:00	15.0	A PIE > 15 MIN	 A regresar al hogar	107.5
+87	146	32400.0	09:00:00	15.0	A PIE > 15 MIN	 A acompañar a alguien sin remuneración	107.5
+146	87	35400.0	09:50:00	20.0	A PIE > 15 MIN	 A regresar al hogar	107.5
+153	155	39600.0	11:00:00	55.0	AUTO	 A realizar actividades recreativas y culturales	26.0
+21	62	21720.0	06:02:00	13.0	AUTO	 A trabajar	32.2
+62	21	55800.0	15:30:00	20.0	AUTO	 A realizar algún trámite personal	32.2
+21	62	21720.0	06:02:00	13.0	AUTO	 A trabajar	32.2
+62	21	55800.0	15:30:00	20.0	AUTO	 A realizar algún trámite personal	32.2
+145	51	19200.0	05:20:00	85.0	ESPECIAL OCUPADO	 A Estudiar	366.6
+51	145	54000.0	15:00:00	75.0	ESPECIAL OCUPADO	 A regresar al hogar	366.6
+145	51	19200.0	05:20:00	85.0	ESPECIAL OCUPADO	 A Estudiar	366.6
+51	145	54000.0	15:00:00	75.0	ESPECIAL OCUPADO	 A regresar al hogar	366.6
+145	86	34200.0	09:30:00	40.0	TAXI OCUPADO	 A asuntos médicos personales	514.6
+86	146	44100.0	12:15:00	30.0	AUTO	 A realizar compras	514.6
+146	145	49500.0	13:45:00	25.0	AUTO	 A regresar al hogar	514.6
+145	86	41400.0	11:30:00	40.0	AUTO	 A realizar algún trámite personal	514.6
+86	146	44100.0	12:15:00	30.0	AUTO	 A acompañar a alguien sin remuneración	514.6
+146	145	49500.0	13:45:00	25.0	AUTO	 A regresar al hogar	514.6
+145	54	28800.0	08:00:00	75.0	AUTO	 A asuntos médicos personales	350.5
+54	145	43200.0	12:00:00	90.0	AUTO	 A regresar al hogar	350.5
+145	148	54000.0	15:00:00	30.0	AUTO	 A realizar compras	464.5
+148	145	61200.0	17:00:00	40.0	AUTO	 A regresar al hogar	464.5
+145	148	54000.0	15:00:00	30.0	AUTO	 A realizar compras	464.5
+148	145	61200.0	17:00:00	40.0	AUTO	 A regresar al hogar	464.5
+852	852	64800.0	18:00:00	15.0	AUTO	 A llevar y/o dejar algo	411.8
+852	852	75600.0	21:00:00	10.0	AUTO	 A regresar al hogar	411.8
+852	852	37800.0	10:30:00	10.0	A PIE <15 MIN	 A realizar algún trámite personal	350.9
+852	852	43200.0	12:00:00	10.0	A PIE <15 MIN	 A regresar al hogar	350.9
+145	147	36000.0	10:00:00	20.0	A PIE > 15 MIN	 A realizar compras	490.1
+147	145	46800.0	13:00:00	30.0	A PIE > 15 MIN	 A regresar al hogar	490.1
+7	26	32400.0	09:00:00	18.0	A PIE > 15 MIN	 A realizar algún trámite personal	6.5
+26	7	39600.0	11:00:00	20.0	A PIE > 15 MIN	 A regresar al hogar	6.5
+7	16	38100.0	10:35:00	15.0	A PIE > 15 MIN	 A trabajar	6.5
+16	7	39900.0	11:05:00	11.0	A PIE <15 MIN	 A regresar al hogar	6.5
+7	77	32400.0	09:00:00	60.0	TRANSPORTE PÚBLICO	 A trabajar	6.5
+77	7	57600.0	16:00:00	87.0	TRANSPORTE PÚBLICO	 A regresar al hogar	6.5
+7	52	25320.0	07:02:00	38.0	TRANSPORTE PÚBLICO	 A trabajar	6.5
+52	7	59400.0	16:30:00	37.0	TRANSPORTE PÚBLICO	 A regresar al hogar	6.5
+7	52	23400.0	06:30:00	35.0	TRANSPORTE PÚBLICO	 A trabajar	5.6
+52	7	55800.0	15:30:00	39.0	TRANSPORTE PÚBLICO	 A regresar al hogar	5.6
+7	16	22440.0	06:14:00	16.0	A PIE > 15 MIN	 A Estudiar	5.6
+16	7	45000.0	12:30:00	15.0	A PIE > 15 MIN	 A regresar al hogar	5.6
+76	21	21600.0	06:00:00	30.0	AUTO	 A trabajar	592.7
+21	76	62400.0	17:20:00	40.0	TRANSPORTE PÚBLICO	 A regresar al hogar	592.7
+88	71	50400.0	14:00:00	20.0	AUTO	 A realizar compras	94.6
+71	87	54000.0	15:00:00	5.0	AUTO	 A realizar compras	94.6
+87	88	55800.0	15:30:00	20.0	AUTO	 A regresar al hogar	94.6
+88	71	50400.0	14:00:00	20.0	AUTO	 A realizar compras	94.6
+71	87	54000.0	15:00:00	5.0	AUTO	 A realizar compras	94.6
+87	88	55800.0	15:30:00	20.0	AUTO	 A regresar al hogar	94.6
+88	147	36000.0	10:00:00	15.0	AUTO	 A trabajar	105.9
+147	88	50400.0	14:00:00	20.0	AUTO	 A regresar al hogar	105.9
+88	81	61200.0	17:00:00	30.0	A PIE > 15 MIN	 A realizar compras	87.7
+81	88	67200.0	18:40:00	35.0	A PIE > 15 MIN	 A regresar al hogar	87.7
+88	75	61200.0	17:00:00	30.0	A PIE > 15 MIN	 A realizar compras	87.7
+75	88	67500.0	18:45:00	30.0	A PIE > 15 MIN	 A regresar al hogar	87.7
+88	155	23400.0	06:30:00	30.0	TRANSPORTE ESCOLAR	 A Estudiar	91.7
+155	88	54600.0	15:10:00	100.0	TRANSPORTE ESCOLAR	 A regresar al hogar	91.7
+88	155	23400.0	06:30:00	30.0	TRANSPORTE ESCOLAR	 A Estudiar	91.7
+155	88	54600.0	15:10:00	100.0	TRANSPORTE ESCOLAR	 A regresar al hogar	91.7
+88	88	24600.0	06:50:00	5.0	AUTO	 A acompañar a alguien sin remuneración	99.3
+88	88	24000.0	06:40:00	15.0	AUTO	 A Estudiar	99.3
+88	88	55800.0	15:30:00	15.0	A PIE > 15 MIN	 A regresar al hogar	99.3
+88	88	24000.0	06:40:00	15.0	AUTO	 A Estudiar	99.3
+88	88	55800.0	15:30:00	15.0	A PIE > 15 MIN	 A regresar al hogar	99.3
+88	88	24000.0	06:40:00	10.0	AUTO	 A Estudiar	99.3
+88	88	55800.0	15:30:00	15.0	A PIE > 15 MIN	 A regresar al hogar	99.3
+88	155	23400.0	06:30:00	27.0	TRANSPORTE ESCOLAR	 A Estudiar	106.9
+155	88	55800.0	15:30:00	40.0	TRANSPORTE ESCOLAR	 A regresar al hogar	106.9
+7	153	36000.0	10:00:00	66.0	TRANSPORTE PÚBLICO	 A realizar algún trámite personal	6.4
+153	7	44100.0	12:15:00	55.0	TRANSPORTE PÚBLICO	 A regresar al hogar	6.4
+88	75	46800.0	13:00:00	23.0	AUTO	 A realizar compras	86.4
+75	88	50400.0	14:00:00	25.0	AUTO	 A regresar al hogar	86.4
+88	13	23400.0	06:30:00	30.0	BICICLETA	 A trabajar	86.4
+13	88	52200.0	14:30:00	30.0	BICICLETA	 A regresar al hogar	86.4
+150	153	28800.0	08:00:00	25.0	AUTO	 A acompañar a alguien sin remuneración	99.0
+153	150	36000.0	10:00:00	30.0	AUTO	 A regresar al hogar	99.0
+150	146	25200.0	07:00:00	15.0	ESPECIAL OCUPADO	 A trabajar	99.0
+146	150	61200.0	17:00:00	25.0	ESPECIAL OCUPADO	 A regresar al hogar	99.0
+150	153	28800.0	08:00:00	25.0	AUTO	 A asuntos médicos personales	99.0
+153	150	36000.0	10:00:00	30.0	AUTO	 A regresar al hogar	99.0
+150	155	41400.0	11:30:00	25.0	AUTO	 A realizar compras	123.3
+155	150	59400.0	16:30:00	30.0	AUTO	 A regresar al hogar	123.3
+150	155	41400.0	11:30:00	25.0	AUTO	 A realizar compras	123.3
+155	150	59400.0	16:30:00	30.0	AUTO	 A regresar al hogar	123.3
+150	52	36000.0	10:00:00	30.0	AUTO	 A realizar compras	157.1
+52	150	43200.0	12:00:00	30.0	AUTO	 A regresar al hogar	157.1
+150	52	36000.0	10:00:00	30.0	AUTO	 A realizar compras	157.1
+52	150	43200.0	12:00:00	30.0	AUTO	 A regresar al hogar	157.1
+150	87	25200.0	07:00:00	10.0	AUTO	 A acompañar a alguien sin remuneración	201.2
+150	87	61200.0	17:00:00	15.0	AUTO	 A realizar algún trámite personal	201.2
+150	87	61200.0	17:00:00	10.0	AUTO	 A acompañar a alguien sin remuneración	201.2
+150	87	25200.0	07:00:00	20.0	AUTO	 A Estudiar	201.2
+87	150	55800.0	15:30:00	10.0	AUTO	 A regresar al hogar	201.2
+150	87	61200.0	17:00:00	10.0	AUTO	 A visitar a alguien	201.2
+150	87	25200.0	07:00:00	20.0	AUTO	 A Estudiar	201.2
+87	150	55800.0	15:30:00	10.0	AUTO	 A regresar al hogar	201.2
+150	87	61200.0	17:00:00	10.0	AUTO	 A visitar a alguien	201.2
+145	155	23400.0	06:30:00	15.0	MOTO	 A trabajar	369.2
+155	145	63900.0	17:45:00	15.0	MOTO	 A regresar al hogar	369.2
+145	156	27000.0	07:30:00	20.0	A PIE > 15 MIN	 A trabajar	369.2
+156	145	61800.0	17:10:00	20.0	A PIE > 15 MIN	 A regresar al hogar	369.2
+145	52	46800.0	13:00:00	30.0	TAXI OCUPADO	 A asuntos médicos personales	446.4
+52	145	48900.0	13:35:00	145.0	TAXI OCUPADO	 A regresar al hogar	446.4
+145	52	46800.0	13:00:00	30.0	TAXI OCUPADO	 A acompañar a alguien sin remuneración	446.4
+52	145	48900.0	13:35:00	145.0	TAXI OCUPADO	 A regresar al hogar	446.4
+151	87	27000.0	07:30:00	20.0	AUTO	 A trabajar	123.5
+87	151	57600.0	16:00:00	30.0	AUTO	 A regresar al hogar	123.5
+151	87	27000.0	07:30:00	20.0	AUTO	 A trabajar	123.5
+87	151	57600.0	16:00:00	30.0	AUTO	 A regresar al hogar	123.5
+150	83	25200.0	07:00:00	60.0	AUTO	 A trabajar	153.5
+83	150	61200.0	17:00:00	60.0	AUTO	 A regresar al hogar	153.5
+150	152	27600.0	07:40:00	20.0	MOTO	 A trabajar	122.7
+152	150	59400.0	16:30:00	30.0	MOTO	 A regresar al hogar	122.7
+150	147	28800.0	08:00:00	30.0	AUTO	 A realizar algún trámite personal	123.3
+147	150	37800.0	10:30:00	30.0	AUTO	 A regresar al hogar	123.3
+150	151	25200.0	07:00:00	15.0	A PIE > 15 MIN	 A Estudiar	123.3
+151	150	50400.0	14:00:00	15.0	A PIE > 15 MIN	 A regresar al hogar	123.3
+150	52	32400.0	09:00:00	45.0	AUTO	 A asuntos médicos personales	123.3
+52	150	39600.0	11:00:00	40.0	AUTO	 A regresar al hogar	123.3
+150	155	54000.0	15:00:00	20.0	AUTO	 A realizar actividades recreativas y culturales	120.0
+155	150	73200.0	20:20:00	55.0	AUTO	 A regresar al hogar	120.0
+150	155	54000.0	15:00:00	20.0	AUTO	 A realizar compras	120.0
+155	150	73200.0	20:20:00	55.0	AUTO	 A regresar al hogar	120.0
+150	155	54000.0	15:00:00	20.0	AUTO	 A acompañar a alguien sin remuneración	120.0
+155	150	73200.0	20:20:00	55.0	AUTO	 A regresar al hogar	120.0
+150	75	28800.0	08:00:00	75.0	AUTO	 A trabajar	155.6
+75	150	43800.0	12:10:00	50.0	AUTO	 A regresar al hogar	155.6
+150	147	46800.0	13:00:00	15.0	MOTO	 A trabajar	155.6
+147	150	52200.0	14:30:00	20.0	MOTO	 A regresar al hogar	155.6
+150	147	50400.0	14:00:00	20.0	MOTO	 A realizar compras	157.1
+147	150	70200.0	19:30:00	40.0	MOTO	 A regresar al hogar	157.1
+150	149	27000.0	07:30:00	20.0	MOTO	 A trabajar	162.9
+149	150	63000.0	17:30:00	30.0	MOTO	 A regresar al hogar	162.9
+150	150	32400.0	09:00:00	10.0	A PIE <15 MIN	 A realizar compras	162.9
+150	150	36000.0	10:00:00	5.0	A PIE <15 MIN	 A regresar al hogar	162.9
+150	155	37800.0	10:30:00	60.0	AUTO	 A realizar compras	120.0
+155	150	59400.0	16:30:00	65.0	AUTO	 A regresar al hogar	120.0
+150	155	37800.0	10:30:00	60.0	AUTO	 A realizar compras	120.0
+155	150	59400.0	16:30:00	65.0	AUTO	 A regresar al hogar	120.0
+145	851	41400.0	11:30:00	30.0	AUTO	 A realizar compras	574.8
+851	145	62100.0	17:15:00	30.0	AUTO	 A regresar al hogar	574.8
+145	851	41400.0	11:30:00	30.0	AUTO	 A realizar compras	574.8
+851	145	45000.0	12:30:00	30.0	AUTO	 A regresar al hogar	574.8
+150	152	25200.0	07:00:00	35.0	AUTO	 A trabajar	162.6
+152	150	57600.0	16:00:00	30.0	AUTO	 A regresar al hogar	162.6
+150	18	21600.0	06:00:00	60.0	TRANSPORTE ESCOLAR	 A Estudiar	162.6
+18	150	54000.0	15:00:00	40.0	TRANSPORTE ESCOLAR	 A regresar al hogar	162.6
+145	852	39600.0	11:00:00	30.0	A PIE > 15 MIN	 A realizar algún trámite personal	351.1
+852	145	46800.0	13:00:00	30.0	A PIE > 15 MIN	 A regresar al hogar	351.1
+145	852	39600.0	11:00:00	30.0	A PIE > 15 MIN	 A realizar compras	351.1
+852	145	46800.0	13:00:00	30.0	A PIE > 15 MIN	 A regresar al hogar	351.1
+150	156	64800.0	18:00:00	10.0	A PIE <15 MIN	 A realizar compras	160.8
+156	150	72000.0	20:00:00	15.0	ESPECIAL OCUPADO	 A regresar al hogar	160.8
+150	147	25200.0	07:00:00	15.0	MOTO	 A trabajar	126.7
+147	150	58500.0	16:15:00	25.0	MOTO	 A regresar al hogar	126.7
+150	147	50400.0	14:00:00	15.0	TAXI OCUPADO	 A realizar compras	157.9
+147	150	64800.0	18:00:00	20.0	TAXI OCUPADO	 A regresar al hogar	157.9
+150	147	50400.0	14:00:00	25.0	TAXI OCUPADO	 A realizar compras	157.9
+147	150	64800.0	18:00:00	20.0	TAXI OCUPADO	 A regresar al hogar	157.9
+150	850	36900.0	10:15:00	10.0	A PIE <15 MIN	 A realizar compras	123.5
+850	150	41400.0	11:30:00	90.0	A PIE > 15 MIN	 A regresar al hogar	123.5
+150	82	32400.0	09:00:00	25.0	AUTO	 A realizar algún trámite personal	128.0
+82	150	41400.0	11:30:00	30.0	AUTO	 A regresar al hogar	128.0
+150	149	61200.0	17:00:00	10.0	A PIE <15 MIN	 A asistir actividad de tipo religioso y/o culto	120.5
+149	150	68700.0	19:05:00	10.0	A PIE <15 MIN	 A regresar al hogar	120.5
+150	150	61200.0	17:00:00	30.0	A PIE > 15 MIN	 A asistir actividad de tipo religioso y/o culto	120.5
+150	150	68700.0	19:05:00	10.0	A PIE <15 MIN	 A regresar al hogar	120.5
+150	852	23400.0	06:30:00	30.0	ESPECIAL OCUPADO	 A trabajar	122.7
+852	150	61200.0	17:00:00	30.0	ESPECIAL OCUPADO	 A regresar al hogar	122.7
+7	12	32400.0	09:00:00	15.0	A PIE > 15 MIN	 A Estudiar	5.7
+12	7	57600.0	16:00:00	15.0	A PIE > 15 MIN	 A regresar al hogar	5.7
+154	88	40500.0	11:15:00	15.0	AUTO	 A regresar al hogar	95.5
+7	52	32400.0	09:00:00	45.0	TRANSPORTE PÚBLICO	 A trabajar	5.7
+52	7	61200.0	17:00:00	85.0	TRANSPORTE PÚBLICO	 A regresar al hogar	5.7
+88	79	23400.0	06:30:00	30.0	AUTO	 A trabajar	72.6
+79	88	55800.0	15:30:00	30.0	AUTO	 A regresar al hogar	72.6
+25	88	86100.0	23:55:00	20.0	AUTO	 A regresar al hogar	107.1
+69	52	28800.0	08:00:00	20.0	MOTO	 A trabajar	496.5
+52	69	66600.0	18:30:00	70.0	MOTO	 A regresar al hogar	496.5
+71	75	63000.0	17:30:00	5.0	A PIE <15 MIN	 A realizar compras	597.0
+75	71	64920.0	18:02:00	6.0	A PIE <15 MIN	 A regresar al hogar	597.0
+82	87	27000.0	07:30:00	30.0	AUTO	 A trabajar	591.2
+87	82	59640.0	16:34:00	27.0	AUTO	 A regresar al hogar	591.2
+69	75	61200.0	17:00:00	20.0	A PIE > 15 MIN	 A asuntos médicos personales	435.3
+75	69	64800.0	18:00:00	30.0	A PIE > 15 MIN	 A regresar al hogar	435.3
+147	852	39600.0	11:00:00	60.0	A PIE > 15 MIN	 A realizar compras	375.8
+852	147	43500.0	12:05:00	85.0	A PIE > 15 MIN	 A regresar al hogar	375.8
+71	155	35100.0	09:45:00	30.0	ESPECIAL OCUPADO	 A asuntos médicos personales	576.1
+155	71	43200.0	12:00:00	30.0	A PIE > 15 MIN	 A regresar al hogar	576.1
+71	155	55800.0	15:30:00	10.0	AUTO	 A realizar actividades físicas y/o deportivas	576.1
+155	71	64800.0	18:00:00	20.0	AUTO	 A regresar al hogar	576.1
+88	69	36000.0	10:00:00	30.0	AUTO	 A asuntos médicos personales	107.6
+69	88	40200.0	11:10:00	25.0	AUTO	 A regresar al hogar	107.6
+88	155	25200.0	07:00:00	30.0	MOTO	 A Estudiar	107.6
+155	88	37800.0	10:30:00	40.0	MOTO	 A regresar al hogar	107.6
+88	69	25200.0	07:00:00	30.0	TRANSPORTE PÚBLICO	 A trabajar	88.6
+69	88	63000.0	17:30:00	53.0	TRANSPORTE PÚBLICO	 A regresar al hogar	88.6
+82	82	37860.0	10:31:00	9.0	A PIE <15 MIN	 A realizar compras	504.5
+82	82	41580.0	11:33:00	9.0	A PIE <15 MIN	 A regresar al hogar	504.5
+147	75	32700.0	09:05:00	15.0	AUTO	 A realizar algún trámite personal	351.1
+75	147	34200.0	09:30:00	33.0	AUTO	 A regresar al hogar	351.1
+7	11	24300.0	06:45:00	15.0	TRANSPORTE ESCOLAR	 A Estudiar	5.4
+11	7	54000.0	15:00:00	30.0	TRANSPORTE ESCOLAR	 A regresar al hogar	5.4
+87	86	32400.0	09:00:00	60.0	TAXI OCUPADO	 A asuntos médicos personales	85.6
+86	87	43200.0	12:00:00	62.0	TAXI OCUPADO	 A regresar al hogar	85.6
+87	82	32400.0	09:00:00	60.0	TAXI OCUPADO	 A acompañar a alguien sin remuneración	85.6
+82	87	43200.0	12:00:00	60.0	TAXI OCUPADO	 A regresar al hogar	85.6
+87	87	28800.0	08:00:00	18.0	A PIE > 15 MIN	 A acompañar a alguien con remuneración	108.9
+87	87	50400.0	14:00:00	30.0	A PIE > 15 MIN	 A regresar al hogar	108.9
+7	11	25200.0	07:00:00	40.0	A PIE > 15 MIN	 A realizar actividades recreativas y culturales	5.4
+11	7	32400.0	09:00:00	40.0	A PIE > 15 MIN	 A regresar al hogar	5.4
+7	11	32400.0	09:00:00	20.0	BICICLETA	 A realizar actividades recreativas y culturales	5.5
+11	7	35400.0	09:50:00	25.0	BICICLETA	 A regresar al hogar	5.5
+7	144	21600.0	06:00:00	60.0	TRANSPORTE PÚBLICO	 A trabajar	5.5
+144	7	57600.0	16:00:00	80.0	TRANSPORTE PÚBLICO	 A regresar al hogar	5.5
+7	7	21000.0	05:50:00	10.0	A PIE <15 MIN	 A trabajar	5.5
+7	7	43800.0	12:10:00	10.0	A PIE <15 MIN	 A regresar al hogar	5.5
+7	7	46800.0	13:00:00	10.0	A PIE <15 MIN	 A trabajar	5.5
+7	7	64800.0	18:00:00	10.0	A PIE <15 MIN	 A regresar al hogar	5.5
+7	11	21300.0	05:55:00	15.0	A PIE > 15 MIN	 A acompañar a alguien sin remuneración	5.9
+11	7	22500.0	06:15:00	10.0	A PIE <15 MIN	 A regresar al hogar	5.9
+7	11	43500.0	12:05:00	15.0	A PIE > 15 MIN	 A realizar algún trámite personal	5.9
+11	7	44700.0	12:25:00	15.0	A PIE > 15 MIN	 A regresar al hogar	5.9
+7	11	27000.0	07:30:00	30.0	A PIE > 15 MIN	 A trabajar	5.9
+11	7	63000.0	17:30:00	30.0	A PIE > 15 MIN	 A regresar al hogar	5.9
+7	11	21300.0	05:55:00	15.0	A PIE > 15 MIN	 A Estudiar	5.9
+11	7	44700.0	12:25:00	15.0	A PIE > 15 MIN	 A regresar al hogar	5.9
+7	11	21300.0	05:55:00	15.0	A PIE > 15 MIN	 A Estudiar	5.9
+11	7	44700.0	12:25:00	15.0	A PIE > 15 MIN	 A regresar al hogar	5.9
+88	71	61200.0	17:00:00	10.0	A PIE <15 MIN	 A realizar actividades físicas y/o deportivas	89.1
+71	88	65400.0	18:10:00	10.0	A PIE <15 MIN	 A regresar al hogar	89.1
+88	70	28800.0	08:00:00	15.0	AUTO	 A acompañar a alguien sin remuneración	125.4
+88	69	28800.0	08:00:00	15.0	AUTO	 A Estudiar	125.4
+69	88	54000.0	15:00:00	15.0	AUTO	 A regresar al hogar	125.4
+88	852	36000.0	10:00:00	40.0	AUTO	 A realizar algún trámite personal	94.4
+852	155	41400.0	11:30:00	30.0	AUTO	 A realizar compras	94.4
+155	88	59400.0	16:30:00	75.0	AUTO	 A regresar al hogar	94.4
+7	12	52200.0	14:30:00	60.0	A PIE > 15 MIN	 A realizar compras	5.6
+12	7	57600.0	16:00:00	60.0	A PIE > 15 MIN	 A regresar al hogar	5.6
+7	7	25200.0	07:00:00	6.0	A PIE <15 MIN	 A trabajar	5.6
+7	7	61200.0	17:00:00	6.0	A PIE <15 MIN	 A regresar al hogar	5.6
+7	11	21960.0	06:06:00	11.0	BICICLETA	 A acompañar a alguien sin remuneración	6.5
+11	7	22680.0	06:18:00	11.0	BICICLETA	 A regresar al hogar	6.5
+7	11	21960.0	06:06:00	11.0	BICICLETA	 A Estudiar	6.5
+11	7	44400.0	12:20:00	130.0	BICICLETA	 A regresar al hogar	6.5
+7	23	18600.0	05:10:00	10.0	BICICLETA	 A trabajar	5.7
+23	7	75600.0	21:00:00	10.0	BICICLETA	 A regresar al hogar	5.7
+76	76	36000.0	10:00:00	10.0	AUTO	 A realizar compras	587.8
+76	76	43200.0	12:00:00	10.0	AUTO	 A regresar al hogar	587.8
+76	76	57600.0	16:00:00	10.0	A PIE <15 MIN	 A realizar algún trámite personal	587.8
+76	76	58320.0	16:12:00	28.0	A PIE > 15 MIN	 A regresar al hogar	587.8
+76	76	36000.0	10:00:00	10.0	AUTO	 A realizar algún trámite personal	587.8
+76	76	43200.0	12:00:00	10.0	AUTO	 A regresar al hogar	587.8
+88	71	39600.0	11:00:00	20.0	A PIE > 15 MIN	 A realizar compras	84.9
+71	88	43800.0	12:10:00	25.0	A PIE > 15 MIN	 A regresar al hogar	84.9
+7	52	36000.0	10:00:00	36.0	BICICLETA	 A realizar algún trámite personal	6.4
+52	7	42600.0	11:50:00	15.0	BICICLETA	 A regresar al hogar	6.4
+88	71	36000.0	10:00:00	45.0	A PIE > 15 MIN	 A realizar compras	104.6
+71	88	39600.0	11:00:00	20.0	A PIE > 15 MIN	 A regresar al hogar	104.6
+7	12	32400.0	09:00:00	20.0	A PIE > 15 MIN	 A trabajar	5.6
+12	7	64800.0	18:00:00	4.0	A PIE <15 MIN	 A regresar al hogar	5.6
+82	76	45000.0	12:30:00	45.0	A PIE > 15 MIN	 A visitar a alguien	509.8
+76	82	63540.0	17:39:00	29.0	ESPECIAL OCUPADO	 A regresar al hogar	509.8
+82	76	52080.0	14:28:00	32.0	A PIE > 15 MIN	 A realizar compras	579.0
+76	82	58500.0	16:15:00	25.0	A PIE > 15 MIN	 A regresar al hogar	579.0
+7	7	25200.0	07:00:00	70.0	TRANSPORTE PÚBLICO	 A trabajar	5.6
+7	7	57600.0	16:00:00	100.0	TRANSPORTE PÚBLICO	 A regresar al hogar	5.6
+7	1059	28800.0	08:00:00	30.0	TRANSPORTE PÚBLICO	 A acompañar a alguien sin remuneración	5.6
+1059	7	34200.0	09:30:00	60.0	TRANSPORTE PÚBLICO	 A regresar al hogar	5.6
+7	1059	28800.0	08:00:00	30.0	TRANSPORTE PÚBLICO	 A acompañar a alguien sin remuneración	5.6
+1059	7	34200.0	09:30:00	60.0	TRANSPORTE PÚBLICO	 A regresar al hogar	5.6
+7	24	28800.0	08:00:00	20.0	BICICLETA	 A trabajar	5.6
+24	7	63600.0	17:40:00	20.0	BICICLETA	 A regresar al hogar	5.6
+88	71	37800.0	10:30:00	30.0	A PIE > 15 MIN	 A realizar actividades físicas y/o deportivas	103.3
+71	88	40800.0	11:20:00	30.0	A PIE > 15 MIN	 A regresar al hogar	103.3
+88	88	28800.0	08:00:00	10.0	A PIE <15 MIN	 A realizar compras	103.3
+88	88	31500.0	08:45:00	5.0	A PIE <15 MIN	 A regresar al hogar	103.3
+71	81	21600.0	06:00:00	30.0	ESPECIAL OCUPADO	 A asuntos médicos personales	591.9
+81	71	26400.0	07:20:00	40.0	TAXI OCUPADO	 A regresar al hogar	591.9
+7	11	54000.0	15:00:00	20.0	A PIE > 15 MIN	 A realizar algún trámite personal	6.3
+11	7	57720.0	16:02:00	83.0	A PIE > 15 MIN	 A regresar al hogar	6.3
+7	7	36000.0	10:00:00	15.0	A PIE > 15 MIN	 A realizar algún trámite personal	6.3
+7	7	40800.0	11:20:00	50.0	A PIE > 15 MIN	 A regresar al hogar	6.3
+7	11	39600.0	11:00:00	74.0	A PIE > 15 MIN	 A realizar algún trámite personal	6.3
+11	7	46200.0	12:50:00	25.0	A PIE > 15 MIN	 A regresar al hogar	6.3
+7	158	35460.0	09:51:00	5.0	A PIE <15 MIN	 A Estudiar	5.5
+158	7	71580.0	19:53:00	3.0	A PIE <15 MIN	 A regresar al hogar	5.5
+7	153	28800.0	08:00:00	45.0	TRANSPORTE PÚBLICO	 A asuntos médicos personales	5.4
+153	7	38700.0	10:45:00	45.0	TRANSPORTE PÚBLICO	 A regresar al hogar	5.4
+7	7	43200.0	12:00:00	15.0	A PIE > 15 MIN	 A Estudiar	5.4
+7	7	63000.0	17:30:00	15.0	A PIE > 15 MIN	 A regresar al hogar	5.4
+71	71	27000.0	07:30:00	5.0	A PIE <15 MIN	 A realizar compras	580.8
+71	71	27600.0	07:40:00	3.0	A PIE <15 MIN	 A regresar al hogar	580.8
+71	23	21600.0	06:00:00	130.0	TRANSPORTE PÚBLICO	 A trabajar	599.9
+23	71	57600.0	16:00:00	100.0	TRANSPORTE PÚBLICO	 A regresar al hogar	599.9
+7	87	22920.0	06:22:00	62.0	TRANSPORTE ESCOLAR	 A Estudiar	5.5
+87	7	48240.0	13:24:00	182.0	TRANSPORTE ESCOLAR	 A regresar al hogar	5.5
+7	7	21300.0	05:55:00	123.0	A PIE > 15 MIN	 A trabajar	6.4
+7	7	68280.0	18:58:00	62.0	TRANSPORTE PÚBLICO	 A regresar al hogar	6.4
+7	11	39600.0	11:00:00	20.0	A PIE > 15 MIN	 A realizar compras	5.5
+11	7	43200.0	12:00:00	20.0	A PIE > 15 MIN	 A regresar al hogar	5.5
+83	156	21600.0	06:00:00	35.0	AUTO	 A realizar algún trámite personal	423.9
+156	83	59700.0	16:35:00	16.0	AUTO	 A regresar al hogar	423.9
+83	87	45780.0	12:43:00	63.0	AUTO	 A realizar compras	423.9
+83	63	22800.0	06:20:00	40.0	AUTO	 A Estudiar	423.9
+63	83	53100.0	14:45:00	14.0	AUTO	 A regresar al hogar	423.9
+87	852	24600.0	06:50:00	10.0	A PIE <15 MIN	 A trabajar	89.2
+852	87	67800.0	18:50:00	10.0	A PIE <15 MIN	 A regresar al hogar	89.2
+71	146	51300.0	14:15:00	55.0	TRANSPORTE PÚBLICO	 A realizar algún trámite personal	569.5
+146	71	57600.0	16:00:00	50.0	TRANSPORTE PÚBLICO	 A regresar al hogar	569.5
+83	88	25200.0	07:00:00	5.0	A PIE <15 MIN	 A realizar actividades físicas y/o deportivas	482.4
+88	83	28800.0	08:00:00	10.0	A PIE <15 MIN	 A regresar al hogar	482.4
+83	87	36000.0	10:00:00	5.0	A PIE <15 MIN	 A realizar actividades físicas y/o deportivas	482.4
+87	83	39600.0	11:00:00	10.0	A PIE <15 MIN	 A regresar al hogar	482.4
+83	71	43200.0	12:00:00	30.0	ESPECIAL OCUPADO	 A asuntos médicos personales	482.4
+71	83	48000.0	13:20:00	50.0	ESPECIAL OCUPADO	 A regresar al hogar	482.4
+7	56	21360.0	05:56:00	63.0	TRANSPORTE ESCOLAR	 A Estudiar	6.3
+56	7	50340.0	13:59:00	62.0	TRANSPORTE ESCOLAR	 A regresar al hogar	6.3
+7	12	18060.0	05:01:00	5.0	AUTO	 A trabajar	6.5
+12	7	43560.0	12:06:00	63.0	AUTO	 A regresar al hogar	6.5
+83	83	37800.0	10:30:00	10.0	A PIE <15 MIN	 A realizar compras	421.0
+83	83	43200.0	12:00:00	15.0	A PIE > 15 MIN	 A regresar al hogar	421.0
+83	147	25200.0	07:00:00	60.0	A PIE > 15 MIN	 A trabajar	421.0
+147	83	70200.0	19:30:00	30.0	TAXI OCUPADO	 A regresar al hogar	421.0
+83	82	54000.0	15:00:00	20.0	A PIE > 15 MIN	 A realizar compras	421.0
+82	83	61200.0	17:00:00	20.0	A PIE > 15 MIN	 A regresar al hogar	421.0
+83	82	34200.0	09:30:00	30.0	A PIE > 15 MIN	 A realizar algún trámite personal	421.0
+82	83	46800.0	13:00:00	30.0	A PIE > 15 MIN	 A regresar al hogar	421.0
+83	146	57600.0	16:00:00	40.0	AUTO	 A realizar algún trámite personal	593.6
+146	83	80400.0	22:20:00	40.0	AUTO	 A regresar al hogar	593.6
+69	71	54000.0	15:00:00	10.0	BICICLETA	 A realizar actividades físicas y/o deportivas	495.3
+71	69	55200.0	15:20:00	10.0	BICICLETA	 A regresar al hogar	495.3
+69	71	25200.0	07:00:00	7.0	A PIE <15 MIN	 A realizar compras	495.3
+71	69	29700.0	08:15:00	10.0	A PIE <15 MIN	 A regresar al hogar	495.3
+69	25	21600.0	06:00:00	30.0	TRANSPORTE ESCOLAR	 A Estudiar	495.3
+25	69	54000.0	15:00:00	30.0	TRANSPORTE ESCOLAR	 A regresar al hogar	495.3
+88	71	29700.0	08:15:00	10.0	AUTO	 A acompañar a alguien sin remuneración	84.8
+71	88	30360.0	08:26:00	9.0	AUTO	 A regresar al hogar	84.8
+71	71	34200.0	09:30:00	15.0	A PIE > 15 MIN	 A realizar actividades físicas y/o deportivas	585.6
+71	71	36000.0	10:00:00	15.0	A PIE > 15 MIN	 A regresar al hogar	585.6
+76	76	26820.0	07:27:00	33.0	A PIE > 15 MIN	 A realizar actividades físicas y/o deportivas	63.8
+71	71	43800.0	12:10:00	5.0	A PIE <15 MIN	 A realizar actividades físicas y/o deportivas	567.6
+71	71	47400.0	13:10:00	10.0	A PIE <15 MIN	 A regresar al hogar	567.6
+69	70	43200.0	12:00:00	5.0	A PIE <15 MIN	 A realizar compras	599.2
+70	69	45000.0	12:30:00	8.0	A PIE <15 MIN	 A regresar al hogar	599.2
+71	71	36000.0	10:00:00	10.0	OTRO	 A realizar actividades físicas y/o deportivas	411.1
+71	71	39600.0	11:00:00	15.0	OTRO	 A regresar al hogar	411.1
+71	71	28800.0	08:00:00	15.0	A PIE > 15 MIN	 A realizar compras	411.1
+71	71	30600.0	08:30:00	15.0	A PIE > 15 MIN	 A regresar al hogar	411.1
+71	71	25200.0	07:00:00	6.0	A PIE <15 MIN	 A realizar actividades físicas y/o deportivas	429.2
+71	71	28800.0	08:00:00	3.0	A PIE <15 MIN	 A regresar al hogar	429.2
+83	54	32400.0	09:00:00	20.0	AUTO	 A trabajar	417.2
+54	83	39600.0	11:00:00	30.0	AUTO	 A regresar al hogar	417.2
+83	83	55800.0	15:30:00	10.0	A PIE <15 MIN	 A realizar compras	582.4
+83	83	58500.0	16:15:00	10.0	A PIE <15 MIN	 A regresar al hogar	582.4
+83	86	21600.0	06:00:00	60.0	AUTO	 A trabajar	430.9
+86	83	61200.0	17:00:00	80.0	AUTO	 A regresar al hogar	430.9
+83	12	21000.0	05:50:00	70.0	TRANSPORTE ESCOLAR	 A Estudiar	430.9
+12	83	54000.0	15:00:00	60.0	TRANSPORTE ESCOLAR	 A regresar al hogar	430.9
+156	71	49200.0	13:40:00	45.0	AUTO	 A regresar al hogar	460.3
+71	87	36000.0	10:00:00	15.0	TAXI OCUPADO	 A trabajar	430.9
+87	71	39600.0	11:00:00	28.0	TAXI OCUPADO	 A regresar al hogar	430.9
+83	155	16380.0	04:33:00	111.0	AUTO	 A realizar algún trámite personal	422.9
+155	83	67020.0	18:37:00	121.0	AUTO	 A regresar al hogar	422.9
+71	53	32400.0	09:00:00	60.0	A PIE > 15 MIN	 A asuntos médicos personales	416.1
+53	71	37800.0	10:30:00	50.0	A PIE > 15 MIN	 A regresar al hogar	416.1
+71	53	7200.0	02:00:00	25.0	ESPECIAL OCUPADO	 A asuntos médicos personales	416.1
+53	71	54900.0	15:15:00	45.0	ESPECIAL OCUPADO	 A regresar al hogar	416.1
+71	71	39600.0	11:00:00	15.0	ESPECIAL OCUPADO	 A realizar algún trámite personal	430.2
+71	71	43200.0	12:00:00	180.0	ESPECIAL OCUPADO	 A regresar al hogar	430.2
+71	69	28800.0	08:00:00	15.0	A PIE > 15 MIN	 A realizar actividades recreativas y culturales	430.2
+69	71	30600.0	08:30:00	10.0	A PIE <15 MIN	 A regresar al hogar	430.2
+71	86	28800.0	08:00:00	34.0	BICICLETA	 A trabajar	654.0
+86	71	34200.0	09:30:00	68.0	BICICLETA	 A visitar a alguien	654.0
+71	71	39600.0	11:00:00	150.0	BICICLETA	 A regresar al hogar	654.0
+71	71	37800.0	10:30:00	30.0	BICICLETA	 A trabajar	654.0
+71	71	48600.0	13:30:00	30.0	BICICLETA	 A regresar al hogar	654.0
+71	71	36180.0	10:03:00	62.0	A PIE > 15 MIN	 A realizar algún trámite personal	429.7
+71	71	41400.0	11:30:00	15.0	A PIE > 15 MIN	 A regresar al hogar	429.7
+69	71	54000.0	15:00:00	7.0	A PIE <15 MIN	 A realizar actividades recreativas y culturales	688.5
+71	69	58800.0	16:20:00	10.0	A PIE <15 MIN	 A regresar al hogar	688.5
+69	88	34200.0	09:30:00	20.0	A PIE > 15 MIN	 A realizar actividades físicas y/o deportivas	688.5
+88	69	41400.0	11:30:00	20.0	A PIE > 15 MIN	 A regresar al hogar	688.5
+69	69	39600.0	11:00:00	15.0	A PIE > 15 MIN	 A asuntos médicos personales	688.5
+69	82	45900.0	12:45:00	60.0	A PIE > 15 MIN	 A asuntos médicos personales	688.5
+147	147	82620.0	22:57:00	48.0	A PIE > 15 MIN	 A Estudiar	229.9
+87	87	43200.0	12:00:00	6.0	A PIE <15 MIN	 A realizar compras	87.3
+87	87	45360.0	12:36:00	6.0	A PIE <15 MIN	 A regresar al hogar	87.3
+17	20	57660.0	16:01:00	9.0	A PIE <15 MIN	 A realizar compras	101.9
+20	17	58500.0	16:15:00	15.0	A PIE > 15 MIN	 A regresar al hogar	101.9
+20	51	25200.0	07:00:00	33.0	BICICLETA	 A asuntos médicos personales	86.8
+51	20	39660.0	11:01:00	63.0	BICICLETA	 A regresar al hogar	86.8
+20	153	16260.0	04:31:00	44.0	BICICLETA	 A trabajar	86.8
+153	20	65100.0	18:05:00	39.0	BICICLETA	 A regresar al hogar	86.8
+20	851	38700.0	10:45:00	60.0	TRANSPORTE PÚBLICO	 A trabajar	87.3
+851	20	78000.0	21:40:00	79.0	TRANSPORTE PÚBLICO	 A regresar al hogar	87.3
+20	55	36780.0	10:13:00	17.0	A PIE > 15 MIN	 A asuntos médicos personales	85.8
+55	20	47760.0	13:16:00	44.0	A PIE > 15 MIN	 A regresar al hogar	85.8
+20	56	23400.0	06:30:00	60.0	A PIE > 15 MIN	 A Estudiar	85.8
+56	20	47280.0	13:08:00	3.0	A PIE <15 MIN	 A regresar al hogar	85.8
+20	56	23400.0	06:30:00	30.0	A PIE > 15 MIN	 A Estudiar	85.8
+56	20	47580.0	13:13:00	53.0	A PIE > 15 MIN	 A regresar al hogar	85.8
+17	17	54120.0	15:02:00	65.0	A PIE > 15 MIN	 A acompañar a alguien sin remuneración	81.5
+17	17	58140.0	16:09:00	60.0	A PIE > 15 MIN	 A regresar al hogar	81.5
+17	17	54780.0	15:13:00	64.0	A PIE > 15 MIN	 A realizar actividades recreativas y culturales	81.5
+17	17	58680.0	16:18:00	59.0	A PIE > 15 MIN	 A regresar al hogar	81.5
+17	146	27000.0	07:30:00	38.0	A PIE > 15 MIN	 A asuntos médicos personales	84.2
+146	17	61800.0	17:10:00	61.0	MOTO	 A regresar al hogar	84.2
+17	146	32400.0	09:00:00	45.0	A PIE > 15 MIN	 A asuntos médicos personales	84.2
+146	17	40020.0	11:07:00	72.0	A PIE > 15 MIN	 A regresar al hogar	84.2
+17	3	24900.0	06:55:00	73.0	TRANSPORTE ESCOLAR	 A Estudiar	84.2
+3	17	54000.0	15:00:00	60.0	A PIE > 15 MIN	 A regresar al hogar	84.2
+20	56	28800.0	08:00:00	20.0	A PIE > 15 MIN	 A Estudiar	84.0
+56	20	40200.0	11:10:00	146.0	A PIE > 15 MIN	 A regresar al hogar	84.0
+20	21	54000.0	15:00:00	15.0	A PIE > 15 MIN	 A trabajar	83.2
+21	20	79320.0	22:02:00	59.0	A PIE > 15 MIN	 A regresar al hogar	83.2
+7	24	21600.0	06:00:00	22.0	A PIE > 15 MIN	 A trabajar	5.5
+24	7	55800.0	15:30:00	30.0	A PIE > 15 MIN	 A regresar al hogar	5.5
+7	24	41400.0	11:30:00	20.0	A PIE > 15 MIN	 A Estudiar	5.5
+24	7	63000.0	17:30:00	30.0	A PIE > 15 MIN	 A regresar al hogar	5.5
+7	11	21600.0	06:00:00	90.0	A PIE > 15 MIN	 A trabajar	6.4
+11	7	56700.0	15:45:00	15.0	A PIE > 15 MIN	 A regresar al hogar	6.4
+17	55	19800.0	05:30:00	15.0	TRANSPORTE PÚBLICO	 A asuntos médicos personales	95.8
+55	17	39600.0	11:00:00	30.0	TRANSPORTE PÚBLICO	 A regresar al hogar	95.8
+17	21	27900.0	07:45:00	15.0	A PIE > 15 MIN	 A Estudiar	95.8
+21	17	43200.0	12:00:00	10.0	A PIE <15 MIN	 A regresar al hogar	95.8
+17	13	18600.0	05:10:00	80.0	TRANSPORTE ESCOLAR	 A Estudiar	95.8
+13	17	45000.0	12:30:00	60.0	TRANSPORTE ESCOLAR	 A regresar al hogar	95.8
+17	146	54900.0	15:15:00	60.0	TRANSPORTE PÚBLICO	 A asuntos médicos personales	98.8
+146	17	58800.0	16:20:00	115.0	TRANSPORTE PÚBLICO	 A regresar al hogar	98.8
+16	16	28800.0	08:00:00	10.0	A PIE <15 MIN	 A realizar compras	86.4
+16	17	29700.0	08:15:00	75.0	A PIE > 15 MIN	 A regresar al hogar	86.4
+17	21	32400.0	09:00:00	30.0	A PIE > 15 MIN	 A realizar compras	104.1
+21	17	34500.0	09:35:00	65.0	A PIE > 15 MIN	 A regresar al hogar	104.1
+20	54	45000.0	12:30:00	30.0	TRANSPORTE PÚBLICO	 A trabajar	72.8
+54	20	72300.0	20:05:00	85.0	TRANSPORTE PÚBLICO	 A regresar al hogar	72.8
+20	16	45000.0	12:30:00	30.0	A PIE > 15 MIN	 A trabajar	72.8
+16	20	72300.0	20:05:00	85.0	A PIE > 15 MIN	 A regresar al hogar	72.8
+20	52	28800.0	08:00:00	35.0	A PIE > 15 MIN	 A asuntos médicos personales	82.3
+52	20	31200.0	08:40:00	170.0	A PIE > 15 MIN	 A regresar al hogar	82.3
+52	52	28800.0	08:00:00	35.0	A PIE > 15 MIN	 A acompañar a alguien sin remuneración	82.3
+52	20	31200.0	08:40:00	25.0	A PIE > 15 MIN	 A regresar al hogar	82.3
+20	53	32400.0	09:00:00	40.0	TRANSPORTE PÚBLICO	 A realizar algún trámite personal	76.3
+20	51	25200.0	07:00:00	30.0	TRANSPORTE PÚBLICO	 A trabajar	76.3
+51	20	59400.0	16:30:00	60.0	TRANSPORTE PÚBLICO	 A regresar al hogar	76.3
+17	17	36000.0	10:00:00	10.0	A PIE <15 MIN	 A visitar a alguien	81.8
+17	17	43500.0	12:05:00	10.0	A PIE <15 MIN	 A regresar al hogar	81.8
+17	20	21600.0	06:00:00	30.0	A PIE > 15 MIN	 A visitar a alguien	81.8
+20	17	46800.0	13:00:00	3.0	A PIE <15 MIN	 A regresar al hogar	81.8
+17	851	25200.0	07:00:00	45.0	BICICLETA	 A trabajar	81.8
+851	17	66600.0	18:30:00	60.0	BICICLETA	 A regresar al hogar	81.8
+20	147	25200.0	07:00:00	50.0	TRANSPORTE PÚBLICO	 A trabajar	70.8
+147	20	63000.0	17:30:00	50.0	TRANSPORTE PÚBLICO	 A regresar al hogar	70.8
+20	52	30600.0	08:30:00	45.0	A PIE > 15 MIN	 A asuntos médicos personales	70.8
+52	20	37800.0	10:30:00	61.0	A PIE > 15 MIN	 A regresar al hogar	70.8
+20	57	22500.0	06:15:00	25.0	A PIE > 15 MIN	 A Estudiar	70.8
+57	20	52200.0	14:30:00	15.0	A PIE > 15 MIN	 A regresar al hogar	70.8
+20	52	30600.0	08:30:00	30.0	A PIE > 15 MIN	 A asuntos médicos personales	70.8
+52	20	38760.0	10:46:00	61.0	A PIE > 15 MIN	 A regresar al hogar	70.8
+7	87	23400.0	06:30:00	80.0	BICICLETA	 A trabajar	5.1
+87	7	57600.0	16:00:00	60.0	BICICLETA	 A regresar al hogar	5.1
+7	144	19800.0	05:30:00	75.0	TRANSPORTE PÚBLICO	 A trabajar	5.1
+144	7	64800.0	18:00:00	90.0	TRANSPORTE PÚBLICO	 A regresar al hogar	5.1
+7	11	21600.0	06:00:00	20.0	A PIE > 15 MIN	 A acompañar a alguien sin remuneración	5.7
+7	11	21600.0	06:00:00	20.0	A PIE > 15 MIN	 A Estudiar	5.7
+11	7	47700.0	13:15:00	25.0	A PIE > 15 MIN	 A regresar al hogar	5.7
+7	10	37800.0	10:30:00	30.0	A PIE > 15 MIN	 A realizar algún trámite personal	5.1
+10	7	43800.0	12:10:00	25.0	A PIE > 15 MIN	 A regresar al hogar	5.1
+7	11	21600.0	06:00:00	20.0	A PIE > 15 MIN	 A Estudiar	5.1
+11	7	45000.0	12:30:00	25.0	A PIE > 15 MIN	 A regresar al hogar	5.1
+20	55	39600.0	11:00:00	30.0	A PIE > 15 MIN	 A asuntos médicos personales	83.4
+854	20	66600.0	18:30:00	30.0	TRANSPORTE PÚBLICO	 A regresar al hogar	83.4
+7	11	22200.0	06:10:00	15.0	A PIE > 15 MIN	 A acompañar a alguien sin remuneración	5.9
+11	7	23400.0	06:30:00	15.0	A PIE > 15 MIN	 A regresar al hogar	5.9
+7	11	42300.0	11:45:00	15.0	A PIE > 15 MIN	 A realizar algún trámite personal	5.9
+11	7	43800.0	12:10:00	15.0	A PIE > 15 MIN	 A regresar al hogar	5.9
+7	11	22200.0	06:10:00	15.0	A PIE > 15 MIN	 A Estudiar	5.9
+11	7	43800.0	12:10:00	15.0	A PIE > 15 MIN	 A regresar al hogar	5.9
+17	86	25200.0	07:00:00	30.0	BICICLETA	 A trabajar	80.9
+86	17	46800.0	13:00:00	30.0	BICICLETA	 A regresar al hogar	80.9
+7	11	32400.0	09:00:00	30.0	A PIE > 15 MIN	 A realizar algún trámite personal	5.6
+11	7	36000.0	10:00:00	30.0	A PIE > 15 MIN	 A regresar al hogar	5.6
+7	7	32400.0	09:00:00	5.0	A PIE <15 MIN	 A trabajar	5.6
+7	7	68400.0	19:00:00	5.0	A PIE <15 MIN	 A regresar al hogar	5.6
+7	7	25200.0	07:00:00	5.0	BICICLETA	 A trabajar	5.6
+7	7	61200.0	17:00:00	5.0	BICICLETA	 A regresar al hogar	5.6
+7	7	36000.0	10:00:00	5.0	A PIE <15 MIN	 A trabajar	5.6
+7	7	68400.0	19:00:00	5.0	A PIE <15 MIN	 A regresar al hogar	5.6
+7	7	35100.0	09:45:00	15.0	A PIE > 15 MIN	 A trabajar	5.6
+7	7	67500.0	18:45:00	15.0	A PIE > 15 MIN	 A regresar al hogar	5.6
+7	52	36000.0	10:00:00	21.0	A PIE > 15 MIN	 A realizar actividades recreativas y culturales	6.4
+52	7	46800.0	13:00:00	16.0	A PIE > 15 MIN	 A regresar al hogar	6.4
+7	11	25200.0	07:00:00	25.0	BICICLETA	 A trabajar	5.5
+11	7	57600.0	16:00:00	30.0	BICICLETA	 A regresar al hogar	5.5
+7	10	46800.0	13:00:00	15.0	A PIE > 15 MIN	 A realizar compras	5.5
+10	7	51000.0	14:10:00	10.0	A PIE <15 MIN	 A regresar al hogar	5.5
+20	12	19800.0	05:30:00	15.0	AUTO	 A trabajar	69.1
+12	20	36000.0	10:00:00	15.0	AUTO	 A regresar al hogar	69.1
+20	15	19800.0	05:30:00	15.0	AUTO	 A trabajar	69.1
+15	20	36000.0	10:00:00	15.0	AUTO	 A regresar al hogar	69.1
+17	26	43200.0	12:00:00	20.0	AUTO	 A realizar algún trámite personal	78.8
+26	17	61200.0	17:00:00	75.0	AUTO	 A regresar al hogar	78.8
+7	11	22200.0	06:10:00	20.0	A PIE > 15 MIN	 A acompañar a alguien sin remuneración	6.3
+11	7	24000.0	06:40:00	20.0	A PIE > 15 MIN	 A regresar al hogar	6.3
+7	11	53400.0	14:50:00	20.0	A PIE > 15 MIN	 A realizar algún trámite personal	6.3
+11	7	54900.0	15:15:00	20.0	A PIE > 15 MIN	 A regresar al hogar	6.3
+7	11	22200.0	06:10:00	20.0	A PIE > 15 MIN	 A Estudiar	6.3
+11	7	54900.0	15:15:00	20.0	A PIE > 15 MIN	 A regresar al hogar	6.3
+7	7	27000.0	07:30:00	10.0	A PIE <15 MIN	 A trabajar	6.4
+7	7	54000.0	15:00:00	15.0	A PIE > 15 MIN	 A regresar al hogar	6.4
+7	11	28800.0	08:00:00	15.0	A PIE > 15 MIN	 A realizar actividades recreativas y culturales	6.4
+11	7	43800.0	12:10:00	15.0	A PIE > 15 MIN	 A regresar al hogar	6.4
+7	11	22800.0	06:20:00	10.0	BICICLETA	 A acompañar a alguien con remuneración	7.1
+11	7	23460.0	06:31:00	9.0	BICICLETA	 A regresar al hogar	7.1
+7	61	50400.0	14:00:00	25.0	TRANSPORTE PÚBLICO	 A Estudiar	7.1
+61	7	61200.0	17:00:00	25.0	TRANSPORTE PÚBLICO	 A regresar al hogar	7.1
+7	11	23100.0	06:25:00	5.0	BICICLETA	 A Estudiar	7.1
+11	7	45000.0	12:30:00	15.0	A PIE > 15 MIN	 A regresar al hogar	7.1
+7	11	44100.0	12:15:00	14.0	A PIE <15 MIN	 A acompañar a alguien sin remuneración	7.1
+11	7	45000.0	12:30:00	15.0	A PIE > 15 MIN	 A regresar al hogar	7.1
+7	10	37800.0	10:30:00	12.0	BICICLETA	 A trabajar	6.3
+10	7	54000.0	15:00:00	12.0	BICICLETA	 A regresar al hogar	6.3
+7	148	28800.0	08:00:00	75.0	TRANSPORTE PÚBLICO	 A Estudiar	6.3
+148	7	54000.0	15:00:00	90.0	TRANSPORTE PÚBLICO	 A regresar al hogar	6.3
+7	7	24300.0	06:45:00	10.0	A PIE <15 MIN	 A trabajar	6.4
+7	7	57600.0	16:00:00	10.0	A PIE <15 MIN	 A regresar al hogar	6.4
+7	11	22800.0	06:20:00	15.0	A PIE > 15 MIN	 A acompañar a alguien sin remuneración	6.4
+11	7	24000.0	06:40:00	15.0	A PIE > 15 MIN	 A regresar al hogar	6.4
+7	11	40800.0	11:20:00	15.0	A PIE > 15 MIN	 A realizar algún trámite personal	6.4
+11	7	42600.0	11:50:00	15.0	A PIE > 15 MIN	 A regresar al hogar	6.4
+7	11	27600.0	07:40:00	20.0	BICICLETA	 A trabajar	6.4
+11	7	66600.0	18:30:00	30.0	BICICLETA	 A regresar al hogar	6.4
+7	11	22800.0	06:20:00	15.0	A PIE > 15 MIN	 A Estudiar	6.4
+11	7	42600.0	11:50:00	15.0	A PIE > 15 MIN	 A regresar al hogar	6.4
+7	16	23400.0	06:30:00	24.0	BICICLETA	 A trabajar	5.4
+16	7	54000.0	15:00:00	20.0	BICICLETA	 A regresar al hogar	5.4
+7	16	23400.0	06:30:00	33.0	BICICLETA	 A trabajar	5.4
+16	7	54000.0	15:00:00	30.0	BICICLETA	 A regresar al hogar	5.4
+7	16	32400.0	09:00:00	39.0	A PIE > 15 MIN	 A trabajar	5.4
+16	7	54000.0	15:00:00	35.0	A PIE > 15 MIN	 A regresar al hogar	5.4
+7	14	28800.0	08:00:00	92.0	A PIE > 15 MIN	 A trabajar	5.4
+14	7	57600.0	16:00:00	24.0	A PIE > 15 MIN	 A regresar al hogar	5.4
+7	11	28800.0	08:00:00	88.0	A PIE > 15 MIN	 A realizar actividades recreativas y culturales	5.4
+11	7	45000.0	12:30:00	7.0	A PIE <15 MIN	 A regresar al hogar	5.4
+7	63	34200.0	09:30:00	35.0	TRANSPORTE PÚBLICO	 A llevar y/o dejar algo	6.4
+63	7	37800.0	10:30:00	25.0	TRANSPORTE PÚBLICO	 A regresar al hogar	6.4
+7	7	34200.0	09:30:00	8.0	A PIE <15 MIN	 A realizar compras	6.4
+7	7	35700.0	09:55:00	8.0	A PIE <15 MIN	 A regresar al hogar	6.4
+7	53	16200.0	04:30:00	20.0	TRANSPORTE PÚBLICO	 A trabajar	6.5
+53	7	60600.0	16:50:00	10.0	TRANSPORTE PÚBLICO	 A regresar al hogar	6.5
+7	153	46800.0	13:00:00	50.0	ESPECIAL OCUPADO	 A asuntos médicos personales	6.5
+153	7	53400.0	14:50:00	60.0	TAXI OCUPADO	 A regresar al hogar	6.5
+146	146	21600.0	06:00:00	5.0	A PIE <15 MIN	 A realizar actividades físicas y/o deportivas	367.0
+146	146	23400.0	06:30:00	5.0	A PIE <15 MIN	 A regresar al hogar	367.0
+146	146	21600.0	06:00:00	5.0	A PIE <15 MIN	 A realizar actividades recreativas y culturales	367.0
+146	146	23400.0	06:30:00	5.0	A PIE <15 MIN	 A regresar al hogar	367.0
+146	52	39600.0	11:00:00	20.0	AUTO	 A asuntos médicos personales	444.6
+52	146	45000.0	12:30:00	30.0	AUTO	 A regresar al hogar	444.6
+146	54	39600.0	11:00:00	20.0	AUTO	 A acompañar a alguien sin remuneración	444.6
+54	146	45000.0	12:30:00	30.0	AUTO	 A regresar al hogar	444.6
+145	88	32400.0	09:00:00	20.0	A PIE > 15 MIN	 A asuntos médicos personales	356.0
+88	145	33900.0	09:25:00	65.0	A PIE > 15 MIN	 A regresar al hogar	356.0
+145	145	45000.0	12:30:00	7.0	A PIE <15 MIN	 A realizar algún trámite personal	488.3
+145	145	48000.0	13:20:00	3.0	A PIE <15 MIN	 A regresar al hogar	488.3
+7	146	26340.0	07:19:00	21.0	A PIE > 15 MIN	 A trabajar	5.5
+146	7	58860.0	16:21:00	9.0	A PIE <15 MIN	 A regresar al hogar	5.5
+7	69	20460.0	05:41:00	4.0	A PIE <15 MIN	 A trabajar	5.5
+69	7	31380.0	08:43:00	120.0	A PIE > 15 MIN	 A regresar al hogar	5.5
+7	10	20160.0	05:36:00	9.0	A PIE <15 MIN	 A trabajar	5.5
+10	7	38700.0	10:45:00	61.0	A PIE > 15 MIN	 A regresar al hogar	5.5
+7	69	31620.0	08:47:00	61.0	A PIE > 15 MIN	 A trabajar	5.5
+69	7	49680.0	13:48:00	61.0	A PIE > 15 MIN	 A regresar al hogar	5.5
+7	52	31920.0	08:52:00	122.0	A PIE > 15 MIN	 A trabajar	5.5
+52	7	53640.0	14:54:00	121.0	A PIE > 15 MIN	 A regresar al hogar	5.5
+7	7	21540.0	05:59:00	123.0	TRANSPORTE PÚBLICO	 A trabajar	6.0
+7	7	57720.0	16:02:00	181.0	TRANSPORTE PÚBLICO	 A regresar al hogar	6.0
+7	7	37800.0	10:30:00	3.0	A PIE <15 MIN	 A trabajar	5.6
+7	7	63420.0	17:37:00	3.0	A PIE <15 MIN	 A regresar al hogar	5.6
+7	7	39600.0	11:00:00	3.0	A PIE <15 MIN	 A trabajar	5.6
+7	7	64800.0	18:00:00	3.0	A PIE <15 MIN	 A regresar al hogar	5.6
+7	7	37800.0	10:30:00	10.0	A PIE <15 MIN	 A realizar compras	5.6
+7	7	39600.0	11:00:00	10.0	A PIE <15 MIN	 A regresar al hogar	5.6
+7	7	37800.0	10:30:00	10.0	A PIE <15 MIN	 A trabajar	5.6
+7	7	68400.0	19:00:00	10.0	A PIE <15 MIN	 A regresar al hogar	5.6
+1156	26	32400.0	09:00:00	50.0	AUTO	 A realizar compras	5.7
+26	1156	41400.0	11:30:00	50.0	AUTO	 A regresar al hogar	5.7
+10	86	36000.0	10:00:00	32.0	AUTO	 A asuntos médicos personales	185.4
+86	10	43200.0	12:00:00	30.0	AUTO	 A regresar al hogar	185.4
+10	152	27000.0	07:30:00	55.0	AUTO	 A trabajar	199.3
+152	10	66600.0	18:30:00	50.0	AUTO	 A regresar al hogar	199.3
+10	851	34200.0	09:30:00	45.0	AUTO	 A asuntos médicos personales	199.1
+851	10	40500.0	11:15:00	65.0	AUTO	 A regresar al hogar	199.1
+10	26	28800.0	08:00:00	10.0	AUTO	 A trabajar	202.5
+26	10	54000.0	15:00:00	13.0	AUTO	 A regresar al hogar	202.5
+10	1011	25200.0	07:00:00	10.0	AUTO	 A Estudiar	201.8
+1011	10	54240.0	15:04:00	11.0	AUTO	 A regresar al hogar	201.8
+10	62	50400.0	14:00:00	20.0	AUTO	 A realizar actividades recreativas y culturales	180.0
+62	10	64800.0	18:00:00	25.0	AUTO	 A regresar al hogar	180.0
+62	62	50400.0	14:00:00	20.0	AUTO	 A realizar actividades recreativas y culturales	180.0
+62	10	64800.0	18:00:00	25.0	AUTO	 A regresar al hogar	180.0
+10	62	50400.0	14:00:00	20.0	AUTO	 A realizar actividades recreativas y culturales	180.0
+62	10	64800.0	18:00:00	25.0	AUTO	 A regresar al hogar	180.0
+10	71	43200.0	12:00:00	60.0	AUTO	 A realizar algún trámite personal	200.0
+71	10	57600.0	16:00:00	90.0	AUTO	 A regresar al hogar	200.0
+1155	153	23400.0	06:30:00	35.0	AUTO	 A trabajar	5.8
+153	1155	41400.0	11:30:00	35.0	AUTO	 A regresar al hogar	5.8
+10	10	28800.0	08:00:00	10.0	A PIE <15 MIN	 A realizar actividades físicas y/o deportivas	210.1
+10	10	36000.0	10:00:00	10.0	A PIE <15 MIN	 A regresar al hogar	210.1
+1155	144	28800.0	08:00:00	30.0	ESPECIAL OCUPADO	 A asuntos médicos personales	5.0
+144	1155	36600.0	10:10:00	35.0	ESPECIAL OCUPADO	 A regresar al hogar	5.0
+10	1059	28800.0	08:00:00	30.0	AUTO	 A realizar actividades físicas y/o deportivas	212.6
+1059	10	57600.0	16:00:00	30.0	AUTO	 A regresar al hogar	212.6
+1156	69	19800.0	05:30:00	35.0	AUTO	 A trabajar	5.8
+69	1156	47400.0	13:10:00	30.0	AUTO	 A regresar al hogar	5.8
+10	10	28800.0	08:00:00	10.0	A PIE <15 MIN	 A realizar actividades recreativas y culturales	197.8
+10	10	36000.0	10:00:00	10.0	A PIE <15 MIN	 A regresar al hogar	197.8
+10	53	25200.0	07:00:00	60.0	AUTO	 A trabajar	197.8
+53	10	57600.0	16:00:00	30.0	AUTO	 A regresar al hogar	197.8
+10	7	30600.0	08:30:00	30.0	AUTO	 A trabajar	201.2
+7	10	68400.0	19:00:00	40.0	AUTO	 A regresar al hogar	201.2
+10	854	26400.0	07:20:00	40.0	AUTO	 A trabajar	212.4
+854	10	61200.0	17:00:00	40.0	AUTO	 A regresar al hogar	212.4
+10	69	34200.0	09:30:00	30.0	AUTO	 A acompañar a alguien sin remuneración	213.5
+69	10	41400.0	11:30:00	30.0	AUTO	 A regresar al hogar	213.5
+10	69	34200.0	09:30:00	30.0	AUTO	 A asuntos médicos personales	213.5
+69	10	41400.0	11:30:00	30.0	AUTO	 A regresar al hogar	213.5
+10	69	34200.0	09:30:00	30.0	AUTO	 A acompañar a alguien sin remuneración	213.5
+69	10	41400.0	11:30:00	30.0	AUTO	 A regresar al hogar	213.5
+10	22	24000.0	06:40:00	20.0	AUTO	 A trabajar	203.3
+22	10	61200.0	17:00:00	20.0	AUTO	 A regresar al hogar	203.3
+87	148	21600.0	06:00:00	50.0	ESPECIAL OCUPADO	 A trabajar	87.7
+148	87	57600.0	16:00:00	40.0	ESPECIAL OCUPADO	 A regresar al hogar	87.7
+87	87	25200.0	07:00:00	15.0	A PIE > 15 MIN	 A visitar a alguien	87.7
+87	87	46800.0	13:00:00	10.0	A PIE <15 MIN	 A regresar al hogar	87.7
+87	87	64800.0	18:00:00	45.0	AUTO	 A realizar actividades recreativas y culturales	108.7
+87	87	74700.0	20:45:00	30.0	AUTO	 A regresar al hogar	108.7
+87	87	64800.0	18:00:00	46.0	AUTO	 A realizar actividades recreativas y culturales	108.7
+87	87	74700.0	20:45:00	30.0	AUTO	 A regresar al hogar	108.7
+87	87	64800.0	18:00:00	45.0	AUTO	 A realizar actividades recreativas y culturales	108.7
+87	87	74700.0	20:45:00	30.0	AUTO	 A regresar al hogar	108.7
+87	87	64800.0	18:00:00	45.0	AUTO	 A realizar actividades recreativas y culturales	108.7
+87	87	74700.0	20:45:00	30.0	AUTO	 A regresar al hogar	108.7
+87	73	28800.0	08:00:00	20.0	TAXI OCUPADO	 A trabajar	106.1
+73	87	64800.0	18:00:00	30.0	AUTO	 A regresar al hogar	106.1
+87	26	32400.0	09:00:00	90.0	AUTO	 A acompañar a alguien sin remuneración	106.1
+26	87	39600.0	11:00:00	60.0	AUTO	 A regresar al hogar	106.1
+87	26	32400.0	09:00:00	90.0	AUTO	 A asuntos médicos personales	106.1
+26	87	39600.0	11:00:00	60.0	AUTO	 A regresar al hogar	106.1
+87	53	31800.0	08:50:00	55.0	TRANSPORTE PÚBLICO	 A realizar algún trámite personal	85.6
+53	87	39600.0	11:00:00	40.0	TRANSPORTE PÚBLICO	 A regresar al hogar	85.6
+87	86	32400.0	09:00:00	15.0	AUTO	 A asuntos médicos personales	90.9
+86	87	36000.0	10:00:00	20.0	AUTO	 A regresar al hogar	90.9
+87	87	36000.0	10:00:00	70.0	AUTO	 A realizar compras	88.0
+87	87	58800.0	16:20:00	15.0	AUTO	 A regresar al hogar	88.0
+87	87	39600.0	11:00:00	10.0	AUTO	 A realizar compras	88.0
+87	87	58800.0	16:20:00	10.0	AUTO	 A regresar al hogar	88.0
+87	87	39600.0	11:00:00	10.0	AUTO	 A acompañar a alguien sin remuneración	88.0
+87	87	58800.0	16:20:00	10.0	AUTO	 A regresar al hogar	88.0
+87	87	39600.0	11:00:00	10.0	AUTO	 A acompañar a alguien sin remuneración	88.0
+87	87	58800.0	16:20:00	10.0	AUTO	 A regresar al hogar	88.0
+87	60	28800.0	08:00:00	40.0	TAXI OCUPADO	 A trabajar	73.1
+60	87	75600.0	21:00:00	33.0	TAXI OCUPADO	 A regresar al hogar	73.1
+87	56	30600.0	08:30:00	47.0	A PIE > 15 MIN	 A realizar actividades recreativas y culturales	85.7
+56	52	37200.0	10:20:00	130.0	BICICLETA	 A realizar algún trámite personal	85.7
+52	87	46800.0	13:00:00	60.0	BICICLETA	 A regresar al hogar	85.7
+87	76	50400.0	14:00:00	10.0	A PIE <15 MIN	 A realizar actividades físicas y/o deportivas	85.7
+76	87	57600.0	16:00:00	8.0	A PIE <15 MIN	 A regresar al hogar	85.7
+87	23	19800.0	05:30:00	30.0	BICICLETA	 A trabajar	85.7
+23	87	54000.0	15:00:00	67.0	BICICLETA	 A regresar al hogar	85.7
+87	75	54000.0	15:00:00	20.0	A PIE > 15 MIN	 A asuntos médicos personales	101.9
+75	87	58500.0	16:15:00	35.0	A PIE > 15 MIN	 A regresar al hogar	101.9
+87	75	54000.0	15:00:00	20.0	A PIE > 15 MIN	 A asuntos médicos personales	101.9
+75	87	58500.0	16:15:00	35.0	A PIE > 15 MIN	 A regresar al hogar	101.9
+88	148	54000.0	15:00:00	30.0	AUTO	 A trabajar	88.4
+148	88	59400.0	16:30:00	30.0	AUTO	 A regresar al hogar	88.4
+88	54	22500.0	06:15:00	55.0	TRANSPORTE ESCOLAR	 A Estudiar	88.8
+54	88	57600.0	16:00:00	50.0	TRANSPORTE ESCOLAR	 A regresar al hogar	88.8
+88	88	26400.0	07:20:00	20.0	TAXI OCUPADO	 A asuntos médicos personales	90.9
+88	88	43200.0	12:00:00	30.0	TAXI OCUPADO	 A regresar al hogar	90.9
+88	152	36000.0	10:00:00	30.0	AUTO	 A trabajar	107.8
+152	88	57600.0	16:00:00	30.0	AUTO	 A regresar al hogar	107.8
+88	72	52200.0	14:30:00	30.0	AUTO	 A realizar compras	85.3
+72	88	55800.0	15:30:00	30.0	AUTO	 A regresar al hogar	85.3
+88	72	52200.0	14:30:00	30.0	AUTO	 A realizar compras	85.3
+72	88	55800.0	15:30:00	30.0	AUTO	 A regresar al hogar	85.3
+88	61	50400.0	14:00:00	20.0	AUTO	 A realizar actividades recreativas y culturales	85.8
+61	88	56700.0	15:45:00	20.0	AUTO	 A regresar al hogar	85.8
+88	61	50400.0	14:00:00	20.0	AUTO	 A realizar actividades recreativas y culturales	85.8
+61	88	56700.0	15:45:00	20.0	AUTO	 A regresar al hogar	85.8
+88	146	55800.0	15:30:00	20.0	TAXI OCUPADO	 A asuntos médicos personales	84.0
+146	88	59400.0	16:30:00	30.0	TAXI OCUPADO	 A regresar al hogar	84.0
+88	146	55800.0	15:30:00	20.0	TAXI OCUPADO	 A asuntos médicos personales	84.0
+146	88	59400.0	16:30:00	30.0	TAXI OCUPADO	 A regresar al hogar	84.0
+152	86	63000.0	17:30:00	40.0	AUTO	 A asuntos médicos personales	191.2
+55	15	21000.0	05:50:00	30.0	TRANSPORTE ESCOLAR	 A Estudiar	101.6
+15	55	54900.0	15:15:00	25.0	TRANSPORTE ESCOLAR	 A regresar al hogar	101.6
+25	16	16200.0	04:30:00	30.0	BICICLETA	 A trabajar	86.7
+16	25	21600.0	06:00:00	30.0	BICICLETA	 A regresar al hogar	86.7
+7	11	39600.0	11:00:00	30.0	TRANSPORTE ESCOLAR	 A Estudiar	5.6
+11	7	64800.0	18:00:00	30.0	TRANSPORTE ESCOLAR	 A regresar al hogar	5.6
+7	11	24600.0	06:50:00	25.0	A PIE > 15 MIN	 A Estudiar	6.2
+11	7	42300.0	11:45:00	3.0	A PIE <15 MIN	 A regresar al hogar	6.2
+7	52	20100.0	05:35:00	20.0	BICICLETA	 A trabajar	6.2
+52	7	61200.0	17:00:00	60.0	BICICLETA	 A regresar al hogar	6.2
+7	11	27000.0	07:30:00	30.0	A PIE > 15 MIN	 A trabajar	5.3
+11	7	46800.0	13:00:00	60.0	A PIE > 15 MIN	 A regresar al hogar	5.3
+7	11	40260.0	11:11:00	34.0	BICICLETA	 A asuntos médicos personales	5.2
+11	7	59400.0	16:30:00	30.0	BICICLETA	 A regresar al hogar	5.2
+7	11	41400.0	11:30:00	15.0	A PIE > 15 MIN	 A Estudiar	6.1
+11	7	64800.0	18:00:00	15.0	A PIE > 15 MIN	 A regresar al hogar	6.1
+7	11	41400.0	11:30:00	15.0	A PIE > 15 MIN	 A Estudiar	6.1
+11	7	64800.0	18:00:00	15.0	A PIE > 15 MIN	 A regresar al hogar	6.1
+7	1011	37800.0	10:30:00	10.0	A PIE <15 MIN	 A trabajar	6.1
+1011	7	50400.0	14:00:00	20.0	A PIE > 15 MIN	 A regresar al hogar	6.1
+58	82	29940.0	08:19:00	68.0	TRANSPORTE PÚBLICO	 A trabajar	108.0
+82	58	62460.0	17:21:00	68.0	TRANSPORTE PÚBLICO	 A regresar al hogar	108.0
+59	56	34320.0	09:32:00	61.0	A PIE > 15 MIN	 A realizar algún trámite personal	102.5
+56	59	77640.0	21:34:00	61.0	A PIE > 15 MIN	 A regresar al hogar	102.5
+20	57	21600.0	06:00:00	6.0	A PIE <15 MIN	 A trabajar	84.5
+57	20	63000.0	17:30:00	6.0	A PIE <15 MIN	 A regresar al hogar	84.5
+7	26	32400.0	09:00:00	20.0	A PIE > 15 MIN	 A realizar algún trámite personal	6.6
+26	7	40200.0	11:10:00	10.0	A PIE <15 MIN	 A regresar al hogar	6.6
+10	10	32400.0	09:00:00	10.0	A PIE <15 MIN	 A realizar algún trámite personal	197.4
+10	10	36000.0	10:00:00	15.0	A PIE > 15 MIN	 A regresar al hogar	197.4
+10	10	32400.0	09:00:00	10.0	A PIE <15 MIN	 A realizar algún trámite personal	197.4
+10	10	36000.0	10:00:00	15.0	A PIE > 15 MIN	 A regresar al hogar	197.4
+10	10	32400.0	09:00:00	10.0	A PIE <15 MIN	 A realizar algún trámite personal	197.4
+10	10	39000.0	10:50:00	25.0	A PIE > 15 MIN	 A regresar al hogar	197.4
+1156	147	45600.0	12:40:00	50.0	AUTO	 A realizar compras	5.8
+147	1156	75600.0	21:00:00	120.0	AUTO	 A regresar al hogar	5.8
+1156	147	45600.0	12:40:00	50.0	AUTO	 A realizar compras	5.8
+147	1156	75600.0	21:00:00	60.0	AUTO	 A regresar al hogar	5.8
+10	1012	36000.0	10:00:00	15.0	BICICLETA	 A realizar algún trámite personal	197.8
+1012	10	39600.0	11:00:00	20.0	BICICLETA	 A regresar al hogar	197.8
+10	1012	36000.0	10:00:00	30.0	BICICLETA	 A realizar algún trámite personal	197.8
+1012	10	39600.0	11:00:00	20.0	BICICLETA	 A regresar al hogar	197.8
+88	147	32400.0	09:00:00	15.0	TAXI OCUPADO	 A realizar algún trámite personal	84.0
+147	88	39600.0	11:00:00	30.0	A PIE > 15 MIN	 A regresar al hogar	84.0
+88	153	31500.0	08:45:00	65.0	AUTO	 A realizar algún trámite personal	84.0
+153	88	39600.0	11:00:00	90.0	AUTO	 A regresar al hogar	84.0
+71	81	32400.0	09:00:00	10.0	A PIE <15 MIN	 A realizar algún trámite personal	419.1
+81	71	36000.0	10:00:00	10.0	A PIE <15 MIN	 A regresar al hogar	419.1
+1156	17	36000.0	10:00:00	40.0	TAXI OCUPADO	 A acompañar a alguien sin remuneración	5.9
+17	1156	43200.0	12:00:00	60.0	TAXI OCUPADO	 A regresar al hogar	5.9
+1156	17	36000.0	10:00:00	40.0	TAXI OCUPADO	 A realizar algún trámite personal	5.9
+17	1156	43200.0	12:00:00	60.0	TAXI OCUPADO	 A regresar al hogar	5.9
+1156	86	32400.0	09:00:00	60.0	TAXI OCUPADO	 A acompañar a alguien sin remuneración	5.8
+86	1156	37800.0	10:30:00	75.0	TAXI OCUPADO	 A regresar al hogar	5.8
+1156	86	32400.0	09:00:00	60.0	TAXI OCUPADO	 A asuntos médicos personales	5.8
+86	1156	37800.0	10:30:00	15.0	TAXI OCUPADO	 A regresar al hogar	5.8
+10	144	37800.0	10:30:00	30.0	TAXI OCUPADO	 A acompañar a alguien sin remuneración	199.7
+144	10	42900.0	11:55:00	35.0	TAXI OCUPADO	 A regresar al hogar	199.7
+10	144	37800.0	10:30:00	30.0	TAXI OCUPADO	 A asuntos médicos personales	199.7
+144	10	42900.0	11:55:00	35.0	TAXI OCUPADO	 A regresar al hogar	199.7
+60	60	36000.0	10:00:00	15.0	A PIE > 15 MIN	 A realizar compras	130.2
+60	60	37800.0	10:30:00	15.0	A PIE > 15 MIN	 A regresar al hogar	130.2
+13	13	30600.0	08:30:00	10.0	A PIE <15 MIN	 A realizar algún trámite personal	297.1
+13	13	34200.0	09:30:00	10.0	A PIE <15 MIN	 A regresar al hogar	297.1
+1155	88	46800.0	13:00:00	70.0	AUTO	 A visitar a alguien	5.0
+88	1155	57600.0	16:00:00	90.0	AUTO	 A regresar al hogar	5.0
+1155	88	46800.0	13:00:00	70.0	AUTO	 A visitar a alguien	5.0
+88	1155	57600.0	16:00:00	90.0	AUTO	 A regresar al hogar	5.0
+88	146	48600.0	13:30:00	10.0	ESPECIAL OCUPADO	 A realizar algún trámite personal	89.8
+146	88	59400.0	16:30:00	20.0	ESPECIAL OCUPADO	 A regresar al hogar	89.8
+1156	76	32400.0	09:00:00	60.0	AUTO	 A visitar a alguien	5.8
+76	1156	57600.0	16:00:00	80.0	AUTO	 A regresar al hogar	5.8
+1156	76	32400.0	09:00:00	60.0	AUTO	 A visitar a alguien	5.8
+76	1156	57600.0	16:00:00	80.0	AUTO	 A regresar al hogar	5.8
+1156	76	32400.0	09:00:00	60.0	AUTO	 A visitar a alguien	5.8
+76	1156	57600.0	16:00:00	80.0	AUTO	 A regresar al hogar	5.8
+1156	3	36000.0	10:00:00	15.0	AUTO	 A realizar actividades recreativas y culturales	5.0
+3	1156	43200.0	12:00:00	15.0	AUTO	 A regresar al hogar	5.0
+1156	3	36000.0	10:00:00	15.0	AUTO	 A realizar actividades recreativas y culturales	5.0
+3	1156	43200.0	12:00:00	15.0	AUTO	 A regresar al hogar	5.0
+26	26	28800.0	08:00:00	15.0	A PIE > 15 MIN	 A realizar compras	63.6
+26	26	33300.0	09:15:00	15.0	A PIE > 15 MIN	 A regresar al hogar	63.6
+19	18	25200.0	07:00:00	15.0	A PIE > 15 MIN	 A Estudiar	78.7
+18	19	46800.0	13:00:00	20.0	A PIE > 15 MIN	 A regresar al hogar	78.7
+19	14	23400.0	06:30:00	30.0	BICICLETA	 A trabajar	78.7
+14	19	57600.0	16:00:00	30.0	BICICLETA	 A regresar al hogar	78.7
+19	14	36000.0	10:00:00	15.0	A PIE > 15 MIN	 A acompañar a alguien sin remuneración	78.7
+14	19	39600.0	11:00:00	15.0	A PIE > 15 MIN	 A regresar al hogar	78.7
+19	14	36000.0	10:00:00	15.0	A PIE > 15 MIN	 A realizar compras	78.7
+14	19	39600.0	11:00:00	14.0	A PIE <15 MIN	 A regresar al hogar	78.7
+14	14	23400.0	06:30:00	10.0	A PIE <15 MIN	 A realizar actividades físicas y/o deportivas	284.8
+14	14	28800.0	08:00:00	15.0	A PIE > 15 MIN	 A regresar al hogar	284.8
+14	14	34200.0	09:30:00	10.0	A PIE <15 MIN	 A realizar compras	284.8
+14	14	36000.0	10:00:00	10.0	A PIE <15 MIN	 A regresar al hogar	284.8
+13	12	21600.0	06:00:00	40.0	BICICLETA	 A buscar trabajo	307.0
+12	13	34800.0	09:40:00	30.0	BICICLETA	 A regresar al hogar	307.0
+13	13	24000.0	06:40:00	20.0	BICICLETA	 A trabajar	307.0
+13	13	72000.0	20:00:00	15.0	BICICLETA	 A regresar al hogar	307.0
+13	13	29400.0	08:10:00	10.0	A PIE <15 MIN	 A trabajar	307.0
+13	13	72000.0	20:00:00	10.0	A PIE <15 MIN	 A regresar al hogar	307.0
+13	13	39600.0	11:00:00	15.0	A PIE > 15 MIN	 A realizar compras	307.0
+13	13	43200.0	12:00:00	10.0	A PIE <15 MIN	 A regresar al hogar	307.0
+58	58	50400.0	14:00:00	10.0	A PIE <15 MIN	 A realizar actividades físicas y/o deportivas	107.9
+58	58	61200.0	17:00:00	15.0	A PIE > 15 MIN	 A regresar al hogar	107.9
+58	58	50400.0	14:00:00	10.0	A PIE <15 MIN	 A realizar actividades físicas y/o deportivas	107.9
+58	58	61200.0	17:00:00	15.0	A PIE > 15 MIN	 A regresar al hogar	107.9
+58	58	50400.0	14:00:00	10.0	A PIE <15 MIN	 A realizar actividades físicas y/o deportivas	107.9
+58	58	61200.0	17:00:00	10.0	A PIE <15 MIN	 A regresar al hogar	107.9
+58	58	39600.0	11:00:00	10.0	A PIE <15 MIN	 A realizar compras	107.9
+58	58	41400.0	11:30:00	10.0	A PIE <15 MIN	 A regresar al hogar	107.9
+58	58	23400.0	06:30:00	10.0	A PIE <15 MIN	 A trabajar	107.9
+58	58	57600.0	16:00:00	15.0	A PIE > 15 MIN	 A regresar al hogar	107.9
+58	56	22800.0	06:20:00	10.0	A PIE <15 MIN	 A Estudiar	109.4
+56	58	46800.0	13:00:00	15.0	A PIE > 15 MIN	 A regresar al hogar	109.4
+58	56	22800.0	06:20:00	10.0	A PIE <15 MIN	 A Estudiar	109.4
+56	58	46800.0	13:00:00	20.0	A PIE > 15 MIN	 A regresar al hogar	109.4
+58	56	21600.0	06:00:00	40.0	BICICLETA	 A trabajar	109.4
+56	58	55800.0	15:30:00	40.0	BICICLETA	 A regresar al hogar	109.4
+58	55	21600.0	06:00:00	40.0	BICICLETA	 A trabajar	109.4
+55	58	57600.0	16:00:00	30.0	BICICLETA	 A regresar al hogar	109.4
+87	87	23400.0	06:30:00	10.0	A PIE <15 MIN	 A realizar actividades recreativas y culturales	88.3
+87	87	30600.0	08:30:00	10.0	A PIE <15 MIN	 A regresar al hogar	88.3
+87	87	23400.0	06:30:00	10.0	A PIE <15 MIN	 A realizar actividades físicas y/o deportivas	88.3
+87	87	28800.0	08:00:00	10.0	A PIE <15 MIN	 A regresar al hogar	88.3
+26	26	30600.0	08:30:00	15.0	A PIE > 15 MIN	 A realizar compras	64.2
+26	26	36000.0	10:00:00	15.0	A PIE > 15 MIN	 A regresar al hogar	64.2
+26	52	25200.0	07:00:00	15.0	A PIE > 15 MIN	 A realizar algún trámite personal	78.8
+52	26	32400.0	09:00:00	15.0	A PIE > 15 MIN	 A regresar al hogar	78.8
+54	54	36000.0	10:00:00	20.0	A PIE > 15 MIN	 A realizar compras	191.2
+54	54	37800.0	10:30:00	20.0	A PIE > 15 MIN	 A regresar al hogar	191.2
+54	54	28800.0	08:00:00	25.0	A PIE > 15 MIN	 A asuntos médicos personales	192.7
+54	54	31200.0	08:40:00	30.0	A PIE > 15 MIN	 A regresar al hogar	192.7
+54	22	32400.0	09:00:00	15.0	A PIE > 15 MIN	 A realizar compras	193.8
+22	54	36000.0	10:00:00	20.0	A PIE > 15 MIN	 A regresar al hogar	193.8
+54	22	32400.0	09:00:00	15.0	A PIE > 15 MIN	 A realizar compras	193.8
+22	54	36000.0	10:00:00	20.0	A PIE > 15 MIN	 A regresar al hogar	193.8
+1155	82	32400.0	09:00:00	60.0	TAXI OCUPADO	 A realizar compras	5.8
+82	1155	39600.0	11:00:00	60.0	TAXI OCUPADO	 A regresar al hogar	5.8
+1155	82	32400.0	09:00:00	60.0	TAXI OCUPADO	 A realizar compras	5.8
+82	1155	39600.0	11:00:00	60.0	TAXI OCUPADO	 A regresar al hogar	5.8
+1155	1059	43200.0	12:00:00	20.0	AUTO	 A realizar actividades recreativas y culturales	5.0
+1059	1155	50400.0	14:00:00	20.0	AUTO	 A regresar al hogar	5.0
+1155	1059	43200.0	12:00:00	20.0	AUTO	 A realizar actividades recreativas y culturales	5.0
+1059	1155	50400.0	14:00:00	20.0	AUTO	 A regresar al hogar	5.0
+1155	1059	43200.0	12:00:00	20.0	AUTO	 A realizar actividades recreativas y culturales	5.0
+1059	1155	50400.0	14:00:00	20.0	AUTO	 A regresar al hogar	5.0
+88	87	25200.0	07:00:00	10.0	A PIE <15 MIN	 A realizar actividades físicas y/o deportivas	104.9
+87	88	28800.0	08:00:00	10.0	A PIE <15 MIN	 A regresar al hogar	104.9
+87	87	50400.0	14:00:00	15.0	A PIE > 15 MIN	 A realizar algún trámite personal	104.0
+87	87	57600.0	16:00:00	15.0	A PIE > 15 MIN	 A regresar al hogar	104.0
+10	62	32400.0	09:00:00	20.0	TAXI OCUPADO	 A realizar algún trámite personal	209.8
+62	10	43200.0	12:00:00	25.0	TAXI OCUPADO	 A regresar al hogar	209.8
+10	11	32400.0	09:00:00	20.0	A PIE > 15 MIN	 A asuntos médicos personales	199.3
+11	10	43200.0	12:00:00	20.0	A PIE > 15 MIN	 A regresar al hogar	199.3
+10	72	42600.0	11:50:00	25.0	TAXI OCUPADO	 A realizar compras	198.4
+72	10	46800.0	13:00:00	30.0	TAXI OCUPADO	 A regresar al hogar	198.4
+10	10	55800.0	15:30:00	15.0	A PIE > 15 MIN	 A realizar compras	198.4
+10	10	57600.0	16:00:00	15.0	A PIE > 15 MIN	 A regresar al hogar	198.4
+10	73	43200.0	12:00:00	20.0	TAXI OCUPADO	 A realizar algún trámite personal	198.4
+73	10	48000.0	13:20:00	25.0	TAXI OCUPADO	 A regresar al hogar	198.4
+10	73	43200.0	12:00:00	20.0	TAXI OCUPADO	 A realizar algún trámite personal	198.4
+73	10	48000.0	13:20:00	25.0	TAXI OCUPADO	 A regresar al hogar	198.4
+10	10	28800.0	08:00:00	15.0	A PIE > 15 MIN	 A realizar algún trámite personal	205.9
+10	10	32400.0	09:00:00	15.0	A PIE > 15 MIN	 A regresar al hogar	205.9
+854	60	64800.0	18:00:00	20.0	A PIE > 15 MIN	 A realizar compras	106.2
+60	854	68400.0	19:00:00	30.0	A PIE > 15 MIN	 A regresar al hogar	106.2
+854	60	36000.0	10:00:00	20.0	A PIE > 15 MIN	 A realizar algún trámite personal	106.2
+60	854	39600.0	11:00:00	30.0	A PIE > 15 MIN	 A regresar al hogar	106.2
+60	83	27000.0	07:30:00	30.0	BICICLETA	 A realizar actividades físicas y/o deportivas	136.0
+83	60	36000.0	10:00:00	30.0	BICICLETA	 A regresar al hogar	136.0
+60	60	41400.0	11:30:00	10.0	A PIE <15 MIN	 A realizar compras	136.0
+60	60	42900.0	11:55:00	15.0	A PIE > 15 MIN	 A regresar al hogar	136.0
+60	60	21600.0	06:00:00	10.0	A PIE <15 MIN	 A realizar actividades físicas y/o deportivas	136.0
+60	60	27000.0	07:30:00	17.0	A PIE > 15 MIN	 A regresar al hogar	136.0
+58	58	36000.0	10:00:00	30.0	A PIE > 15 MIN	 A realizar actividades físicas y/o deportivas	103.5
+58	58	43200.0	12:00:00	15.0	A PIE > 15 MIN	 A regresar al hogar	103.5
+58	58	36000.0	10:00:00	30.0	A PIE > 15 MIN	 A realizar actividades físicas y/o deportivas	103.5
+58	58	43200.0	12:00:00	30.0	A PIE > 15 MIN	 A regresar al hogar	103.5
+58	58	50400.0	14:00:00	30.0	A PIE > 15 MIN	 A visitar a alguien	107.2
+58	58	54000.0	15:00:00	150.0	A PIE > 15 MIN	 A regresar al hogar	107.2
+54	54	46800.0	13:00:00	15.0	A PIE > 15 MIN	 A realizar algún trámite personal	208.0
+54	54	50400.0	14:00:00	15.0	A PIE > 15 MIN	 A regresar al hogar	208.0
+58	58	50400.0	14:00:00	30.0	A PIE > 15 MIN	 A visitar a alguien	107.2
+58	58	61200.0	17:00:00	30.0	A PIE > 15 MIN	 A regresar al hogar	107.2
+58	82	25200.0	07:00:00	60.0	INFORMAL	 A trabajar	107.2
+82	58	59400.0	16:30:00	120.0	INFORMAL	 A regresar al hogar	107.2
+58	58	36000.0	10:00:00	30.0	TAXI OCUPADO	 A acompañar a alguien sin remuneración	107.2
+58	58	43200.0	12:00:00	30.0	TAXI OCUPADO	 A regresar al hogar	107.2
+52	52	23400.0	06:30:00	10.0	A PIE <15 MIN	 A trabajar	196.1
+52	52	57600.0	16:00:00	10.0	A PIE <15 MIN	 A regresar al hogar	196.1
+56	147	36000.0	10:00:00	60.0	AUTO	 A realizar actividades recreativas y culturales	104.6
+147	56	46800.0	13:00:00	60.0	AUTO	 A regresar al hogar	104.6
+56	147	36000.0	10:00:00	60.0	AUTO	 A realizar actividades recreativas y culturales	104.6
+147	56	46800.0	13:00:00	60.0	AUTO	 A regresar al hogar	104.6
+52	52	21600.0	06:00:00	10.0	A PIE <15 MIN	 A realizar actividades recreativas y culturales	196.1
+52	52	50400.0	14:00:00	10.0	A PIE <15 MIN	 A regresar al hogar	196.1
+58	16	25200.0	07:00:00	50.0	INFORMAL	 A trabajar	107.2
+16	58	57600.0	16:00:00	40.0	INFORMAL	 A regresar al hogar	107.2
+56	852	21600.0	06:00:00	60.0	TAXI OCUPADO	 A asuntos médicos personales	102.4
+852	56	32400.0	09:00:00	80.0	TAXI OCUPADO	 A regresar al hogar	102.4
+56	852	21600.0	06:00:00	60.0	TAXI OCUPADO	 A asuntos médicos personales	102.4
+852	56	32400.0	09:00:00	80.0	TAXI OCUPADO	 A regresar al hogar	102.4
+58	7	32400.0	09:00:00	20.0	MOTO	 A trabajar	110.0
+7	58	61200.0	17:00:00	20.0	MOTO	 A regresar al hogar	110.0
+59	59	23400.0	06:30:00	10.0	A PIE <15 MIN	 A realizar actividades físicas y/o deportivas	106.9
+59	59	28800.0	08:00:00	10.0	A PIE <15 MIN	 A regresar al hogar	106.9
+56	852	21600.0	06:00:00	60.0	TAXI OCUPADO	 A asuntos médicos personales	102.4
+852	56	32400.0	09:00:00	80.0	TAXI OCUPADO	 A regresar al hogar	102.4
+14	14	36000.0	10:00:00	10.0	A PIE <15 MIN	 A visitar a alguien	297.1
+14	14	43200.0	12:00:00	10.0	A PIE <15 MIN	 A regresar al hogar	297.1
+56	147	32400.0	09:00:00	60.0	TAXI OCUPADO	 A acompañar a alguien sin remuneración	104.3
+147	56	37800.0	10:30:00	60.0	TAXI OCUPADO	 A regresar al hogar	104.3
+56	147	32400.0	09:00:00	60.0	TAXI OCUPADO	 A realizar algún trámite personal	104.3
+147	56	37800.0	10:30:00	60.0	TAXI OCUPADO	 A regresar al hogar	104.3
+56	56	50400.0	14:00:00	15.0	A PIE > 15 MIN	 A realizar compras	104.0
+56	56	56700.0	15:45:00	15.0	A PIE > 15 MIN	 A regresar al hogar	104.0
+56	56	50400.0	14:00:00	15.0	A PIE > 15 MIN	 A realizar compras	104.0
+56	56	56700.0	15:45:00	15.0	A PIE > 15 MIN	 A regresar al hogar	104.0
+14	16	32400.0	09:00:00	15.0	A PIE > 15 MIN	 A realizar compras	297.1
+16	14	36000.0	10:00:00	15.0	A PIE > 15 MIN	 A regresar al hogar	297.1
+154	153	46800.0	13:00:00	20.0	A PIE > 15 MIN	 A acompañar a alguien con remuneración	181.3
+153	154	50400.0	14:00:00	20.0	A PIE > 15 MIN	 A regresar al hogar	181.3
+56	56	50400.0	14:00:00	15.0	A PIE > 15 MIN	 A realizar compras	104.0
+56	56	56700.0	15:45:00	15.0	A PIE > 15 MIN	 A regresar al hogar	104.0
+14	16	32400.0	09:00:00	15.0	A PIE > 15 MIN	 A realizar compras	297.1
+16	14	36000.0	10:00:00	15.0	A PIE > 15 MIN	 A regresar al hogar	297.1
+154	153	46800.0	13:00:00	20.0	A PIE > 15 MIN	 A realizar algún trámite personal	181.3
+153	154	50400.0	14:00:00	20.0	A PIE > 15 MIN	 A regresar al hogar	181.3
+51	147	61200.0	17:00:00	60.0	AUTO	 A realizar actividades recreativas y culturales	188.7
+147	51	75600.0	21:00:00	60.0	AUTO	 A regresar al hogar	188.7
+51	147	61200.0	17:00:00	60.0	AUTO	 A realizar actividades recreativas y culturales	188.7
+147	51	75600.0	21:00:00	60.0	AUTO	 A regresar al hogar	188.7
+51	147	61200.0	17:00:00	60.0	AUTO	 A realizar actividades recreativas y culturales	188.7
+147	51	75600.0	21:00:00	60.0	AUTO	 A regresar al hogar	188.7
+51	147	61200.0	17:00:00	60.0	AUTO	 A realizar actividades recreativas y culturales	188.7
+147	51	75600.0	21:00:00	60.0	AUTO	 A regresar al hogar	188.7
+53	147	50400.0	14:00:00	60.0	TAXI OCUPADO	 A realizar algún trámite personal	204.7
+147	53	61200.0	17:00:00	60.0	TAXI OCUPADO	 A regresar al hogar	204.7
+54	54	36000.0	10:00:00	15.0	A PIE > 15 MIN	 A visitar a alguien	208.0
+54	54	50400.0	14:00:00	15.0	A PIE > 15 MIN	 A regresar al hogar	208.0
+53	53	25200.0	07:00:00	30.0	A PIE > 15 MIN	 A acompañar a alguien sin remuneración	189.2
+53	53	30600.0	08:30:00	30.0	A PIE > 15 MIN	 A regresar al hogar	189.2
+52	53	25200.0	07:00:00	10.0	A PIE <15 MIN	 A asistir actividad de tipo religioso y/o culto	196.1
+53	52	32400.0	09:00:00	15.0	A PIE > 15 MIN	 A regresar al hogar	196.1
+53	53	25200.0	07:00:00	30.0	A PIE > 15 MIN	 A acompañar a alguien sin remuneración	189.2
+53	53	30600.0	08:30:00	30.0	A PIE > 15 MIN	 A regresar al hogar	189.2
+53	53	25200.0	07:00:00	30.0	A PIE > 15 MIN	 A asuntos médicos personales	189.2
+53	53	30600.0	08:30:00	30.0	A PIE > 15 MIN	 A regresar al hogar	189.2
+52	52	25200.0	07:00:00	10.0	A PIE <15 MIN	 A realizar actividades físicas y/o deportivas	191.5
+52	52	30600.0	08:30:00	10.0	A PIE <15 MIN	 A regresar al hogar	191.5
+52	86	23400.0	06:30:00	30.0	MOTO	 A realizar actividades físicas y/o deportivas	202.8
+86	52	57600.0	16:00:00	30.0	MOTO	 A regresar al hogar	202.8
+53	53	32400.0	09:00:00	20.0	A PIE > 15 MIN	 A realizar compras	193.8
+53	53	39600.0	11:00:00	20.0	A PIE > 15 MIN	 A regresar al hogar	193.8
+53	53	32400.0	09:00:00	20.0	A PIE > 15 MIN	 A realizar compras	193.8
+53	53	39600.0	11:00:00	20.0	A PIE > 15 MIN	 A regresar al hogar	193.8
+53	52	39600.0	11:00:00	25.0	A PIE > 15 MIN	 A realizar compras	195.2
+52	53	45000.0	12:30:00	30.0	A PIE > 15 MIN	 A regresar al hogar	195.2
+53	52	39600.0	11:00:00	25.0	A PIE > 15 MIN	 A realizar compras	195.2
+52	53	45000.0	12:30:00	30.0	A PIE > 15 MIN	 A regresar al hogar	195.2
+59	56	32400.0	09:00:00	10.0	A PIE <15 MIN	 A realizar compras	106.9
+56	59	34200.0	09:30:00	10.0	A PIE <15 MIN	 A regresar al hogar	106.9
+53	52	36000.0	10:00:00	20.0	A PIE > 15 MIN	 A realizar compras	198.5
+52	53	41400.0	11:30:00	30.0	A PIE > 15 MIN	 A regresar al hogar	198.5
+53	52	36000.0	10:00:00	20.0	A PIE > 15 MIN	 A realizar compras	198.5
+52	53	41400.0	11:30:00	31.0	A PIE > 15 MIN	 A regresar al hogar	198.5
+23	23	25200.0	07:00:00	10.0	A PIE <15 MIN	 A realizar actividades físicas y/o deportivas	278.1
+23	23	30600.0	08:30:00	10.0	A PIE <15 MIN	 A regresar al hogar	278.1
+26	26	28800.0	08:00:00	15.0	A PIE > 15 MIN	 A realizar compras	63.6
+26	26	33300.0	09:15:00	15.0	A PIE > 15 MIN	 A regresar al hogar	63.6
+852	852	42600.0	11:50:00	22.0	A PIE > 15 MIN	 A realizar compras	376.4
+852	852	47400.0	13:10:00	14.0	A PIE <15 MIN	 A regresar al hogar	376.4
+852	852	43800.0	12:10:00	6.0	A PIE <15 MIN	 A realizar compras	376.4
+852	852	47400.0	13:10:00	17.0	A PIE > 15 MIN	 A regresar al hogar	376.4
+852	852	46800.0	13:00:00	20.0	A PIE > 15 MIN	 A realizar actividades recreativas y culturales	362.2
+852	852	54600.0	15:10:00	24.0	A PIE > 15 MIN	 A regresar al hogar	362.2
+82	82	30600.0	08:30:00	5.0	A PIE <15 MIN	 A realizar actividades físicas y/o deportivas	588.4
+82	82	46800.0	13:00:00	15.0	A PIE > 15 MIN	 A regresar al hogar	588.4
+82	147	41400.0	11:30:00	30.0	A PIE > 15 MIN	 A realizar compras	429.2
+147	82	45600.0	12:40:00	35.0	A PIE > 15 MIN	 A regresar al hogar	429.2
+82	87	45900.0	12:45:00	10.0	A PIE <15 MIN	 A realizar compras	430.7
+87	82	48600.0	13:30:00	10.0	A PIE <15 MIN	 A regresar al hogar	430.7
+82	87	45900.0	12:45:00	10.0	A PIE <15 MIN	 A realizar compras	430.7
+87	82	48000.0	13:20:00	10.0	A PIE <15 MIN	 A regresar al hogar	430.7
+76	55	34200.0	09:30:00	30.0	TAXI OCUPADO	 A acompañar a alguien sin remuneración	572.8
+55	76	44400.0	12:20:00	55.0	TAXI OCUPADO	 A regresar al hogar	572.8
+76	55	34200.0	09:30:00	45.0	TAXI OCUPADO	 A asuntos médicos personales	572.8
+55	76	45000.0	12:30:00	45.0	TAXI OCUPADO	 A regresar al hogar	572.8
+83	854	31500.0	08:45:00	15.0	A PIE > 15 MIN	 A trabajar	502.6
+854	83	61200.0	17:00:00	20.0	A PIE > 15 MIN	 A regresar al hogar	502.6
+83	88	21600.0	06:00:00	60.0	TRANSPORTE PÚBLICO	 A trabajar	633.8
+88	83	68400.0	19:00:00	60.0	TRANSPORTE PÚBLICO	 A regresar al hogar	633.8
+83	56	27900.0	07:45:00	15.0	A PIE > 15 MIN	 A trabajar	615.5
+56	83	55800.0	15:30:00	30.0	A PIE > 15 MIN	 A regresar al hogar	615.5
+83	56	43800.0	12:10:00	20.0	A PIE > 15 MIN	 A llevar y/o dejar algo	615.5
+56	83	45600.0	12:40:00	20.0	A PIE > 15 MIN	 A regresar al hogar	615.5
+83	56	27000.0	07:30:00	30.0	A PIE > 15 MIN	 A trabajar	615.5
+56	83	55800.0	15:30:00	30.0	A PIE > 15 MIN	 A regresar al hogar	615.5
+147	153	40800.0	11:20:00	35.0	A PIE > 15 MIN	 A realizar actividades recreativas y culturales	471.1
+153	147	49500.0	13:45:00	35.0	A PIE > 15 MIN	 A regresar al hogar	471.1
+147	153	40800.0	11:20:00	35.0	A PIE > 15 MIN	 A realizar actividades recreativas y culturales	471.1
+153	147	49500.0	13:45:00	35.0	A PIE > 15 MIN	 A regresar al hogar	471.1
+147	153	40800.0	11:20:00	35.0	A PIE > 15 MIN	 A realizar actividades recreativas y culturales	471.1
+153	147	49500.0	13:45:00	35.0	A PIE > 15 MIN	 A regresar al hogar	471.1
+147	851	25380.0	07:03:00	22.0	AUTO	 A trabajar	367.2
+851	147	61440.0	17:04:00	29.0	AUTO	 A regresar al hogar	367.2
+147	851	35220.0	09:47:00	29.0	A PIE > 15 MIN	 A realizar compras	367.2
+851	147	37200.0	10:20:00	25.0	A PIE > 15 MIN	 A regresar al hogar	367.2
+147	147	35220.0	09:47:00	16.0	A PIE > 15 MIN	 A realizar compras	367.2
+147	147	37200.0	10:20:00	25.0	A PIE > 15 MIN	 A regresar al hogar	367.2
+147	88	32400.0	09:00:00	20.0	AUTO	 A asuntos médicos personales	467.8
+88	147	36000.0	10:00:00	30.0	AUTO	 A regresar al hogar	467.8
+145	145	57600.0	16:00:00	15.0	A PIE > 15 MIN	 A realizar actividades físicas y/o deportivas	347.0
+145	145	63000.0	17:30:00	15.0	A PIE > 15 MIN	 A regresar al hogar	347.0
+145	145	57600.0	16:00:00	15.0	A PIE > 15 MIN	 A realizar actividades físicas y/o deportivas	347.0
+145	145	63000.0	17:30:00	15.0	A PIE > 15 MIN	 A regresar al hogar	347.0
+145	17	32400.0	09:00:00	60.0	ESPECIAL OCUPADO	 A Estudiar	371.8
+17	145	57600.0	16:00:00	60.0	AUTO	 A regresar al hogar	371.8
+145	155	28800.0	08:00:00	20.0	AUTO	 A realizar actividades físicas y/o deportivas	362.2
+155	145	36000.0	10:00:00	25.0	ESPECIAL OCUPADO	 A regresar al hogar	362.2
+145	851	50400.0	14:00:00	15.0	A PIE > 15 MIN	 A realizar actividades recreativas y culturales	362.2
+851	145	61200.0	17:00:00	20.0	A PIE > 15 MIN	 A regresar al hogar	362.2
+145	26	25200.0	07:00:00	40.0	AUTO	 A trabajar	364.7
+26	145	43320.0	12:02:00	158.0	AUTO	 A regresar al hogar	364.7
+145	145	36000.0	10:00:00	10.0	A PIE <15 MIN	 A realizar compras	364.7
+145	145	46800.0	13:00:00	10.0	A PIE <15 MIN	 A regresar al hogar	364.7
+145	147	57600.0	16:00:00	20.0	ESPECIAL OCUPADO	 A realizar actividades recreativas y culturales	364.7
+147	145	72000.0	20:00:00	30.0	ESPECIAL OCUPADO	 A regresar al hogar	364.7
+145	147	57600.0	16:00:00	20.0	ESPECIAL OCUPADO	 A realizar actividades recreativas y culturales	364.7
+147	145	72000.0	20:00:00	30.0	ESPECIAL OCUPADO	 A regresar al hogar	364.7
+145	147	57600.0	16:00:00	20.0	ESPECIAL OCUPADO	 A realizar actividades recreativas y culturales	364.7
+147	145	72000.0	20:00:00	30.0	ESPECIAL OCUPADO	 A regresar al hogar	364.7
+147	147	40560.0	11:16:00	14.0	AUTO	 A realizar actividades recreativas y culturales	359.0
+147	147	45300.0	12:35:00	28.0	AUTO	 A regresar al hogar	359.0
+147	147	40380.0	11:13:00	20.0	AUTO	 A realizar actividades recreativas y culturales	359.0
+147	147	45360.0	12:36:00	21.0	AUTO	 A regresar al hogar	359.0
+145	153	28800.0	08:00:00	20.0	AUTO	 A asistir actividad de tipo religioso y/o culto	365.3
+153	145	32400.0	09:00:00	20.0	AUTO	 A regresar al hogar	365.3
+145	153	28800.0	08:00:00	20.0	AUTO	 A acompañar a alguien sin remuneración	365.3
+153	145	32400.0	09:00:00	20.0	AUTO	 A regresar al hogar	365.3
+145	145	25200.0	07:00:00	10.0	A PIE <15 MIN	 A realizar actividades recreativas y culturales	365.3
+145	145	32400.0	09:00:00	10.0	A PIE <15 MIN	 A regresar al hogar	365.3
+145	851	36000.0	10:00:00	25.0	A PIE > 15 MIN	 A realizar compras	365.3
+851	145	39600.0	11:00:00	30.0	A PIE > 15 MIN	 A regresar al hogar	365.3
+145	145	45000.0	12:30:00	15.0	A PIE > 15 MIN	 A visitar a alguien	365.3
+145	145	49500.0	13:45:00	15.0	A PIE > 15 MIN	 A regresar al hogar	365.3
+145	145	50400.0	14:00:00	15.0	A PIE > 15 MIN	 A realizar algún trámite personal	365.3
+145	145	52200.0	14:30:00	15.0	A PIE > 15 MIN	 A regresar al hogar	365.3
+852	153	34200.0	09:30:00	50.0	AUTO	 A acompañar a alguien sin remuneración	362.2
+153	852	39600.0	11:00:00	60.0	AUTO	 A regresar al hogar	362.2
+852	153	34200.0	09:30:00	50.0	AUTO	 A asuntos médicos personales	362.2
+153	852	39600.0	11:00:00	60.0	AUTO	 A regresar al hogar	362.2
+852	153	34200.0	09:30:00	50.0	AUTO	 A acompañar a alguien sin remuneración	362.2
+153	852	39600.0	11:00:00	60.0	AUTO	 A regresar al hogar	362.2
+852	850	64800.0	18:00:00	15.0	A PIE > 15 MIN	 A visitar a alguien	287.5
+850	852	72000.0	20:00:00	10.0	TAXI OCUPADO	 A regresar al hogar	287.5
+852	153	32400.0	09:00:00	10.0	BICICLETA	 A realizar compras	368.3
+153	852	33600.0	09:20:00	10.0	BICICLETA	 A regresar al hogar	368.3
+852	852	38040.0	10:34:00	9.0	A PIE <15 MIN	 A realizar actividades físicas y/o deportivas	481.0
+852	852	39780.0	11:03:00	35.0	A PIE > 15 MIN	 A regresar al hogar	481.0
+82	155	36000.0	10:00:00	30.0	AUTO	 A trabajar	422.3
+155	82	59400.0	16:30:00	34.0	AUTO	 A regresar al hogar	422.3
+82	155	36000.0	10:00:00	30.0	AUTO	 A trabajar	422.3
+155	82	59400.0	16:30:00	34.0	AUTO	 A regresar al hogar	422.3
+82	153	32400.0	09:00:00	30.0	MOTO	 A trabajar	427.7
+153	82	59400.0	16:30:00	40.0	MOTO	 A regresar al hogar	427.7
+82	82	36900.0	10:15:00	20.0	A PIE > 15 MIN	 A realizar compras	427.7
+82	82	47700.0	13:15:00	20.0	A PIE > 15 MIN	 A regresar al hogar	427.7
+82	86	37800.0	10:30:00	30.0	A PIE > 15 MIN	 A Estudiar	427.7
+86	82	55800.0	15:30:00	35.0	A PIE > 15 MIN	 A regresar al hogar	427.7
+82	86	37800.0	10:30:00	30.0	A PIE > 15 MIN	 A Estudiar	427.7
+86	82	55800.0	15:30:00	35.0	A PIE > 15 MIN	 A regresar al hogar	427.7
+82	87	40200.0	11:10:00	15.0	A PIE > 15 MIN	 A realizar compras	422.8
+87	82	45900.0	12:45:00	30.0	A PIE > 15 MIN	 A regresar al hogar	422.8
+82	86	32400.0	09:00:00	20.0	MOTO	 A Estudiar	422.8
+86	82	55800.0	15:30:00	33.0	MOTO	 A regresar al hogar	422.8
+82	86	32400.0	09:00:00	20.0	MOTO	 A Estudiar	422.8
+86	82	55800.0	15:30:00	33.0	MOTO	 A regresar al hogar	422.8
+146	146	19800.0	05:30:00	15.0	A PIE > 15 MIN	 A realizar actividades físicas y/o deportivas	378.5
+146	146	27000.0	07:30:00	15.0	A PIE > 15 MIN	 A regresar al hogar	378.5
+146	146	32400.0	09:00:00	10.0	A PIE <15 MIN	 A realizar actividades recreativas y culturales	356.0
+146	146	37800.0	10:30:00	10.0	A PIE <15 MIN	 A regresar al hogar	356.0
+146	146	32400.0	09:00:00	10.0	A PIE <15 MIN	 A realizar actividades recreativas y culturales	356.0
+146	146	37800.0	10:30:00	10.0	A PIE <15 MIN	 A regresar al hogar	356.0
+146	146	32400.0	09:00:00	15.0	A PIE > 15 MIN	 A realizar actividades recreativas y culturales	368.5
+146	146	36900.0	10:15:00	17.0	A PIE > 15 MIN	 A regresar al hogar	368.5
+146	146	32460.0	09:01:00	14.0	A PIE <15 MIN	 A realizar actividades recreativas y culturales	368.5
+146	146	36900.0	10:15:00	17.0	A PIE > 15 MIN	 A regresar al hogar	368.5
+146	146	29580.0	08:13:00	4.0	A PIE <15 MIN	 A realizar actividades recreativas y culturales	358.2
+146	146	35160.0	09:46:00	5.0	A PIE <15 MIN	 A regresar al hogar	358.2
+146	146	29580.0	08:13:00	5.0	A PIE <15 MIN	 A realizar actividades recreativas y culturales	358.2
+146	146	35160.0	09:46:00	5.0	A PIE <15 MIN	 A regresar al hogar	358.2
+146	146	29400.0	08:10:00	10.0	A PIE <15 MIN	 A realizar actividades físicas y/o deportivas	471.9
+146	146	37800.0	10:30:00	15.0	A PIE > 15 MIN	 A regresar al hogar	471.9
+146	146	29400.0	08:10:00	10.0	A PIE <15 MIN	 A realizar actividades recreativas y culturales	471.9
+146	146	37800.0	10:30:00	15.0	A PIE > 15 MIN	 A regresar al hogar	471.9
+146	146	29400.0	08:10:00	70.0	AUTO	 A realizar compras	471.9
+146	146	35520.0	09:52:00	17.0	AUTO	 A regresar al hogar	471.9
+71	1014	50400.0	14:00:00	65.0	AUTO	 A realizar algún trámite personal	409.3
+1014	71	62100.0	17:15:00	85.0	AUTO	 A regresar al hogar	409.3
+71	1012	50400.0	14:00:00	75.0	AUTO	 A realizar algún trámite personal	409.3
+1012	71	62100.0	17:15:00	85.0	AUTO	 A regresar al hogar	409.3
+71	1012	50400.0	14:00:00	75.0	AUTO	 A realizar algún trámite personal	409.3
+1012	71	62100.0	17:15:00	85.0	AUTO	 A regresar al hogar	409.3
+71	153	33600.0	09:20:00	30.0	AUTO	 A visitar a alguien	432.7
+153	71	39600.0	11:00:00	40.0	AUTO	 A regresar al hogar	432.7
+71	153	33600.0	09:20:00	30.0	AUTO	 A visitar a alguien	432.7
+153	71	39600.0	11:00:00	40.0	AUTO	 A regresar al hogar	432.7
+71	153	33600.0	09:20:00	30.0	AUTO	 A visitar a alguien	432.7
+153	71	39600.0	11:00:00	40.0	AUTO	 A regresar al hogar	432.7
+71	147	46800.0	13:00:00	35.0	AUTO	 A realizar compras	410.2
+147	71	57000.0	15:50:00	25.0	AUTO	 A regresar al hogar	410.2
+71	147	46800.0	13:00:00	30.0	AUTO	 A realizar compras	410.2
+147	71	57000.0	15:50:00	25.0	AUTO	 A regresar al hogar	410.2
+71	147	46800.0	13:00:00	30.0	AUTO	 A realizar compras	410.2
+147	71	57000.0	15:50:00	25.0	AUTO	 A regresar al hogar	410.2
+83	79	44400.0	12:20:00	25.0	TRANSPORTE PÚBLICO	 A trabajar	857.0
+79	83	68400.0	19:00:00	30.0	TRANSPORTE PÚBLICO	 A regresar al hogar	857.0
+83	83	41400.0	11:30:00	20.0	A PIE > 15 MIN	 A Estudiar	857.0
+83	83	65400.0	18:10:00	35.0	A PIE > 15 MIN	 A regresar al hogar	857.0
+83	83	41400.0	11:30:00	20.0	A PIE > 15 MIN	 A Estudiar	857.0
+83	83	65400.0	18:10:00	38.0	A PIE > 15 MIN	 A regresar al hogar	857.0
+83	83	41400.0	11:30:00	20.0	A PIE > 15 MIN	 A Estudiar	857.0
+83	83	65400.0	18:10:00	38.0	A PIE > 15 MIN	 A regresar al hogar	857.0
+83	55	19200.0	05:20:00	20.0	TRANSPORTE PÚBLICO	 A trabajar	867.6
+55	83	50700.0	14:05:00	35.0	TRANSPORTE PÚBLICO	 A regresar al hogar	867.6
+83	55	28800.0	08:00:00	35.0	TRANSPORTE PÚBLICO	 A trabajar	867.6
+55	83	59400.0	16:30:00	35.0	TRANSPORTE PÚBLICO	 A regresar al hogar	867.6
+83	55	36000.0	10:00:00	40.0	TRANSPORTE PÚBLICO	 A trabajar	867.6
+55	83	66600.0	18:30:00	35.0	TRANSPORTE PÚBLICO	 A regresar al hogar	867.6
+83	55	43200.0	12:00:00	42.0	TRANSPORTE PÚBLICO	 A trabajar	867.6
+55	83	73800.0	20:30:00	33.0	TRANSPORTE PÚBLICO	 A regresar al hogar	867.6
+83	16	21000.0	05:50:00	30.0	TRANSPORTE PÚBLICO	 A trabajar	625.0
+16	83	43200.0	12:00:00	40.0	TRANSPORTE PÚBLICO	 A regresar al hogar	625.0
+83	16	28800.0	08:00:00	35.0	TRANSPORTE PÚBLICO	 A trabajar	625.0
+16	83	52200.0	14:30:00	40.0	TRANSPORTE PÚBLICO	 A regresar al hogar	625.0
+83	16	36000.0	10:00:00	30.0	TRANSPORTE PÚBLICO	 A trabajar	625.0
+16	83	59400.0	16:30:00	38.0	TRANSPORTE PÚBLICO	 A regresar al hogar	625.0
+83	16	43200.0	12:00:00	40.0	TRANSPORTE PÚBLICO	 A trabajar	625.0
+16	83	67200.0	18:40:00	5.0	TRANSPORTE PÚBLICO	 A regresar al hogar	625.0
+83	60	22200.0	06:10:00	10.0	A PIE <15 MIN	 A trabajar	618.6
+60	83	66600.0	18:30:00	25.0	A PIE > 15 MIN	 A regresar al hogar	618.6
+83	60	22200.0	06:10:00	10.0	A PIE <15 MIN	 A trabajar	618.6
+60	83	66600.0	18:30:00	25.0	A PIE > 15 MIN	 A regresar al hogar	618.6
+83	60	25200.0	07:00:00	21.0	A PIE > 15 MIN	 A trabajar	618.6
+60	83	66600.0	18:30:00	25.0	A PIE > 15 MIN	 A regresar al hogar	618.6
+83	60	46200.0	12:50:00	25.0	A PIE > 15 MIN	 A llevar y/o dejar algo	618.6
+60	83	51600.0	14:20:00	20.0	A PIE > 15 MIN	 A regresar al hogar	618.6
+83	26	30600.0	08:30:00	30.0	BICICLETA	 A trabajar	630.5
+26	83	57600.0	16:00:00	40.0	BICICLETA	 A regresar al hogar	630.5
+83	26	25200.0	07:00:00	25.0	BICICLETA	 A trabajar	630.5
+26	83	50400.0	14:00:00	40.0	BICICLETA	 A regresar al hogar	630.5
+83	26	36000.0	10:00:00	35.0	BICICLETA	 A trabajar	630.5
+26	83	61200.0	17:00:00	45.0	BICICLETA	 A regresar al hogar	630.5
+83	59	57600.0	16:00:00	15.0	A PIE > 15 MIN	 A realizar compras	606.1
+59	83	59400.0	16:30:00	30.0	A PIE > 15 MIN	 A regresar al hogar	606.1
+83	59	57600.0	16:00:00	15.0	A PIE > 15 MIN	 A realizar compras	606.1
+59	83	59400.0	16:30:00	20.0	A PIE > 15 MIN	 A regresar al hogar	606.1
+83	62	25200.0	07:00:00	60.0	TRANSPORTE PÚBLICO	 A trabajar	606.1
+62	83	61200.0	17:00:00	60.0	TRANSPORTE PÚBLICO	 A regresar al hogar	606.1
+83	60	31200.0	08:40:00	20.0	A PIE > 15 MIN	 A trabajar	884.6
+60	83	54000.0	15:00:00	20.0	A PIE > 15 MIN	 A regresar al hogar	884.6
+83	60	19800.0	05:30:00	30.0	A PIE > 15 MIN	 A trabajar	884.6
+60	83	64800.0	18:00:00	30.0	A PIE > 15 MIN	 A regresar al hogar	884.6
+83	60	39600.0	11:00:00	20.0	A PIE > 15 MIN	 A realizar compras	884.6
+60	83	42300.0	11:45:00	30.0	A PIE > 15 MIN	 A regresar al hogar	884.6
+83	70	21600.0	06:00:00	60.0	TRANSPORTE PÚBLICO	 A trabajar	612.3
+70	83	54000.0	15:00:00	75.0	TRANSPORTE PÚBLICO	 A regresar al hogar	612.3
+83	60	55800.0	15:30:00	10.0	A PIE <15 MIN	 A realizar compras	612.3
+60	83	57000.0	15:50:00	20.0	A PIE > 15 MIN	 A regresar al hogar	612.3
+83	70	21600.0	06:00:00	60.0	TRANSPORTE PÚBLICO	 A trabajar	612.3
+70	83	54000.0	15:00:00	70.0	TRANSPORTE PÚBLICO	 A regresar al hogar	612.3
+83	59	36000.0	10:00:00	20.0	A PIE > 15 MIN	 A realizar compras	599.0
+59	83	38400.0	10:40:00	20.0	A PIE > 15 MIN	 A regresar al hogar	599.0
+83	59	36000.0	10:00:00	20.0	A PIE > 15 MIN	 A realizar compras	599.0
+59	83	38400.0	10:40:00	20.0	A PIE > 15 MIN	 A regresar al hogar	599.0
+146	146	21600.0	06:00:00	10.0	A PIE <15 MIN	 A realizar actividades físicas y/o deportivas	467.8
+146	146	28800.0	08:00:00	10.0	A PIE <15 MIN	 A regresar al hogar	467.8
+146	146	21600.0	06:00:00	10.0	A PIE <15 MIN	 A realizar actividades físicas y/o deportivas	467.8
+146	146	28800.0	08:00:00	10.0	A PIE <15 MIN	 A regresar al hogar	467.8
+852	852	41400.0	11:30:00	15.0	A PIE > 15 MIN	 A realizar actividades recreativas y culturales	375.8
+852	852	48600.0	13:30:00	15.0	A PIE > 15 MIN	 A regresar al hogar	375.8
+852	852	41400.0	11:30:00	15.0	A PIE > 15 MIN	 A realizar actividades recreativas y culturales	375.8
+852	852	48600.0	13:30:00	15.0	A PIE > 15 MIN	 A regresar al hogar	375.8
+852	852	21600.0	06:00:00	15.0	A PIE > 15 MIN	 A realizar actividades físicas y/o deportivas	378.5
+852	852	28800.0	08:00:00	15.0	A PIE > 15 MIN	 A regresar al hogar	378.5
+852	852	21600.0	06:00:00	10.0	A PIE <15 MIN	 A realizar actividades físicas y/o deportivas	378.5
+852	852	28800.0	08:00:00	15.0	A PIE > 15 MIN	 A regresar al hogar	378.5
+852	147	45000.0	12:30:00	28.0	A PIE > 15 MIN	 A trabajar	374.4
+147	852	61200.0	17:00:00	23.0	A PIE > 15 MIN	 A regresar al hogar	374.4
+852	147	46800.0	13:00:00	20.0	A PIE > 15 MIN	 A trabajar	374.4
+852	147	36480.0	10:08:00	21.0	A PIE > 15 MIN	 A realizar actividades recreativas y culturales	374.4
+147	852	38160.0	10:36:00	16.0	A PIE > 15 MIN	 A regresar al hogar	374.4
+82	147	48600.0	13:30:00	30.0	A PIE > 15 MIN	 A realizar compras	568.2
+147	82	54000.0	15:00:00	30.0	A PIE > 15 MIN	 A regresar al hogar	568.2
+82	147	48600.0	13:30:00	30.0	A PIE > 15 MIN	 A realizar compras	568.2
+147	82	54000.0	15:00:00	30.0	A PIE > 15 MIN	 A regresar al hogar	568.2
+83	26	25200.0	07:00:00	60.0	TRANSPORTE PÚBLICO	 A trabajar	434.3
+26	83	63000.0	17:30:00	60.0	TRANSPORTE PÚBLICO	 A regresar al hogar	434.3
+83	87	41400.0	11:30:00	15.0	A PIE > 15 MIN	 A realizar compras	434.3
+87	83	44400.0	12:20:00	15.0	A PIE > 15 MIN	 A regresar al hogar	434.3
+83	87	41400.0	11:30:00	15.0	A PIE > 15 MIN	 A realizar compras	434.3
+87	83	45300.0	12:35:00	33.0	A PIE > 15 MIN	 A regresar al hogar	434.3
+83	86	18000.0	05:00:00	45.0	TRANSPORTE PÚBLICO	 A trabajar	621.8
+86	83	46800.0	13:00:00	45.0	TRANSPORTE PÚBLICO	 A regresar al hogar	621.8
+83	86	25200.0	07:00:00	50.0	TRANSPORTE PÚBLICO	 A trabajar	621.8
+86	83	54000.0	15:00:00	45.0	TRANSPORTE PÚBLICO	 A regresar al hogar	621.8
+83	86	32400.0	09:00:00	45.0	TRANSPORTE PÚBLICO	 A trabajar	621.8
+86	83	57600.0	16:00:00	170.0	TRANSPORTE PÚBLICO	 A regresar al hogar	621.8
+83	86	46800.0	13:00:00	45.0	TRANSPORTE PÚBLICO	 A trabajar	621.8
+86	83	75600.0	21:00:00	38.0	TRANSPORTE PÚBLICO	 A regresar al hogar	621.8
+83	82	34200.0	09:30:00	30.0	TRANSPORTE PÚBLICO	 A trabajar	869.1
+82	83	61200.0	17:00:00	40.0	TRANSPORTE PÚBLICO	 A regresar al hogar	869.1
+83	82	37800.0	10:30:00	35.0	TRANSPORTE PÚBLICO	 A trabajar	869.1
+82	83	65100.0	18:05:00	45.0	TRANSPORTE PÚBLICO	 A regresar al hogar	869.1
+83	82	43200.0	12:00:00	50.0	A PIE > 15 MIN	 A trabajar	869.1
+82	83	68400.0	19:00:00	55.0	TRANSPORTE PÚBLICO	 A regresar al hogar	869.1
+83	82	48600.0	13:30:00	35.0	TRANSPORTE PÚBLICO	 A trabajar	869.1
+82	83	76200.0	21:10:00	40.0	TRANSPORTE PÚBLICO	 A regresar al hogar	869.1
+83	83	18000.0	05:00:00	30.0	TRANSPORTE PÚBLICO	 A trabajar	878.4
+83	83	51000.0	14:10:00	30.0	TRANSPORTE PÚBLICO	 A regresar al hogar	878.4
+83	83	21600.0	06:00:00	30.0	TRANSPORTE PÚBLICO	 A trabajar	878.4
+83	83	52800.0	14:40:00	30.0	TRANSPORTE PÚBLICO	 A regresar al hogar	878.4
+83	83	25200.0	07:00:00	30.0	TRANSPORTE PÚBLICO	 A trabajar	878.4
+83	83	58200.0	16:10:00	30.0	TRANSPORTE PÚBLICO	 A regresar al hogar	878.4
+83	83	43200.0	12:00:00	40.0	TRANSPORTE PÚBLICO	 A trabajar	878.4
+83	83	66000.0	18:20:00	35.0	TRANSPORTE PÚBLICO	 A regresar al hogar	878.4
+83	16	14400.0	04:00:00	35.0	TRANSPORTE PÚBLICO	 A trabajar	632.7
+16	83	43800.0	12:10:00	15.0	TRANSPORTE PÚBLICO	 A regresar al hogar	632.7
+83	16	14400.0	04:00:00	35.0	TRANSPORTE PÚBLICO	 A trabajar	632.7
+16	83	43800.0	12:10:00	20.0	TRANSPORTE PÚBLICO	 A regresar al hogar	632.7
+83	16	14400.0	04:00:00	35.0	TRANSPORTE PÚBLICO	 A trabajar	632.7
+16	83	43800.0	12:10:00	25.0	TRANSPORTE PÚBLICO	 A regresar al hogar	632.7
+76	153	39600.0	11:00:00	30.0	AUTO	 A asuntos médicos personales	426.7
+153	76	55800.0	15:30:00	45.0	AUTO	 A regresar al hogar	426.7
+76	153	39600.0	11:00:00	30.0	AUTO	 A asuntos médicos personales	426.7
+153	76	55800.0	15:30:00	45.0	AUTO	 A regresar al hogar	426.7
+76	155	36000.0	10:00:00	30.0	AUTO	 A realizar compras	424.7
+155	76	58500.0	16:15:00	35.0	AUTO	 A regresar al hogar	424.7
+76	155	36000.0	10:00:00	30.0	AUTO	 A realizar compras	424.7
+155	76	58500.0	16:15:00	35.0	AUTO	 A regresar al hogar	424.7
+76	155	36000.0	10:00:00	30.0	AUTO	 A realizar compras	424.7
+155	76	58500.0	16:15:00	35.0	AUTO	 A regresar al hogar	424.7
+76	155	36000.0	10:00:00	30.0	AUTO	 A realizar compras	424.7
+155	76	58500.0	16:15:00	35.0	AUTO	 A regresar al hogar	424.7
+852	148	50400.0	14:00:00	15.0	AUTO	 A realizar algún trámite personal	378.7
+148	852	58200.0	16:10:00	10.0	AUTO	 A regresar al hogar	378.7
+852	147	57600.0	16:00:00	10.0	A PIE <15 MIN	 A realizar compras	373.8
+147	852	63600.0	17:40:00	10.0	A PIE <15 MIN	 A regresar al hogar	373.8
+852	147	57600.0	16:00:00	10.0	A PIE <15 MIN	 A realizar compras	373.8
+147	852	63600.0	17:40:00	10.0	A PIE <15 MIN	 A regresar al hogar	373.8
+852	851	21660.0	06:01:00	25.0	AUTO	 A realizar algún trámite personal	469.4
+851	852	32700.0	09:05:00	18.0	AUTO	 A regresar al hogar	469.4
+852	851	21780.0	06:03:00	23.0	AUTO	 A realizar algún trámite personal	469.4
+851	852	28980.0	08:03:00	33.0	AUTO	 A regresar al hogar	469.4
+852	852	36240.0	10:04:00	22.0	A PIE > 15 MIN	 A realizar actividades recreativas y culturales	373.1
+852	852	40440.0	11:14:00	26.0	A PIE > 15 MIN	 A regresar al hogar	373.1
+852	851	25200.0	07:00:00	22.0	A PIE > 15 MIN	 A trabajar	364.7
+851	852	61260.0	17:01:00	33.0	OTRO	 A regresar al hogar	364.7
+852	153	46860.0	13:01:00	40.0	AUTO	 A visitar a alguien	364.7
+153	852	66840.0	18:34:00	69.0	AUTO	 A regresar al hogar	364.7
+852	852	23460.0	06:31:00	19.0	A PIE > 15 MIN	 A realizar algún trámite personal	481.3
+852	852	75000.0	20:50:00	27.0	A PIE > 15 MIN	 A regresar al hogar	481.3
+852	852	36000.0	10:00:00	5.0	A PIE <15 MIN	 A realizar actividades físicas y/o deportivas	629.6
+852	852	43200.0	12:00:00	10.0	A PIE <15 MIN	 A regresar al hogar	629.6
+852	851	46800.0	13:00:00	15.0	A PIE > 15 MIN	 A realizar compras	629.6
+851	852	48600.0	13:30:00	10.0	A PIE <15 MIN	 A regresar al hogar	629.6
+852	852	36000.0	10:00:00	10.0	A PIE <15 MIN	 A realizar actividades físicas y/o deportivas	292.9
+852	852	43200.0	12:00:00	10.0	A PIE <15 MIN	 A regresar al hogar	292.9
+852	147	57600.0	16:00:00	10.0	A PIE <15 MIN	 A realizar actividades recreativas y culturales	292.9
+147	852	64800.0	18:00:00	10.0	A PIE <15 MIN	 A regresar al hogar	292.9
+852	25	23400.0	06:30:00	30.0	TRANSPORTE ESCOLAR	 A Estudiar	292.9
+25	852	55800.0	15:30:00	60.0	TRANSPORTE ESCOLAR	 A regresar al hogar	292.9
+852	147	27000.0	07:30:00	15.0	AUTO	 A acompañar a alguien sin remuneración	373.8
+147	852	28200.0	07:50:00	20.0	AUTO	 A regresar al hogar	373.8
+852	75	25200.0	07:00:00	15.0	MOTO	 A trabajar	375.1
+75	852	68400.0	19:00:00	60.0	MOTO	 A regresar al hogar	375.1
+852	86	32400.0	09:00:00	15.0	AUTO	 A realizar compras	356.6
+86	852	40500.0	11:15:00	10.0	AUTO	 A regresar al hogar	356.6
+852	59	19800.0	05:30:00	20.0	AUTO	 A trabajar	370.5
+59	852	45000.0	12:30:00	30.0	AUTO	 A regresar al hogar	370.5
+852	147	55800.0	15:30:00	20.0	A PIE > 15 MIN	 A realizar compras	380.5
+147	852	61200.0	17:00:00	20.0	A PIE > 15 MIN	 A regresar al hogar	380.5
+852	147	55800.0	15:30:00	20.0	A PIE > 15 MIN	 A realizar compras	380.5
+147	852	61200.0	17:00:00	20.0	A PIE > 15 MIN	 A regresar al hogar	380.5
+852	854	25200.0	07:00:00	30.0	BICICLETA	 A realizar actividades físicas y/o deportivas	366.0
+854	852	32400.0	09:00:00	20.0	BICICLETA	 A regresar al hogar	366.0
+852	86	28800.0	08:00:00	25.0	MOTO	 A Estudiar	368.5
+86	852	39600.0	11:00:00	120.0	MOTO	 A regresar al hogar	368.5
