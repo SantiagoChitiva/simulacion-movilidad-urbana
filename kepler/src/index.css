@@ -2,3 +2,166 @@ html, body, #root {
   margin: 0;
   height: 100%;
 }
+
+/* ---------------------------------------------------------------- panel de demanda */
+/* Colores del tema oscuro de kepler.gl para que el panel se vea integrado */
+:root {
+  --pd-fondo: #242730;
+  --pd-fondo-2: #29323c;
+  --pd-borde: #3a414c;
+  --pd-texto: #d3d8e0;
+  --pd-tenue: #8c939e;
+  --pd-acento: #1fbad6;
+  --pd-error: #f25f5c;
+  --pd-ok: #2ecc71;
+}
+
+/* Deja libres la columna de controles del mapa de kepler (derecha, ~50px) y la
+   línea de tiempo con sus botones de reproducción (abajo, ~110px) */
+.pd-panel {
+  position: fixed;
+  top: 12px;
+  right: 56px;
+  width: 330px;
+  max-width: calc(100vw - 68px);
+  max-height: calc(100vh - 130px);
+  overflow-y: auto;
+  box-sizing: border-box;
+  padding: 12px 14px;
+  background: var(--pd-fondo);
+  color: var(--pd-texto);
+  border: 1px solid var(--pd-borde);
+  border-radius: 6px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  font: 12px/1.4 system-ui, -apple-system, 'Segoe UI', sans-serif;
+  z-index: 10;
+}
+
+.pd-panel h2 { font-size: 14px; margin: 0; }
+.pd-panel h3 {
+  font-size: 11px;
+  margin: 14px 0 6px;
+  color: var(--pd-tenue);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.pd-panel button,
+.pd-panel input,
+.pd-panel select {
+  font: inherit;
+  color: var(--pd-texto);
+  background: var(--pd-fondo-2);
+  border: 1px solid var(--pd-borde);
+  border-radius: 4px;
+}
+.pd-panel button { cursor: pointer; padding: 4px 8px; }
+.pd-panel button:hover:not(:disabled) { border-color: var(--pd-acento); }
+.pd-panel button:disabled { opacity: 0.45; cursor: not-allowed; }
+.pd-panel :focus-visible { outline: 2px solid var(--pd-acento); outline-offset: 1px; }
+
+.pd-encabezado { display: flex; align-items: center; justify-content: space-between; }
+.pd-cerrar { font-size: 16px; line-height: 1; }
+
+.pd-abrir {
+  position: fixed;
+  top: 12px;
+  right: 56px;
+  z-index: 10;
+  padding: 6px 12px;
+  background: var(--pd-fondo);
+  color: var(--pd-texto);
+  border: 1px solid var(--pd-borde);
+  border-radius: 4px;
+  font: 12px system-ui, sans-serif;
+  cursor: pointer;
+}
+
+.pd-presets { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.pd-presets button.activo { border-color: var(--pd-acento); color: #fff; background: #1f6f80; }
+.pd-descripcion { color: var(--pd-tenue); margin: 6px 0 0; }
+.pd-descripcion strong { color: var(--pd-acento); font-weight: 600; }
+
+.pd-grupo { margin-bottom: 8px; }
+.pd-grupo-titulo {
+  display: flex;
+  justify-content: space-between;
+  color: var(--pd-tenue);
+  border-bottom: 1px solid var(--pd-borde);
+  margin-bottom: 4px;
+  padding-bottom: 2px;
+}
+
+.pd-fila {
+  display: grid;
+  grid-template-columns: 1fr 26px 76px 26px;
+  gap: 4px;
+  align-items: center;
+  margin: 3px 0;
+}
+.pd-fila input { width: 100%; box-sizing: border-box; padding: 3px 4px; text-align: right; }
+.pd-fila button { padding: 2px 0; }
+.pd-aviso { color: var(--pd-acento); }
+.pd-nota { color: var(--pd-tenue); font-size: 11px; margin: 4px 0; }
+
+.pd-total {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  font-size: 13px;
+  border-top: 1px solid var(--pd-borde);
+  padding-top: 6px;
+}
+.pd-total.excedido { color: var(--pd-error); }
+
+.pd-ajustes {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  margin-top: 12px;
+}
+.pd-ajustes label { display: flex; align-items: center; gap: 4px; color: var(--pd-tenue); }
+.pd-ajustes input { width: 64px; padding: 3px 4px; text-align: right; }
+
+.pd-ejecutar {
+  width: 100%;
+  margin-top: 12px;
+  padding: 8px !important;
+  font-weight: 600 !important;
+  background: #1f6f80 !important;
+  color: #fff !important;
+}
+
+.pd-estado {
+  margin-top: 8px;
+  padding: 6px 8px;
+  border-left: 3px solid var(--pd-acento);
+  background: var(--pd-fondo-2);
+}
+.pd-estado.terminado { border-color: var(--pd-ok); }
+.pd-estado.error { border-color: var(--pd-error); }
+.pd-estado p { margin: 4px 0 0; color: var(--pd-tenue); word-break: break-word; }
+
+.pd-panel select { width: 100%; padding: 4px; }
+
+.pd-error {
+  color: var(--pd-error);
+  background: rgba(242, 95, 92, 0.1);
+  padding: 6px 8px;
+  border-radius: 4px;
+}
+
+.aviso-carga {
+  position: fixed;
+  bottom: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  padding: 6px 12px;
+  background: var(--pd-fondo);
+  color: var(--pd-texto);
+  border: 1px solid var(--pd-borde);
+  border-radius: 4px;
+  font: 12px system-ui, sans-serif;
+}

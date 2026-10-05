@@ -7,3 +7,5 @@ simulation_service.egg-info/
 *rou*.xml
 *trips.xml
 output/
+# corridas lanzadas desde la API (src/api/jobs.py)
+runs/
