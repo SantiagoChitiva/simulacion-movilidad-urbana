@@ -11,6 +11,8 @@ const mmss = (segundos) => {
 
 const segundosDesde = (iso) => (Date.now() - new Date(iso).getTime()) / 1000;
 
+const SEGUNDOS_AVISO = 6;
+
 function Barra({ avance }) {
   // avance null = no se sabe cuánto falta: barra animada
   return (
@@ -113,8 +115,38 @@ function CargaMapa({ carga, onCancelar }) {
   );
 }
 
-/** Tarjeta en la esquina inferior derecha: simulación en curso y carga de trips en el mapa. */
-export default function TarjetaActividad({ corrida, carga, errorCarga, onCancelarCorrida, onDescartarCorrida, onCancelarCarga, onDescartarError }) {
+function AvisoCarga({ aviso, onDescartar }) {
+  // se cierra solo; `clave` reinicia la cuenta si llega otro aviso igual
+  useEffect(() => {
+    const id = setTimeout(onDescartar, SEGUNDOS_AVISO * 1000);
+    return () => clearTimeout(id);
+  }, [aviso.clave, onDescartar]);
+
+  return (
+    <div className="ta-item terminado ta-aviso" role="status">
+      <div className="ta-titulo">
+        <strong>✓ {aviso.titulo}</strong>
+        <button type="button" className="ta-cerrar" onClick={onDescartar} aria-label="Cerrar aviso">
+          ×
+        </button>
+      </div>
+      <p>{aviso.detalle}</p>
+    </div>
+  );
+}
+
+/** Tarjeta en la esquina inferior derecha: simulación en curso, carga de trips en el mapa y aviso al terminar. */
+export default function TarjetaActividad({
+  corrida,
+  carga,
+  errorCarga,
+  aviso,
+  onCancelarCorrida,
+  onDescartarCorrida,
+  onCancelarCarga,
+  onDescartarError,
+  onDescartarAviso,
+}) {
   const [, setTic] = useState(0);
   const activa = !!carga || (corrida && !ESTADOS_FINALES.has(corrida.estado));
   useEffect(() => {
@@ -123,11 +155,12 @@ export default function TarjetaActividad({ corrida, carga, errorCarga, onCancela
     return () => clearInterval(id);
   }, [activa]);
 
-  if (!corrida && !carga && !errorCarga) return null;
+  if (!corrida && !carga && !errorCarga && !aviso) return null;
   return (
     <section className="tarjeta-actividad" aria-live="polite" aria-label="Actividad">
       {corrida && <Simulacion corrida={corrida} onCancelar={onCancelarCorrida} onDescartar={onDescartarCorrida} />}
       {carga && <CargaMapa carga={carga} onCancelar={onCancelarCarga} />}
+      {aviso && <AvisoCarga aviso={aviso} onDescartar={onDescartarAviso} />}
       {errorCarga && (
         <div className="ta-item error">
           <div className="ta-titulo">

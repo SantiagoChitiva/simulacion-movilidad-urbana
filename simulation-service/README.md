@@ -55,6 +55,23 @@ Las corridas se ejecutan **de a una**, en segundo plano, y cada una tarda 10–1
 - **SUMO:** se controla con **TraCI** en saltos de 60 s simulados. La simulación y sus salidas son las mismas, y cancelar es inmediato.
 - **Exportación a kepler:** se mide por los bytes leídos del FCD.
 
+**Simulaciones precalculadas.** Los cuatro presets, con sus conteos por defecto, se simulan una vez en local y sus resultados se versionan en `precalculadas/<preset>/`. Así el visor los carga en segundos, sin correr SUMO.
+
+```bash
+python -m etl.precalculadas                 # los cuatro, uno tras otro (~50 min)
+python -m etl.precalculadas dia_sin_carro   # solo uno
+```
+
+- Cada preset deja tres archivos:
+  - `trips.geojson.gz`: el GeoJSON de kepler comprimido, ~17 MB en lugar de ~91 MB.
+  - `volumenes.json`: los volúmenes por edge para la ficha de intersecciones.
+  - `meta.json`: conteos, semilla, resumen y la huella de los insumos.
+- El `.gz` nunca se descomprime en disco: la API lo envía con `Content-Encoding: gzip` y el navegador lo descomprime al recibirlo. Por eso `.gitignore` ignora cualquier `precalculadas/**/*.geojson`.
+- La huella es un sha256 de la encuesta, la red, la TAZ y la plantilla `.sumocfg`. Si cambia alguno, `GET /precalculadas` marca el preset como `desactualizada` y hay que regenerarlo.
+- `GET /precalculadas`: lista los presets disponibles con su `meta.json`.
+- `GET /precalculadas/{preset}/kepler-trips`: los trips comprimidos.
+- `GET /intersecciones?precalculada={preset}`: los volúmenes de una precalculada.
+
 Intersecciones semaforizadas (fase A del módulo de semáforos, ver `../docs/propuesta-semaforizacion-3d.md`):
 
 - `GET /intersecciones?run_id=`: los 220 semáforos de la red como GeoJSON de puntos, con su nombre, número de accesos, ciclo y volumen simulado. El volumen sale de la corrida indicada, o de la corrida por defecto.
@@ -79,6 +96,7 @@ src/
 │   └── jobs.py          # cola de corridas (una a la vez) y su estado en runs/
 └── etl/
     ├── etl.py           # orquestador del pipeline
+    ├── precalculadas.py # simula los presets una vez y guarda lo que usa el visor
     └── sumo/
         ├── scenarios/default/   # insumos: .net.xml, .taz.xml, .tsv, plantilla .sumocfg
         ├── configuration.py     # rutas por escenario/corrida y constantes
@@ -93,6 +111,7 @@ src/
         ├── fcd.py               # FCD → GeoJSON de puntos
         └── kepler.py            # FCD → GeoJSON de trips (kepler.gl)
 test/                    # tests con pytest
+precalculadas/           # resultados versionados de los presets (python -m etl.precalculadas)
 ```
 
 ## `pyproject.toml`

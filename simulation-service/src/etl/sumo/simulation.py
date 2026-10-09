@@ -53,6 +53,22 @@ class SimulationResult:
     stderr: str
 
 
+def leer_estadisticas(statistics_path: Path) -> dict[str, int]:
+    """Resumen del statistic-output de SUMO (insertados, teleports, colisiones)."""
+    if not statistics_path.is_file():
+        return {}
+    root = ET.parse(statistics_path).getroot()
+    attrs = lambda tag: root.find(tag).attrib if root.find(tag) is not None else {}
+    vehiculos, personas = attrs("vehicles"), attrs("persons")
+    return {
+        "vehiculos_cargados": int(vehiculos.get("loaded", 0)),
+        "vehiculos_insertados": int(vehiculos.get("inserted", 0)),
+        "personas_cargadas": int(personas.get("loaded", 0)),
+        "teleports": int(attrs("teleports").get("total", 0)),
+        "colisiones": int(attrs("safety").get("collisions", 0)),
+    }
+
+
 def _tail(path: Path | None, lines: int = 20) -> str:
     if path is None or not path.is_file():
         return ""

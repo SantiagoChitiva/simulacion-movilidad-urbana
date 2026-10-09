@@ -13,7 +13,7 @@ import {
 } from '@kepler.gl/actions';
 import { processGeojson, processRowObject } from '@kepler.gl/processors';
 import KeplerGl from '@kepler.gl/components';
-import { descargarJson, obtenerIntersecciones, obtenerModos, urlTrips } from './api';
+import { descargarJson, listarPrecalculadas, obtenerIntersecciones, obtenerModos, urlTrips } from './api';
 import { useCorridas, useTamanoVentana } from './hooks';
 import { COLOR_SEMAFORO, hexARgb, modeColorRange, modosPresentes } from './modos';
 import FichaInterseccion from './components/FichaInterseccion';
@@ -108,11 +108,38 @@ const configSemaforos = {
 
 const tickDePintado = () => new Promise((r) => setTimeout(r, 30)); // deja que React pinte antes de bloquear
 
+const fecha = (iso) => new Date(iso).toLocaleString('es-CO');
+const numero = (n) => n.toLocaleString('es-CO');
+
+/** Cómo se nombra una corrida en la interfaz (null = la corrida por defecto del pipeline). */
+const nombreCorrida = (corrida) => {
+  if (!corrida) return 'Corrida por defecto';
+  if (corrida.precalculada) return `${corrida.nombre} (precalculada)`;
+  return `Corrida ${fecha(corrida.creada)}`;
+};
+
+/** Mensaje que confirma qué simulación quedó en el mapa. */
+const avisoDeCarga = (corrida, nueva) => {
+  const viajes = corrida?.resultado?.viajes_generados;
+  const detalle = [];
+  if (corrida?.precalculada) detalle.push(corrida.nombre, 'precalculada');
+  else if (corrida) detalle.push(fecha(corrida.creada));
+  else detalle.push('Corrida por defecto del pipeline');
+  if (viajes != null) detalle.push(`${numero(viajes)} viajes`);
+  return {
+    titulo: nueva ? 'Simulación nueva cargada en el mapa' : 'Simulación cargada en el mapa',
+    detalle: detalle.join(' · '),
+    clave: Date.now(), // reinicia el temporizador aunque el texto se repita
+  };
+};
+
 function Visor() {
   const dispatch = useDispatch();
   const { ancho, alto } = useTamanoVentana();
   const [modos, setModos] = useState([]);
   const [corridaMapa, setCorridaMapa] = useState(null); // null = corrida por defecto
+  const [precalculadas, setPrecalculadas] = useState([]);
+  const [aviso, setAviso] = useState(null);
   const [presentes, setPresentes] = useState([]);
   const [carga, setCarga] = useState(null);
   const [errorCarga, setErrorCarga] = useState(null);
@@ -135,15 +162,16 @@ function Visor() {
   // ---------------------------------------------------------------- trips
 
   const cargarCorrida = useCallback(
-    async (corrida) => {
+    async (corrida, { nueva = false } = {}) => {
       abortar.current?.abort();
       const controlador = new AbortController();
       abortar.current = controlador;
-      const etiqueta = corrida ? `Corrida ${new Date(corrida.creada).toLocaleString('es-CO')}` : 'Corrida por defecto';
+      const etiqueta = nombreCorrida(corrida);
       setErrorCarga(null);
+      setAviso(null);
       setCarga({ etapa: 'descargando', avance: 0, mb: 0, etiqueta });
       try {
-        const geojson = await descargarJson(urlTrips(corrida?.id), {
+        const geojson = await descargarJson(urlTrips(corrida), {
           signal: controlador.signal,
           onProgreso: (avance, bytes) => setCarga({ etapa: 'descargando', avance, mb: bytes / 1e6, etiqueta }),
         });
@@ -157,7 +185,7 @@ function Visor() {
         dispatch(
           addDataToMap({
             datasets: {
-              info: { label: corrida ? `Simulación (${corrida.preset})` : 'Simulación SUMO – Usaquén', id: DATASET_TRIPS },
+              info: { label: corrida ? `Simulación – ${corrida.nombre ?? corrida.preset}` : 'Simulación SUMO – Usaquén', id: DATASET_TRIPS },
               data: processGeojson(geojson),
             },
             options: { centerMap: false, readOnly: false, keepExistingConfig: true },
@@ -169,6 +197,7 @@ function Visor() {
         setPresentes(modosCorrida);
         setCorridaMapa(corrida);
         setCarga(null);
+        setAviso(avisoDeCarga(corrida, nueva));
       } catch (e) {
         setCarga(null);
         if (e.name !== 'AbortError') setErrorCarga(e.message); // cancelar deja la corrida anterior
@@ -178,14 +207,22 @@ function Visor() {
   );
 
   const cancelarCarga = useCallback(() => abortar.current?.abort(), []);
+  const descartarAviso = useCallback(() => setAviso(null), []);
 
-  const corridas = useCorridas(cargarCorrida); // al terminar una simulación se carga sola
+  // al terminar una simulación se carga sola
+  const corridas = useCorridas((corrida) => cargarCorrida(corrida, { nueva: true }));
 
   useEffect(() => {
     // kepler abre "Add Data To Map" mientras no hay datos y taparía la tarjeta de carga
     dispatch(toggleModal(null));
     obtenerModos().then(setModos).catch(() => {});
-    cargarCorrida(null);
+    // al abrir se muestra la Encuesta precalculada; sin ella, la corrida por defecto del pipeline
+    listarPrecalculadas()
+      .catch(() => [])
+      .then((lista) => {
+        setPrecalculadas(lista);
+        cargarCorrida(lista.find((p) => p.preset === 'encuesta') ?? null);
+      });
   }, [cargarCorrida, dispatch]);
 
   // ----------------------------------------------------------- semáforos
@@ -198,7 +235,7 @@ function Visor() {
       return undefined;
     }
     let cancelado = false;
-    obtenerIntersecciones(corridaMapa?.id)
+    obtenerIntersecciones(corridaMapa)
       .then((fc) => {
         if (cancelado) return;
         const filas = fc.features.map((f) => ({
@@ -226,7 +263,7 @@ function Visor() {
     return () => {
       cancelado = true;
     };
-  }, [semaforosVisibles, corridaMapa?.id, dispatch, limpiarInteraccion]);
+  }, [semaforosVisibles, corridaMapa, dispatch, limpiarInteraccion]);
 
   // clic sobre un semáforo → ficha (kepler guarda el objeto clicado en visState.clicked)
   const clicado = useSelector((s) => s.keplerGl?.[MAPA_ID]?.visState?.clicked);
@@ -241,9 +278,9 @@ function Visor() {
   }, [clicado]);
 
   const etiquetas = Object.fromEntries(modos.map((m) => [m.id, m.etiqueta]));
-  const etiquetaCorrida = corridaMapa
-    ? `la corrida del ${new Date(corridaMapa.creada).toLocaleString('es-CO')}`
-    : 'la corrida por defecto';
+  let etiquetaCorrida = 'la corrida por defecto';
+  if (corridaMapa?.precalculada) etiquetaCorrida = `la simulación precalculada "${corridaMapa.nombre}"`;
+  else if (corridaMapa) etiquetaCorrida = `la corrida del ${fecha(corridaMapa.creada)}`;
 
   return (
     <>
@@ -293,14 +330,16 @@ function Visor() {
               <PanelDemanda
                 modos={modos}
                 historial={corridas.historial}
+                precalculadas={precalculadas}
                 corridaCargada={corridaMapa?.id}
+                cargando={!!carga}
                 enCurso={corridas.enCurso}
                 error={corridas.error}
                 onEjecutar={corridas.lanzar}
                 onVerCorrida={cargarCorrida}
               />
             ) : (
-              <FichaInterseccion id={interseccion} runId={corridaMapa?.id} etiquetaCorrida={etiquetaCorrida} />
+              <FichaInterseccion id={interseccion} corrida={corridaMapa} etiquetaCorrida={etiquetaCorrida} />
             )}
           </aside>
         )}
@@ -309,6 +348,8 @@ function Visor() {
           corrida={corridas.activa}
           carga={carga}
           errorCarga={errorCarga}
+          aviso={aviso}
+          onDescartarAviso={descartarAviso}
           onCancelarCorrida={corridas.cancelar}
           onDescartarCorrida={corridas.descartar}
           onCancelarCarga={cancelarCarga}

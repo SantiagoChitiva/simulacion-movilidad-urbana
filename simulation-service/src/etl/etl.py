@@ -1,6 +1,7 @@
 import threading
 from collections.abc import Callable
 from dataclasses import dataclass
+from typing import Any
 
 from .sumo.configuration import DEFAULT_SCENARIO, ScenarioPaths, escribir_sumocfg_corrida
 from .sumo.demanda import DemandaConfig
@@ -8,10 +9,13 @@ from .sumo.duarouter import DuarouterConfig, DuarouterResult, run_duarouter
 from .sumo.fcd import FcdConversionResult, FcdToGeoJsonConfig, convert_fcd_to_geojson
 from .sumo.kepler import KeplerTripsConfig, KeplerTripsResult, convert_fcd_to_kepler_trips
 from .sumo.proceso import Cancelado, revisar_cancelacion
-from .sumo.simulation import SimulationConfig, SimulationResult, run_simulation
+from .sumo.simulation import SimulationConfig, SimulationResult, leer_estadisticas, run_simulation
 from .sumo.trips import TripGenerationConfig, TripGenerationResult, generate_trips
 
-__all__ = ["Cancelado", "run_pipeline", "run_etl", "simulate", "export_geojson", "export_kepler_trips"]
+__all__ = [
+    "Cancelado", "run_pipeline", "run_etl", "simulate", "export_geojson", "export_kepler_trips",
+    "resumen_corrida",
+]
 
 # Recibe la etapa en curso ("generando_demanda", "ruteando", "simulando" o "exportando")
 # y su avance (0-1), o None si la etapa no informa avance
@@ -144,6 +148,16 @@ def run_pipeline(
     geojson = export_geojson(scenario_name, sample_every, run_id) if exportar_puntos else None
     kepler = export_kepler_trips(scenario_name, run_id=run_id, on_progreso=on_progreso, cancelar=cancelar)
     return PipelineResult(etl, simulation, geojson, kepler)
+
+
+def resumen_corrida(resultado: PipelineResult, paths: ScenarioPaths) -> dict[str, Any]:
+    """Lo que se muestra de una corrida terminada: viajes, trips y estadísticas de SUMO."""
+    return {
+        "viajes_generados": resultado.etl.trips.stats.viajes_generados,
+        "viajes_por_modo": dict(resultado.etl.trips.stats.por_modo),
+        "trips_kepler": resultado.kepler.stats.trips_escritos,
+        **leer_estadisticas(paths.statistics),
+    }
 
 
 if __name__ == "__main__":

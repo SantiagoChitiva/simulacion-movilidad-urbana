@@ -6,7 +6,10 @@ from fastapi import Depends, FastAPI, HTTPException, Query
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field, model_validator
 
-from etl.sumo.configuration import CACHE_DIR, DEFAULT_SCENARIO, MAX_VIAJES, ScenarioPaths
+from etl import precalculadas
+from etl.sumo.configuration import (
+    CACHE_DIR, DEFAULT_SCENARIO, MAX_VIAJES, ArchivosPrecalculada, ScenarioPaths,
+)
 from etl.sumo.intersecciones import (
     HORAS_VENTANA, Semaforo, a_feature, catalogo, con_volumenes, volumenes,
 )
@@ -142,6 +145,36 @@ def obtener_simulacion(run_id: str, gestor: Gestor) -> dict:
     return asdict(_corrida(gestor, run_id))
 
 
+# ------------------------------------------------------------ precalculadas
+
+def _precalculada(preset: Preset) -> dict:
+    meta = precalculadas.cargar(preset)
+    if meta is None:
+        raise HTTPException(
+            status_code=404,
+            detail=f"El preset '{preset.value}' no está precalculado. Ejecuta python -m etl.precalculadas",
+        )
+    return meta
+
+
+@app.get("/precalculadas")
+def listar_precalculadas() -> list[dict]:
+    """Presets ya simulados que el visor puede cargar sin correr SUMO."""
+    return precalculadas.listar()
+
+
+@app.get("/precalculadas/{preset}/kepler-trips")
+def kepler_trips_precalculada(preset: Preset) -> FileResponse:
+    """Trips de un preset precalculado. Se envían comprimidos: el navegador los descomprime."""
+    meta = _precalculada(preset)
+    return FileResponse(
+        ArchivosPrecalculada.from_preset(preset.value).trips_gz,
+        media_type="application/json",
+        # Content-Length es el tamaño comprimido; el visor mide el avance con el original
+        headers={"Content-Encoding": "gzip", "X-Tamano-Original": str(meta["tamano_original"])},
+    )
+
+
 # ---------------------------------------------------------- intersecciones
 
 @lru_cache(maxsize=1)
@@ -151,8 +184,11 @@ def _semaforos() -> dict[str, Semaforo]:
     return {s.id: s for s in lista}
 
 
-def _volumenes_corrida(gestor: GestorCorridas, run_id: str | None):
-    """Volúmenes por edge de la corrida pedida (None = la corrida por defecto)."""
+def _volumenes_corrida(gestor: GestorCorridas, run_id: str | None, precalculada: Preset | None = None):
+    """Volúmenes por edge de la corrida pedida (ninguna = la corrida por defecto)."""
+    if precalculada is not None:
+        _precalculada(precalculada)
+        return precalculadas.leer_volumenes(precalculada)
     if run_id is None:
         paths = ScenarioPaths.from_name(DEFAULT_SCENARIO)
     else:
@@ -166,9 +202,11 @@ def _volumenes_corrida(gestor: GestorCorridas, run_id: str | None):
 
 
 @app.get("/intersecciones")
-def listar_intersecciones(gestor: Gestor, run_id: str | None = None) -> dict:
+def listar_intersecciones(
+    gestor: Gestor, run_id: str | None = None, precalculada: Preset | None = None
+) -> dict:
     """Intersecciones semaforizadas como GeoJSON de puntos, con el volumen de la corrida."""
-    vols = _volumenes_corrida(gestor, run_id)
+    vols = _volumenes_corrida(gestor, run_id, precalculada)
     return {
         "type": "FeatureCollection",
         "features": [a_feature(con_volumenes(s, vols)) for s in _semaforos().values()],
@@ -176,12 +214,14 @@ def listar_intersecciones(gestor: Gestor, run_id: str | None = None) -> dict:
 
 
 @app.get("/intersecciones/{tl_id}")
-def obtener_interseccion(tl_id: str, gestor: Gestor, run_id: str | None = None) -> dict:
+def obtener_interseccion(
+    tl_id: str, gestor: Gestor, run_id: str | None = None, precalculada: Preset | None = None
+) -> dict:
     """Ficha de una intersección: accesos, programa del semáforo y volúmenes simulados."""
     semaforo = _semaforos().get(tl_id)
     if semaforo is None:
         raise HTTPException(status_code=404, detail=f"No existe la intersección '{tl_id}'")
-    vols = _volumenes_corrida(gestor, run_id)
+    vols = _volumenes_corrida(gestor, run_id, precalculada)
     return {
         **asdict(con_volumenes(semaforo, vols)),
         "horas_ventana": HORAS_VENTANA,

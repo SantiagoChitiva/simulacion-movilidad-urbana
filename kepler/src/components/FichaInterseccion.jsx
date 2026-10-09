@@ -10,7 +10,7 @@ function Luz({ luz }) {
 }
 
 /** Ficha de una intersección semaforizada: accesos con volumen simulado y programa del semáforo. */
-export default function FichaInterseccion({ id, runId, etiquetaCorrida }) {
+export default function FichaInterseccion({ id, corrida, etiquetaCorrida }) {
   const [ficha, setFicha] = useState(null);
   const [error, setError] = useState(null);
 
@@ -19,13 +19,13 @@ export default function FichaInterseccion({ id, runId, etiquetaCorrida }) {
     let cancelado = false;
     setFicha(null);
     setError(null);
-    obtenerInterseccion(id, runId)
+    obtenerInterseccion(id, corrida)
       .then((f) => !cancelado && setFicha(f))
       .catch((e) => !cancelado && setError(e.message));
     return () => {
       cancelado = true;
     };
-  }, [id, runId]);
+  }, [id, corrida]);
 
   if (!id) {
     return (

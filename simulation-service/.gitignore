@@ -11,3 +11,6 @@ output/
 runs/
 # catálogo de semáforos y otros derivados de la red
 cache/
+# precalculadas/ se versiona, pero solo comprimido (python -m etl.precalculadas)
+precalculadas/**/*.geojson
+precalculadas/**/*.tmp
