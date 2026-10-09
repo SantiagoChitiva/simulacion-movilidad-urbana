@@ -1,3 +1,5 @@
+import gzip
+import json
 import threading
 from collections import Counter
 from types import SimpleNamespace
@@ -158,6 +160,49 @@ def test_ficha_con_volumenes_de_una_corrida(con_catalogo):
     assert {a["edge"]: a["volumen"] for a in ficha["accesos"]}[acceso] == 1
     assert c.get("/intersecciones/no-existe").status_code == 404
     assert c.get("/intersecciones", params={"run_id": "nada"}).status_code == 404
+
+
+# ------------------------------------------------------------ precalculadas
+
+@pytest.fixture
+def con_precalculada(con_catalogo, tmp_path, monkeypatch):
+    """Un preset 'encuesta' precalculado a mano en un directorio temporal."""
+    monkeypatch.setattr(configuration, "PRECALCULADAS_DIR", tmp_path / "precalculadas")
+    archivos = configuration.ArchivosPrecalculada.from_preset("encuesta")
+    archivos.dir.mkdir(parents=True)
+    geojson = b'{"type":"FeatureCollection","features":[]}'
+    archivos.trips_gz.write_bytes(gzip.compress(geojson))
+    archivos.meta.write_text(json.dumps({
+        "preset": "encuesta", "conteos": {"auto": 10}, "semilla": None, "insumos": "x",
+        "tamano_original": len(geojson), "resultado": {"viajes_generados": 10},
+    }), encoding="utf-8")
+    return con_catalogo, archivos
+
+
+def test_precalculadas_listado_y_trips_comprimidos(con_precalculada):
+    (c, _), _ = con_precalculada
+    lista = c.get("/precalculadas").json()
+    assert [p["preset"] for p in lista] == ["encuesta"]
+    assert lista[0]["desactualizada"]   # la huella "x" no es la de los insumos reales
+
+    r = c.get("/precalculadas/encuesta/kepler-trips")
+    assert r.headers["content-encoding"] == "gzip"
+    assert r.headers["x-tamano-original"] == str(len(r.content))   # el cliente ya lo descomprimió
+    assert r.json()["type"] == "FeatureCollection"
+
+    assert c.get("/precalculadas/mas_peatones/kepler-trips").status_code == 404
+    assert c.get("/precalculadas/no_existe/kepler-trips").status_code == 422
+
+
+def test_ficha_con_volumenes_de_una_precalculada(con_precalculada):
+    (c, _), archivos = con_precalculada
+    tl_id = c.get("/intersecciones").json()["features"][0]["properties"]["id"]
+    acceso = c.get(f"/intersecciones/{tl_id}").json()["accesos"][0]["edge"]
+    archivos.volumenes.write_text(json.dumps({acceso: {"auto": 7}}), encoding="utf-8")
+
+    ficha = c.get(f"/intersecciones/{tl_id}", params={"precalculada": "encuesta"}).json()
+    assert {a["edge"]: a["volumen"] for a in ficha["accesos"]}[acceso] == 7
+    assert c.get("/intersecciones", params={"precalculada": "dia_sin_carro"}).status_code == 404
 
 
 # ------------------------------------------------------------ avance y cancelación

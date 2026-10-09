@@ -12,6 +12,9 @@ RUNS_DIR = SUMO_DIR.parents[2] / "runs"
 # Datos derivados de la red que conviene no recalcular (ignorado por git)
 CACHE_DIR = SUMO_DIR.parents[2] / "cache"
 
+# Resultados de los presets ya simulados (versionados): simulation-service/precalculadas/<preset>/
+PRECALCULADAS_DIR = SUMO_DIR.parents[2] / "precalculadas"
+
 # Ventana horaria de la simulación (segundos desde las 00:00)
 HORA_INI = 7 * 3600
 HORA_FIN = 10 * 3600
@@ -71,6 +74,20 @@ class ScenarioPaths:
             vehroute=output / "usaquen_am.vehroute.xml",
             sumo_log=output / "usaquen_am.sumo.log"
         )
+
+
+@dataclass(frozen=True)
+class ArchivosPrecalculada:
+    """Lo que se guarda de un preset ya simulado: solo lo que necesita el visor."""
+    dir: Path
+    trips_gz: Path      # GeoJSON de kepler comprimido; la API lo sirve sin descomprimir
+    volumenes: Path     # volúmenes por edge (reemplaza al vehroute, que pesa ~22 MB)
+    meta: Path          # parámetros, resumen y huella de los insumos
+
+    @classmethod
+    def from_preset(cls, preset: str) -> "ArchivosPrecalculada":
+        d = PRECALCULADAS_DIR / preset
+        return cls(dir=d, trips_gz=d / "trips.geojson.gz", volumenes=d / "volumenes.json", meta=d / "meta.json")
 
 
 def escribir_sumocfg_corrida(paths: ScenarioPaths) -> Path:

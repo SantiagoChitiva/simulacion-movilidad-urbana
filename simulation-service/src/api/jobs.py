@@ -10,14 +10,13 @@ import shutil
 import threading
 import time
 import uuid
-import xml.etree.ElementTree as ET
 from collections.abc import Callable
 from concurrent.futures import Future, ThreadPoolExecutor
 from dataclasses import asdict, dataclass
 from datetime import datetime
 from typing import Any
 
-from etl.etl import Cancelado, run_pipeline
+from etl.etl import Cancelado, resumen_corrida, run_pipeline
 from etl.sumo import configuration
 from etl.sumo.configuration import DEFAULT_SCENARIO, ScenarioPaths
 from etl.sumo.demanda import DemandaConfig
@@ -62,22 +61,6 @@ class Corrida:
 
 def _ahora() -> str:
     return datetime.now().astimezone().isoformat(timespec="seconds")
-
-
-def _leer_estadisticas(paths: ScenarioPaths) -> dict[str, Any]:
-    """Resumen del statistic-output de SUMO (insertados, teleports, colisiones)."""
-    if not paths.statistics.is_file():
-        return {}
-    root = ET.parse(paths.statistics).getroot()
-    attrs = lambda tag: root.find(tag).attrib if root.find(tag) is not None else {}
-    vehiculos, personas = attrs("vehicles"), attrs("persons")
-    return {
-        "vehiculos_cargados": int(vehiculos.get("loaded", 0)),
-        "vehiculos_insertados": int(vehiculos.get("inserted", 0)),
-        "personas_cargadas": int(personas.get("loaded", 0)),
-        "teleports": int(attrs("teleports").get("total", 0)),
-        "colisiones": int(attrs("safety").get("collisions", 0)),
-    }
 
 
 class GestorCorridas:
@@ -214,12 +197,7 @@ class GestorCorridas:
                 on_progreso=lambda etapa, avance: self._progreso(run_id, etapa, avance),
                 cancelar=cancelar,
             )
-            resumen = {
-                "viajes_generados": resultado.etl.trips.stats.viajes_generados,
-                "viajes_por_modo": dict(resultado.etl.trips.stats.por_modo),
-                "trips_kepler": resultado.kepler.stats.trips_escritos,
-                **_leer_estadisticas(paths),
-            }
+            resumen = resumen_corrida(resultado, paths)
             # el FCD pesa ~1,4 GB con la demanda completa y ya quedó convertido para kepler
             paths.fcd.unlink(missing_ok=True)
             self._actualizar(run_id, estado="terminado", avance=1.0, avance_etapa=1.0, resultado=resumen)

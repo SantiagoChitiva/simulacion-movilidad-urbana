@@ -3,6 +3,7 @@ import { obtenerPresets } from '../api';
 
 const PASO = 50;
 const MAX_VIAJES = 100000; // mismo tope que configuration.MAX_VIAJES en la API
+const SEMILLA_SUMOCFG = 42; // <seed> de usaquen-sim.sumocfg: la que se usa si no se pide otra
 
 const GRUPOS = [
   ['particulares', 'Vehículos particulares'],
@@ -14,6 +15,7 @@ const GRUPOS = [
 
 const numero = (n) => n.toLocaleString('es-CO');
 const suma = (obj) => Object.values(obj).reduce((a, b) => a + b, 0);
+const mismosConteos = (a, b) => Object.keys({ ...a, ...b }).every((k) => (a[k] ?? 0) === (b[k] ?? 0));
 
 function FilaModo({ modo, valor, onCambio }) {
   const fijar = (v) => onCambio(Math.max(0, Math.round(Number.isFinite(v) ? v : 0)));
@@ -41,8 +43,21 @@ function FilaModo({ modo, valor, onCambio }) {
   );
 }
 
-/** Parámetros de demanda: preset, viajes por actor vial, escala y semilla; historial de corridas. */
-export default function PanelDemanda({ modos, historial, corridaCargada, enCurso, error, onEjecutar, onVerCorrida }) {
+/**
+ * Parámetros de demanda: preset, viajes por actor vial, escala y semilla; historial de corridas.
+ * Si lo pedido coincide con una simulación precalculada, se carga en vez de simular.
+ */
+export default function PanelDemanda({
+  modos,
+  historial,
+  precalculadas,
+  corridaCargada,
+  cargando,
+  enCurso,
+  error,
+  onEjecutar,
+  onVerCorrida,
+}) {
   const [presets, setPresets] = useState([]);
   const [errorPresets, setErrorPresets] = useState(null);
   const [presetId, setPresetId] = useState('encuesta');
@@ -63,6 +78,15 @@ export default function PanelDemanda({ modos, historial, corridaCargada, enCurso
   const total = suma(conteos);
   const modificado = preset && modos.some((m) => (conteos[m.id] ?? 0) !== (preset.conteos[m.id] ?? 0));
 
+  // precalculada que corresponde exactamente a lo que está en el panel
+  const precalculada = precalculadas.find((p) => p.preset === presetId);
+  const semillaPedida = semilla === '' ? SEMILLA_SUMOCFG : Number(semilla);
+  const lista =
+    !!precalculada &&
+    mismosConteos(conteos, precalculada.conteos) &&
+    semillaPedida === (precalculada.semilla ?? SEMILLA_SUMOCFG);
+  const enMapa = lista && corridaCargada === precalculada.id;
+
   const subtotales = useMemo(() => {
     const s = {};
     for (const m of modos) s[m.grupo] = (s[m.grupo] ?? 0) + (conteos[m.id] ?? 0);
@@ -76,7 +100,7 @@ export default function PanelDemanda({ modos, historial, corridaCargada, enCurso
 
   // al ver una corrida anterior, el panel muestra los parámetros con que se lanzó
   const verCorrida = (id) => {
-    const c = historial.find((x) => x.id === id) ?? null;
+    const c = [...precalculadas, ...historial].find((x) => x.id === id) ?? null;
     if (c) {
       setPresetId(c.preset);
       setConteos({ ...Object.fromEntries(modos.map((m) => [m.id, 0])), ...c.conteos });
@@ -116,6 +140,12 @@ export default function PanelDemanda({ modos, historial, corridaCargada, enCurso
               title={p.descripcion}
             >
               {p.nombre}
+              {precalculadas.some((x) => x.preset === p.id) && (
+                <span className="pd-lista" title="Precalculada: se carga sin correr SUMO">
+                  {' '}
+                  · lista
+                </span>
+              )}
             </button>
           ))}
         </div>
@@ -171,28 +201,56 @@ export default function PanelDemanda({ modos, historial, corridaCargada, enCurso
         </label>
       </section>
 
-      <button
-        type="button"
-        className="pd-ejecutar"
-        onClick={ejecutar}
-        disabled={enCurso || total < 1 || total > MAX_VIAJES || !modos.length}
-        title={enCurso ? 'Espera a que termine o cancela la simulación en curso' : undefined}
-      >
-        {enCurso ? 'Simulación en curso…' : 'Ejecutar simulación'}
-      </button>
+      {lista ? (
+        <>
+          <button type="button" className="pd-ejecutar" onClick={() => onVerCorrida(precalculada)} disabled={cargando || enMapa}>
+            {enMapa ? 'Cargada en el mapa' : 'Cargar simulación'}
+          </button>
+          <p className="pd-nota">
+            Este escenario ya está simulado: se carga en segundos, sin correr SUMO. Cambia algún valor para simular uno
+            nuevo.
+          </p>
+          {precalculada.desactualizada && (
+            <p className="pd-advertencia">
+              Se generó con otra versión de la red o de la encuesta. Regenérala con <code>python -m etl.precalculadas</code>.
+            </p>
+          )}
+        </>
+      ) : (
+        <button
+          type="button"
+          className="pd-ejecutar"
+          onClick={ejecutar}
+          disabled={enCurso || total < 1 || total > MAX_VIAJES || !modos.length}
+          title={enCurso ? 'Espera a que termine o cancela la simulación en curso' : undefined}
+        >
+          {enCurso ? 'Simulación en curso…' : 'Ejecutar simulación'}
+        </button>
+      )}
 
       <section>
         <h3>Corridas</h3>
         <select value={corridaCargada ?? ''} onChange={(e) => verCorrida(e.target.value)} aria-label="Corrida en el mapa">
           <option value="">Corrida por defecto (pipeline)</option>
-          {historial
-            .filter((c) => c.estado === 'terminado')
-            .map((c) => (
-              <option key={c.id} value={c.id}>
-                {new Date(c.creada).toLocaleString('es-CO')} · {presets.find((p) => p.id === c.preset)?.nombre ?? c.preset} ·{' '}
-                {numero(suma(c.conteos))} viajes
-              </option>
-            ))}
+          {precalculadas.length > 0 && (
+            <optgroup label="Precalculadas">
+              {precalculadas.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.nombre} · {numero(suma(c.conteos))} viajes
+                </option>
+              ))}
+            </optgroup>
+          )}
+          <optgroup label="Ejecutadas">
+            {historial
+              .filter((c) => c.estado === 'terminado')
+              .map((c) => (
+                <option key={c.id} value={c.id}>
+                  {new Date(c.creada).toLocaleString('es-CO')} · {presets.find((p) => p.id === c.preset)?.nombre ?? c.preset} ·{' '}
+                  {numero(suma(c.conteos))} viajes
+                </option>
+              ))}
+          </optgroup>
         </select>
       </section>
     </div>

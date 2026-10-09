@@ -112,6 +112,8 @@ html, body, #root {
 /* ---------------------------------------------------------- demanda */
 .pd-presets { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
 .pd-presets button.activo { border-color: var(--pd-acento); color: #fff; background: #1f6f80; }
+.pd-lista { color: var(--pd-ok); font-size: 10px; }
+.pd-presets button.activo .pd-lista { color: #b8f5d0; }
 .pd-descripcion { color: var(--pd-tenue); margin: 6px 0 0; }
 .pd-descripcion strong { color: var(--pd-acento); font-weight: 600; }
 
@@ -136,6 +138,8 @@ html, body, #root {
 .pd-fila button { padding: 2px 0 !important; }
 .pd-aviso { color: var(--pd-acento); }
 .pd-nota { color: var(--pd-tenue); font-size: 11px; margin: 4px 0; }
+.pd-advertencia { color: var(--pd-aviso); font-size: 11px; margin: 4px 0; }
+.pd-advertencia code { font-size: 10px; }
 
 .pd-total {
   display: flex;

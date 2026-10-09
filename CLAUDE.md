@@ -69,6 +69,10 @@ Conventions across `etl/sumo/` modules:
   - User counts are allocated across the survey trips of that mode with largest remainder, so allocation is deterministic. If the preset has no trips for a mode, it falls back to the base survey pool.
   - With `encuesta` + its default counts, the output reproduces the plain survey expansion exactly. Tests assert this.
 - **Runs:** `ScenarioPaths.from_name(name, run_id)` puts generated files in `simulation-service/runs/<run_id>/` (git-ignored). Inputs stay in the scenario. `simulate()` writes a per-run sumocfg from the template (`escribir_sumocfg_corrida`, absolute net/taz/routes, outputs relative). Without `run_id` everything stays in `scenarios/default/` as before.
+- **Precalculated presets** (`src/etl/precalculadas.py`, `python -m etl.precalculadas [preset ...]`): each preset with its default counts is simulated once locally and **committed** to `simulation-service/precalculadas/<preset>/`:
+  - `trips.geojson.gz` (gzip `mtime=0`, so it is reproducible), `volumenes.json`, `meta.json` (with a content sha256 `insumos` of TSV/net/TAZ/sumocfg, CRLF-normalized).
+  - The API serves the `.gz` as-is with `Content-Encoding: gzip` + `X-Tamano-Original` (the browser decompresses it; the viewer measures progress with that header). Uncompressed `*.geojson` there is git-ignored.
+  - The viewer treats them as finished runs (`id: precalculada-<preset>`, `precalculada: true`). When the panel matches one exactly, it shows "Cargar simulación" instead of running. On startup it loads the `encuesta` one if it exists.
 - The API (`src/api/api.py`, FastAPI):
   - Default-run files: `/simulation-output?limit=`, `/kepler-trips`, and `/health`. These return 404 if the pipeline hasn't run yet.
   - Parametrized runs: `/demanda/modos`, `/demanda/presets`, `POST/GET /simulaciones`, and `POST /simulaciones/{id}/cancelar`.
