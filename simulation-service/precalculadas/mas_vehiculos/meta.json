@@ -1,0 +1,41 @@
+{
+  "preset": "mas_vehiculos",
+  "conteos": {
+    "auto": 7354,
+    "bici": 1812,
+    "peaton": 6012,
+    "transporte_publico": 3372,
+    "moto": 2071,
+    "taxi": 2308,
+    "escolar": 419,
+    "especial": 630,
+    "informal": 480,
+    "otro": 189
+  },
+  "semilla": null,
+  "generada": "2026-10-08T15:42:40-05:00",
+  "insumos": "687ea4098a363fb3",
+  "tamano_original": 55387054,
+  "tamano_gz": 10531184,
+  "resultado": {
+    "viajes_generados": 24647,
+    "viajes_por_modo": {
+      "auto": 7354,
+      "bici": 1812,
+      "peaton": 6012,
+      "transporte_publico": 3372,
+      "moto": 2071,
+      "taxi": 2308,
+      "escolar": 419,
+      "especial": 630,
+      "informal": 480,
+      "otro": 189
+    },
+    "trips_kepler": 16068,
+    "vehiculos_cargados": 15213,
+    "vehiculos_insertados": 14404,
+    "personas_cargadas": 9234,
+    "teleports": 254,
+    "colisiones": 58
+  }
+}

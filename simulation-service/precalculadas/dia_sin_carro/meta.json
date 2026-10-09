@@ -1,0 +1,37 @@
+{
+  "preset": "dia_sin_carro",
+  "conteos": {
+    "auto": 0,
+    "bici": 2338,
+    "peaton": 14532,
+    "transporte_publico": 4875,
+    "moto": 0,
+    "taxi": 2094,
+    "escolar": 328,
+    "especial": 480,
+    "informal": 0,
+    "otro": 0
+  },
+  "semilla": null,
+  "generada": "2026-10-09T10:00:25-05:00",
+  "insumos": "687ea4098a363fb3",
+  "tamano_original": 90433853,
+  "tamano_gz": 16019419,
+  "resultado": {
+    "viajes_generados": 24647,
+    "viajes_por_modo": {
+      "bici": 2338,
+      "peaton": 14532,
+      "transporte_publico": 4875,
+      "taxi": 2094,
+      "escolar": 328,
+      "especial": 480
+    },
+    "trips_kepler": 16380,
+    "vehiculos_cargados": 5190,
+    "vehiculos_insertados": 4945,
+    "personas_cargadas": 19257,
+    "teleports": 106,
+    "colisiones": 134
+  }
+}

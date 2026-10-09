@@ -1,0 +1,41 @@
+{
+  "preset": "encuesta",
+  "conteos": {
+    "auto": 4374,
+    "bici": 1812,
+    "peaton": 10901,
+    "transporte_publico": 3372,
+    "moto": 1557,
+    "taxi": 1726,
+    "escolar": 150,
+    "especial": 255,
+    "informal": 350,
+    "otro": 150
+  },
+  "semilla": null,
+  "generada": "2026-10-08T15:32:20-05:00",
+  "insumos": "687ea4098a363fb3",
+  "tamano_original": 63737417,
+  "tamano_gz": 11714547,
+  "resultado": {
+    "viajes_generados": 24647,
+    "viajes_por_modo": {
+      "auto": 4374,
+      "bici": 1812,
+      "peaton": 10901,
+      "transporte_publico": 3372,
+      "moto": 1557,
+      "taxi": 1726,
+      "escolar": 150,
+      "especial": 255,
+      "informal": 350,
+      "otro": 150
+    },
+    "trips_kepler": 15900,
+    "vehiculos_cargados": 10324,
+    "vehiculos_insertados": 9592,
+    "personas_cargadas": 14123,
+    "teleports": 209,
+    "colisiones": 80
+  }
+}
