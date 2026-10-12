@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { obtenerPresets } from '../api';
+import { obtenerPresets, obtenerEstilos } from '../api';
 
 const PASO = 50;
 const MAX_VIAJES = 100000; // mismo tope que configuration.MAX_VIAJES en la API
@@ -64,6 +64,8 @@ export default function PanelDemanda({
   const [conteos, setConteos] = useState({});
   const [escala, setEscala] = useState(100);
   const [semilla, setSemilla] = useState('');
+  const [estilos, setEstilos] = useState([]);
+  const [estiloId, setEstiloId] = useState('normal');
 
   useEffect(() => {
     obtenerPresets()
@@ -72,6 +74,9 @@ export default function PanelDemanda({
         setConteos({ ...p.find((x) => x.id === 'encuesta').conteos });
       })
       .catch((e) => setErrorPresets(`No se pudo conectar con la API: ${e.message}`));
+    obtenerEstilos()
+      .then(setEstilos)
+      .catch(() => {});
   }, []);
 
   const preset = presets.find((p) => p.id === presetId);
@@ -120,6 +125,7 @@ export default function PanelDemanda({
       preset: presetId,
       conteos: Object.fromEntries(Object.entries(conteos).filter(([, v]) => v > 0)),
       semilla: semilla === '' ? null : Number(semilla),
+      estilo: estiloId,
     });
 
   const nota = modos.find((m) => m.nota)?.nota;
@@ -156,6 +162,29 @@ export default function PanelDemanda({
           </p>
         )}
       </section>
+
+      {estilos.length > 0 && (
+        <section>
+          <h3>Estilo de conducción</h3>
+          <div className="pd-presets">
+            {estilos.map((e) => (
+              <button
+                type="button"
+                key={e.id}
+                className={e.id === estiloId ? 'activo' : ''}
+                onClick={() => setEstiloId(e.id)}
+                title={e.descripcion}
+              >
+                {e.etiqueta}
+              </button>
+            ))}
+          </div>
+          {estilos.find((e) => e.id === estiloId) && (
+            <p className="pd-descripcion">{estilos.find((e) => e.id === estiloId).descripcion}</p>
+          )}
+          <p className="pd-nota">* Solo afecta a vehículos motorizados.</p>
+        </section>
+      )}
 
       <section>
         <h3>Viajes por actor vial (07:00–10:00)</h3>

@@ -1,20 +1,26 @@
 import threading
+import xml.etree.ElementTree as ET
 from collections.abc import Callable
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any
 
-from .sumo.configuration import DEFAULT_SCENARIO, ScenarioPaths, escribir_sumocfg_corrida
+from .sumo.cierres import CierreVial, escribir_rerouter
+from .sumo.configuration import DEFAULT_SCENARIO, RUNS_DIR, ScenarioPaths, escribir_sumocfg_corrida
 from .sumo.demanda import DemandaConfig
 from .sumo.duarouter import DuarouterConfig, DuarouterResult, run_duarouter
+from .sumo.enums.vehicle_type import VehicleType
+from .sumo.estilos import EstiloConductor, PARAMS_ESTILO
 from .sumo.fcd import FcdConversionResult, FcdToGeoJsonConfig, convert_fcd_to_geojson
 from .sumo.kepler import KeplerTripsConfig, KeplerTripsResult, convert_fcd_to_kepler_trips
 from .sumo.proceso import Cancelado, revisar_cancelacion
 from .sumo.simulation import SimulationConfig, SimulationResult, leer_estadisticas, run_simulation
+from .sumo.subred import SubredConfig, SubredDemandaConfig, SubredStats, recortar_demanda, recortar_red
 from .sumo.trips import TripGenerationConfig, TripGenerationResult, generate_trips
 
 __all__ = [
     "Cancelado", "run_pipeline", "run_etl", "simulate", "export_geojson", "export_kepler_trips",
-    "resumen_corrida",
+    "resumen_corrida", "run_recorte",
 ]
 
 # Recibe la etapa en curso ("generando_demanda", "ruteando", "simulando" o "exportando")
@@ -75,6 +81,7 @@ def simulate(
     run_id: str | None = None,
     on_progreso: OnProgreso = _sin_aviso,
     cancelar: threading.Event | None = None,
+    additional_files: list[Path] | None = None,
 ) -> SimulationResult:
     paths = ScenarioPaths.from_name(scenario_name, run_id)
 
@@ -82,7 +89,7 @@ def simulate(
         raise FileNotFoundError(f"Falta {paths.routes}. Ejecuta run_etl() antes de simular.")
 
     if paths.sumocfg != paths.sumocfg_template:
-        escribir_sumocfg_corrida(paths)
+        escribir_sumocfg_corrida(paths, additional_files=additional_files)
 
     paths.fcd.parent.mkdir(parents=True, exist_ok=True)  # SUMO no crea output/
 
@@ -139,11 +146,45 @@ def run_pipeline(
     exportar_puntos: bool = True,
     on_progreso: OnProgreso = _sin_aviso,
     cancelar: threading.Event | None = None,
+    estilo: EstiloConductor | None = None,
+    cierres: list[CierreVial] | None = None,
 ) -> PipelineResult:
     """Encuesta → trips → duarouter → SUMO → GeoJSON. Lanza Cancelado si se activa `cancelar`."""
+    # Preparar archivos adicionales para el sumocfg
+    additional_files: list[Path] = []
+
+    if run_id:
+        run_dir = RUNS_DIR / run_id
+        run_dir.mkdir(parents=True, exist_ok=True)
+
+        # Estilo de conducción: genera vtypes adicional con parámetros modificados
+        if estilo is not None and estilo != EstiloConductor.normal:
+            from .sumo.vtypes import VTYPES
+            params = PARAMS_ESTILO[estilo]
+            raiz = ET.Element("additional")
+            for vt in VTYPES.values():
+                attrs = vt.to_xml_attrs()
+                if attrs.get("vClass") not in ("pedestrian", "bicycle"):
+                    attrs.update(params)
+                ET.SubElement(raiz, "vType", attrs)
+            estilo_xml = run_dir / "vtypes_estilo.xml"
+            tree = ET.ElementTree(raiz)
+            ET.indent(tree, space="  ")
+            tree.write(str(estilo_xml), encoding="UTF-8", xml_declaration=True)
+            additional_files.append(estilo_xml)
+
+        # Cierres viales: genera rerouter XML
+        if cierres:
+            cierres_xml = run_dir / "cierres.xml"
+            escribir_rerouter(cierres, cierres_xml)
+            additional_files.append(cierres_xml)
+
     etl = run_etl(scenario_name, demanda, run_id, on_progreso, cancelar)
     revisar_cancelacion(cancelar)
-    simulation = simulate(scenario_name, seed, run_id, on_progreso, cancelar)
+    simulation = simulate(
+        scenario_name, seed, run_id, on_progreso, cancelar,
+        additional_files=additional_files if additional_files else None,
+    )
     revisar_cancelacion(cancelar)
     geojson = export_geojson(scenario_name, sample_every, run_id) if exportar_puntos else None
     kepler = export_kepler_trips(scenario_name, run_id=run_id, on_progreso=on_progreso, cancelar=cancelar)
@@ -157,6 +198,57 @@ def resumen_corrida(resultado: PipelineResult, paths: ScenarioPaths) -> dict[str
         "viajes_por_modo": dict(resultado.etl.trips.stats.por_modo),
         "trips_kepler": resultado.kepler.stats.trips_escritos,
         **leer_estadisticas(paths.statistics),
+    }
+
+
+def run_recorte(
+    semaforo_lon: float,
+    semaforo_lat: float,
+    run_id_origen: str | None,
+    radio_m: float,
+    run_id_destino: str,
+    on_progreso: OnProgreso = _sin_aviso,
+    cancelar: threading.Event | None = None,
+) -> dict[str, Any]:
+    """Recorta la red y la demanda alrededor de un semáforo y deja el resultado en runs/<run_id_destino>/.
+
+    Retorna un dict con las rutas de los archivos creados.
+    """
+    paths_origen = ScenarioPaths.from_name(DEFAULT_SCENARIO, run_id_origen) if run_id_origen else ScenarioPaths.from_name(DEFAULT_SCENARIO)
+    destino_dir = RUNS_DIR / run_id_destino
+    destino_dir.mkdir(parents=True, exist_ok=True)
+
+    zona_net = destino_dir / "zona.net.xml"
+    zona_rou = destino_dir / "zona.rou.xml"
+
+    stats = SubredStats()
+
+    on_progreso("recortando_red", None)
+    cfg_red = SubredConfig(
+        net_origen=paths_origen.net,
+        centro_lonlat=(semaforo_lon, semaforo_lat),
+        radio_m=radio_m,
+        destino=zona_net,
+    )
+    resultado_red = recortar_red(cfg_red, stats=stats, cancelar=cancelar)
+    revisar_cancelacion(cancelar)
+
+    on_progreso("recortando_demanda", None)
+    if paths_origen.routes.is_file():
+        cfg_demanda = SubredDemandaConfig(
+            zona_net=zona_net,
+            rou_xml=paths_origen.routes,
+            destino=zona_rou,
+            net_orig=paths_origen.net,
+            vehroute_xml=paths_origen.vehroute if paths_origen.vehroute.is_file() else None,
+        )
+        recortar_demanda(cfg_demanda, stats=stats, cancelar=cancelar)
+
+    return {
+        "zona_net": str(zona_net),
+        "zona_rou": str(zona_rou) if zona_rou.is_file() else None,
+        "bbox": resultado_red.bbox,
+        "demanda_recortada": stats.demanda_recortada,
     }
 
 

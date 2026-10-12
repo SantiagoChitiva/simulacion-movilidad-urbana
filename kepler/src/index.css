@@ -316,3 +316,74 @@ html, body, #root {
 .fi-luz.amarillo { background: #ffd21f; }
 .fi-luz.rojo { background: #f25f5c; }
 .fi-luz.apagado { background: transparent; box-shadow: inset 0 0 0 1px var(--pd-tenue); }
+
+/* ─── sub-pestañas de la ficha ─────────────────────────────────────────────── */
+.fi-subpestanas { display: flex; gap: 4px; margin-bottom: 8px; flex-wrap: wrap; }
+.fi-subpestanas button {
+  flex: 1; padding: 4px 8px; font: var(--pd-fuente); cursor: pointer;
+  background: var(--pd-fondo-2); color: var(--pd-tenue);
+  border: 1px solid var(--pd-borde); border-radius: 4px;
+}
+.fi-subpestanas button.activa { background: var(--pd-acento); color: #fff; border-color: var(--pd-acento); }
+.fi-subpestanas .fi-btn-3d {
+  flex: 0; padding: 4px 10px; font-weight: 600;
+  background: #1f3040; color: var(--pd-acento); border-color: var(--pd-acento);
+}
+.fi-subpestanas .fi-btn-3d:hover { background: var(--pd-acento); color: #fff; }
+
+/* ─── configuración de programa ───────────────────────────────────────────── */
+.fi-config-controles { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+.fi-config-controles label { display: flex; flex-direction: column; gap: 2px; font-size: 11px; color: var(--pd-tenue); }
+.fi-config-controles select,
+.fi-config-controles input { background: var(--pd-fondo-2); color: var(--pd-texto); border: 1px solid var(--pd-borde); border-radius: 3px; padding: 3px 6px; font: var(--pd-fuente); }
+.fi-input-duracion { width: 52px; }
+.fi-input-estado { width: 100%; font-family: monospace; letter-spacing: 1px; }
+.fi-config-acciones { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.fi-config-acciones button {
+  padding: 4px 10px; font: var(--pd-fuente); cursor: pointer;
+  background: var(--pd-fondo-2); color: var(--pd-texto);
+  border: 1px solid var(--pd-borde); border-radius: 4px;
+}
+.fi-config-acciones button:hover { border-color: var(--pd-acento); }
+.fi-config-acciones button:disabled { opacity: 0.4; cursor: not-allowed; }
+.fi-guardar { background: var(--pd-acento) !important; color: #fff !important; border-color: var(--pd-acento) !important; }
+.fi-ok { color: var(--pd-ok) !important; }
+
+/* ─── vista 3D ─────────────────────────────────────────────────────────────── */
+.vista3d-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.65); z-index: 200;
+  display: flex; align-items: center; justify-content: center;
+}
+.vista3d-panel {
+  background: var(--pd-fondo); border: 1px solid var(--pd-borde); border-radius: 8px;
+  padding: 12px; width: 600px; max-width: 96vw; max-height: 90vh;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.vista3d-encabezado { display: flex; align-items: center; gap: 8px; }
+.vista3d-encabezado h3 { flex: 1; margin: 0; font-size: 13px; color: #fff; }
+.vista3d-estado { font-size: 11px; padding: 2px 8px; border-radius: 10px; }
+.vista3d-estado.conectado { background: rgba(46,204,113,0.2); color: var(--pd-ok); }
+.vista3d-estado.desconectado { background: rgba(242,95,92,0.2); color: var(--pd-error); }
+.vista3d-canvas { width: 100%; border-radius: 4px; background: #111; }
+.vista3d-controles { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.vista3d-controles button {
+  padding: 4px 10px; font: var(--pd-fuente); cursor: pointer;
+  background: var(--pd-fondo-2); color: var(--pd-texto);
+  border: 1px solid var(--pd-borde); border-radius: 4px;
+}
+.vista3d-controles button.activo { border-color: var(--pd-acento); color: var(--pd-acento); }
+.vista3d-controles button:disabled { opacity: 0.4; cursor: not-allowed; }
+.vista3d-tiempo { margin-left: auto; font-size: 11px; color: var(--pd-tenue); font-variant-numeric: tabular-nums; }
+
+/* ── Tabla de comparación (TablaComparacion.jsx) ─────────────────────────── */
+.tc-tabla td { vertical-align: middle; }
+.tc-ref td { background: rgba(255,255,255,0.05); }
+.tc-mejor { color: var(--pd-ok); font-weight: 600; }
+.tc-barra-contenedor { height: 4px; background: var(--pd-fondo-2); border-radius: 2px; margin-top: 3px; }
+.tc-barra { height: 100%; border-radius: 2px; }
+.tc-badge {
+  display: inline-block; font-size: 10px; padding: 1px 5px;
+  border-radius: 8px; margin-left: 4px; font-weight: 600;
+}
+.tc-badge.ok { background: rgba(76,175,80,0.2); color: var(--pd-ok); }
+.tc-badge.nok { background: rgba(229,57,53,0.2); color: var(--pd-error); }

@@ -90,21 +90,30 @@ class ArchivosPrecalculada:
         return cls(dir=d, trips_gz=d / "trips.geojson.gz", volumenes=d / "volumenes.json", meta=d / "meta.json")
 
 
-def escribir_sumocfg_corrida(paths: ScenarioPaths) -> Path:
+def escribir_sumocfg_corrida(
+    paths: "ScenarioPaths",
+    additional_files: list[Path] | None = None,
+) -> Path:
     """Copia la plantilla .sumocfg al directorio de la corrida apuntando a sus insumos.
 
     Red, TAZ y rutas quedan con ruta absoluta; las salidas (output/...) siguen
     relativas, así que SUMO las escribe junto al .sumocfg de la corrida.
+
+    `additional_files` permite añadir archivos adicionales (vtypes de estilo, rerouters de
+    cierre vial) además del TAZ; se concatenan separados por comas.
     """
     tree = ET.parse(paths.sumocfg_template)
+    extras: list[Path] = additional_files or []
+    all_additionals = [paths.taz] + extras
     valores = {
         "net-file": paths.net,
         "route-files": paths.routes,
-        "additional-files": paths.taz,
+        "additional-files": ",".join(str(p.resolve()) for p in all_additionals),
     }
     for elem in tree.getroot().iter():
         if elem.tag in valores:
-            elem.set("value", str(valores[elem.tag].resolve()))
+            elem.set("value", str(valores[elem.tag]) if elem.tag == "additional-files"
+                     else str(Path(valores[elem.tag]).resolve()))
 
     paths.sumocfg.parent.mkdir(parents=True, exist_ok=True)
     tree.write(paths.sumocfg, encoding="UTF-8", xml_declaration=True)
