@@ -3,8 +3,11 @@ import { COLOR_SEMAFORO } from '../modos';
 
 const numero = (n) => n.toLocaleString('es-CO');
 
-/** Franja arriba al centro: color de cada actor vial de la corrida cargada y la capa de semáforos. */
-export default function LeyendaModos({ presentes, etiquetas, semaforosVisibles, onAlternarSemaforos }) {
+/** Franja arriba al centro: color de cada actor vial de la corrida cargada, semáforos y priorización. */
+export default function LeyendaModos({
+  presentes, etiquetas, semaforosVisibles, priorizacionVisible,
+  onAlternarSemaforos, onAlternarPriorizacion,
+}) {
   if (!presentes.length) return null;
   const porTrips = [...presentes].sort((a, b) => b.trips - a.trips);
   return (
@@ -27,6 +30,18 @@ export default function LeyendaModos({ presentes, etiquetas, semaforosVisibles, 
         <span className="leyenda-punto semaforo" style={{ background: COLOR_SEMAFORO }} />
         Semáforos
       </button>
+      {onAlternarPriorizacion && (
+        <button
+          type="button"
+          className={`leyenda-item leyenda-boton ${priorizacionVisible ? 'activo' : ''}`}
+          onClick={onAlternarPriorizacion}
+          aria-pressed={priorizacionVisible}
+          title="Mostrar u ocultar la priorización de cruces sin semáforo"
+        >
+          <span className="leyenda-punto" style={{ background: '#f44336' }} />
+          Priorización
+        </button>
+      )}
     </nav>
     </div>
   );

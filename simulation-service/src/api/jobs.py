@@ -12,14 +12,16 @@ import time
 import uuid
 from collections.abc import Callable
 from concurrent.futures import Future, ThreadPoolExecutor
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 from datetime import datetime
 from typing import Any
 
 from etl.etl import Cancelado, resumen_corrida, run_pipeline
 from etl.sumo import configuration
 from etl.sumo.configuration import DEFAULT_SCENARIO, ScenarioPaths
+from etl.sumo.cierres import CierreVial
 from etl.sumo.demanda import DemandaConfig
+from etl.sumo.estilos import EstiloConductor
 
 ESTADOS_FINALES = {"terminado", "error", "cancelada"}
 
@@ -57,6 +59,8 @@ class Corrida:
     avance_etapa: float | None = None       # None = la etapa no informa avance
     error: str | None = None
     resultado: dict[str, Any] | None = None
+    estilo: str = EstiloConductor.normal.value
+    cierres: list[dict[str, Any]] = field(default_factory=list)
 
 
 def _ahora() -> str:
@@ -129,9 +133,16 @@ class GestorCorridas:
 
     # --------------------------------------------------------- pública
 
-    def crear(self, demanda: DemandaConfig, semilla: int | None = None) -> Corrida:
+    def crear(
+        self,
+        demanda: DemandaConfig,
+        semilla: int | None = None,
+        estilo: "EstiloConductor | None" = None,
+        cierres: "list[CierreVial] | None" = None,
+    ) -> Corrida:
         run_id = f"{datetime.now():%Y%m%d-%H%M%S}-{uuid.uuid4().hex[:6]}"
         ahora = _ahora()
+        from etl.sumo.estilos import EstiloConductor as _E
         corrida = Corrida(
             id=run_id,
             preset=demanda.preset.value,
@@ -139,12 +150,17 @@ class GestorCorridas:
             semilla=semilla,
             creada=ahora,
             actualizada=ahora,
+            estilo=(estilo or _E.normal).value,
+            cierres=[
+                {"edge_id": c.edge_id, "hora_inicio_s": c.hora_inicio_s, "hora_fin_s": c.hora_fin_s}
+                for c in (cierres or [])
+            ],
         )
         with self._lock:
             self._corridas[run_id] = corrida
             self._guardar(corrida)
         self._cancelaciones[run_id] = threading.Event()
-        self._futuros[run_id] = self._pool.submit(self._correr, run_id, demanda, semilla)
+        self._futuros[run_id] = self._pool.submit(self._correr, run_id, demanda, semilla, estilo, cierres)
         return corrida
 
     def cancelar(self, run_id: str) -> Corrida:
@@ -181,7 +197,14 @@ class GestorCorridas:
 
     # ---------------------------------------------------------- worker
 
-    def _correr(self, run_id: str, demanda: DemandaConfig, semilla: int | None) -> None:
+    def _correr(
+        self,
+        run_id: str,
+        demanda: DemandaConfig,
+        semilla: int | None,
+        estilo: "EstiloConductor | None" = None,
+        cierres: "list[CierreVial] | None" = None,
+    ) -> None:
         paths = self.paths(run_id)
         cancelar = self._cancelaciones[run_id]
         try:
@@ -196,6 +219,8 @@ class GestorCorridas:
                 exportar_puntos=False,   # el visor solo usa los trips de kepler
                 on_progreso=lambda etapa, avance: self._progreso(run_id, etapa, avance),
                 cancelar=cancelar,
+                estilo=estilo,
+                cierres=cierres,
             )
             resumen = resumen_corrida(resultado, paths)
             # el FCD pesa ~1,4 GB con la demanda completa y ya quedó convertido para kepler

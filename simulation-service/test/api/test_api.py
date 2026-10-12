@@ -14,7 +14,7 @@ from etl.sumo import configuration
 from etl.sumo.configuration import DEFAULT_SCENARIO, ScenarioPaths
 
 
-def _pipeline_falso(scenario, *, seed, demanda, run_id, exportar_puntos, on_progreso, cancelar):
+def _pipeline_falso(scenario, *, seed, demanda, run_id, exportar_puntos, on_progreso, cancelar, **_kwargs):
     """Hace lo mínimo que el gestor espera de run_pipeline, sin SUMO."""
     for etapa in ("generando_demanda", "ruteando", "simulando", "exportando"):
         on_progreso(etapa, 0.5)
@@ -220,7 +220,7 @@ class _PipelineBloqueado:
         self.simulando = threading.Event()
         self.liberar = threading.Event()
 
-    def __call__(self, scenario, *, seed, demanda, run_id, exportar_puntos, on_progreso, cancelar):
+    def __call__(self, scenario, *, seed, demanda, run_id, exportar_puntos, on_progreso, cancelar, **_kwargs):
         paths = ScenarioPaths.from_name(scenario, run_id)
         paths.routes.parent.mkdir(parents=True, exist_ok=True)
         paths.routes.write_text("<routes/>", encoding="utf-8")   # archivo "pesado" parcial
