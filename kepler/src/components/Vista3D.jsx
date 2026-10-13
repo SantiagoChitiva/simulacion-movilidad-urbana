@@ -242,8 +242,14 @@ export default function Vista3D({ id, corrida, onCerrar }) {
         </div>
 
         <p className="pd-nota">
-          Vista simplificada: carriles en azul oscuro, vehículos en puntos de colores, peatones en rosa.
-          El cuadro superior izquierdo muestra el estado del semáforo y el tiempo restante de la fase.
+          <strong>Vista en vivo:</strong> carriles (azul oscuro), vehículos (azul=auto, naranja=moto,
+          verde=bici, amarillo=taxi), peatones (rosa). Esquina superior izquierda: fase activa y tiempo restante.
+        </p>
+        <p className="pd-nota">
+          ⚠ Para que el mapa enfoque la intersección y no toda Usaquén, primero crea una zona con
+          <em> POST /intersecciones/{'{id}'}/escenarios</em> (recorte de red, Fase B).
+          Sin zona se usa la red completa y los vehículos aparecen dispersos.
+          La <strong>comparación cuantitativa</strong> (con/sin semáforo) está en la pestaña <strong>Comparar</strong>.
         </p>
       </div>
     </div>
