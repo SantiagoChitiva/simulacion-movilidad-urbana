@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { crearSesion3D, obtenerGeometria3D, cerrarSesion3D } from '../api';
 
-const WS_BASE = window.location.origin.replace(/^http/, 'ws').replace(':5173', ':8000');
-const WS_API = `${WS_BASE}/api`;
+// Usa el proxy de Vite (/api/* → ws://localhost:8000/*) para evitar problemas de CORS
+const WS_API = `${window.location.origin.replace(/^http/, 'ws')}/api`;
 
 // Colores por estado de semáforo (letra SUMO → CSS)
 const COLOR_LUZ = { G: '#00e676', g: '#00c853', y: '#ffd600', Y: '#ff6f00', r: '#f44336', R: '#b71c1c' };
