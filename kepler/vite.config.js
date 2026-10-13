@@ -9,6 +9,7 @@ export default defineConfig({
       // /api/* -> API de simulation-service (uvicorn api.api:app)
       '/api': {
         target: 'http://localhost:8000',
+        ws: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
       },
     },
