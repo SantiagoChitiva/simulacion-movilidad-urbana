@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { crearSesion3D, obtenerGeometria3D, cerrarSesion3D } from '../api';
+import { crearSesion3D, obtenerGeometria3D, cerrarSesion3D, crearEscenarioZona, obtenerEscenario } from '../api';
 
 // Usa el proxy de Vite (/api/* → ws://localhost:8000/*) para evitar problemas de CORS
 const WS_API = `${window.location.origin.replace(/^http/, 'ws')}/api`;
@@ -28,21 +28,50 @@ export default function Vista3D({ id, corrida, onCerrar }) {
   const [estado, setEstado] = useState({ pausada: false, velocidad: 1, tiempo: 0 });
   const [errorMsg, setErrorMsg] = useState(null);
   const [conectado, setConectado] = useState(false);
+  const [preparando, setPreparando] = useState('Recortando zona…');
 
-  // Abrir sesión al montar
+  // Espera a que un escenario de zona esté terminado (polling)
+  const esperarZona = async (runId, señal) => {
+    for (let i = 0; i < 120; i++) {
+      if (señal.aborted) throw new DOMException('cancelado', 'AbortError');
+      const est = await obtenerEscenario(runId);
+      if (est.estado === 'terminado') return runId;
+      if (est.estado === 'error') throw new Error(`Zona: ${est.error ?? 'error desconocido'}`);
+      await new Promise((r) => setTimeout(r, 2000));
+    }
+    throw new Error('Tiempo de espera al crear la zona agotado');
+  };
+
+  // Abrir sesión al montar: primero crea zona, luego abre la sesión TraCI
   useEffect(() => {
-    let cancelado = false;
-    crearSesion3D(id, { escenario_run_id: corrida?.id ?? null, programa_id: '0' })
-      .then(async ({ sid: nuevoSid }) => {
-        if (cancelado) return;
+    const abortar = new AbortController();
+    (async () => {
+      try {
+        // Paso 1: recortar la red alrededor de la intersección
+        setPreparando('Recortando zona (300 m)…');
+        const { run_id: zonaId } = await crearEscenarioZona(id, {
+          run_id: corrida?.id ?? null,
+          radio_m: 300,
+        });
+        await esperarZona(zonaId, abortar.signal);
+
+        // Paso 2: crear sesión TraCI con la zona recortada
+        setPreparando('Iniciando simulación…');
+        const { sid: nuevoSid } = await crearSesion3D(id, {
+          escenario_run_id: zonaId,
+          programa_id: '0',
+        });
+        if (abortar.signal.aborted) return;
         setSid(nuevoSid);
+        setPreparando(null);
+
         const geo = await obtenerGeometria3D(nuevoSid).catch(() => null);
-        if (!cancelado) setGeometria(geo);
-      })
-      .catch((e) => !cancelado && setErrorMsg(e.message));
-    return () => {
-      cancelado = true;
-    };
+        if (!abortar.signal.aborted) setGeometria(geo);
+      } catch (e) {
+        if (e.name !== 'AbortError') setErrorMsg(e.message);
+      }
+    })();
+    return () => abortar.abort();
   }, [id, corrida]);
 
   // Conectar WebSocket al obtener el sid
@@ -207,7 +236,7 @@ export default function Vista3D({ id, corrida, onCerrar }) {
         <header className="vista3d-encabezado">
           <h3>Vista 3D · {id}</h3>
           <span className={`vista3d-estado ${conectado ? 'conectado' : 'desconectado'}`}>
-            {conectado ? 'En vivo' : sid ? 'Conectando…' : 'Iniciando…'}
+            {conectado ? 'En vivo' : preparando ?? (sid ? 'Conectando…' : 'Iniciando…')}
           </span>
           <button type="button" className="pd-cerrar" onClick={onCerrar} aria-label="Cerrar vista 3D">×</button>
         </header>
@@ -246,10 +275,10 @@ export default function Vista3D({ id, corrida, onCerrar }) {
           verde=bici, amarillo=taxi), peatones (rosa). Esquina superior izquierda: fase activa y tiempo restante.
         </p>
         <p className="pd-nota">
-          ⚠ Para que el mapa enfoque la intersección y no toda Usaquén, primero crea una zona con
-          <em> POST /intersecciones/{'{id}'}/escenarios</em> (recorte de red, Fase B).
-          Sin zona se usa la red completa y los vehículos aparecen dispersos.
-          La <strong>comparación cuantitativa</strong> (con/sin semáforo) está en la pestaña <strong>Comparar</strong>.
+          La vista recorta automáticamente la red a 300 m alrededor de la intersección antes de simular,
+          por eso tarda unos segundos al abrir.
+          Para la <strong>comparación cuantitativa</strong> (métricas con distintos programas de semáforo)
+          usa la pestaña <strong>Comparar</strong> de la ficha.
         </p>
       </div>
     </div>
