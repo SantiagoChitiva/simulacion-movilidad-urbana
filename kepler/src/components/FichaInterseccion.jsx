@@ -322,8 +322,17 @@ export default function FichaInterseccion({ id, corrida, etiquetaCorrida, onAbri
   if (!id) {
     return (
       <div className="pd-contenido fi-vacia">
-        <p>Haz clic en un semáforo del mapa (puntos cian) para ver su ficha.</p>
-        <p className="pd-nota">Si no los ves, actívalos con "Semáforos" en la leyenda de arriba.</p>
+        <p>Haz clic en un semáforo del mapa para ver su ficha.</p>
+        <p className="pd-nota">
+          Primero activa los semáforos con el botón <strong>Semáforos</strong> en la leyenda superior.
+          Aparecen como puntos cian; al hacer clic en uno se abre aquí.
+        </p>
+        <p className="pd-nota">
+          <strong>Ficha</strong> — accesos y volumen simulado por acceso, programa de fases actual.<br />
+          <strong>Configurar</strong> — edita las duraciones de cada fase o calcula tiempos óptimos con Webster.<br />
+          <strong>Comparar</strong> — lanza simulaciones con distintos programas y compara métricas (demora, cola, peatones).<br />
+          <strong>3D ▶</strong> — simulación en vivo de la intersección en tiempo real (requiere zona recortada).
+        </p>
       </div>
     );
   }

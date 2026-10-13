@@ -56,10 +56,10 @@ const configPriorizacion = {
           type: 'point',
           config: {
             dataId: DATASET_PRIORIZACION,
-            label: 'Priorización',
+            label: 'Priorización de cruces',
             columns: { lat: 'lat', lng: 'lng', altitude: null },
             isVisible: true,
-            visConfig: { radius: 18, opacity: 0.85, filled: true },
+            visConfig: { radius: 20, opacity: 0.9, filled: true },
           },
           visualChannels: {
             colorField: { name: 'nivel', type: 'string' },
@@ -67,6 +67,18 @@ const configPriorizacion = {
           },
         },
       ],
+      interactionConfig: {
+        tooltip: {
+          enabled: true,
+          fieldsToShow: {
+            [DATASET_PRIORIZACION]: [
+              { name: 'nivel', format: null },
+              { name: 'puntaje_total', format: null },
+              { name: 'distancia_semaforo_m', format: null },
+            ],
+          },
+        },
+      },
     },
   },
 };
@@ -328,14 +340,17 @@ function Visor() {
     obtenerPriorizacion(corridaMapa)
       .then((fc) => {
         if (cancelado) return;
-        const filas = fc.features.map((f) => ({
-          id: f.properties.id,
-          nivel: f.properties.nivel,
-          puntaje_total: f.properties.puntaje_total,
-          distancia_semaforo_m: f.properties.distancia_semaforo_m,
-          lng: f.geometry.coordinates[0],
-          lat: f.geometry.coordinates[1],
-        }));
+        // Solo mostrar cruces con acción concreta (prioritario / recomendado)
+        const filas = fc.features
+          .filter((f) => f.properties.nivel === 'prioritario' || f.properties.nivel === 'recomendado')
+          .map((f) => ({
+            id: f.properties.id,
+            nivel: f.properties.nivel,
+            puntaje_total: f.properties.puntaje_total,
+            distancia_semaforo_m: f.properties.distancia_semaforo_m,
+            lng: f.geometry.coordinates[0],
+            lat: f.geometry.coordinates[1],
+          }));
         dispatch(removeDataset(DATASET_PRIORIZACION));
         dispatch(
           addDataToMap({
