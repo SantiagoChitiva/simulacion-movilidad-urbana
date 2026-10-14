@@ -14,7 +14,13 @@ métricas agregadas y la telemetría del actor seguido (velocidad, aceleración,
 riesgo, acción que está tomando y decisiones posibles en el próximo cruce).
 
 Comandos del cliente (JSON): {"pausa": bool}, {"velocidad": x}, {"periodo_riesgo": s},
-{"seguir": id}, {"inyectar": {"tipo": "auto", "acceso": edge, "giro": "s", "estilo": "normal"}}.
+{"seguir": id}, {"inyectar": {"tipo": "auto", "acceso": edge, "giro": "s", "estilo": "normal"}},
+{"manual": bool}, {"control": {"acelerar": -1|0|1}}, {"giro": "s"|"l"|"r"}.
+
+Modo manual: el usuario maneja al actor seguido con el teclado. Los comandos se aplican
+igual en los dos lados (la comparación sigue siendo justa) y SUMO conserva sus chequeos
+de seguridad (speedMode por defecto): el actor no atraviesa un rojo ni choca, pero el
+usuario decide cuándo acelerar, frenar y por dónde girar en el próximo cruce.
 """
 import asyncio
 import json
@@ -48,6 +54,9 @@ CALENTAMIENTO_S = 240           # tiempo simulado antes de empezar a transmitir
 DURACION_S = 3600               # duración simulable de la comparación
 HISTORIAL_RIESGO = 40           # muestras de riesgo que se guardan por lado
 RADIO_CRUCE_M = 60              # vehículos a esta distancia del cruce entran en las métricas
+ACEL_MANUAL = 1.8               # m/s² con la tecla de acelerar (modo manual)
+FRENO_MANUAL = 3.5              # m/s² con la tecla de frenar
+VEL_PEATON = {-1: 0.05, 0: 1.3, 1: 2.4}   # m/s del peatón: detenerse, caminar, trotar
 
 # motivos de cambio de carril de SUMO (getLaneChangeStatePretty) que se muestran en el HUD
 _MOTIVOS_CAMBIO = {
@@ -63,6 +72,7 @@ class Comparacion:
     cid: str
     nodo_id: str
     run_dir: Path
+    nodos: list[str] = field(default_factory=list)   # todos los nodos del cruce
     estado: str = "preparando"          # preparando | lista | error
     etapa: str | None = None
     info: dict[str, Any] = field(default_factory=dict)
@@ -75,6 +85,8 @@ class Comparacion:
     pausada: bool = False
     velocidad: float = 1.0
     periodo_riesgo: float = 2.0
+    manual: bool = False
+    acelerar: int = 0                    # -1 frena, 0 mantiene, 1 acelera (modo manual)
     comandos: "queue.Queue[dict]" = field(default_factory=queue.Queue)
     activa: bool = True
 
@@ -94,11 +106,13 @@ class GestorComparaciones:
         self._comparaciones: dict[str, Comparacion] = {}
         self._lock = threading.Lock()
         # inyectable en las pruebas: (comparación, nodo, lon, lat, run_id_origen, intensidades) -> info
+        # (los nodos del cruce van en comp.nodos)
         self._preparar = preparar or _preparar_zona
 
     def crear(
         self, nodo_id: str, lon: float, lat: float,
         run_id_origen: str | None = None, intensidades: dict[str, float] | None = None,
+        nodos: list[str] | None = None,
     ) -> Comparacion:
         with self._lock:
             self._limpiar_expiradas()
@@ -107,7 +121,10 @@ class GestorComparaciones:
                     f"Ya hay {MAX_COMPARACIONES} comparaciones 3D abiertas. Cierra una antes de abrir otra."
                 )
             cid = f"sem-{datetime.now():%Y%m%d-%H%M%S}-{uuid.uuid4().hex[:6]}"
-            comp = Comparacion(cid=cid, nodo_id=nodo_id, run_dir=self._runs_dir / cid)
+            comp = Comparacion(
+                cid=cid, nodo_id=nodo_id, run_dir=self._runs_dir / cid,
+                nodos=list(dict.fromkeys([nodo_id, *(nodos or [])])),
+            )
             self._comparaciones[cid] = comp
 
         def _trabajo() -> None:
@@ -170,10 +187,10 @@ def _preparar_zona(comp: Comparacion, nodo_id: str, lon: float, lat: float,
 
     info = run_escenario_semaforo(
         nodo_id, lon, lat, comp.cid, run_id_origen=run_id_origen,
-        intensidades=intensidades, on_progreso=_progreso,
+        intensidades=intensidades, on_progreso=_progreso, nodos=comp.nodos,
     )
     comp.etapa = "armando_escena"
-    comp.geometria = geometria_escena(comp.run_dir, nodo_id, _nombres_vias())
+    comp.geometria = geometria_escena(comp.run_dir, nodo_id, _nombres_vias(), comp.nodos, info["tl_id"])
     info["nodo"] = {k: comp.geometria["nodo"][k] for k in ("x", "y", "z", "lon", "lat", "tipo_actual")}
     info["geometria_accesos"] = comp.geometria["accesos"]
     return info
@@ -216,7 +233,8 @@ def escribir_sumocfg_lado(destino: Path, net: Path, demanda: list[str], vtypes: 
 class Lado:
     """Una instancia de SUMO con TraCI y el estado que se le sigue por frame."""
 
-    def __init__(self, nombre: str, sumocfg: Path, nodo: dict, tl_id: str | None) -> None:
+    def __init__(self, nombre: str, sumocfg: Path, nodo: dict, tl_id: str | None,
+                 laterales: set[str] | None = None) -> None:
         import traci
         from sumolib.miscutils import getFreeSocketPort
         import traci.constants as tc
@@ -224,6 +242,7 @@ class Lado:
         self.nombre = nombre
         self.nodo = nodo
         self.tl_id = tl_id
+        self.laterales = laterales or set()   # accesos de la vía que cede (espera lateral)
         self._tc = tc
         self._traci_error = traci.exceptions.TraCIException
         sumo = shutil.which("sumo")
@@ -244,6 +263,7 @@ class Lado:
         self.max_riesgo = 0.0
         self.conflictos = 0
         self.espera_cruce: dict[str, float] = {}
+        self.v_objetivo = 0.0
         self._carril_previo: dict[str, tuple[int, str | None, float]] = {}
 
     # -- simulación
@@ -282,7 +302,10 @@ class Lado:
         vehiculos, personas = [], []
         nx, ny = self.nodo["x"], self.nodo["y"]
         cerca, detenidos, espera, suma_v = 0, 0, 0.0, 0.0
+        espera_lateral = 0.0
         for vid, d in self.con.vehicle.getAllSubscriptionResults().items():
+            if not d.get(tc.VAR_ROAD_ID):
+                continue   # insertado por TraCI pero aún esperando entrar a la red
             x, y, z = d[tc.VAR_POSITION3D]
             v = d[tc.VAR_SPEED]
             vehiculos.append([vid, d[tc.VAR_TYPE].split("@")[0], round(x, 2), round(y, 2), round(z, 2),
@@ -294,6 +317,8 @@ class Lado:
                     detenidos += 1
                 espera += d[tc.VAR_WAITING_TIME]
                 self.espera_cruce[vid] = max(self.espera_cruce.get(vid, 0.0), d[tc.VAR_WAITING_TIME])
+            if d[tc.VAR_ROAD_ID] in self.laterales:
+                espera_lateral = max(espera_lateral, d[tc.VAR_WAITING_TIME])
         for pid, d in self.con.person.getAllSubscriptionResults().items():
             x, y, z = d[tc.VAR_POSITION3D]
             personas.append([pid, "peaton", round(x, 2), round(y, 2), round(z, 2),
@@ -304,6 +329,7 @@ class Lado:
             "en_cruce": cerca, "detenidos_cruce": detenidos,
             "velocidad_media_cruce_kmh": round(3.6 * suma_v / cerca, 1) if cerca else None,
             "espera_media_cruce_s": round(sum(esperas) / len(esperas), 1) if esperas else 0.0,
+            "espera_lateral_s": round(espera_lateral, 1),
             "colisiones": self.colisiones, "conflictos": self.conflictos,
             "riesgo_max": round(self.max_riesgo),
         }
@@ -354,9 +380,20 @@ class Lado:
         self.conflictos += len(vistos)
 
     # -- actor seguido
+    def ruta(self, ego: str) -> list[str]:
+        """Edges que le faltan por recorrer al vehículo (vacío si no es un vehículo)."""
+        if self.existe(ego) != "vehiculo":
+            return []
+        try:
+            edges = list(self.con.vehicle.getRoute(ego))
+            return edges[self.con.vehicle.getRouteIndex(ego):]
+        except self._traci_error:
+            return []
+
     def existe(self, ego: str) -> str | None:
-        """'vehiculo', 'persona' o None."""
-        if ego in self.con.vehicle.getAllSubscriptionResults():
+        """'vehiculo', 'persona' o None (un vehículo que espera entrar a la red no cuenta)."""
+        d = self.con.vehicle.getAllSubscriptionResults().get(ego)
+        if d is not None and d.get(self._tc.VAR_ROAD_ID):
             return "vehiculo"
         if ego in self.con.person.getAllSubscriptionResults():
             return "persona"
@@ -365,6 +402,13 @@ class Lado:
     def telemetria(self, ego: str, actores_veh: list, medir_riesgo: bool) -> dict | None:
         clase = self.existe(ego)
         if clase is None:
+            if ego in self.con.vehicle.getAllSubscriptionResults():
+                # la vía de entrada está llena (p. ej. por la cola del semáforo)
+                return {
+                    "id": ego, "clase": "vehiculo", "pendiente": True, "velocidad_kmh": 0.0,
+                    "accion": {"codigo": "esperando_entrar", "texto": "Esperando espacio para entrar a la vía"},
+                    "opciones": [], "riesgo": None, "historial_riesgo": [],
+                }
             return None
         try:
             if clase == "vehiculo":
@@ -491,6 +535,50 @@ class Lado:
             "accion": {"codigo": codigo, "texto": accion}, "opciones": [], "giro_elegido": None,
         }
 
+    # -- modo manual
+    def tomar_control(self, ego: str, manual: bool) -> None:
+        """Pasa el actor al usuario (velocidad fija a la actual) o se lo devuelve a SUMO."""
+        clase = self.existe(ego)
+        try:
+            if clase == "vehiculo":
+                if manual:
+                    self.v_objetivo = self.con.vehicle.getSpeed(ego)
+                    self.con.vehicle.setSpeed(ego, self.v_objetivo)
+                else:
+                    self.con.vehicle.setSpeed(ego, -1)
+            elif clase == "persona":
+                self.con.person.setSpeed(ego, VEL_PEATON[0])
+        except self._traci_error:
+            pass
+
+    def controlar(self, ego: str, acelerar: int, dt: float) -> None:
+        """Ajusta la velocidad pedida; SUMO la limita por seguridad (líder, rojo, prioridad)."""
+        clase = self.existe(ego)
+        try:
+            if clase == "vehiculo":
+                veh = self.con.vehicle
+                actual = veh.getSpeed(ego)
+                tope = veh.getAllowedSpeed(ego) * 1.15
+                if acelerar > 0:
+                    self.v_objetivo = min(max(self.v_objetivo, actual) + ACEL_MANUAL * dt, tope)
+                elif acelerar < 0:
+                    self.v_objetivo = max(min(self.v_objetivo, actual) - FRENO_MANUAL * dt, 0.0)
+                veh.setSpeed(ego, self.v_objetivo)
+            elif clase == "persona":
+                self.con.person.setSpeed(ego, VEL_PEATON[max(-1, min(1, acelerar))])
+        except self._traci_error:
+            pass
+
+    def girar(self, ego: str, destino: str) -> bool:
+        """Cambia el destino del vehículo para que tome otro giro en el cruce."""
+        if self.existe(ego) != "vehiculo":
+            return False
+        try:
+            self.con.vehicle.changeTarget(ego, destino)
+            return True
+        except self._traci_error:
+            return False
+
     # -- inyección
     def _permite_peatones(self, edge: str) -> bool:
         try:
@@ -560,7 +648,11 @@ def correr_comparacion(comp: Comparacion, cola: asyncio.Queue, bucle: asyncio.Ab
     lados: list[Lado] = []
     try:
         publicar({"tipo": "estado", "mensaje": "Iniciando las dos simulaciones…"})
-        lados = [Lado("a", cfg_a, nodo, None), Lado("b", cfg_b, nodo, comp.nodo_id)]
+        laterales = {a["edge"] for a in info["geometria_accesos"] if a.get("lateral")}
+        lados = [
+            Lado("a", cfg_a, nodo, None, laterales),
+            Lado("b", cfg_b, nodo, info.get("tl_id", comp.nodo_id), laterales),
+        ]
         t = lados[0].tiempo()
         fin_calentamiento = t + CALENTAMIENTO_S
         while comp.activa and t < fin_calentamiento:
@@ -570,6 +662,7 @@ def correr_comparacion(comp: Comparacion, cola: asyncio.Queue, bucle: asyncio.Ab
             publicar({"tipo": "estado", "mensaje": f"Calentando la simulación ({int(100 * (t - HORA_INI) / CALENTAMIENTO_S)} %)…"})
 
         ego: str | None = None
+        pendiente_control = False
         n_ego = 0
         proximo_riesgo = t
         fin = HORA_INI + CALENTAMIENTO_S + DURACION_S
@@ -580,8 +673,30 @@ def correr_comparacion(comp: Comparacion, cola: asyncio.Queue, bucle: asyncio.Ab
                     cmd = comp.comandos.get_nowait()
                 except queue.Empty:
                     break
-                if "seguir" in cmd:
+                if "manual" in cmd:
+                    comp.manual, comp.acelerar = bool(cmd["manual"]), 0
+                    if ego:
+                        for lado in lados:
+                            lado.tomar_control(ego, comp.manual)
+                elif "control" in cmd:
+                    comp.acelerar = max(-1, min(1, int((cmd["control"] or {}).get("acelerar", 0))))
+                elif "giro" in cmd:
+                    if ego:
+                        try:
+                            destino = _destino_giro(info["geometria_accesos"], lados[0].ruta(ego), cmd["giro"])
+                        except ValueError as exc:
+                            publicar({"tipo": "aviso", "mensaje": str(exc)})
+                        else:
+                            if all([lado.girar(ego, destino) for lado in lados]):
+                                publicar({"tipo": "giro", "direccion": cmd["giro"]})
+                elif "seguir" in cmd:
+                    if ego and comp.manual:
+                        for lado in lados:
+                            lado.tomar_control(ego, False)
                     ego = cmd["seguir"] or None
+                    if ego and comp.manual:
+                        for lado in lados:
+                            lado.tomar_control(ego, True)
                     for lado in lados:
                         lado.historial.clear()
                         lado.riesgo = None
@@ -598,6 +713,8 @@ def correr_comparacion(comp: Comparacion, cola: asyncio.Queue, bucle: asyncio.Ab
                         for lado in lados:
                             lado.inyectar(nuevo, tipo, edges, estilo)
                         ego = nuevo
+                        # en manual, el actor recién insertado se toma apenas aparezca en la red
+                        pendiente_control = comp.manual
                         for lado in lados:
                             lado.historial.clear()
                             lado.riesgo = None
@@ -614,6 +731,12 @@ def correr_comparacion(comp: Comparacion, cola: asyncio.Queue, bucle: asyncio.Ab
             t = round(t + pasos * PASO_S, 3)
             for lado in lados:
                 lado.avanzar(t)
+            if ego and comp.manual:
+                for lado in lados:
+                    if pendiente_control and lado.existe(ego):
+                        lado.tomar_control(ego, True)
+                    lado.controlar(ego, comp.acelerar, pasos * PASO_S)
+                pendiente_control = pendiente_control and not all(lado.existe(ego) for lado in lados)
 
             medir = t >= proximo_riesgo
             if medir:
@@ -629,6 +752,7 @@ def correr_comparacion(comp: Comparacion, cola: asyncio.Queue, bucle: asyncio.Ab
                     "ego": lado.telemetria(ego, vehiculos, medir) if ego else None,
                 }
             frame["ego"] = ego
+            frame["manual"] = comp.manual
             publicar(frame)
 
             # ritmo de tiempo real: pasos * PASO_S segundos simulados a la velocidad pedida
@@ -653,6 +777,20 @@ def _ruta_inyeccion(accesos: list[dict], acceso: str | None, giro: str | None) -
     giros = candidatos[0]["giros"]
     elegido = next((g for g in giros if g["direccion"] == giro), None) or giros[0]
     return elegido["edges"]
+
+
+def _destino_giro(accesos: list[dict], ruta: list[str], giro: str) -> str:
+    """Último edge de la ruta del giro pedido, en el acceso al cruce por el que viene el actor."""
+    en_ruta = set(ruta)
+    for acceso in accesos:
+        if acceso["edge"] not in en_ruta:
+            continue
+        elegido = next((g for g in acceso["giros"] if g["direccion"] == giro), None)
+        if elegido is None:
+            disponibles = ", ".join(g["direccion"] for g in acceso["giros"])
+            raise ValueError(f"Desde este acceso no se puede girar '{giro}' (se puede: {disponibles}).")
+        return elegido["edges"][-1]
+    raise ValueError("El actor ya no va hacia el cruce estudiado.")
 
 
 def mensaje_json(texto: str) -> dict | None:

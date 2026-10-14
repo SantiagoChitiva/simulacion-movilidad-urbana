@@ -89,3 +89,14 @@ def test_ruta_inyeccion():
     assert _ruta_inyeccion(_ACCESOS, "e2", "s") == ["b", "e2", "z"]   # giro no disponible: el primero
     with pytest.raises(ValueError):
         _ruta_inyeccion(_ACCESOS, "nada", "s")
+
+
+def test_destino_giro():
+    from api.comparacion3d import _destino_giro
+
+    accesos = [{"edge": "a", "giros": [{"direccion": "s", "edges": ["a", "b", "c"]}, {"direccion": "l", "edges": ["a", "x", "y"]}]}]
+    assert _destino_giro(accesos, ["a", "b", "c"], "l") == "y"
+    with pytest.raises(ValueError, match="no se puede girar 'r'"):
+        _destino_giro(accesos, ["a", "b"], "r")
+    with pytest.raises(ValueError, match="ya no va"):
+        _destino_giro(accesos, ["z"], "s")

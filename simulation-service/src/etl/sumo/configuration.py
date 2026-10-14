@@ -18,6 +18,10 @@ PRECALCULADAS_DIR = SUMO_DIR.parents[2] / "precalculadas"
 # Huellas de edificios (Microsoft Building Footprints) para la escena 3D (versionado en la raíz)
 EDIFICIOS_GEOJSON = SUMO_DIR.parents[3] / "data" / "processed" / "edificios_ms.geojson"
 
+# Evidencia para priorizar cruces (python -m etl.sumo.evidencia): siniestros SDM y POIs OSM
+SINIESTROS_GEOJSON = SUMO_DIR.parents[3] / "data" / "processed" / "siniestros_usaquen.geojson"
+POIS_GEOJSON = SUMO_DIR.parents[3] / "data" / "processed" / "pois_usaquen.geojson"
+
 # Ventana horaria de la simulación (segundos desde las 00:00)
 HORA_INI = 7 * 3600
 HORA_FIN = 10 * 3600
