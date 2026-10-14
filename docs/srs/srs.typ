@@ -106,6 +106,10 @@
     - RD-003, RD-004 y RNF-USA-001, con sus casos de prueba CP-029 a CP-042.
     Se reescriben las interfaces de usuario, software y comunicaciones (visor web, WebSocket, TraCI).],
     [Equipo EFSS],
+    [2.1], [2026-10-14], [2.8, 3.1, 3.3, 4.4, 5.3],
+    [Priorización con la lógica de Semáforos de Barranquilla y evidencia externa (RF-032 reescrito, RF-045). Simulador 3D: escena y HUD como la
+    referencia, edificios OSM + Microsoft, un poste por acceso, sin cámara libre (RF-034, RF-035) y modo manual (RF-044). Casos CP-043 y CP-044.],
+    [Equipo EFSS],
   ),
   caption: [Historial de cambios.]
 )

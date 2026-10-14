@@ -137,8 +137,10 @@ Cada requerimiento está asociado a la fuente que lo originó:
     `cierres.py`, `precalculadas.py`],
     [`RF-028` a `RF-032`], [Sprint 4 de la VFP: escenarios de control de tráfico (semáforos nuevos y ajuste de fases)], [`intersecciones.py`,
     `programas_tls.py`, `priorizacion.py`; `docs/propuesta-semaforizacion-3d.md`],
-    [`RF-033` a `RF-042`], [Solicitud del equipo: ver de forma tangible, en 3D y lado a lado, el efecto de un semáforo propuesto siguiendo a un
-    actor], [`docs/propuesta-semaforizacion-3d.md`; `api/comparacion3d.py`],
+    [`RF-033` a `RF-042`, `RF-044`], [Solicitud del equipo: ver de forma tangible, en 3D y lado a lado, el efecto de un semáforo propuesto siguiendo a
+    un actor, con una captura de referencia "tipo videojuego"], [`docs/propuesta-semaforizacion-3d.md`; `api/comparacion3d.py`],
+    [`RF-032`, `RF-045`], [Revisión del equipo: demasiados candidatos; adoptar la lógica de Semáforos de Barranquilla], [`priorizacion.py`,
+    `evidencia.py`],
     [`RF-043`], [Limitación documentada del transporte público como caminata], [`simulation-service/README.md`],
   ),
   caption: [Trazabilidad de requerimientos seleccionados hacia su origen.]

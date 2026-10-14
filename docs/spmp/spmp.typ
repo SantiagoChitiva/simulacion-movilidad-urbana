@@ -54,6 +54,8 @@
     - herramientas reales del sistema (8.2), criterios de aceptación (8.3), WBS y calendarización con los Sprints 6 a 8 (9.3);
     - riesgos R8 a R11 (12.2), ítems de configuración y estructura del repositorio (12.3, Anexo A) y nueva métrica de pruebas automatizadas (12.4).],
     [Equipo EFSS],
+    [2.1], [14/10/2026], [Alcance del Sprint 7 (9.3): escena 3D tipo videojuego, modo manual del actor seguido y priorización de cruces con reglas y
+    evidencia (siniestros de la SDM, colegios y centros de salud de OSM), siguiendo el proyecto Semáforos de Barranquilla.], [Equipo EFSS],
   ),
   caption: [Historial de cambios del documento.],
 ) <tabHistorial>

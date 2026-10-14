@@ -274,7 +274,7 @@ crítico.
     [Terminada],
     [F3.6], [_(v2.0)_ Sprint 6: Intersecciones y semaforización (ficha, programas, Webster, zonas, comparación, priorización)], [40 h], [11–12],
     [F3.5], [—], [Terminada],
-    [F3.7], [_(v2.0)_ Sprint 7: Simulador 3D comparativo (semáforo propuesto, lockstep, 3ª persona, HUD, riesgo, minimapa)], [40 h], [12–13],
+    [F3.7], [_(v2.0)_ Sprint 7: Simulador 3D comparativo (semáforo propuesto, lockstep, 3ª persona, HUD, riesgo, minimapa). _(v2.1)_ Escena tipo videojuego, modo manual y priorización con la lógica de Semáforos de Barranquilla (siniestros SDM, colegios y salud OSM)], [40 h], [12–13],
     [F3.6], [—], [Terminada],
     [F3.8], [_(v2.0)_ Sprint 8: Reporte de la comparación 3D, programa editable del semáforo propuesto, transporte público con GTFS], [40 h],
     [13–14], [F3.7], [F4.1], [Pendiente],
