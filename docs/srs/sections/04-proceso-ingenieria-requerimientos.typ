@@ -105,6 +105,7 @@ La convención de identificadores adoptada es la siguiente:
     [`RNF-PORT-NNN`],[No Funcional -- Portabilidad],     [`RNF-PORT-001`],
     [`RNF-REP-NNN`], [No Funcional -- Reproducibilidad], [`RNF-REP-001`],
     [`RNF-OBS-NNN`], [No Funcional -- Observabilidad],   [`RNF-OBS-001`],
+    [`RNF-USA-NNN`], [No Funcional -- Usabilidad],       [`RNF-USA-001`],
   ),
   caption: [Convención de identificadores de requerimientos.]
 ) <tabIds>
@@ -132,6 +133,13 @@ Cada requerimiento está asociado a la fuente que lo originó:
     [`RF-014`], [Criterio de validación acordado con el director (GEH < 5 en ≥ 85%)], [Acta de reunión Semana 3],
     [`RD-001`], [Supuesto de hardware del SPMP (8 GB RAM, 4 núcleos)], [SPMP Sección 6.3 -- Supuestos y Restricciones],
     [`RNF-REP-001`], [Requisito científico del proyecto de grado (resultados verificables)], [Acta de reunión Semana 1 -- objetivo de reproducibilidad],
+    [`RF-021` a `RF-025`], [Objetivo de evaluar políticas de movilidad (VFP §2, mediano plazo: día sin carro, cierres)], [`demanda.py`, `estilos.py`,
+    `cierres.py`, `precalculadas.py`],
+    [`RF-028` a `RF-032`], [Sprint 4 de la VFP: escenarios de control de tráfico (semáforos nuevos y ajuste de fases)], [`intersecciones.py`,
+    `programas_tls.py`, `priorizacion.py`; `docs/propuesta-semaforizacion-3d.md`],
+    [`RF-033` a `RF-042`], [Solicitud del equipo: ver de forma tangible, en 3D y lado a lado, el efecto de un semáforo propuesto siguiendo a un
+    actor], [`docs/propuesta-semaforizacion-3d.md`; `api/comparacion3d.py`],
+    [`RF-043`], [Limitación documentada del transporte público como caminata], [`simulation-service/README.md`],
   ),
   caption: [Trazabilidad de requerimientos seleccionados hacia su origen.]
 ) <tabTrazabilidadOrigen>
@@ -187,6 +195,8 @@ prioridad del requerimiento incrementa el número mayor (1.0 #sym.arrow 2.0). Lo
 De acuerdo con el SPMP, se establecen las siguientes restricciones para evitar la expansión descontrolada del alcance (*scope creep*):
 
 - No se aceptarán nuevos requerimientos funcionales de prioridad Alta después de la Semana 5 del proyecto (inicio de la Fase 3 -- construcción).
+  Los requerimientos F8 y F9 (v2.0) se incorporaron como parte del Sprint 4 (escenarios de control de tráfico) y del Sprint 5 (módulo web)
+  definidos en la VFP; su incorporación queda sujeta a la aprobación del director según el flujo de control de cambios.
 - Cambios en los criterios de aceptación de requerimientos de validación (RF-014, RNF-REP-001) requieren aprobación del director en todos los casos.
 - Cualquier cambio que implique modificar los formatos de salida del pipeline (extensiones de archivo, estructura XML) debe ser evaluado contra la
   compatibilidad con SUMO 1.19 antes de ser aprobado.

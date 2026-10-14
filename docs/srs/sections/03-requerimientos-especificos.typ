@@ -13,7 +13,8 @@
   prioridad: "",
   modulo: "",
   version: "1.0",
-  fecha: ""
+  fecha: "",
+  estado: none,
 ) = figure(
   table(
     columns: (auto, 1fr),
@@ -26,6 +27,7 @@
     [*Criterio de medición*],[#criterio],
     [*Prioridad*],           [#prioridad],
     [*Módulo asociado*],     [#modulo],
+    ..if estado != none { ([*Estado (v2.0)*], [#estado]) },
     [*Versión*],             [#version],
     [*Fecha*],               [#fecha],
   ),
@@ -72,29 +74,39 @@ cumplir con las siguientes características:
 
 === Interfaces con el Usuario
 
-El proyecto se basa en un sistema de línea de comandos (CLI) sin interfaz gráfica en su versión 1.0. La interacción con el usuario se realiza
-exclusivamente a través de:
+En la versión 2.0 el usuario final interactúa con el sistema a través del *visor web* (`kepler/`), una aplicación React servida por Vite que consume la
+API de `simulation-service`. La línea de comandos queda para el equipo de desarrollo (pipeline por defecto y precalculadas). La interfaz está en
+español y se organiza así:
 
-- *Línea de comandos (CLI):* el usuario invoca el pipeline mediante un comando Python con argumentos que especifican la fuente de datos, el período de
-  análisis (AM/PM/nocturno) y los parámetros de escenario. Ejemplo:
-  #block(
-    fill: luma(235),
-    inset: 8pt,
-    radius: 4pt,
-    width: 100%,
-  )[
-    `python pipeline.py --encuesta datos/encuesta2023.xlsx --periodo AM --localidad Usaquen`
-  ]
-- *Archivo de configuración YAML:* los parámetros avanzados de simulación (velocidades por
-  tipo de vía, factores de expansión, umbrales de validación GEH) se definen en un archivo
-  `config.yaml` que el usuario edita antes de ejecutar el pipeline.
-- *Logs de consola y archivo:* el sistema imprime el progreso de cada fase en consola y escribe
-  un archivo `pipeline.log` con el detalle de registros procesados, descartados y métricas de
-  validación.
-- *Archivos de salida:* los artefactos generados (`.net.xml`, `.taz.xml`, `.od`, `.rou.xml`,
-  `.vtype.xml`) se depositan en un directorio de salida configurable por el usuario.
+- *Mapa principal (kepler.gl):* anima los viajes simulados por modo con una capa de trayectorias, una línea de tiempo y una leyenda de modos en la parte
+  superior. La leyenda tiene además los interruptores de las capas *Semáforos* (intersecciones semaforizadas) y *Priorización* (cruces sin semáforo
+  puntuados).
+- *Panel derecho con pestañas:*
+  - *Demanda:* preset, conteos por modo, escala, semilla y estilo de conducción. Muestra el historial de corridas y las simulaciones precalculadas.
+  - *Intersección:* ficha del semáforo con accesos, volúmenes y fases, edición del programa, cálculo de Webster y comparación de programas.
+  - *Cierres:* lista de vías cerradas para la próxima corrida.
+  - *Semaforizar:* elige un cruce candidato, ajusta el tráfico de fondo y abre el simulador 3D.
+- *Tarjeta de actividad:* barras de progreso de la corrida en curso o de la descarga, con botón de cancelar.
+- *Simulador 3D comparativo (pantalla completa):*
+  - *Vistas:* dos vistas 3D lado a lado, "Sin semáforo (actual)" y "Con semáforo propuesto", y cámara en tercera persona trasera, aérea o libre.
+  - *HUD por lado:* velocímetro, índice de riesgo con historial, acción del conductor, decisiones en el próximo cruce y métricas del cruce.
+  - *Minimapa:* mapa 2D tipo Maps en la esquina superior derecha.
+  - *Panel de actores y vías:* para lanzar o seguir actores.
 
-No se requiere resolución de pantalla específica ni dispositivos de entrada distintos al teclado.
+La interfaz se ajusta al tamaño de la ventana; en pantallas de menos de 900 px de ancho las dos vistas 3D se apilan verticalmente. Se usa con ratón y
+teclado; la cámara libre admite arrastre y rueda.
+
+#figure(
+  table(
+    columns: (auto, 1fr),
+    table.header([*Comando (desarrollo)*], [*Uso*]),
+    [`python -m etl.etl`], [Pipeline completo del escenario por defecto: TSV → trips → duarouter → SUMO → GeoJSON/trips de kepler.],
+    [`python -m etl.precalculadas [preset ...]`], [Simula los presets con sus conteos por defecto y guarda los resultados versionados en `precalculadas/`.],
+    [`uvicorn api.api:app`], [Levanta la API en el puerto 8000 (documentación interactiva en `/docs`).],
+    [`npm run dev`], [Levanta el visor web en el puerto 5173 con proxy `/api` → `localhost:8000` (HTTP y WebSocket).],
+  ),
+  caption: [Comandos de línea de comandos del sistema.]
+) <tabComandos>
 
 === Interfaces con el Hardware <secInterfacesHardware>
 
@@ -122,11 +134,18 @@ No se requieren dispositivos especiales, aceleradores GPU ni interfaces de red d
   table(
     columns: (auto, auto, auto),
     table.header([*Software*], [*Versión mínima*], [*Rol en el sistema*]),
-    [Python], [3.11], [Lenguaje de implementación del pipeline ETL],
-    [SUMO], [1.19], [Motor de simulación; proveedor de netconvert y duarouter],
-    [pandas], [2.0], [Procesamiento de datos tabulares de la encuesta],
-    [geopandas], [0.14], [Procesamiento de datos geoespaciales (TAZ, OSM)],
-    [osmium-tool], [1.16], [Extracción del polígono de Usaquén desde el dump OSM],
+    [Python], [3.11], [Lenguaje del pipeline ETL, la API y el control de SUMO],
+    [SUMO (`eclipse-sumo`)], [1.27], [Motor de simulación; netconvert, duarouter y las herramientas `cutRoutes.py` y `randomTrips.py`],
+    [TraCI / sumolib], [1.27.1], [Control de SUMO en vivo (avance de corridas, simulador 3D) y lectura de la red],
+    [FastAPI + Uvicorn], [0.110+], [API REST y WebSocket del sistema],
+    [pyproj], [3.6+], [Conversión entre coordenadas de la red y lon/lat],
+    [pandas / geopandas], [2.0 / 0.14], [Exploración y preparación de datos (notebooks)],
+    [Node.js + Vite], [20+ / 6], [Servidor de desarrollo y empaquetado del visor web],
+    [React], [18.3], [Interfaz del visor web],
+    [kepler.gl], [3.1], [Mapa con la animación de viajes y las capas de semáforos y priorización],
+    [three.js], [0.169.0], [Render 3D del simulador comparativo],
+    [maplibre-gl], [4.7.1], [Minimapa 2D del simulador (teselas de OpenStreetMap)],
+    [Typst], [0.12+], [Compilación de los documentos SRS, SPMP y VFP],
     [Ubuntu / macOS / Windows], [22.04 / 13 / 10], [Sistemas operativos soportados],
     [Git], [2.40], [Control de versiones del código fuente],
     [pytest], [7.0], [Ejecución de pruebas unitarias e integración],
@@ -137,9 +156,23 @@ No se requieren dispositivos especiales, aceleradores GPU ni interfaces de red d
 
 === Interfaces de Comunicaciones
 
-El pipeline no implementa comunicación en red durante su ejecución principal. La única comunicación de red ocurre en la fase de descarga de datos OSM
-(RF-002), que utiliza el protocolo HTTPS sobre el puerto 443 hacia los servidores de OpenStreetMap (`planet.openstreetmap.org` o la API Overpass). Una vez
-descargada la red vial, todas las fases restantes del pipeline operan de forma completamente *offline*.
+El sistema usa las siguientes comunicaciones, todas en la máquina local salvo las teselas de mapa:
+
+#figure(
+  table(
+    columns: (auto, auto, 1fr),
+    table.header([*Canal*], [*Protocolo / puerto*], [*Uso*]),
+    [Visor #sym.arrow API], [HTTP REST, JSON (`localhost:8000`, vía proxy `/api` de Vite)], [Demanda, corridas, intersecciones, programas,
+    comparaciones, priorización y preparación del simulador 3D. Los trips precalculados se sirven en gzip con `Content-Encoding: gzip`.],
+    [Visor #sym.arrow API], [WebSocket (`/comparacion3d/{id}`)], [Frames del simulador 3D (≈5 por segundo) y comandos del usuario (pausa, velocidad,
+    período de riesgo, seguir o inyectar actor).],
+    [API #sym.arrow SUMO], [TraCI sobre TCP en un puerto libre de `localhost`], [Avance de las corridas y control en vivo de los dos SUMO del simulador 3D.],
+    [Visor #sym.arrow mapas base], [HTTPS 443], [Teselas de Mapbox (mapa principal, requiere `VITE_MAPBOX_TOKEN`) y de OpenStreetMap (minimapa).],
+  ),
+  caption: [Interfaces de comunicaciones.]
+) <tabComunicaciones>
+
+El pipeline de datos no usa la red; la red vial de OpenStreetMap se descargó una vez durante la preparación de datos.
 
 == Características del Producto de Software (Requerimientos Funcionales)
 
@@ -159,8 +192,9 @@ redactan con la forma \"El sistema debe #sym.dots\", y se organizan en cinco fun
   criterio: [Dado un archivo XLSX sin la columna destino_UPZ, el sistema debe terminar con código de error distinto de cero y el log debe contener el
   mensaje 'Columna requerida ausente: destino_UPZ'.],
   prioridad: [Alta],
-  modulo: [Módulo de Ingestión (etl/ingestion.py)],
-  fecha: []
+  modulo: [`notebooks/F2.x` + `simulation-service/src/etl/sumo/trips.py`],
+  estado: [Parcial. La limpieza y el cruce de la encuesta se hacen en los notebooks de la Fase 2 (`notebooks/F2.x`); el pipeline lee el TSV resultante (`viajes_usaquen_internos.tsv`) y valida sus columnas.],
+  fecha: [],
 )
 
 #reqTable(
@@ -175,8 +209,9 @@ redactan con la forma \"El sistema debe #sym.dots\", y se organizan en cinco fun
   criterio: [Ejecutado el pipeline con red local ausente, se debe generar el archivo usaquen.osm.pbf en el directorio de datos. En una segunda ejecución,
   el log debe indicar 'Red OSM encontrada en caché, omitiendo descarga'.],
   prioridad: [Alta],
-  modulo: [Módulo de Ingestión (etl/ingestion.py)],
-  fecha: []
+  modulo: [`notebooks/F2.x`, `data/processed/usaquen.osm.xml`],
+  estado: [Parcial. La red se descargó y procesó una vez en los notebooks y se versiona en `data/processed/`; no se descarga en cada ejecución.],
+  fecha: [],
 )
 
 #reqTable(
@@ -190,8 +225,9 @@ redactan con la forma \"El sistema debe #sym.dots\", y se organizan en cinco fun
   criterio: [Dado un conjunto de prueba con 10 registros que incluyan 2 dobles conteos conocidos, el sistema debe producir una tabla de 8 registros y el
   log debe indicar exactamente 2 registros eliminados por doble conteo.],
   prioridad: [Alta],
-  modulo: [Módulo de Ingestión (etl/ingestion.py)],
-  fecha: []
+  modulo: [`notebooks/F2.x`],
+  estado: [Implementado en la preparación de datos (notebooks de la Fase 2).],
+  fecha: [],
 )
 
 #reqTable(
@@ -205,8 +241,9 @@ redactan con la forma \"El sistema debe #sym.dots\", y se organizan en cinco fun
   criterio: [El log debe reportar el porcentaje de registros descartados sobre el total leído. Dado un archivo con 5% de registros con origen_UPZ nulo, el
   log debe indicar exactamente ese 5% como tasa de descarte.],
   prioridad: [Alta],
-  modulo: [Módulo de Ingestión (etl/ingestion.py)],
-  fecha: []
+  modulo: [`simulation-service/src/etl/sumo/trips.py`],
+  estado: [Implementado. Las filas inválidas se descartan y se cuentan en `TripGenerationStats.filas_invalidas`.],
+  fecha: [],
 )
 
 #reqTable(
@@ -220,8 +257,9 @@ redactan con la forma \"El sistema debe #sym.dots\", y se organizan en cinco fun
   criterio: [La suma de los viajes expandidos debe ser igual a la suma del campo factor_expansión de todos los registros válidos, con una tolerancia de
   #sym.plus.minus 0.01%.],
   prioridad: [Alta],
-  modulo: [Módulo de Construcción O/D (etl/od_builder.py)],
-  fecha: []
+  modulo: [`simulation-service/src/etl/sumo/trips.py`, `configuration.py`],
+  estado: [Implementado. Cada viaje se replica `round(fexp_vj)` veces, con tope `MAX_COPIAS`.],
+  fecha: [],
 )
 
 === F2 -- Construcción de Matrices Origen-Destino
@@ -237,8 +275,9 @@ redactan con la forma \"El sistema debe #sym.dots\", y se organizan en cinco fun
   criterio: [Para cada modo con al menos un viaje registrado en la encuesta, el sistema debe generar un archivo .od. El número de archivos generados debe
   coincidir con el número de modos con viajes en la encuesta.],
   prioridad: [Alta],
-  modulo: [Módulo de Construcción O/D (etl/od_builder.py)],
-  fecha: []
+  modulo: [`simulation-service/src/etl/sumo/trips.py`, `vtypes.py`],
+  estado: [Implementado con un formato distinto: en lugar de un `.od` por modo, cada viaje se emite como `<trip>` TAZ a TAZ con su vType (modo) en un único `.trips.xml`.],
+  fecha: [],
 )
 
 #reqTable(
@@ -253,8 +292,9 @@ redactan con la forma \"El sistema debe #sym.dots\", y se organizan en cinco fun
   criterio: [El sistema debe generar al menos 3 *#sym.ast* N archivos .od, donde N es el número de modos con viajes. Los archivos de período AM deben
   contener únicamente viajes con hora de inicio entre 6:00 y 8:59.],
   prioridad: [Alta],
-  modulo: [Módulo de Construcción O/D (etl/od_builder.py)],
-  fecha: []
+  modulo: [`simulation-service/src/etl/sumo/configuration.py`],
+  estado: [Parcial. La versión actual simula la ventana AM de 7:00 a 10:00 (`HORA_INI`, `HORA_FIN`); PM y nocturno quedan pendientes.],
+  fecha: [],
 )
 
 #reqTable(
@@ -267,8 +307,9 @@ redactan con la forma \"El sistema debe #sym.dots\", y se organizan en cinco fun
   criterio: [Cada archivo .od generado debe ser procesado exitosamente por duarouter sin errores de formato. Se verificará ejecutando duarouter con el
   archivo generado sobre la red .net.xml de Usaquén.],
   prioridad: [Alta],
-  modulo: [Módulo de Construcción O/D (etl/od_builder.py)],
-  fecha: []
+  modulo: [`simulation-service/src/etl/sumo/trips.py`],
+  estado: [Reemplazado por viajes TAZ (`fromTaz`/`toTaz`) que duarouter rutea directamente.],
+  fecha: [],
 )
 
 === F3 -- Generación de Red Vial y Zonas TAZ
@@ -283,8 +324,9 @@ redactan con la forma \"El sistema debe #sym.dots\", y se organizan en cinco fun
   criterio: [El archivo .net.xml generado debe superar la validación de netconvert (salida sin errores) y SUMO debe poder cargar la red sin advertencias
   críticas (tipo ERROR en el log de SUMO).],
   prioridad: [Alta],
-  modulo: [Módulo de Red (etl/network.py)],
-  fecha: []
+  modulo: [`notebooks/F2.x`, `data/processed/`],
+  estado: [Implementado. La red 3D (`usaquen_3d_v2.net.xml`, con elevación) se generó con netconvert en los notebooks.],
+  fecha: [],
 )
 
 #reqTable(
@@ -297,8 +339,9 @@ redactan con la forma \"El sistema debe #sym.dots\", y se organizan en cinco fun
   criterio: [Cada UPZ de Usaquén debe aparecer como una zona en el .taz.xml y debe contener al menos un nodo de la red. El archivo debe ser validado por
   SUMO sin errores de zona vacía.],
   prioridad: [Alta],
-  modulo: [Módulo de Red (etl/network.py)],
-  fecha: []
+  modulo: [`data/processed/usaquen.taz.xml`],
+  estado: [Implementado (`usaquen.taz.xml`).],
+  fecha: [],
 )
 
 === F4 -- Generación de Archivos de Simulación
@@ -314,8 +357,9 @@ redactan con la forma \"El sistema debe #sym.dots\", y se organizan en cinco fun
   criterio: [El archivo .vtype.xml debe contener al menos cuatro entradas (una por modo). SUMO debe cargar el archivo sin errores ni advertencias de tipo
   desconocido.],
   prioridad: [Alta],
-  modulo: [Módulo de Simulación (etl/simulation.py)],
-  fecha: []
+  modulo: [`simulation-service/src/etl/sumo/vtypes.py`],
+  estado: [Implementado. Diez vTypes (auto, bici, moto, taxi, escolar, especial, informal, otro y bus_pt).],
+  fecha: [],
 )
 
 #reqTable(
@@ -328,8 +372,9 @@ redactan con la forma \"El sistema debe #sym.dots\", y se organizan en cinco fun
   criterio: [duarouter debe completar la ejecución sin errores y producir un .rou.xml con al menos un viaje por cada par O/D con valor mayor a cero en la
   matriz .od.],
   prioridad: [Alta],
-  modulo: [Módulo de Simulación (etl/simulation.py)],
-  fecha: []
+  modulo: [`simulation-service/src/etl/sumo/duarouter.py`],
+  estado: [Implementado (`--ignore-errors --repair`, viajes ordenados por `depart`).],
+  fecha: [],
 )
 
 === F5 -- Variación Paramétrica y Escenarios Hipotéticos
@@ -346,7 +391,91 @@ redactan con la forma \"El sistema debe #sym.dots\", y se organizan en cinco fun
   criterio: [Dados dos archivos de configuración con factores de escala 1.0 y 1.2 respectivamente, el sistema debe generar dos conjuntos de artefactos
   cuyo total de viajes expandidos difiera exactamente en un 20%.],
   prioridad: [Alta],
-  modulo: [Módulo de Configuración (etl/config.py)],
+  modulo: [`simulation-service/src/etl/sumo/demanda.py`, `api/api.py`],
+  estado: [Implementado y ampliado: la variación paramétrica se hace desde la API/visor con presets de demanda, conteos por modo, semilla, estilo de conducción y cierres viales (ver RF-021 a RF-025).],
+  fecha: [],
+)
+
+#reqTable(
+  id: [RF-021],
+  tipo: [Funcional],
+  cu: [CU-05],
+  descripcion: [El sistema debe ofrecer presets de demanda que redistribuyan los viajes entre modos sin cambiar el total. Los presets son
+  `encuesta`, `mas_vehiculos`, `mas_peatones` y `dia_sin_carro`. La redistribución se hace con reglas de transferencia modal basadas en
+  P(modo | duración del viaje), calculada sobre la encuesta del día completo ponderada por `fexp`. Un viaje transferido conserva su origen, su
+  destino y su hora de salida.],
+  razon: [Permite evaluar políticas de movilidad (p. ej. día sin carro) con una demanda coherente con los patrones de la encuesta.],
+  criterio: [Con `encuesta` y sus conteos por defecto, los viajes generados son idénticos a la expansión simple de la encuesta (prueba
+  `test_demanda.py`). Con cualquier preset, el total de viajes es igual al de la encuesta.],
+  prioridad: [Alta],
+  modulo: [`simulation-service/src/etl/sumo/demanda.py`],
+  estado: [Implementado.],
+  version: "2.0",
+  fecha: []
+)
+
+#reqTable(
+  id: [RF-022],
+  tipo: [Funcional],
+  cu: [CU-05],
+  descripcion: [El sistema debe permitir fijar el número de viajes por modo y la semilla aleatoria de una corrida. Los conteos se asignan entre los
+  viajes de la encuesta de ese modo por el método de mayor residuo. Si el preset no tiene viajes de un modo, la asignación usa el conjunto base de la
+  encuesta.],
+  razon: [El analista necesita escenarios con cantidades exactas por modo y resultados repetibles.],
+  criterio: [Dos corridas con los mismos conteos y semilla generan el mismo `.trips.xml`; el total por modo coincide con el pedido. La API rechaza
+  totales mayores a `MAX_VIAJES` (100 000).],
+  prioridad: [Alta],
+  modulo: [`simulation-service/src/etl/sumo/demanda.py`, `api/api.py`],
+  estado: [Implementado.],
+  version: "2.0",
+  fecha: []
+)
+
+#reqTable(
+  id: [RF-023],
+  tipo: [Funcional],
+  cu: [CU-05],
+  descripcion: [El sistema debe permitir elegir un estilo de conducción (agresivo, normal o cauteloso) que ajuste `sigma`, `speedFactor`, `tau` y
+  `lcSpeedGain` de los vTypes motorizados. Peatones y bicicletas no se modifican.],
+  razon: [El comportamiento de los conductores bogotanos es heterogéneo; el estilo permite analizar la sensibilidad de los resultados.],
+  criterio: [Con estilo distinto de `normal`, la corrida incluye un `vtypes_estilo.xml` cuyos vTypes motorizados tienen los parámetros del estilo.],
+  prioridad: [Media],
+  modulo: [`simulation-service/src/etl/sumo/estilos.py`],
+  estado: [Implementado.],
+  version: "2.0",
+  fecha: []
+)
+
+#reqTable(
+  id: [RF-024],
+  tipo: [Funcional],
+  cu: [CU-05],
+  descripcion: [El sistema debe permitir cerrar vías durante una corrida. Cada cierre genera un `<rerouter>` con `<closingReroute>` sobre el edge
+  correspondiente, para que los vehículos recalculen su ruta.],
+  razon: [Los cierres por obras o eventos son uno de los escenarios hipotéticos centrales de la propuesta.],
+  criterio: [Una corrida con un cierre incluye `cierres.xml` en sus *additional files* y ningún vehículo atraviesa el edge cerrado en la ventana del
+  cierre.],
+  prioridad: [Media],
+  modulo: [`simulation-service/src/etl/sumo/cierres.py`, `kepler/src/components/PanelCierres.jsx`],
+  estado: [Implementado.],
+  version: "2.0",
+  fecha: []
+)
+
+#reqTable(
+  id: [RF-025],
+  tipo: [Funcional],
+  cu: [CU-07],
+  descripcion: [El sistema debe incluir una simulación precalculada y versionada de cada preset con sus conteos por defecto. Cada una se guarda como
+  `trips.geojson.gz`, `volumenes.json` y `meta.json`, con el hash de los insumos. La API debe servirlas comprimidas. El visor debe cargarlas como
+  corridas terminadas y abrir la del preset `encuesta` al iniciar.],
+  razon: [Una corrida completa tarda varios minutos; las precalculadas permiten explorar los presets de inmediato.],
+  criterio: [Al abrir el visor sin corridas propias se muestra la simulación `encuesta`. Si el panel coincide con un preset, el botón ofrece "Cargar
+  simulación" en lugar de ejecutar.],
+  prioridad: [Media],
+  modulo: [`simulation-service/src/etl/precalculadas.py`, `kepler/src/App.jsx`],
+  estado: [Implementado.],
+  version: "2.0",
   fecha: []
 )
 
@@ -364,8 +493,9 @@ redactan con la forma \"El sistema debe #sym.dots\", y se organizan en cinco fun
   criterio: [Dado un conjunto de resultados de simulación válidos, el módulo web debe renderizar las métricas listadas en menos de 3 segundos desde que el
   usuario selecciona la simulación. Verificable con prueba manual ante el director.],
   prioridad: [Alta],
-  modulo: [Módulo Web (web/api.py + web/frontend/)],
-  fecha: []
+  modulo: [`kepler/src/App.jsx`],
+  estado: [Parcial. El visor anima los viajes por modo y muestra volúmenes por acceso de cada intersección; tiempos de viaje y GEH por punto de aforo quedan pendientes.],
+  fecha: [],
 )
 
 #reqTable(
@@ -380,8 +510,9 @@ redactan con la forma \"El sistema debe #sym.dots\", y se organizan en cinco fun
   criterio: [Los tres endpoints deben responder con código HTTP 200 y contenido JSON válido ante peticiones con IDs de simulación existentes, y con código
   404 ante IDs inexistentes.],
   prioridad: [Alta],
-  modulo: [Backend web (web/api.py)],
-  fecha: []
+  modulo: [`simulation-service/src/api/api.py`],
+  estado: [Implementado con los endpoints actuales: `GET /simulaciones`, `GET /simulaciones/{id}`, `GET /simulaciones/{id}/kepler-trips`, `GET /intersecciones[/{id}]`; 404 si no existe.],
+  fecha: [],
 )
 
 #reqTable(
@@ -397,8 +528,9 @@ redactan con la forma \"El sistema debe #sym.dots\", y se organizan en cinco fun
   criterio: [El usuario debe poder lanzar una simulación con parámetros distintos a los de la última ejecución sin editar ningún archivo en disco. El
   sistema debe mostrar un indicador de progreso durante la ejecución y un mensaje de éxito o error al finalizar.],
   prioridad: [Alta],
-  modulo: [Módulo Web (web/frontend/ + web/api.py)],
-  fecha: []
+  modulo: [`kepler/src/components/PanelDemanda.jsx`, `api/jobs.py`],
+  estado: [Implementado (pestaña Demanda: preset, conteos por modo, escala, semilla, estilo y cierres).],
+  fecha: [],
 )
 
 #reqTable(
@@ -413,7 +545,40 @@ redactan con la forma \"El sistema debe #sym.dots\", y se organizan en cinco fun
   criterio: [Dado un formulario con factor de escala igual a cero, el sistema debe mostrar un mensaje de error visible y no enviar la petición al backend.
   Verificable mediante prueba manual.],
   prioridad: [Media],
-  modulo: [Frontend web (web/frontend/)],
+  modulo: [`kepler/src/components/PanelDemanda.jsx`, `api/api.py`],
+  estado: [Implementado (validación en el panel y en el modelo Pydantic de la API).],
+  fecha: [],
+)
+
+#reqTable(
+  id: [RF-026],
+  tipo: [Funcional],
+  cu: [CU-08],
+  descripcion: [El sistema debe ejecutar una corrida a la vez en segundo plano. Debe informar su avance global y por etapa (generando demanda,
+  ruteando, simulando, exportando) y permitir cancelarla. Al cancelar se detienen los subprocesos y se borran los archivos de la corrida, salvo su
+  estado.],
+  razon: [Las corridas tardan minutos; el usuario necesita saber cuánto falta y poder detener una corrida equivocada.],
+  criterio: [El avance mostrado crece de forma monótona hasta 100%. Tras cancelar, `runs/<id>/` contiene solo `estado.json` con estado `cancelada`.],
+  prioridad: [Alta],
+  modulo: [`simulation-service/src/api/jobs.py`, `etl/sumo/proceso.py`, `kepler/src/hooks.js`],
+  estado: [Implementado.],
+  version: "2.0",
+  fecha: []
+)
+
+#reqTable(
+  id: [RF-027],
+  tipo: [Funcional],
+  cu: [CU-07],
+  descripcion: [El visor debe animar en el mapa los viajes simulados con una capa de trayectorias de kepler.gl: una línea por vehículo o persona con
+  coordenadas `[lon, lat, z, t]` y un color por modo. Al reemplazar una corrida no debe recargar la página.],
+  razon: [Ver los viajes moverse en el tiempo es la forma más directa de entender los resultados de SUMO.],
+  criterio: [Al cargar una corrida, la leyenda muestra los modos presentes con su número de viajes y la línea de tiempo reproduce la ventana
+  7:00–10:00.],
+  prioridad: [Alta],
+  modulo: [`simulation-service/src/etl/sumo/kepler.py`, `kepler/src/App.jsx`],
+  estado: [Implementado.],
+  version: "2.0",
   fecha: []
 )
 
@@ -432,7 +597,8 @@ redactan con la forma \"El sistema debe #sym.dots\", y se organizan en cinco fun
   porcentaje de puntos con GEH $<$ 5.],
   prioridad: [Alta],
   modulo: [Módulo de Validación (etl/validation.py)],
-  fecha: []
+  estado: [Pendiente (planeado para la Fase 4).],
+  fecha: [],
 )
 
 #reqTable(
@@ -447,8 +613,9 @@ redactan con la forma \"El sistema debe #sym.dots\", y se organizan en cinco fun
   criterio: [Al finalizar una ejecución exitosa, el archivo pipeline.log debe existir y contener al menos una entrada de inicio y una de fin para cada una
   de las fases F1 a F5, con marca de tiempo.],
   prioridad: [Media],
-  modulo: [Módulo transversal (etl/logger.py)],
-  fecha: []
+  modulo: [`simulation-service/src/api/jobs.py`],
+  estado: [Parcial. Cada corrida registra su estado y avance en `runs/<id>/estado.json` y el log de SUMO en `output/`.],
+  fecha: [],
 )
 
 #reqTable(
@@ -464,6 +631,304 @@ redactan con la forma \"El sistema debe #sym.dots\", y se organizan en cinco fun
   sistema debe saltar las fases F1-F3 y comenzar desde F4, produciendo artefactos idénticos a una ejecución completa.],
   prioridad: [Media],
   modulo: [Módulo transversal (etl/checkpoint.py)],
+  estado: [Pendiente. Las simulaciones precalculadas (RF-025) evitan recalcular los presets, pero no hay reanudación por fase.],
+  fecha: [],
+)
+
+=== F8 -- Intersecciones y Semaforización
+
+#reqTable(
+  id: [RF-028],
+  tipo: [Funcional],
+  cu: [CU-09],
+  descripcion: [El sistema debe mostrar en el mapa las intersecciones semaforizadas de la red (una por `tlLogic`). Al seleccionar una, debe abrir su
+  ficha con:
+  - nombre de las vías que se cruzan (tomado de OpenStreetMap),
+  - accesos y su volumen por tipo de vehículo en la corrida cargada,
+  - fases del programa con su duración y estado.],
+  razon: [La intersección es la unidad de análisis de las decisiones de semaforización.],
+  criterio: [`GET /intersecciones` devuelve un punto por `tlLogic` y `GET /intersecciones/{id}` devuelve la ficha (404 si no existe). Los volúmenes
+  cambian al cambiar la corrida cargada.],
+  prioridad: [Alta],
+  modulo: [`simulation-service/src/etl/sumo/intersecciones.py`, `kepler/src/components/FichaInterseccion.jsx`],
+  estado: [Implementado.],
+  version: "2.0",
+  fecha: []
+)
+
+#reqTable(
+  id: [RF-029],
+  tipo: [Funcional],
+  cu: [CU-09],
+  descripcion: [El sistema debe recortar la red y la demanda a un radio configurable (50 a 2000 m) alrededor de un cruce. La red se recorta con
+  netconvert (`--keep-edges.in-geo-boundary`) y la demanda con `cutRoutes.py`, tomando como entrada el vehroute de la corrida cuando exista. Así los
+  escenarios locales se simulan en segundos.],
+  razon: [Simular toda Usaquén para evaluar un solo cruce es lento; el recorte permite iterar rápido sobre programas y escenarios.],
+  criterio: [La zona resultante (`zona.net.xml`) conserva los ids de edges y nodos de la red original, y SUMO la carga sin errores.],
+  prioridad: [Alta],
+  modulo: [`simulation-service/src/etl/sumo/subred.py`, `etl/etl.py` (`run_recorte`)],
+  estado: [Implementado. En v2.0 se corrigió el uso de `cutRoutes.py` (`--disconnected-action`), que antes dejaba las zonas sin demanda.],
+  version: "2.0",
+  fecha: []
+)
+
+#reqTable(
+  id: [RF-030],
+  tipo: [Funcional],
+  cu: [CU-10],
+  descripcion: [El sistema debe permitir editar las duraciones y estados de las fases de un semáforo y calcular un programa con el método de Webster
+  a partir de los volúmenes por acceso. Antes de guardarlo debe validar que el estado de cada fase tenga un carácter por movimiento, que haya al menos
+  una fase amarilla de 3 s o más si hay verdes, y que el ciclo sea de al menos 15 s.],
+  razon: [Ajustar tiempos es la intervención más común y barata sobre una intersección.],
+  criterio: [Un programa inválido se rechaza con un mensaje que indica la regla incumplida (y la fase, cuando aplica). El ciclo de Webster
+  $C = (1,5 L + 5)/(1 - Y)$ nunca es menor a 30 s.],
+  prioridad: [Alta],
+  modulo: [`simulation-service/src/etl/sumo/programas_tls.py`, `FichaInterseccion.jsx`],
+  estado: [Implementado.],
+  version: "2.0",
+  fecha: []
+)
+
+#reqTable(
+  id: [RF-031],
+  tipo: [Funcional],
+  cu: [CU-10],
+  descripcion: [El sistema debe comparar dos o más programas de semáforo sobre la misma zona y demanda (una corrida de zona por programa), reportar
+  por programa las métricas de la simulación y marcar el mejor en cada métrica. La versión actual reporta teleports, vehículos insertados y personas
+  cargadas; se deben agregar demora media, longitud de cola y espera peatonal por acceso.],
+  razon: [La decisión entre programas debe sustentarse con métricas cuantitativas comparables.],
+  criterio: [`POST /intersecciones/{id}/comparaciones` devuelve un id; al terminar, `GET /comparaciones/{id}` trae una fila por programa con las
+  métricas.],
+  prioridad: [Media],
+  modulo: [`simulation-service/src/api/api.py`, `kepler/src/components/TablaComparacion.jsx`],
+  estado: [Parcial: la comparación funciona con las métricas de `statistics.xml`; demora, cola y espera peatonal están pendientes.],
+  version: "2.0",
+  fecha: []
+)
+
+#reqTable(
+  id: [RF-032],
+  tipo: [Funcional],
+  cu: [CU-11],
+  descripcion: [El sistema debe puntuar de 0 a 100 los cruces sin semáforo (`priority` y `right_before_left`) y clasificarlos en prioritario
+  (≥ 60), recomendado, en observación o sin acción. El puntaje suma:
+  - jerarquía del par de vías (40);
+  - carriles y geometría (15);
+  - hueco en un corredor semaforizado, es decir, un semáforo entre 300 y 600 m (15);
+  - demanda peatonal de la corrida (15);
+  - siniestralidad (15, reservado hasta contar con datos).
+  Se excluyen los cruces a menos de 300 m de un semáforo. El mapa debe mostrar los cruces prioritarios y recomendados.],
+  razon: [Ayuda a decidir dónde vale la pena estudiar un semáforo nuevo antes de simularlo (ver F9).],
+  criterio: [Ningún cruce listado tiene un semáforo a menos de 300 m (Haversine). El orden por puntaje es estable para una misma corrida.],
+  prioridad: [Media],
+  modulo: [`simulation-service/src/etl/sumo/priorizacion.py`],
+  estado: [Implementado.],
+  version: "2.0",
+  fecha: []
+)
+
+=== F9 -- Simulador 3D Comparativo de Semáforo Propuesto
+
+Esta funcionalidad permite ver de forma tangible, como en un videojuego pero con los datos reales de Usaquén, qué pasaría al poner un semáforo en
+un cruce que hoy no lo tiene. La pantalla se parte en dos:
+- a la izquierda, el cruce como está hoy, sin semáforo;
+- a la derecha, el mismo cruce con el semáforo propuesto.
+
+Los dos lados corren la misma demanda, con la misma semilla y a la par (lockstep). Se puede seguir a cualquier actor en tercera persona y ver sus
+datos, su riesgo y sus decisiones.
+
+#reqTable(
+  id: [RF-033],
+  tipo: [Funcional],
+  cu: [CU-12],
+  descripcion: [Dado un cruce sin semáforo, el sistema debe preparar en segundo plano un escenario comparativo con:
+  - el recorte de la zona (350 m) como escenario actual (`zona.net.xml`);
+  - una variante idéntica con un semáforo de tiempos fijos instalado por netconvert (`--tls.set`) en ese nodo (`zona_tls.net.xml`);
+  - una demanda común a ambos lados: los viajes reales de una corrida que pasan por la zona más un tráfico de fondo por modo generado con
+    `randomTrips.py`, con intensidades (veh/h y peatones/h) ajustables por el usuario.],
+  razon: [Recortada a unos cientos de metros, la demanda real de la encuesta es muy escasa para mostrar el efecto de un semáforo. El tráfico de fondo la
+  completa sin perder los viajes reales.],
+  criterio: [`POST /cruces/{nodo}/comparacion3d` responde 202. En menos de 60 s, `GET /comparacion3d/{id}` pasa a estado `lista`, con
+  `fuente_demanda` (`real`, `sintetica` o `real+sintetica`) y el número de fases y el ciclo del semáforo propuesto. Si el nodo ya tiene semáforo, el
+  estado es `error` con un mensaje que lo indica.],
+  prioridad: [Alta],
+  modulo: [`simulation-service/src/etl/sumo/semaforo_nuevo.py`, `demanda_zona.py`, `etl/etl.py` (`run_escenario_semaforo`)],
+  estado: [Implementado.],
+  version: "2.0",
+  fecha: []
+)
+
+#reqTable(
+  id: [RF-034],
+  tipo: [Funcional],
+  cu: [CU-12],
+  descripcion: [El visor debe mostrar los dos escenarios en una vista 3D partida. Cada lado debe incluir:
+  - la red 3D real de la zona: carriles con su ancho y marcas, cruces, andenes, ciclorrutas y elevación;
+  - los edificios de Microsoft Building Footprints extruidos;
+  - las luces del semáforo propuesto cambiando según su estado en cada paso;
+  - un modelo por actor según su tipo (carro, taxi, moto, bicicleta, bus o peatón), con el movimiento interpolado entre frames.],
+  razon: [Ver el escenario en 3D hace tangible el resultado de la simulación para usuarios no técnicos.],
+  criterio: [Con la comparación abierta, ambos lados muestran los mismos actores en las mismas posiciones mientras sus trayectorias no diverjan, y el
+  lado derecho muestra las luces del semáforo con la fase reportada por TraCI.],
+  prioridad: [Alta],
+  modulo: [`simulation-service/src/api/comparacion3d.py`, `etl/sumo/escena3d.py`, `kepler/src/components/simulador3d/escena.js`],
+  estado: [Implementado.],
+  version: "2.0",
+  fecha: []
+)
+
+#reqTable(
+  id: [RF-035],
+  tipo: [Funcional],
+  cu: [CU-12],
+  descripcion: [El usuario debe poder seguir con cámara en tercera persona trasera a cualquier vehículo o peatón presente en ambos escenarios, o
+  lanzar uno nuevo. Para lanzarlo elige el tipo, la vía de llegada, el giro (recto, izquierda, derecha) y el estilo de conducción; el sistema lo
+  inyecta en los dos lados a la vez con la misma ruta. También debe ofrecer cámara aérea y libre, con la cámara libre sincronizada entre ambos lados.],
+  razon: [Seguir un mismo actor en los dos escenarios muestra cómo cambia su comportamiento según haya o no semáforo.],
+  criterio: [Tras lanzar un actor, en menos de 2 s aparece en ambos lados con el mismo id y la cámara lo sigue. Si no hay ruta peatonal por el
+  acceso elegido, el visor muestra un aviso sin interrumpir la simulación.],
+  prioridad: [Alta],
+  modulo: [`simulation-service/src/api/comparacion3d.py` (`Lado.inyectar`), `kepler/src/components/simulador3d/Simulador3D.jsx`],
+  estado: [Implementado.],
+  version: "2.0",
+  fecha: []
+)
+
+#reqTable(
+  id: [RF-036],
+  tipo: [Funcional],
+  cu: [CU-12],
+  descripcion: [Para el actor seguido, cada lado debe mostrar en pantalla (HUD):
+  - velocidad y límite del carril, aceleración, distancia al vehículo de adelante;
+  - tiempo de espera, tiempo perdido y estado y distancia del próximo semáforo;
+  - la acción que está tomando (acelera, frena, frena por el semáforo, cede el paso, en cola, cambia de carril, camina, espera para cruzar);
+  - las decisiones posibles en el próximo cruce: cada giro con su estado (verde, rojo, vía principal, cede), si hay tráfico en conflicto y cuál
+    tomará según su ruta;
+  - su intención de cambio de carril y el motivo.],
+  razon: [Explica por qué el actor se comporta como lo hace en cada escenario.],
+  criterio: [Los valores del HUD coinciden con los que reporta TraCI en el mismo paso. Un vehículo detenido frente a un rojo muestra "Detenido en el
+  semáforo".],
+  prioridad: [Alta],
+  modulo: [`simulation-service/src/etl/sumo/telemetria.py`, `kepler/src/components/simulador3d/HUD.jsx`],
+  estado: [Implementado.],
+  version: "2.0",
+  fecha: []
+)
+
+#reqTable(
+  id: [RF-037],
+  tipo: [Funcional],
+  cu: [CU-12],
+  descripcion: [El sistema debe calcular cada cierto tiempo, configurable entre 1 y 10 s simulados, un índice de riesgo de 0 a 100 para el actor
+  seguido, con nivel bajo, medio o alto y la causa dominante. El índice toma el peor de tres indicadores sustitutos de seguridad:
+  - TTC con el vehículo de adelante (crítico < 1,5 s);
+  - DRAC (crítico > 3,35 m/s²);
+  - PET aproximado con el tráfico transversal en el cruce (crítico < 1,5 s).
+  Para peatones se usa el tiempo hasta que lo alcance el vehículo más cercano. El HUD debe mostrar el historial reciente del índice.],
+  razon: [El riesgo es el argumento principal para instalar un semáforo; medirlo en el tiempo permite comparar ambos escenarios.],
+  criterio: [Con TTC = 1 s el índice es 100 (alto); sin conflictos es 0 (bajo); el período elegido cambia la frecuencia de las muestras del historial
+  (prueba `test_telemetria.py`).],
+  prioridad: [Alta],
+  modulo: [`simulation-service/src/etl/sumo/telemetria.py`],
+  estado: [Implementado.],
+  version: "2.0",
+  fecha: []
+)
+
+#reqTable(
+  id: [RF-038],
+  tipo: [Funcional],
+  cu: [CU-12],
+  descripcion: [El simulador debe mostrar en la esquina superior derecha un minimapa 2D tipo Maps con el cruce estudiado, el límite de la zona
+  simulada, la posición del actor seguido y el rastro de su recorrido.],
+  razon: [Ubica al usuario en la ciudad mientras ve la escena en 3D.],
+  criterio: [El punto del actor en el minimapa sigue sus coordenadas lon/lat reportadas por TraCI y el rastro se borra al cambiar de actor.],
+  prioridad: [Media],
+  modulo: [`kepler/src/components/simulador3d/Minimapa.jsx`],
+  estado: [Implementado.],
+  version: "2.0",
+  fecha: []
+)
+
+#reqTable(
+  id: [RF-039],
+  tipo: [Funcional],
+  cu: [CU-12],
+  descripcion: [El usuario debe poder elegir cualquiera de las vías con nombre de la zona para llevar la cámara a ella y ver la lista de actores que
+  circulan por esa vía en ese momento, con su tipo y velocidad, para seguir a uno.],
+  razon: [Permite mirar las distintas vías del cruce y elegir qué actor observar.],
+  criterio: [La lista de una vía solo contiene actores cuyo edge actual pertenece a esa vía.],
+  prioridad: [Media],
+  modulo: [`simulation-service/src/etl/sumo/escena3d.py` (vías), `Simulador3D.jsx`],
+  estado: [Implementado.],
+  version: "2.0",
+  fecha: []
+)
+
+#reqTable(
+  id: [RF-040],
+  tipo: [Funcional],
+  cu: [CU-12],
+  descripcion: [Cada lado debe mostrar métricas del cruce actualizadas en cada frame:
+  - vehículos a menos de 60 m del cruce y cuántos están detenidos;
+  - espera media;
+  - conflictos (pares de vehículos con PET < 1,5 s);
+  - colisiones detectadas por SUMO;
+  - vehículos y peatones en la zona.],
+  razon: [Resume, lado a lado, el efecto del semáforo propuesto sobre la fluidez y la seguridad.],
+  criterio: [Las métricas de ambos lados se calculan con la misma definición y radio; sin actores en el cruce, los contadores instantáneos son 0.],
+  prioridad: [Alta],
+  modulo: [`simulation-service/src/api/comparacion3d.py` (`Lado.actores`, `Lado.contar_conflictos`)],
+  estado: [Implementado.],
+  version: "2.0",
+  fecha: []
+)
+
+#reqTable(
+  id: [RF-041],
+  tipo: [Funcional],
+  cu: [CU-12],
+  descripcion: [El sistema debe exportar un reporte de la comparación 3D (PDF o CSV) con:
+  - las métricas acumuladas de cada lado;
+  - la distribución del índice de riesgo;
+  - los datos del semáforo propuesto (fases y ciclo);
+  - un resumen de recomendación.],
+  razon: [El análisis debe poder entregarse a la entidad que toma la decisión.],
+  criterio: [Al cerrar una comparación, el usuario puede descargar el reporte con los valores de ambos lados.],
+  prioridad: [Media],
+  modulo: [Por definir],
+  estado: [Pendiente (por desarrollar).],
+  version: "2.0",
+  fecha: []
+)
+
+#reqTable(
+  id: [RF-042],
+  tipo: [Funcional],
+  cu: [CU-12],
+  descripcion: [El simulador debe permitir editar el programa del semáforo propuesto (ciclo y repartos, o Webster con los volúmenes de la zona) y
+  reiniciar la comparación con el nuevo programa.],
+  razon: [El programa por defecto de netconvert no es óptimo; la comparación es más justa con un programa ajustado a la demanda.],
+  criterio: [El ciclo elegido se refleja en `GET /comparacion3d/{id}` y en la fase mostrada en el HUD del lado con semáforo.],
+  prioridad: [Media],
+  modulo: [`semaforo_nuevo.py` (`ciclo_s` ya soportado por la API interna), `programas_tls.py`],
+  estado: [Parcial: el backend acepta `ciclo_s`; falta exponerlo en el visor.],
+  version: "2.0",
+  fecha: []
+)
+
+#reqTable(
+  id: [RF-043],
+  tipo: [Funcional],
+  cu: [CU-05, CU-12],
+  descripcion: [El sistema debe modelar el transporte público con buses, paradas y rutas reales (GTFS de TransMilenio/SITP mediante `gtfs2pt`) y
+  viajes de personas con `personTrip modes="public"`, en lugar de representarlo como caminata.],
+  razon: [Hoy los viajes de transporte público se emiten como `<person><walk>`, lo que subestima los buses en las vías y en los cruces.],
+  criterio: [Una corrida con transporte público muestra buses deteniéndose en paradas y personas que los abordan.],
+  prioridad: [Media],
+  modulo: [Por definir],
+  estado: [Pendiente (por desarrollar).],
+  version: "2.0",
   fecha: []
 )
 
@@ -483,7 +948,8 @@ Los siguientes requerimientos establecen los umbrales cuantitativos de rendimien
   finalización de F5 debe ser $<=$ 14,400 segundos.],
   prioridad: [Alta],
   modulo: [Pipeline completo],
-  fecha: []
+  estado: [Cumplido: la corrida completa con la demanda de la encuesta (~24.600 viajes) toma varios minutos.],
+  fecha: [],
 )
 
 #reqTable(
@@ -498,6 +964,38 @@ Los siguientes requerimientos establecen los umbrales cuantitativos de rendimien
   1,800 segundos.],
   prioridad: [Media],
   modulo: [Módulo de Construcción O/D (etl/od_builder.py)],
+  estado: [No aplica en la versión actual: la matriz se arma en los notebooks.],
+  fecha: [],
+)
+
+#reqTable(
+  id: [RD-003],
+  tipo: [Desempeño -- Latencia],
+  cu: [CU-12],
+  descripcion: [La preparación de una comparación 3D (recorte, demanda y semáforo propuesto) debe tardar como máximo 60 s. Durante la comparación,
+  el servidor debe emitir al menos 4 frames por segundo con los dos lados a velocidad 1× para zonas de hasta 200 actores por lado.],
+  razon: [Por debajo de ese ritmo la animación pierde continuidad incluso con interpolación.],
+  criterio: [Medido en la máquina de referencia, la preparación tardó 14 a 40 s y el bucle mantuvo 5 frames/s con unos 60 vehículos y 95 peatones por
+  lado.],
+  prioridad: [Alta],
+  modulo: [`simulation-service/src/api/comparacion3d.py`],
+  estado: [Cumplido en las pruebas de integración.],
+  version: "2.0",
+  fecha: []
+)
+
+#reqTable(
+  id: [RD-004],
+  tipo: [Desempeño -- Render],
+  cu: [CU-12],
+  descripcion: [El visor debe renderizar las dos escenas 3D a 30 cuadros por segundo o más en un equipo con GPU integrada. Para lograrlo, las
+  geometrías estáticas (carriles, cruces y edificios) se fusionan en pocas mallas por material.],
+  razon: [Una experiencia "tipo videojuego" requiere fluidez visual.],
+  criterio: [Medido con las herramientas de rendimiento del navegador durante 60 s de comparación a velocidad 1×.],
+  prioridad: [Media],
+  modulo: [`kepler/src/components/simulador3d/escena.js`],
+  estado: [Por verificar en la prueba de aceptación.],
+  version: "2.0",
   fecha: []
 )
 
@@ -517,8 +1015,14 @@ que esto puede cambiar ya que, puede haber una tecnología que disminuya el tiem
 - *Arquitectura del pipeline:* el sistema debe seguir una arquitectura de pipeline por fases secuenciales (F1-F5), donde cada fase produce artefactos que
   sirven como entrada de la fase siguiente.
 - *Control de versiones:* todo el código fuente debe versionarse en el repositorio GitHub del proyecto con una estructura de carpetas definida en el SPMP.
-- *Arquitectura del módulo web:* el módulo web debe seguir una arquitectura de dos capas: backend REST (Python) y frontend accesible desde navegador. El
-  backend debe reutilizar el código del pipeline ETL existente sin duplicar lógica de procesamiento.
+- *Arquitectura del módulo web:* el módulo web sigue una arquitectura de dos capas: backend REST/WebSocket en Python (FastAPI, `simulation-service/`) y
+  frontend React en el navegador (`kepler/`). El backend reutiliza los módulos del pipeline (`etl/sumo/`) sin duplicar lógica de procesamiento.
+- *Patrón de los pasos del pipeline:* cada paso de `etl/sumo/` define un `*Config` inmutable, un `*Result` y un `*Stats` mutable, y lanza un
+  `*Error(RuntimeError)` propio si falla la herramienta de SUMO que invoca. `configuration.py` es la única fuente de rutas y constantes.
+- *Control en vivo:* toda interacción en tiempo real con SUMO (avance de corridas, simulador 3D) se hace por TraCI. No se interpreta la salida de
+  consola de SUMO, porque llega en bloque al terminar el proceso.
+- *Render 3D en el cliente:* la escena 3D se construye en el navegador con three.js a partir de la geometría de la red en coordenadas de SUMO; el
+  servidor solo envía posiciones y estados.
 
 Para las restricciones de diseño de arquitectura interna, modelos de datos y diagramas de componentes, se remite al documento SDD (Software Design
 Document).
@@ -538,8 +1042,9 @@ Document).
   criterio: [Dado un archivo de prueba con 10% de registros con NaN en origen_UPZ, el pipeline debe completarse sin excepciones y el log debe reportar
   exactamente 10% de registros descartados en F1.],
   prioridad: [Alta],
-  modulo: [Módulo de Ingestión (etl/ingestion.py)],
-  fecha: []
+  modulo: [`simulation-service/src/etl/sumo/trips.py`],
+  estado: [Implementado (filas inválidas descartadas y contadas).],
+  fecha: [],
 )
 
 #reqTable(
@@ -554,8 +1059,9 @@ Document).
   criterio: [Simulado un fallo forzado al inicio de F4, el directorio de salida debe contener los artefactos de F1-F3 y el log debe indicar 'Fase F4
   fallida: [causa]'.],
   prioridad: [Alta],
-  modulo: [Módulo transversal (etl/checkpoint.py)],
-  fecha: []
+  modulo: [`simulation-service/src/api/jobs.py`],
+  estado: [Parcial: un fallo deja el error en `estado.json`; cancelar borra la corrida.],
+  fecha: [],
 )
 
 === Disponibilidad
@@ -571,6 +1077,7 @@ Document).
   criterio: [Desconectada la red durante las fases F2-F5, el pipeline debe completarse sin errores de conexión.],
   prioridad: [Media],
   modulo: [Pipeline completo],
+  estado: [Cumplido para el pipeline; el minimapa del simulador 3D usa teselas de OpenStreetMap en línea.],
   fecha: [],
 )
 
@@ -587,7 +1094,8 @@ Document).
   criterio: [Inspeccionados los archivos de salida, ninguno debe contener el campo ID_hogar ni ningún identificador individual de la encuesta.],
   prioridad: [Media],
   modulo: [Módulo de Construcción O/D (etl/od_builder.py)],
-  fecha: []
+  estado: [Cumplido: los archivos de SUMO solo contienen viajes por TAZ con ids sintéticos (`auto_N`, `peaton_N`).],
+  fecha: [],
 )
 
 === Mantenibilidad
@@ -603,7 +1111,8 @@ Document).
   criterio: [Ejecutado pydocstyle sobre el paquete etl/, el número de funciones públicas sin docstring completo debe ser cero.],
   prioridad: [Media],
   modulo: [Pipeline completo],
-  fecha: []
+  estado: [Parcial: los módulos tienen docstring de módulo y de las funciones públicas principales.],
+  fecha: [],
 )
 
 === Portabilidad
@@ -621,7 +1130,8 @@ Document).
   rama principal.],
   prioridad: [Alta],
   modulo: [Pipeline completo],
-  fecha: []
+  estado: [Parcial: probado en Windows 11; el CI solo corre las pruebas de la raíz.],
+  fecha: [],
 )
 
 #reqTable(
@@ -636,7 +1146,8 @@ Document).
   reportada por el CI como advertencia.],
   prioridad: [Media],
   modulo: [Configuración del entorno],
-  fecha: []
+  estado: [Parcial: `simulation-service/pyproject.toml` fija `traci==1.27.1`; el resto usa rangos.],
+  fecha: [],
 )
 
 === Reproducibilidad
@@ -652,8 +1163,9 @@ Document).
   criterio: [Ejecutado el pipeline dos veces con los mismos inputs, el hash SHA-256 de cada archivo de salida debe ser idéntico entre ambas ejecuciones.
   Verificable con el script scripts/verify_reproducibility.py incluido en el repositorio.],
   prioridad: [Alta],
-  modulo: [Pipeline completo],
-  fecha: []
+  modulo: [`simulation-service/src/etl/precalculadas.py`],
+  estado: [Implementado para las precalculadas: gzip con `mtime=0` y hash SHA-256 de los insumos en `meta.json`.],
+  fecha: [],
 )
 
 === Observabilidad
@@ -669,8 +1181,27 @@ Document).
   criterio: [Durante la ejecución de F2 con el dataset completo, el usuario debe ver al menos un mensaje de progreso en consola por cada minuto de
   ejecución.],
   prioridad: [Media],
-  modulo: [Módulo transversal (etl/logger.py)],
+  modulo: [`simulation-service/src/api/jobs.py`, `etl/sumo/proceso.py`],
+  estado: [Implementado: avance real por etapa (duarouter por último `depart`, SUMO por TraCI) visible en el visor.],
   fecha: [],
+)
+
+=== Usabilidad
+
+#reqTable(
+  id: [RNF-USA-001],
+  tipo: [No Funcional -- Usabilidad],
+  cu: [CU-07 a CU-12],
+  descripcion: [Toda la interacción del usuario final debe hacerse desde el visor web en español, sin editar archivos XML ni usar la línea de comandos.
+  Cada operación de más de 2 s (corrida, descarga, preparación de la comparación 3D) debe mostrar su avance o la etapa en curso, y los errores deben
+  explicarse con un mensaje legible.],
+  razon: [El usuario objetivo (planificador de movilidad) no conoce SUMO ni Python.],
+  criterio: [Prueba de usuario con el director: lanzar una corrida, abrir una intersección y una comparación 3D sin asistencia del equipo.],
+  prioridad: [Alta],
+  modulo: [`kepler/src/`],
+  estado: [Implementado; pendiente la prueba de usuario.],
+  version: "2.0",
+  fecha: []
 )
 
 == Requerimientos de la Base de Datos
@@ -690,6 +1221,14 @@ El almacenamiento de los datos a manejar tiene el siguiente formatos:
     [F4 -- Rutas], [.rou.xml], [Formato XML nativo de SUMO generado por duarouter. Contiene viajes y rutas asignadas.],
     [F5 -- Validación], [CSV], [Tabla de resultados GEH por punto de aforo. Columnas: punto_aforo, volumen_simulado, volumen_real, GEH.],
     [Transversal], [JSON], [Archivos de checkpoint por fase. Contienen el estado de ejecución para permitir reanudación parcial.],
+    [Corridas (v2.0)], [`runs/<id>/`], [Trips, rutas, salidas de SUMO, `estado.json` y trips de kepler de cada corrida lanzada desde la API. No se
+    versiona.],
+    [Precalculadas (v2.0)], [`.geojson.gz` + JSON], [`precalculadas/<preset>/`: trips comprimidos, volúmenes por edge y metadatos con el hash de los
+    insumos. Se versiona.],
+    [Zonas y comparaciones 3D (v2.0)], [`.net.xml`, `.rou.xml`, `.trips.xml`], [`runs/zona-*` y `runs/sem-*`: red recortada, variante con el semáforo
+    propuesto, demanda real recortada y tráfico de fondo. Se borran al cerrar la comparación.],
+    [Cachés (v2.0)], [JSON], [`cache/semaforos.json` (catálogo de intersecciones) y `volumenes.json` por corrida; se invalidan por fecha y tamaño del
+    archivo de origen.],
   ),
   caption: [Tipos de datos almacenados por el pipeline.]
 ) <tabDatos>
