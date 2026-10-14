@@ -1,0 +1,129 @@
+eltiempo:
+  type: web
+  title: Bogotá está entre las diez ciudades del mundo con más tráfico
+  author: El Tiempo
+  url: https://www.eltiempo.com/bogota/bogota-esta-entre-las-diez-ciudades-del-mundo-con-mas-trafico-la-congestion-subio-7-7-por-ciento-en-3527699
+
+portafolio2025:
+  type: web
+  title: Bogotá, cada año con un tráfico que sigue empeorando
+  author: Portafolio
+  url: https://www.portafolio.co/economia/regiones/bogota-cada-ano-con-un-trafico-que-sigue-empeorando-nivel-de-congestion-en-la-ciudad-crecio-7-7-en-487350
+
+infobae:
+  type: web
+  title: "Moverse en Bogotá se volvió una odisea: recorrer 5 kilómetros puede tomar hasta 40 minutos"
+  author: Infobae
+  date: 2026-03-05
+  url: https://www.infobae.com/colombia/2026/03/05/moverse-en-bogota-se-volvio-una-odisea-recorrer-5-kilometros-puede-tomar-hasta-40-minutos/
+
+alcaldia:
+  type: web
+  title: Más de 4 millones de personas se benefician con TransMilenio
+  author: Alcaldía de Bogotá
+  url: https://bogota.gov.co/mi-ciudad/movilidad/transmilenio-en-bogota-personas-beneficiadas-flota-viajes-y-mas
+
+portafolio2023:
+  type: web
+  title: "En transporte público y a pie: preferencias de transporte para los bogotanos en 2023"
+  author: Portafolio
+  url: https://www.portafolio.co/economia/regiones/en-transporte-publico-y-a-pie-asi-se-transportaron-los-bogotanos-en-2023-606118
+
+daganzo:
+  type: article
+  title: "The cell transmission model: A dynamic representation of highway traffic consistent with the hydrodynamic theory"
+  author: "Daganzo, Carlos F."
+  date: 1994
+  parent:
+    type: periodical
+    title: "Transportation Research Part B: Methodological"
+    volume: 28
+    issue: 4
+  page-range: 269-287
+
+krajzewicz2012:
+  type: article
+  title: Recent Development and Applications of SUMO – Simulation of Urban MObility
+  author: ["Krajzewicz, Daniel", "Erdmann, Jakob", "Behrisch, Michael", "Bieker, Laura"]
+  date: 2012
+  parent:
+    type: periodical
+    title: International Journal on Advances in Systems and Measurements
+    volume: 5
+    issue: "3&4"
+  page-range: 128-138
+
+lighthill:
+  type: article
+  title: "On kinematic waves II. A theory of traffic flow on long crowded roads"
+  author: ["Lighthill, M. J.", "Whitham, G. B."]
+  date: 1955
+  parent:
+    type: periodical
+    title: "Proceedings of the Royal Society of London. Series A"
+    volume: 229
+    issue: 1178
+  page-range: 317-345
+
+lopez2018:
+  type: article
+  title: Microscopic Traffic Simulation using SUMO
+  author: ["Lopez, Pablo Alvarez", "Behrisch, Michael", "Bieker-Walz, Laura", "Erdmann, Jakob"]
+  date: 2018
+  parent:
+    type: proceedings
+    title: 21st International Conference on Intelligent Transportation Systems (ITSC)
+  page-range: 2575-2582
+
+mcnally:
+  type: chapter
+  title: The four-step model
+  author: "McNally, Michael G."
+  date: 2007
+  parent:
+    type: book
+    title: Handbook of Transport Modelling
+    editor: ["Hensher, David A.", "Button, Kenneth J."]
+    edition: 2
+    publisher: Elsevier
+  page-range: 35-53
+
+ortuzar:
+  type: book
+  title: Modelling Transport
+  author: ["Ortúzar, Juan de Dios", "Willumsen, Luis G."]
+  edition: 4
+  publisher: Wiley
+  date: 2011
+
+sdm2019:
+  type: report
+  title: Encuesta de Movilidad de Bogotá 2019
+  author: Secretaría Distrital de Movilidad de Bogotá
+  publisher: Alcaldía Mayor de Bogotá
+  date: 2019
+
+vlahogianni:
+  type: article
+  title: "Short-term traffic forecasting: Where we are and where we are going"
+  author: ["Vlahogianni, Eleni I.", "Karlaftis, Matthew G.", "Golias, John C."]
+  date: 2014
+  parent:
+    type: periodical
+    title: "Transportation Research Part C: Emerging Technologies"
+    volume: 43
+  page-range: 3-19
+
+webster:
+  type: report
+  title: Traffic Signal Settings (Road Research Technical Paper No. 39)
+  author: "Webster, F. V."
+  publisher: Her Majesty's Stationery Office
+  date: 1958
+
+gettman:
+  type: report
+  title: Surrogate Safety Assessment Model and Validation (FHWA-HRT-08-051)
+  author: ["Gettman, Douglas", "Pu, Lili", "Sayed, Tarek", "Shelby, Steven"]
+  publisher: Federal Highway Administration
+  date: 2008
