@@ -1,6 +1,7 @@
 import asyncio
 import json
 import threading
+import time
 import uuid
 from collections import Counter
 from dataclasses import asdict
@@ -34,14 +35,14 @@ from etl.sumo.programas_tls import (
 )
 
 from .jobs import GestorCorridas
-from .sesion3d import GestorSesiones, ejecutar_sesion, obtener_geometria
+from .comparacion3d import Comparacion, GestorComparaciones, correr_comparacion, mensaje_json
 
 app = FastAPI(title="Simulation Service")
 
 _SIN_SALIDA = "Aún no hay salida de simulación. Ejecuta el pipeline primero."
 
 _gestor: GestorCorridas | None = None
-_gestor_sesiones: GestorSesiones = GestorSesiones()
+_gestor_comparaciones: GestorComparaciones = GestorComparaciones()
 
 
 def obtener_gestor() -> GestorCorridas:
@@ -568,113 +569,141 @@ def obtener_comparacion(comparacion_id: str) -> dict:
     return comp
 
 
-# ------------------------------------ Fase E: sesiones 3D en vivo
+# ------------------------------------ Simulador 3D comparativo (semáforo propuesto)
 
-class SolicitudSesion3D(BaseModel):
-    escenario_run_id: str | None = None
-    programa_id: str = "0"
+class SolicitudComparacion3D(BaseModel):
+    lon: float
+    lat: float
+    run_id: str | None = None
+    # tráfico de fondo por modo (veh/h; "peaton" en personas/h)
+    intensidades: dict[str, float] | None = None
+
+    @model_validator(mode="after")
+    def _validar_intensidades(self) -> "SolicitudComparacion3D":
+        for modo, valor in (self.intensidades or {}).items():
+            if not 0 <= valor <= 3000:
+                raise ValueError(f"Intensidad fuera de rango para '{modo}': {valor} (0 a 3000 por hora)")
+        return self
 
 
-@app.post("/intersecciones/{tl_id}/sesiones", status_code=201)
-async def crear_sesion_3d(tl_id: str, solicitud: SolicitudSesion3D) -> dict:
-    """Abre una sesión TraCI 3D en vivo para una intersección (Fase E)."""
-    if _semaforos().get(tl_id) is None:
-        raise HTTPException(status_code=404, detail=f"No existe la intersección '{tl_id}'")
+def obtener_gestor_comparaciones() -> GestorComparaciones:
+    return _gestor_comparaciones
 
+
+GestorComp = Annotated[GestorComparaciones, Depends(obtener_gestor_comparaciones)]
+
+
+def _comparacion(gestor: GestorComparaciones, cid: str) -> Comparacion:
+    comp = gestor.obtener(cid)
+    if comp is None:
+        raise HTTPException(status_code=404, detail=f"No existe la comparación '{cid}'")
+    return comp
+
+
+@app.post("/cruces/{nodo_id}/comparacion3d", status_code=202)
+def crear_comparacion_3d(nodo_id: str, solicitud: SolicitudComparacion3D, gestor: GestorComp) -> dict:
+    """Prepara la comparación 3D de un cruce sin semáforo: el actual vs. con semáforo propuesto.
+
+    Recorta la zona, arma la demanda y genera la variante con semáforo en segundo plano;
+    el estado se consulta en GET /comparacion3d/{id}.
+    """
+    run_id = solicitud.run_id if solicitud.run_id and not solicitud.run_id.startswith("precalculada-") else None
     try:
-        sesion = _gestor_sesiones.crear(tl_id, solicitud.escenario_run_id, solicitud.programa_id)
+        comp = gestor.crear(nodo_id, solicitud.lon, solicitud.lat, run_id, solicitud.intensidades)
     except RuntimeError as exc:
         raise HTTPException(status_code=429, detail=str(exc)) from exc
-
-    return {"sid": sesion.sid}
-
-
-@app.get("/sesiones/{sid}/geometria")
-def obtener_geometria_sesion(sid: str) -> dict:
-    """Geometría de carriles y semáforos de la zona (enviada una vez al abrir la vista 3D)."""
-    sesion = _gestor_sesiones.obtener(sid)
-    if sesion is None:
-        raise HTTPException(status_code=404, detail=f"No existe la sesión '{sid}'")
-    return obtener_geometria(sesion.tl_id, sesion.escenario_run_id)
+    return comp.resumen()
 
 
-@app.websocket("/sesiones/{sid}")
-async def ws_sesion_3d(websocket: WebSocket, sid: str) -> None:
-    """WebSocket de la sesión 3D: emite frames, recibe comandos de control."""
-    sesion = _gestor_sesiones.obtener(sid)
-    if sesion is None:
-        await websocket.close(code=1008, reason="Sesión no encontrada")
+@app.get("/comparacion3d")
+def listar_comparaciones_3d(gestor: GestorComp) -> list[dict]:
+    return gestor.listar()
+
+
+@app.get("/comparacion3d/{cid}")
+def obtener_comparacion_3d(cid: str, gestor: GestorComp) -> dict:
+    return _comparacion(gestor, cid).resumen()
+
+
+@app.get("/comparacion3d/{cid}/geometria")
+def obtener_geometria_3d(cid: str, gestor: GestorComp) -> dict:
+    """Carriles, cruces, luces del semáforo propuesto, edificios, vías y accesos de la zona."""
+    comp = _comparacion(gestor, cid)
+    if comp.estado != "lista" or comp.geometria is None:
+        raise HTTPException(status_code=409, detail="La comparación todavía no está lista.")
+    return comp.geometria
+
+
+@app.delete("/comparacion3d/{cid}", status_code=204)
+def cerrar_comparacion_3d(cid: str, gestor: GestorComp) -> None:
+    _comparacion(gestor, cid)
+    gestor.cerrar(cid)
+
+
+@app.websocket("/comparacion3d/{cid}")
+async def ws_comparacion_3d(websocket: WebSocket, cid: str) -> None:
+    """Corre los dos lados en lockstep y emite un frame por paso; recibe comandos de control."""
+    gestor = app.dependency_overrides.get(obtener_gestor_comparaciones, obtener_gestor_comparaciones)()
+    comp = gestor.obtener(cid)
+    if comp is None or comp.estado != "lista":
+        await websocket.close(code=1008, reason="Comparación inexistente o no lista")
+        return
+    if comp.conectada:
+        await websocket.close(code=1008, reason="La comparación ya está abierta en otra ventana")
         return
 
     await websocket.accept()
+    comp.conectada, comp.activa = True, True
+    cola: asyncio.Queue = asyncio.Queue(maxsize=8)
+    hilo = threading.Thread(
+        target=correr_comparacion, args=(comp, cola, asyncio.get_running_loop()),
+        daemon=True, name=f"comp-{cid}",
+    )
+    hilo.start()
 
-    # Buscar programa personalizado si lo hay
-    paths_default = ScenarioPaths.from_name(DEFAULT_SCENARIO)
-    prog_path = paths_default.root / f"programa_{sesion.tl_id}_{sesion.programa_id}.xml"
-    programa_tls = None
-    if prog_path.is_file():
-        programa_tls = leer_programa(paths_default.net, sesion.tl_id, sesion.programa_id)
-
-    cola: asyncio.Queue = asyncio.Queue(maxsize=30)
-
-    # Tarea que corre la simulación en background
-    tarea_sim = asyncio.create_task(ejecutar_sesion(sesion, programa_tls, cola))
-
-    async def _recibir():
-        """Consume mensajes de control del cliente."""
+    async def _recibir() -> None:
         try:
-            async for mensaje in websocket.iter_text():
-                sesion.ultimo_ping = __import__("time").monotonic()
-                try:
-                    cmd = json.loads(mensaje)
-                except json.JSONDecodeError:
+            async for texto in websocket.iter_text():
+                cmd = mensaje_json(texto)
+                if cmd is None:
                     continue
+                comp.ultimo_ping = time.monotonic()
                 if "pausa" in cmd:
-                    sesion.pausada = bool(cmd["pausa"])
+                    comp.pausada = bool(cmd["pausa"])
                 if "velocidad" in cmd:
-                    sesion.velocidad = max(0.1, min(float(cmd["velocidad"]), 20.0))
+                    comp.velocidad = max(0.25, min(float(cmd["velocidad"]), 20.0))
+                if "periodo_riesgo" in cmd:
+                    comp.periodo_riesgo = max(0.4, min(float(cmd["periodo_riesgo"]), 30.0))
+                if "seguir" in cmd or "inyectar" in cmd:
+                    comp.comandos.put(cmd)
         except WebSocketDisconnect:
             pass
 
     tarea_recibir = asyncio.create_task(_recibir())
-
     try:
-        while sesion.activa:
+        while True:
             try:
-                frame = await asyncio.wait_for(cola.get(), timeout=5.0)
+                msg = await asyncio.wait_for(cola.get(), timeout=5.0)
             except asyncio.TimeoutError:
+                if tarea_recibir.done():
+                    break
                 await websocket.send_json({"tipo": "ping"})
                 continue
-
-            await websocket.send_json(frame)
-            if frame.get("tipo") in ("fin", "error"):
+            await websocket.send_json(msg)
+            if msg.get("tipo") in ("fin", "error"):
                 break
-    except (WebSocketDisconnect, Exception):
+    except (WebSocketDisconnect, RuntimeError):
         pass
     finally:
-        sesion.activa = False
-        tarea_sim.cancel()
+        comp.activa = False
+        comp.conectada = False
+        comp.ultimo_ping = time.monotonic()
         tarea_recibir.cancel()
-        _gestor_sesiones.cerrar(sid)
+        await asyncio.to_thread(hilo.join, 10)
         try:
             await websocket.close()
-        except Exception:
+        except RuntimeError:
             pass
-
-
-@app.get("/sesiones")
-def listar_sesiones() -> list[dict]:
-    """Lista las sesiones 3D activas."""
-    return _gestor_sesiones.listar()
-
-
-@app.delete("/sesiones/{sid}", status_code=204)
-def cerrar_sesion(sid: str) -> None:
-    """Cierra una sesión 3D activa."""
-    sesion = _gestor_sesiones.obtener(sid)
-    if sesion is None:
-        raise HTTPException(status_code=404, detail=f"No existe la sesión '{sid}'")
-    _gestor_sesiones.cerrar(sid)
 
 
 # ---------------------------------------------------------------- trips de corrida

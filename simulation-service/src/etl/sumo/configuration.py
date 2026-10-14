@@ -15,6 +15,9 @@ CACHE_DIR = SUMO_DIR.parents[2] / "cache"
 # Resultados de los presets ya simulados (versionados): simulation-service/precalculadas/<preset>/
 PRECALCULADAS_DIR = SUMO_DIR.parents[2] / "precalculadas"
 
+# Huellas de edificios (Microsoft Building Footprints) para la escena 3D (versionado en la raíz)
+EDIFICIOS_GEOJSON = SUMO_DIR.parents[3] / "data" / "processed" / "edificios_ms.geojson"
+
 # Ventana horaria de la simulación (segundos desde las 00:00)
 HORA_INI = 7 * 3600
 HORA_FIN = 10 * 3600

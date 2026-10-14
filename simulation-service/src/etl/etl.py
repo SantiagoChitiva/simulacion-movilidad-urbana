@@ -15,12 +15,14 @@ from .sumo.fcd import FcdConversionResult, FcdToGeoJsonConfig, convert_fcd_to_ge
 from .sumo.kepler import KeplerTripsConfig, KeplerTripsResult, convert_fcd_to_kepler_trips
 from .sumo.proceso import Cancelado, revisar_cancelacion
 from .sumo.simulation import SimulationConfig, SimulationResult, leer_estadisticas, run_simulation
+from .sumo.demanda_zona import DemandaZonaConfig, DemandaZonaStats, generar_demanda_zona
+from .sumo.semaforo_nuevo import SemaforoNuevoConfig, agregar_semaforo
 from .sumo.subred import SubredConfig, SubredDemandaConfig, SubredStats, recortar_demanda, recortar_red
 from .sumo.trips import TripGenerationConfig, TripGenerationResult, generate_trips
 
 __all__ = [
     "Cancelado", "run_pipeline", "run_etl", "simulate", "export_geojson", "export_kepler_trips",
-    "resumen_corrida", "run_recorte",
+    "resumen_corrida", "run_recorte", "run_escenario_semaforo",
 ]
 
 # Recibe la etapa en curso ("generando_demanda", "ruteando", "simulando" o "exportando")
@@ -249,6 +251,95 @@ def run_recorte(
         "zona_rou": str(zona_rou) if zona_rou.is_file() else None,
         "bbox": resultado_red.bbox,
         "demanda_recortada": stats.demanda_recortada,
+    }
+
+
+def _corrida_con_rutas(run_id_preferida: str | None) -> ScenarioPaths | None:
+    """La corrida cuyas rutas se recortan: la pedida o, si no tiene, la más reciente que sí."""
+    candidatas: list[str] = [run_id_preferida] if run_id_preferida else []
+    if RUNS_DIR.is_dir():
+        otras = sorted(
+            (d for d in RUNS_DIR.iterdir() if d.is_dir() and not d.name.startswith(("zona-", "sem-", "sesion"))),
+            key=lambda d: d.stat().st_mtime, reverse=True,
+        )
+        candidatas += [d.name for d in otras]
+    for run_id in candidatas:
+        paths = ScenarioPaths.from_name(DEFAULT_SCENARIO, run_id)
+        if paths.vehroute.is_file() or paths.routes.is_file():
+            return paths
+    return None
+
+
+def run_escenario_semaforo(
+    nodo_id: str,
+    nodo_lon: float,
+    nodo_lat: float,
+    run_id_destino: str,
+    run_id_origen: str | None = None,
+    radio_m: float = 350,
+    intensidades: dict[str, float] | None = None,
+    ciclo_s: int | None = None,
+    on_progreso: OnProgreso = _sin_aviso,
+    cancelar: threading.Event | None = None,
+) -> dict[str, Any]:
+    """Prepara la comparación "sin semáforo / con semáforo propuesto" de un cruce.
+
+    Deja en runs/<run_id_destino>/:
+    - zona.net.xml: la red recortada tal como está (escenario actual, sin semáforo),
+    - zona_tls.net.xml: la misma red con un semáforo nuevo en `nodo_id`,
+    - zona.rou.xml (si alguna corrida tiene rutas), fondo_*.trips.xml y vtypes.add.xml:
+      la demanda, idéntica para los dos lados.
+    """
+    paths_net = ScenarioPaths.from_name(DEFAULT_SCENARIO)
+    destino_dir = RUNS_DIR / run_id_destino
+    destino_dir.mkdir(parents=True, exist_ok=True)
+    zona_net = destino_dir / "zona.net.xml"
+    zona_rou = destino_dir / "zona.rou.xml"
+
+    on_progreso("recortando_red", None)
+    resultado_red = recortar_red(
+        SubredConfig(paths_net.net, (nodo_lon, nodo_lat), radio_m, zona_net), cancelar=cancelar,
+    )
+
+    on_progreso("recortando_demanda", None)
+    origen = _corrida_con_rutas(run_id_origen)
+    rutas_reales: Path | None = None
+    if origen is not None:
+        try:
+            recortar_demanda(SubredDemandaConfig(
+                zona_net=zona_net, rou_xml=origen.routes, destino=zona_rou, net_orig=paths_net.net,
+                vehroute_xml=origen.vehroute if origen.vehroute.is_file() else None,
+            ), cancelar=cancelar)
+            rutas_reales = zona_rou
+        except (RuntimeError, FileNotFoundError):
+            rutas_reales = None   # sin viajes reales: la zona queda solo con fondo sintético
+
+    on_progreso("generando_fondo", None)
+    stats_demanda = DemandaZonaStats()
+    cfg_demanda = DemandaZonaConfig(zona_net=zona_net, destino_dir=destino_dir)
+    if intensidades is not None:
+        cfg_demanda = DemandaZonaConfig(zona_net=zona_net, destino_dir=destino_dir, intensidades=intensidades)
+    demanda = generar_demanda_zona(cfg_demanda, rutas_reales, stats=stats_demanda, cancelar=cancelar)
+
+    on_progreso("instalando_semaforo", None)
+    semaforo = agregar_semaforo(
+        SemaforoNuevoConfig(zona_net, nodo_id, destino_dir / "zona_tls.net.xml", ciclo_s=ciclo_s),
+        cancelar=cancelar,
+    )
+
+    return {
+        "nodo_id": nodo_id,
+        "zona_net": str(zona_net),
+        "zona_tls_net": str(semaforo.net),
+        "demanda": [str(a) for a in demanda.archivos],
+        "vtypes": str(demanda.vtypes),
+        "fuente_demanda": demanda.fuente,
+        "corrida_origen": origen.run_dir.name if origen is not None and rutas_reales else None,
+        "viajes_reales": stats_demanda.viajes_reales,
+        "viajes_sinteticos": stats_demanda.viajes_sinteticos,
+        "bbox": resultado_red.bbox,
+        "fases": semaforo.fases,
+        "ciclo_s": semaforo.ciclo_s,
     }
 
 
