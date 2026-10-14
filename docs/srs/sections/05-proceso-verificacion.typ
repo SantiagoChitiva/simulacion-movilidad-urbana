@@ -194,6 +194,13 @@ prueba está asociado a uno o más requerimientos y especifica el método de ver
 
     [CP-039], [RF-038, RF-039], [D], [Seguir un actor y elegir una vía de la lista.], [El minimapa sigue al actor y deja su rastro; la lista de la vía
     solo contiene actores sobre sus edges.],
+
+    [CP-043], [RF-032, RF-045], [T], [`test_priorizacion.py` con redes de juguete y evidencia en archivos temporales.], [Doble calzada = 1 cruce;
+    exclusiones por reglas; niveles según evidencia; NMS; sin archivos de evidencia no hay error.],
+
+    [CP-044], [RF-044, RF-034], [T, D], [Integración con SUMO real: comparación sobre un cruce de varios nodos, ego inyectado en modo manual y cambio
+    de giro; capturas del visor con Chrome sin interfaz.], [Un solo tlLogic para todos los nodos del cruce; el ego acelera y frena igual en ambos
+    lados; el giro pedido se aplica; la escena muestra calles, edificios, un poste por acceso y el HUD.],
   ),
   caption: [Plan de casos de prueba para requerimientos funcionales.]
 ) <tabCasosPruebaFuncionales>

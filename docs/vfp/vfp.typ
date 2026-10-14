@@ -450,7 +450,12 @@ al menos el 85% de los puntos de conteo, criterio estándar en la validación de
   - escena 3D con la red y los edificios reales;
   - seguimiento en tercera persona de vehículos y peatones;
   - HUD de velocidad, acción, decisiones y riesgo (TTC, DRAC, PET);
-  - minimapa 2D y selección de vías.
+  - minimapa 2D y selección de vías;
+  - escena "tipo videojuego" (calles con marcas, edificios de OSM y Microsoft, semáforo con un poste por acceso) y modo manual para manejar el
+    actor seguido con el teclado;
+  - priorización de cruces candidatos con las reglas y la evidencia del proyecto Semáforos de Barranquilla: siniestros de la Secretaría Distrital
+    de Movilidad, colegios y centros de salud de OSM, tramos largos sin semáforo y volumen simulado, calibrados con los cruces que ya tienen
+    semáforo.
 - *Sprint 8 _(v#version, por desarrollar)_:* reporte exportable de la comparación 3D, programa editable del semáforo propuesto y transporte público con
   buses y paradas reales desde GTFS.
 

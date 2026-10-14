@@ -433,7 +433,8 @@ Las entidades centrales del dominio y sus relaciones son:
 
     [Intersección semaforizada], [Nodo de la red controlado por un `tlLogic`, con accesos, conexiones y un programa de fases.], [`.net.xml`],
 
-    [Cruce candidato], [Nodo sin semáforo con puntaje de priorización; posible ubicación de un semáforo nuevo.], [Priorización (RF-032)],
+    [Cruce candidato], [Cruce sin semáforo (uno o varios nodos de SUMO) que cumple las reglas de priorización; posible ubicación de un semáforo
+    nuevo.], [Priorización (RF-032)],
 
     [Escenario comparativo], [Par de zonas idénticas (sin y con semáforo propuesto) con la misma demanda, simuladas en lockstep.], [`runs/sem-*`],
 
@@ -489,16 +490,16 @@ y mantenimiento:
 
     [`etl/precalculadas.py`], [RF-025, RNF-REP-001], [Simulaciones precalculadas reproducibles.],
 
-    [`etl/sumo/intersecciones.py`, `programas_tls.py`, `subred.py`, `priorizacion.py`], [RF-028 a RF-032], [Intersecciones, programas, Webster,
-    recorte de zonas y priorización.],
+    [`etl/sumo/intersecciones.py`, `programas_tls.py`, `subred.py`, `priorizacion.py`, `evidencia.py`], [RF-028 a RF-032, RF-045],
+    [Intersecciones, programas, Webster, recorte de zonas, priorización y evidencia externa.],
 
     [`etl/sumo/semaforo_nuevo.py`, `demanda_zona.py`, `escena3d.py`, `telemetria.py`], [RF-033, RF-034, RF-036, RF-037, RF-039], [Semáforo
     propuesto, demanda de la zona, geometría de la escena e indicadores de riesgo.],
 
-    [`api/api.py`, `api/jobs.py`, `api/comparacion3d.py`], [RF-015, RF-018, RF-026, RF-031, RF-035, RF-040, RD-003], [API REST/WebSocket, gestor de
+    [`api/api.py`, `api/jobs.py`, `api/comparacion3d.py`], [RF-015, RF-018, RF-026, RF-031, RF-035, RF-040, RF-044, RD-003], [API REST/WebSocket, gestor de
     corridas y bucle lockstep de las comparaciones 3D.],
 
-    [`kepler/src/`], [RF-017, RF-019, RF-020, RF-027, RF-034 a RF-039, RD-004, RNF-USA-001], [Visor web: mapa, paneles y simulador 3D.],
+    [`kepler/src/`], [RF-017, RF-019, RF-020, RF-027, RF-034 a RF-039, RF-044, RD-004, RNF-USA-001], [Visor web: mapa, paneles y simulador 3D.],
 
     [Por definir], [RF-014, RF-016, RF-041, RF-043], [Validación GEH, reanudación por fase, reporte de la comparación 3D y transporte público real.],
 

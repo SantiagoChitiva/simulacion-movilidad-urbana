@@ -88,13 +88,18 @@ español y se organiza así:
   - *Semaforizar:* elige un cruce candidato, ajusta el tráfico de fondo y abre el simulador 3D.
 - *Tarjeta de actividad:* barras de progreso de la corrida en curso o de la descarga, con botón de cancelar.
 - *Simulador 3D comparativo (pantalla completa):*
-  - *Vistas:* dos vistas 3D lado a lado, "Sin semáforo (actual)" y "Con semáforo propuesto", y cámara en tercera persona trasera, aérea o libre.
-  - *HUD por lado:* velocímetro, índice de riesgo con historial, acción del conductor, decisiones en el próximo cruce y métricas del cruce.
-  - *Minimapa:* mapa 2D tipo Maps en la esquina superior derecha.
-  - *Panel de actores y vías:* para lanzar o seguir actores.
+  - *Barra superior:* selector del cruce candidato, modo *Auto / Manual*, pestañas *Comparar / Sin semáforo / Con semáforo*, velocidad de la
+    simulación y cámara (tercera persona trasera o aérea).
+  - *Vistas:* dos vistas 3D lado a lado, "Sin semáforo (actual)" y "Con semáforo propuesto", o una sola a pantalla completa.
+  - *HUD por lado:* una píldora arriba (espera lateral, choques, conflictos y fase del semáforo) y una tarjeta abajo con la velocidad en km/h, el
+    estado del actor, la barra de riesgo y los giros posibles; al hacer clic en la tarjeta se despliega el detalle (TTC, DRAC, PET, decisiones en
+    el próximo cruce, métricas e historial de riesgo).
+  - *Minimapa:* mapa 2D tipo navegador en la esquina superior derecha, girado según el rumbo del actor.
+  - *Panel de actores y vías:* para lanzar o seguir actores; se pliega al empezar a seguir uno.
 
 La interfaz se ajusta al tamaño de la ventana; en pantallas de menos de 900 px de ancho las dos vistas 3D se apilan verticalmente. Se usa con ratón y
-teclado; la cámara libre admite arrastre y rueda.
+teclado; en modo manual el actor seguido se maneja con W/↑ (acelerar), S/↓/Espacio (frenar) y A, X, D (izquierda, recto o derecha en el próximo
+cruce).
 
 #figure(
   table(
@@ -710,18 +715,27 @@ redactan con la forma \"El sistema debe #sym.dots\", y se organizan en cinco fun
   id: [RF-032],
   tipo: [Funcional],
   cu: [CU-11],
-  descripcion: [El sistema debe puntuar de 0 a 100 los cruces sin semáforo (`priority` y `right_before_left`) y clasificarlos en prioritario
-  (≥ 60), recomendado, en observación o sin acción. El puntaje suma:
-  - jerarquía del par de vías (40);
-  - carriles y geometría (15);
-  - hueco en un corredor semaforizado, es decir, un semáforo entre 300 y 600 m (15);
-  - demanda peatonal de la corrida (15);
-  - siniestralidad (15, reservado hasta contar con datos).
-  Se excluyen los cruces a menos de 300 m de un semáforo. El mapa debe mostrar los cruces prioritarios y recomendados.],
-  razon: [Ayuda a decidir dónde vale la pena estudiar un semáforo nuevo antes de simularlo (ver F9).],
-  criterio: [Ningún cruce listado tiene un semáforo a menos de 300 m (Haversine). El orden por puntaje es estable para una misma corrida.],
+  descripcion: [El sistema debe priorizar los cruces sin semáforo con la lógica del proyecto Semáforos de Barranquilla (`github.com/Victorpay1/semaforos-barranquilla`), adaptada a la
+  red de SUMO:
+  - *cruces, no nodos:* los nodos a menos de 20 m se agrupan (span máximo 45 m) y los del mismo par de calles a menos de 150 m (doble calzada) se
+    fusionan; un cruce necesita dos calles distintas que se corten a más de 35°;
+  - *reglas duras:* vía colectora o de mayor jerarquía sin autopistas ni troncales (la Autopista Norte con TransMilenio es de acceso controlado);
+    vía secundaria al menos local residencial; a nivel (sin rampas ni glorietas a menos de 40 m); conflicto real (desde la secundaria se cruza de
+    frente o se gira a la izquierda); sin semáforo a menos de 80 m;
+  - *evidencia calibrada con los cruces que ya tienen semáforo:* siniestros a menos de 30 m ≥ p75 de los semaforizados (mínimo 3), o ≥ mediana con
+    un colegio o centro de salud a menos de 200 m; tramo de la vía principal sin semáforo ≥ 600 m; volumen simulado que entra al cruce ≥ p75 de
+    los semaforizados;
+  - *niveles:* prioritario (reglas y dos o más evidencias), recomendado (una), en observación (siniestros ≥ mediana o un generador cerca); dos
+    cruces del mismo nivel a menos de 120 m se estudian juntos y el peor baja un nivel;
+  - *puntaje:* piso del nivel (75, 50 o 25) más hasta 25 puntos por siniestros, volumen, generadores, tramo y jerarquía.
+  Cada candidato lleva los nodos del cruce, las calles y la evidencia en texto. El mapa muestra los prioritarios y recomendados.],
+  razon: [Ayuda a decidir dónde vale la pena estudiar un semáforo nuevo antes de simularlo (ver F9). La versión anterior puntuaba cada nodo de SUMO
+  por separado (unos 700 candidatos, incluidos nodos a mitad de cuadra y cruces de la Autopista Norte).],
+  criterio: [`test_priorizacion.py`: una doble calzada es un solo cruce; un nodo a mitad de cuadra, una troncal, un cruce con solo giro a la derecha o
+  con semáforo a 70 m quedan fuera; los niveles responden a la evidencia y al NMS. Con la red de Usaquén y la corrida `encuesta` resultan 5
+  prioritarios, 56 recomendados y 146 en observación.],
   prioridad: [Media],
-  modulo: [`simulation-service/src/etl/sumo/priorizacion.py`],
+  modulo: [`simulation-service/src/etl/sumo/priorizacion.py`, `evidencia.py`],
   estado: [Implementado.],
   version: "2.0",
   fecha: []
@@ -763,9 +777,12 @@ datos, su riesgo y sus decisiones.
   tipo: [Funcional],
   cu: [CU-12],
   descripcion: [El visor debe mostrar los dos escenarios en una vista 3D partida. Cada lado debe incluir:
-  - la red 3D real de la zona: carriles con su ancho y marcas, cruces, andenes, ciclorrutas y elevación;
-  - los edificios de Microsoft Building Footprints extruidos;
-  - las luces del semáforo propuesto cambiando según su estado en cada paso;
+  - la red 3D real de la zona: calzadas con divisorias, doble línea amarilla y bordes, polígonos de cruce con su elevación, andenes, ciclorrutas,
+    cebras y líneas de pare en el cruce estudiado, y un terreno que sigue la pendiente;
+  - los edificios de OpenStreetMap y Microsoft Building Footprints extruidos, con ventanas; donde ninguna fuente tiene huellas, edificios de
+    relleno ilustrativo en los frentes de manzana (se indica en la interfaz);
+  - en el lado con semáforo, un poste con brazo por acceso cuyas luces cambian según el estado de cada paso; en el lado sin semáforo, señales de
+    PARE en la vía que cede;
   - un modelo por actor según su tipo (carro, taxi, moto, bicicleta, bus o peatón), con el movimiento interpolado entre frames.],
   razon: [Ver el escenario en 3D hace tangible el resultado de la simulación para usuarios no técnicos.],
   criterio: [Con la comparación abierta, ambos lados muestran los mismos actores en las mismas posiciones mientras sus trayectorias no diverjan, y el
@@ -783,7 +800,8 @@ datos, su riesgo y sus decisiones.
   cu: [CU-12],
   descripcion: [El usuario debe poder seguir con cámara en tercera persona trasera a cualquier vehículo o peatón presente en ambos escenarios, o
   lanzar uno nuevo. Para lanzarlo elige el tipo, la vía de llegada, el giro (recto, izquierda, derecha) y el estilo de conducción; el sistema lo
-  inyecta en los dos lados a la vez con la misma ruta. También debe ofrecer cámara aérea y libre, con la cámara libre sincronizada entre ambos lados.],
+  inyecta en los dos lados a la vez con la misma ruta. También debe ofrecer una cámara aérea sobre el cruce o la vía elegida. La cámara en tercera
+  persona no debe atravesar los edificios al girar en una esquina.],
   razon: [Seguir un mismo actor en los dos escenarios muestra cómo cambia su comportamiento según haya o no semáforo.],
   criterio: [Tras lanzar un actor, en menos de 2 s aparece en ambos lados con el mismo id y la cámara lo sigue. Si no hay ruta peatonal por el
   acceso elegido, el visor muestra un aviso sin interrumpir la simulación.],
@@ -929,6 +947,41 @@ datos, su riesgo y sus decisiones.
   modulo: [Por definir],
   estado: [Pendiente (por desarrollar).],
   version: "2.0",
+  fecha: []
+)
+
+#reqTable(
+  id: [RF-044],
+  tipo: [Funcional],
+  cu: [CU-12],
+  descripcion: [El simulador debe ofrecer un modo *Manual* en el que el usuario maneja el actor seguido con el teclado: acelerar, frenar y elegir el
+  giro en el próximo cruce. Los comandos se aplican igual en los dos escenarios y SUMO conserva sus chequeos de seguridad (no atraviesa un rojo ni
+  choca), de modo que se ve la decisión del usuario frente a las reglas del cruce. El modo *Auto* devuelve el control a SUMO.],
+  razon: [Permite explorar "qué pasa si" el conductor toma otra decisión, como en un videojuego, sin romper la comparación.],
+  criterio: [Con el modo manual activo, mantener W durante 3 s acelera el actor en ambos lados (verificado: 30 km/h en A y B), soltar y frenar lo
+  detiene, y elegir un giro distinto cambia su destino en los dos lados (mensaje `giro`).],
+  prioridad: [Media],
+  modulo: [`simulation-service/src/api/comparacion3d.py` (`Lado.tomar_control`, `controlar`, `girar`), `Simulador3D.jsx`],
+  estado: [Implementado.],
+  version: "2.1",
+  fecha: []
+)
+
+#reqTable(
+  id: [RF-045],
+  tipo: [Funcional],
+  cu: [CU-11],
+  descripcion: [El sistema debe descargar y versionar en `data/processed/` la evidencia externa de la priorización y de la escena 3D: siniestros
+  georreferenciados de la Secretaría Distrital de Movilidad (Histórico de siniestros, datos abiertos de Bogotá) filtrados a Usaquén, colegios y
+  centros de salud de OpenStreetMap y huellas de edificios de OpenStreetMap (`python -m etl.sumo.evidencia`). Si falta un archivo, la
+  priorización no usa esa evidencia y la API lo informa en `notas`.],
+  razon: [Barranquilla prioriza con siniestros y generadores de viajes; sin ellos solo quedan reglas geométricas.],
+  criterio: [La descarga produjo 20.109 siniestros, 370 colegios y centros de salud y 14.773 edificios. Sin los archivos, `GET
+  /intersecciones/priorizacion` responde con una nota y sin error.],
+  prioridad: [Media],
+  modulo: [`simulation-service/src/etl/sumo/evidencia.py`],
+  estado: [Implementado.],
+  version: "2.1",
   fecha: []
 )
 
