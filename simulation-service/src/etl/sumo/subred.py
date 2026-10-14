@@ -70,28 +70,32 @@ def _bbox_grados(lon: float, lat: float, radio_m: float) -> tuple[float, float, 
 
 # --------------------------------------------------------------------------- helpers de herramientas
 
-def _encontrar_cutroutes() -> str:
-    """Localiza cutRoutes.py en SUMO_HOME, en el paquete eclipse-sumo o en el PATH."""
-    # 1. $SUMO_HOME/tools/route/cutRoutes.py (instalación estándar de SUMO)
+def encontrar_herramienta(nombre: str) -> str:
+    """Localiza un script de SUMO (cutRoutes.py, randomTrips.py, ...) en SUMO_HOME o en el paquete eclipse-sumo."""
+    bases: list[Path] = []
+    # 1. $SUMO_HOME/tools (instalación estándar de SUMO)
     sumo_home = os.environ.get("SUMO_HOME")
     if sumo_home:
-        for sub in ("tools/route", "tools"):
-            candidato = Path(sumo_home) / sub / "cutRoutes.py"
-            if candidato.is_file():
-                return str(candidato)
+        bases.append(Path(sumo_home))
     # 2. Paquete pip eclipse-sumo: instala las herramientas bajo sumo/tools/
     try:
         import sumo as _sumo_pkg
-        for sub in ("tools/route", "tools"):
-            candidato = Path(_sumo_pkg.__file__).parent / sub / "cutRoutes.py"
-            if candidato.is_file():
-                return str(candidato)
+        bases.append(Path(_sumo_pkg.__file__).parent)
     except ImportError:
         pass
+    for base in bases:
+        for sub in ("tools/route", "tools"):
+            candidato = base / sub / nombre
+            if candidato.is_file():
+                return str(candidato)
     raise SubredError(
-        "No se encontró 'cutRoutes.py'. "
+        f"No se encontró '{nombre}'. "
         "Configura la variable de entorno SUMO_HOME o instala el paquete eclipse-sumo."
     )
+
+
+def _encontrar_cutroutes() -> str:
+    return encontrar_herramienta("cutRoutes.py")
 
 
 # --------------------------------------------------------------------------- funciones públicas
@@ -153,14 +157,17 @@ def recortar_demanda(
     """Filtra la demanda al subconjunto de rutas que pasan por la zona con cutRoutes.py.
 
     cutRoutes.py retiene los vehículos cuya ruta toca al menos un edge de la subred.
-    Los peatones (walk) se conservan por defecto con --disconnected-routes keep.walk.
+    Si hay vehroute-output se usa en lugar de las rutas: trae los tiempos de salida de cada
+    edge y cutRoutes los usa para calcular la hora de entrada a la zona. Las rutas que
+    quedan partidas en la zona generan un tramo por parte (--disconnected-action keep.walk).
     """
     script = _encontrar_cutroutes()
 
     if not cfg.zona_net.is_file():
         raise FileNotFoundError(f"Subred no encontrada: {cfg.zona_net}")
-    if not cfg.rou_xml.is_file():
-        raise FileNotFoundError(f"Archivo de rutas no encontrado: {cfg.rou_xml}")
+    rutas = cfg.vehroute_xml if cfg.vehroute_xml is not None and cfg.vehroute_xml.is_file() else cfg.rou_xml
+    if not rutas.is_file():
+        raise FileNotFoundError(f"Archivo de rutas no encontrado: {rutas}")
 
     revisar_cancelacion(cancelar)
 
@@ -169,13 +176,11 @@ def recortar_demanda(
     args = [
         sys.executable, script,
         str(cfg.zona_net),
-        str(cfg.rou_xml),
+        str(rutas),
         "-o", str(cfg.destino),
         "--orig-net", str(cfg.net_orig),
-        "--disconnected-routes", "keep.walk",
+        "--disconnected-action", "keep.walk",
     ]
-    if cfg.vehroute_xml is not None and cfg.vehroute_xml.is_file():
-        args += ["--vehroute-file", str(cfg.vehroute_xml)]
 
     resultado = ejecutar(args, cancelar=cancelar)
     if resultado.returncode != 0:
