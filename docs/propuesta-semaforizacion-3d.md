@@ -1,6 +1,6 @@
 # Propuesta: módulo de intersecciones, semaforización y vista 3D
 
-Estado: **fase A implementada** (catálogo de intersecciones semaforizadas con ficha en el visor); fases B–F diseñadas en la [sección 7](#7-diseño-de-implementación-de-las-fases-bf). Fecha: 2026-10-05.
+Estado: **fases A–F implementadas** (rama `feat/fases-b-f-estilos-cierres`). La fase E se rediseñó como **simulador 3D comparativo de semáforo propuesto** (ver la [sección 8](#8-implementado-simulador-3d-comparativo-reemplaza-la-fase-e)), que reemplaza la vista 3D en vivo de un semáforo existente descrita en 5 y 7. Fecha: 2026-10-13.
 
 Este documento responde a dos preguntas del equipo:
 
@@ -223,7 +223,7 @@ Orden sugerido: A → B → C → E (para tener pronto el flujo completo con 3D)
   Además, las Condiciones A/B/C del Manual 2024 evaluadas con los volúmenes simulados, marcadas como indicativas: 3 h simuladas contra las 8 h que pide el Manual.
 - **Pantalla:** "Comparar", con una tabla y barras por métrica (el programa original como referencia).
 
-### Fase E: vista 3D en vivo
+### Fase E: vista 3D en vivo (diseño original, reemplazado por la sección 8)
 
 - **Nuevo `api/sesion3d.py`.**
   - `POST /intersecciones/{id}/sesiones {escenario, programa}` levanta SUMO de la zona con TraCI. Es el mismo patrón que `_run_traci`, pero con pasos de 1 s y suscripciones (`vehicle.subscribe`, `person.subscribe`, `trafficlight.subscribe`).
@@ -249,3 +249,71 @@ Orden sugerido: A → B → C → E (para tener pronto el flujo completo con 3D)
 - **Pasos peatonales:** la red no los tiene (`--crossings.guess`). Sin ellos no hay fase peatonal ni espera de peatones en el semáforo; conviene regenerar la red antes de la fase D.
 - **Programas de la línea base:** son los de netconvert. Si la Secretaría de Movilidad publica tiempos reales, se cargan como `programID="real"` con la misma herramienta de la fase C.
 - **Calidad de los nombres:** 12 de los 220 semáforos quedan sin nombre de calle, porque OSM no lo trae para sus vías.
+
+
+## 8. Implementado: simulador 3D comparativo (reemplaza la fase E)
+
+La fase E original mostraba un semáforo **existente** en vivo. El equipo pidió otra cosa: evaluar dónde **poner** un semáforo nuevo. Para eso se
+muestra, en pantalla partida, el cruce sin semáforo tal como está hoy y el mismo cruce con el semáforo propuesto. La vista es "tipo videojuego": se
+sigue en tercera persona a un vehículo o peatón y se ven en pantalla su velocidad, su riesgo y sus decisiones.
+
+### Flujo
+
+1. Capa **Priorización** o pestaña **Semaforizar** → elegir un cruce candidato (sin semáforo) y el tráfico de fondo por modo.
+2. `POST /cruces/{nodo}/comparacion3d` prepara en un hilo `runs/sem-<id>/` (`etl.run_escenario_semaforo`). El estado se consulta en
+   `GET /comparacion3d/{id}`. La preparación:
+   - recorta 350 m alrededor del nodo con netconvert y lo guarda en `zona.net.xml` (lado A);
+   - recorta la demanda real con `cutRoutes.py` (`zona.rou.xml`), usando el vehroute de la corrida pedida o, si no tiene, el de la más reciente que
+     lo tenga;
+   - genera el tráfico de fondo por modo con `randomTrips.py` (`fondo_<modo>.trips.xml`) y los vTypes (`vtypes.add.xml`);
+   - crea `zona_tls.net.xml`, que es `zona.net.xml` con `netconvert --tls.set <nodo>` (lado B; programa estático de netconvert).
+3. `GET /comparacion3d/{id}/geometria` (`etl/sumo/escena3d.py`) devuelve, en coordenadas de la red:
+   - carriles con ancho, cruces y luces del semáforo propuesto en la línea de pare;
+   - edificios de `data/processed/edificios_ms.geojson`;
+   - vías con nombre y, por cada acceso al nodo, la ruta para cada giro.
+4. `WS /comparacion3d/{id}` (`api/comparacion3d.py`) corre los dos SUMO en lockstep por TraCI:
+   - paso de 0,2 s, semilla 42 y calentamiento de 240 s;
+   - ≈5 frames/s a 1×; a mayor velocidad se agrupan pasos;
+   - comandos `{pausa}`, `{velocidad}`, `{periodo_riesgo}`, `{seguir: id}` e `{inyectar: {tipo, acceso, giro, estilo}}`.
+
+### Telemetría y riesgo (`etl/sumo/telemetria.py`, funciones puras con pruebas)
+
+- **Vehículo:** velocidad y límite, aceleración, líder y gap, espera y tiempo perdido, próximo semáforo (`getNextTLS`), acción derivada (acelera,
+  frena, frena por el semáforo, cede el paso, en cola, cambia de carril), opciones del próximo cruce (`lane.getLinks`, con la que tomará según
+  `getNextLinks`) e intención de cambio de carril (`getLaneChangeStatePretty`).
+- **Peatón:** velocidad, espera y vehículo más cercano.
+- **Riesgo cada N s simulados (1–10):** índice 0–100 que toma el peor de:
+  - TTC (crítico < 1,5 s);
+  - DRAC (crítico > 3,35 m/s²);
+  - PET con `getJunctionFoes` (crítico < 1,5 s).
+- **Métricas por lado:** en el cruce (60 m), detenidos, espera media, conflictos (PET < 1,5 s), colisiones de SUMO y actores en la zona.
+
+### Visor (`kepler/src/components/simulador3d/`)
+
+- `escena.js` (three.js 0.169):
+  - carriles con marcas, cruces y edificios fusionados por material;
+  - semáforos con focos que siguen `getRedYellowGreenState`;
+  - modelos low-poly por vType y peatones, con interpolación entre frames;
+  - cámaras de 3ª persona, aérea y libre (OrbitControls sincronizados entre lados).
+- `HUD.jsx`: velocímetro, barra e historial de riesgo, acción, decisiones y métricas.
+- `Minimapa.jsx`: maplibre-gl 4.7 con teselas de OSM, el actor y su rastro.
+- `Simulador3D.jsx`: ciclo de vida, WebSocket y panel de actores y vías. Se carga en diferido (`React.lazy`).
+
+### Por qué three.js y no deck.gl
+
+deck.gl (sección 5.3) está pensado para vistas cartográficas y no trae una cámara de persecución; la vista "tipo videojuego" necesita controlar la
+cámara detrás del actor. three.js construye la escena desde la geometría en coordenadas de SUMO, que son las mismas que reporta TraCI, así que no hay
+que proyectar en cada frame. kepler.gl sigue siendo la vista de la ciudad completa.
+
+### Pendiente
+
+- Reporte exportable de la comparación (RF-041 del SRS).
+- Programa editable del semáforo propuesto: `SemaforoNuevoConfig.ciclo_s` ya existe, falta exponerlo en el visor (RF-042).
+- Calibrar el tráfico de fondo con aforos del cruce.
+- Pasos peatonales (`--crossings.guess`) para que haya fase peatonal.
+- Transporte público con GTFS (RF-043).
+
+### Corrección de paso
+
+`subred.recortar_demanda` pasaba a `cutRoutes.py` opciones que no existen (`--disconnected-routes`, `--vehroute-file`), así que el recorte de
+demanda de la fase B siempre fallaba. Ahora usa `--disconnected-action keep.walk` y toma el vehroute como archivo de rutas.

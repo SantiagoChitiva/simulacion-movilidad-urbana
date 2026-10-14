@@ -8,7 +8,7 @@ Undergraduate thesis (Pontificia Universidad Javeriana): microscopic urban-mobil
 
 ## Repository layout (two independent Python environments)
 
-- **Repo root**: data-exploration workspace. `requirements.txt` (pandas, geopandas, osmnx, folium, jupyter, pytest-cov, pylint). `notebooks/` holds CRISP-DM phase notebooks named by phase (`F1.x`, `F2.x`). `data/processed/` holds SUMO/OSM artifacts produced by those notebooks (netconvert plain files, `usaquen.net.xml`, TAZ, OD, routes). `data/raw/` is not versioned (it lives on Google Drive). `docs/` holds SPMP/SRS written in **Typst** (`*.typ` → `*.pdf`).
+- **Repo root**: data-exploration workspace. `requirements.txt` (pandas, geopandas, osmnx, folium, jupyter, pytest-cov, pylint). `notebooks/` holds CRISP-DM phase notebooks named by phase (`F1.x`, `F2.x`). `data/processed/` holds SUMO/OSM artifacts produced by those notebooks (netconvert plain files, `usaquen.net.xml`, TAZ, OD, routes). `data/raw/` is not versioned (it lives on Google Drive). `docs/` holds SPMP, SRS and VFP (the approved proposal) written in **Typst** (`*.typ` → `*.pdf`, compile with `pip install typst` then `python -c "import typst; typst.compile('docs/srs/srs.typ', root='docs/srs')"`; figures live in each doc's `figures/`, the root for absolute `/figures/...` paths). Each SRS requirement has an `estado` (Implementado/Parcial/Pendiente); keep it in sync when a requirement is built.
 - **`simulation-service/`**: the actual application, an installable package (`pyproject.toml`, Python ≥3.11, `src/` layout). SUMO comes from the `eclipse-sumo` pip package, so `sumo`/`duarouter` end up on PATH inside the venv.
 - **`kepler/`**: Vite + React + kepler.gl viewer that animates the simulation trips. `/api/*` is proxied to the API at `localhost:8000` (`vite.config.js`). It needs `VITE_MAPBOX_TOKEN` in `kepler/.env` (template: `.env.example`).
   - `App.jsx` (`Visor`) owns the map: it downloads trips with progress and an `AbortController` (`api.descargarJson`), replaces the kepler dataset, and toggles the traffic-light point layer. It opens the intersection card by reading `visState.clicked` (`clicked.object?.index ?? clicked.index` → row in `filasSemaforos`).
@@ -17,10 +17,12 @@ Undergraduate thesis (Pontificia Universidad Javeriana): microscopic urban-mobil
     - `PanelDemanda`: presets, per-mode counts, scale, and seed.
     - `TarjetaActividad`: bottom-right card with progress bars and cancel.
     - `LeyendaModos`: top-center legend plus the "Semáforos" toggle.
-    - `FichaInterseccion`: accesses, volumes, and phases.
+    - `FichaInterseccion`: accesses, volumes, phases, program editing, Webster and program comparison.
+    - `PanelSemaforizacion` (tab "Semaforizar"): picks an unsignalized candidate (click on the Priorización layer or the top-score list) and background traffic per mode, then opens the 3D simulator.
+    - `simulador3d/` (lazy-loaded, three.js + maplibre-gl): `Simulador3D.jsx` (lifecycle: create → poll → geometry → WebSocket; split screen "sin semáforo" | "con semáforo propuesto"), `escena.js` (one three.js scene per side; SUMO coords → three: `x, z-z0, -(y-y0)`, origin at the node; static meshes merged per material; actors interpolated between frames; chase/aerial/free camera), `HUD.jsx`, `Minimapa.jsx` (OSM tiles, no token).
   - `modos.js` holds the mode colors.
   - The right column (`.columna-derecha`) leaves room for kepler's map controls (right) and timeline (bottom).
-- `docs/propuesta-semaforizacion-3d.md`: analysis of the Barranquilla traffic-signal project and the proposed architecture for the intersection/traffic-light module and 3D view (deck.gl + TraCI over WebSocket). Not implemented yet.
+- `docs/propuesta-semaforizacion-3d.md`: analysis of the Barranquilla traffic-signal project and the design of the intersection module (phases A–F, implemented). Section 8 documents the implemented 3D comparative simulator, which replaced the original phase E (deck.gl live view of an existing light).
 
 The root README mentions `src/pipeline/` and `src/simulation/`. Those directories do not exist. All pipeline code is in `simulation-service/src/`.
 
@@ -76,7 +78,8 @@ Conventions across `etl/sumo/` modules:
 - The API (`src/api/api.py`, FastAPI):
   - Default-run files: `/simulation-output?limit=`, `/kepler-trips`, and `/health`. These return 404 if the pipeline hasn't run yet.
   - Parametrized runs: `/demanda/modos`, `/demanda/presets`, `POST/GET /simulaciones`, and `POST /simulaciones/{id}/cancelar`.
-  - Intersections: `GET /intersecciones[/{id}]?run_id=`.
+  - Intersections: `GET /intersecciones[/{id}]?run_id=`, `/intersecciones/priorizacion`, zone cut (`POST /intersecciones/{id}/escenarios`), programs/Webster and program comparisons.
+  - 3D comparison: `POST /cruces/{nodo}/comparacion3d {lon, lat, run_id?, intensidades?}` (202, prepared in a thread), `GET /comparacion3d/{id}`, `GET /comparacion3d/{id}/geometria`, `DELETE`, and `WS /comparacion3d/{id}`. Tests inject `GestorComparaciones(preparar=fake, runs_dir=tmp)` via `app.dependency_overrides[obtener_gestor_comparaciones]`.
   - `api/jobs.py` (`GestorCorridas`) runs one pipeline at a time in a `ThreadPoolExecutor(1)`. It persists `runs/<id>/estado.json`, throttled to one write every 2 s.
     - Progress: `avance` maps each stage to a band of the global progress (`FRANJAS_ETAPA`).
     - Cancel: a `threading.Event` goes down to the subprocesses. `Cancelado` makes the worker delete everything in the run dir except `estado.json`.
@@ -92,6 +95,11 @@ Conventions across `etl/sumo/` modules:
   - The net has no street names: `scenarios/default/nombres_vias.json` (OSM way id → name, from `python -m etl.sumo.intersecciones <osm>`) fills them by edge id (`-123#4` → way `123`).
   - Volumes per access are counted from a run's `vehroute.xml` (last route of a `routeDistribution`).
   - Caches: `simulation-service/cache/semaforos.json` and `output/volumenes.json`, both invalidated by mtime/size.
+- **3D comparative simulator** (`api/comparacion3d.py`, `etl.run_escenario_semaforo`): for an unsignalized node it writes `runs/sem-<id>/` with `zona.net.xml` (A, as-is), `zona_tls.net.xml` (B, `netconvert --tls.set`, `etl/sumo/semaforo_nuevo.py`) and a shared demand (`etl/sumo/demanda_zona.py`: real trips cut with `cutRoutes.py` from the requested or most recent run with a vehroute, plus per-mode background traffic from `randomTrips.py`; the real survey demand alone is too sparse in a 350 m zone).
+  - On WebSocket connect, two SUMO run in lockstep via TraCI (`Lado`): step 0.2 s, seed 42, 240 s warm-up, subscriptions for actors. Actor arrays are `[id, tipo, x, y, z, ángulo, v, edge]` in net coords; vType ids are cloned by TraCI as `auto@ego_1`, so strip `@`.
+  - The followed actor ("ego") is injected with the same id/route on both sides (`_ruta_inyeccion` from `escena3d.rutas_por_acceso`); pedestrians use `findIntermodalRoute` between walkable edges.
+  - Risk/behaviour are pure functions in `etl/sumo/telemetria.py` (TTC, DRAC, PET via `getJunctionFoes`, `clasificar_accion`).
+  - `cutRoutes.py` takes `--disconnected-action`, not `--disconnected-routes`, and has no `--vehroute-file`: pass the vehroute as the routes file.
 - Public transport (`transporte_publico`) is still `<person><walk>`: there are no buses, stops, or GTFS. The README documents the limitation and the fix (gtfs2pt + `personTrip modes="public"`).
 - Persons' kepler mode is derived from the id prefix (`peaton_N`, `transporte_publico_N`), so `kepler.mode_of` depends on the id format in `trips.py`. `kepler/src/App.jsx` maps modes to colors (`MODE_COLORS`) and builds the color range in alphabetical order of the modes present, because that's how kepler's ordinal scale assigns them. Add a color there when you add a `TransportMode`.
 
