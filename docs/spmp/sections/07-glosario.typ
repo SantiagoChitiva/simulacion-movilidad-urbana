@@ -1,0 +1,36 @@
+= Glosario
+
+#figure(
+  table(
+    columns: (auto, 1fr),
+    table.header([Término / Acrónimo], [Definición]),
+    [SUMO], [Simulation of Urban MObility. Simulador de tráfico microscópico de código abierto.],
+    [FastAPI], [Framework de Python para construir APIs web (REST y WebSocket). Base del backend del módulo web.],
+    [ETL], [Extract, Transform, Load. Pipeline de procesamiento de datos por etapas.],
+    [O/D], [Matriz Origen-Destino. Estructura que cuantifica viajes entre pares de zonas geográficas.],
+    [TAZ], [Traffic Analysis Zone. Unidad espacial básica del modelo de demanda de transporte.],
+    [UPZ], [Unidad de Planeamiento Zonal. División administrativa de Bogotá usada como TAZ.],
+    [HMD], [Hora de Máxima Demanda. Período de mayor volumen vehicular (AM o PM).],
+    [GEH], [Estadístico de validación de modelos de tráfico. Valor < 5 indica buena calibración.],
+    [RMSE], [Root Mean Square Error. Métrica de error cuadrático medio usada en validación.],
+    [CRISP-DM], [Cross-Industry Standard Process for Data Mining. Metodología iterativa de ciencia de datos.],
+    [Scrum], [Marco ágil de desarrollo de software basado en sprints iterativos cortos.],
+    [TraCI], [Traffic Control Interface. API de SUMO para control en tiempo real de simulaciones.],
+    [netconvert], [Herramienta de SUMO para convertir redes viales de OSM al formato `.net.xml` (y, en v2.0, para instalar el semáforo propuesto).],
+    [duarouter], [Herramienta de SUMO para asignar rutas a los viajes de las matrices O/D.],
+    [OSM], [OpenStreetMap. Mapa vial colaborativo de código abierto.],
+    [PEP 8], [Guía de estilo para código Python de la Python Software Foundation.],
+    [WBS], [Work Breakdown Structure. Estructura de descomposición de tareas del proyecto.],
+    [SPMP], [Software Project Management Plan. Plan de Administración del Proyecto de Software.],
+    [SRS], [Software Requirements Specification. Especificación de Requisitos del Software.],
+    [SDD], [Software Design Document. Documento de Diseño del Software.],
+    [tlLogic], [Programa de un semáforo en la red de SUMO: fases con duración y estado por conexión.],
+    [Webster], [Método clásico de cálculo del ciclo óptimo de un semáforo a partir de los flujos críticos @webster.],
+    [TTC / DRAC / PET], [Indicadores sustitutos de seguridad @ssm: tiempo a la colisión, desaceleración requerida para evitarla y tiempo entre el
+    paso de dos actores por un mismo punto de conflicto.],
+    [Lockstep], [Ejecución de dos simulaciones avanzando el mismo intervalo en cada paso, para compararlas instante a instante.],
+    [kepler.gl / three.js], [Bibliotecas de visualización del visor web: mapa animado de viajes y render 3D del simulador comparativo.],
+    [Typst], [Lenguaje de marcado y compilador de documentos (similar a LaTeX) usado para el SPMP, el SRS y la VFP.],
+  ),
+  caption: [Glosario.],
+) <tabGlosario>

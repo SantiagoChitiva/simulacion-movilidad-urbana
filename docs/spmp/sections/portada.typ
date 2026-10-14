@@ -13,7 +13,7 @@
     Facultad de Ingeniería -- Departamento de Ingeniería de Sistemas
   ]
 
-  #v(5em)
+  #v(3em)
 
   #text(size: 14pt, weight: "bold")[
     PLAN DE ADMINISTRACIÓN DEL PROYECTO DE SOFTWARE \
@@ -28,7 +28,7 @@
 
   #text(size:14pt)[*Estándar base:* IEEE Std 1058--1998 / ISO / IEC 12207:2008]
 
-  #v(7em)
+  #v(3.5em)
 
   #text(size: 12pt)[#info.autores.join("\n")]
 
@@ -38,7 +38,7 @@
 
   #v(3em)
 
-  #text(size: 12pt)[Bogotá D.C., #datetime.today().display() ]
+  #text(size: 12pt)[Bogotá D.C., #info.fecha \ Versión #info.version]
 
 ]
 ]
