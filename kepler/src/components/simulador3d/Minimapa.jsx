@@ -22,7 +22,7 @@ const vacio = { type: 'FeatureCollection', features: [] };
  * Mapa 2D "tipo Maps" en la esquina: el cruce estudiado, la zona simulada, el actor
  * seguido y el rastro que ha dejado.
  */
-export default function Minimapa({ nodo, bbox, ego, egoId, seguir = true }) {
+export default function Minimapa({ nodo, bbox, ego, egoId, rumbo = null, seguir = true }) {
   const contenedor = useRef(null);
   const mapa = useRef(null);
   const listo = useRef(false);
@@ -79,8 +79,15 @@ export default function Minimapa({ nodo, bbox, ego, egoId, seguir = true }) {
     }
     m.getSource('ego')?.setData({ type: 'Feature', geometry: { type: 'Point', coordinates: punto } });
     m.getSource('rastro')?.setData({ type: 'Feature', geometry: { type: 'LineString', coordinates: rastro.current } });
-    if (seguir) m.easeTo({ center: punto, duration: 300 });
-  }, [ego, seguir]);
+    // como un navegador: el mapa gira para que el sentido de marcha quede hacia arriba
+    if (seguir) m.easeTo({ center: punto, bearing: rumbo ?? m.getBearing(), duration: 300 });
+  }, [ego, seguir, rumbo]);
 
-  return <div ref={contenedor} className="sim3d-minimapa" aria-label="Mapa 2D de la zona" />;
+  // maplibre le pone position: relative al contenedor del mapa: el posicionamiento va en un envoltorio
+  return (
+    <div className="sim3d-minimapa" aria-label="Mapa 2D de la zona">
+      <div ref={contenedor} className="sim3d-minimapa-mapa" />
+      <span className="sim3d-minimapa-norte" style={{ transform: `rotate(${-(rumbo ?? 0)}deg)` }} title="Norte">N</span>
+    </div>
+  );
 }

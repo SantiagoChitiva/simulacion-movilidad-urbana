@@ -350,37 +350,57 @@ html, body, #root {
   display: flex; flex-direction: column; font: var(--pd-fuente); color: var(--pd-texto);
 }
 .sim3d button, .sim3d select {
-  font: var(--pd-fuente); color: var(--pd-texto); background: var(--pd-fondo-2);
-  border: 1px solid var(--pd-borde); border-radius: 4px; padding: 4px 9px; cursor: pointer;
+  font: var(--pd-fuente); color: var(--pd-texto); background: rgba(36, 39, 48, 0.92);
+  border: 1px solid var(--pd-borde); border-radius: 6px; padding: 5px 10px; cursor: pointer;
 }
 .sim3d button:hover:not(:disabled) { border-color: var(--pd-acento); }
 .sim3d button:disabled { opacity: 0.45; cursor: not-allowed; }
-.sim3d button.activo { border-color: var(--pd-acento); color: var(--pd-acento); }
+.sim3d button.activo { border-color: var(--pd-acento); color: #fff; background: #2f3542; }
 .sim3d-barra {
-  display: flex; align-items: center; gap: 12px; padding: 6px 12px;
-  background: var(--pd-fondo); border-bottom: 1px solid var(--pd-borde); flex-wrap: wrap;
+  display: flex; align-items: center; gap: 10px; padding: 6px 12px; flex: none;
+  background: #171a21; border-bottom: 1px solid #000; flex-wrap: wrap;
 }
-.sim3d-titulo { display: flex; flex-direction: column; min-width: 0; flex: 1; }
+.sim3d-titulo { display: flex; flex-direction: column; min-width: 0; flex: 1; gap: 2px; }
 .sim3d-titulo strong { color: #fff; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.sim3d-titulo span { color: var(--pd-tenue); font-size: 11px; }
+.sim3d-titulo span { color: var(--pd-tenue); font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sim3d-selector-cruce { max-width: 360px; font-weight: 600 !important; color: #fff !important; border-radius: 16px !important; }
 .sim3d-controles-top { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 .sim3d-grupo { display: inline-flex; }
 .sim3d-grupo button { border-radius: 0; margin-left: -1px; }
-.sim3d-grupo button:first-child { border-radius: 4px 0 0 4px; }
-.sim3d-grupo button:last-child { border-radius: 0 4px 4px 0; }
-.sim3d-cerrar { font-size: 16px !important; line-height: 1; padding: 2px 10px !important; }
-.sim3d-vistas { position: relative; flex: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 2px; min-height: 0; }
-.sim3d-vista { position: relative; overflow: hidden; background: #000; }
+.sim3d-grupo button:first-child { border-radius: 6px 0 0 6px; margin-left: 0; }
+.sim3d-grupo button:last-child { border-radius: 0 6px 6px 0; }
+.sim3d-pildoras button { border-radius: 14px !important; border-color: transparent; background: transparent; }
+.sim3d-pildoras button.activo.rojo { background: #e0262f; border-color: #e0262f; color: #fff; font-weight: 700; }
+.sim3d-pildoras { background: rgba(36, 39, 48, 0.92); border-radius: 16px; padding: 2px; gap: 2px; }
+.sim3d-pestanas button.activo { background: #3a404d; color: #fff; font-weight: 600; }
+.sim3d-cerrar { font-size: 16px !important; line-height: 1; padding: 3px 11px !important; }
+
+.sim3d-cuerpo { position: relative; flex: 1; min-height: 0; }
+.sim3d-vistas {
+  position: absolute; inset: 0; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr; gap: 2px;
+  background: #000;
+}
+.sim3d-vistas.vista-a { grid-template-columns: 1fr 0; gap: 0; }
+.sim3d-vistas.vista-b { grid-template-columns: 0 1fr; gap: 0; }
+.sim3d-vista { position: relative; overflow: hidden; background: #000; min-width: 0; min-height: 0; }
 .sim3d-lienzo { position: absolute; inset: 0; }
 .sim3d-lienzo canvas { display: block; }
+
+/* minimapa 2D arriba a la derecha (el envoltorio es el que se posiciona: ver Minimapa.jsx) */
 .sim3d-minimapa {
-  position: absolute; top: 10px; right: 10px; width: 260px; height: 190px; z-index: 5;
-  border: 2px solid rgba(255, 255, 255, 0.85); border-radius: 8px; overflow: hidden;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  position: absolute; top: 12px; right: 12px; width: 240px; height: 170px; z-index: 5;
+  border: 2px solid rgba(255, 255, 255, 0.9); border-radius: 14px; overflow: hidden;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45); background: #dde3e8;
+}
+.sim3d-minimapa-mapa { width: 100%; height: 100%; }
+.sim3d-minimapa-norte {
+  position: absolute; top: 6px; left: 6px; z-index: 2; width: 20px; height: 20px; border-radius: 50%;
+  background: rgba(20, 24, 30, 0.8); color: #fff; font-size: 10px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; pointer-events: none;
 }
 .sim3d-cortina {
   position: absolute; inset: 0; z-index: 10; display: flex; flex-direction: column;
-  align-items: center; justify-content: center; gap: 10px; background: rgba(10, 12, 16, 0.82);
+  align-items: center; justify-content: center; gap: 10px; background: rgba(10, 12, 16, 0.86);
   text-align: center; padding: 20px;
 }
 .sim3d-cortina p { font-size: 14px; color: #fff; margin: 0; }
@@ -391,64 +411,93 @@ html, body, #root {
 }
 @keyframes sim3d-giro { to { transform: rotate(360deg); } }
 .sim3d-panel {
-  position: absolute; left: 10px; bottom: 10px; z-index: 6; width: 250px; max-height: calc(100% - 80px);
-  overflow-y: auto; background: rgba(36, 39, 48, 0.94); border: 1px solid var(--pd-borde);
-  border-radius: 8px; padding: 10px; display: flex; flex-direction: column; gap: 6px;
+  position: absolute; left: 12px; top: 56px; z-index: 6; width: 250px; max-height: calc(100% - 150px);
+  overflow-y: auto; background: rgba(23, 26, 33, 0.93); border: 1px solid var(--pd-borde);
+  border-radius: 10px; padding: 10px; display: flex; flex-direction: column; gap: 6px;
 }
-.sim3d-panel.plegado { width: auto; padding: 4px; }
+.sim3d-panel.plegado { width: auto; padding: 4px; background: transparent; border-color: transparent; }
 .sim3d-panel h4 { margin: 8px 0 0; font-size: 12px; color: #fff; }
 .sim3d-panel label { display: flex; flex-direction: column; gap: 2px; color: var(--pd-tenue); }
 .sim3d-panel select { width: 100%; }
-.sim3d-plegar { align-self: flex-end; }
-.sim3d-primario { background: #1f6f80 !important; color: #fff !important; font-weight: 600; }
+.sim3d-plegar { align-self: flex-start; }
+.sim3d-primario { background: #e0262f !important; border-color: #e0262f !important; color: #fff !important; font-weight: 700; }
 .sim3d-lista { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 3px; }
 .sim3d-lista button { width: 100%; text-align: left; }
-
-/* HUD de cada lado */
-.hud { position: absolute; inset: 0; pointer-events: none; display: flex; flex-direction: column; justify-content: space-between; }
-.hud > * { pointer-events: auto; }
-.hud-titulo { display: flex; align-items: center; gap: 8px; padding: 8px 10px; flex-wrap: wrap; }
-.hud-chip { padding: 3px 10px; border-radius: 12px; font-weight: 700; color: #111; }
-.hud-chip.sin { background: #ffb300; }
-.hud-chip.con { background: #00e676; }
-.hud-subtitulo { color: #fff; text-shadow: 0 1px 3px #000; font-size: 11px; }
-.hud-fase { background: rgba(0, 0, 0, 0.6); color: #fff; padding: 2px 8px; border-radius: 10px; font-variant-numeric: tabular-nums; }
-.hud-metricas { position: absolute; top: 40px; left: 10px; display: flex; flex-wrap: wrap; gap: 4px; max-width: calc(100% - 290px); }
-.hud-metricas span { background: rgba(0, 0, 0, 0.55); color: #dfe6ee; padding: 2px 7px; border-radius: 4px; font-size: 11px; }
-.hud-metricas b { color: #fff; }
-.hud-vacio { align-self: center; margin-bottom: 18px; background: rgba(0, 0, 0, 0.6); color: #fff; padding: 6px 12px; border-radius: 6px; }
-.hud-ego {
-  display: flex; gap: 10px; align-items: flex-end; padding: 10px; width: 100%; box-sizing: border-box;
-  justify-content: flex-end; flex-wrap: wrap;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.78), rgba(0, 0, 0, 0));
+.sim3d-teclas, .sim3d-aviso {
+  position: absolute; left: 50%; transform: translateX(-50%); z-index: 7;
+  background: rgba(14, 17, 22, 0.85); color: #e8edf2; padding: 5px 12px; border-radius: 14px;
+  font-size: 11px; white-space: nowrap; pointer-events: none;
 }
-.hud-col { background: rgba(14, 17, 22, 0.82); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 8px; padding: 8px; }
-.hud-actor { color: #fff; }
+.sim3d-teclas { bottom: 100px; }
+.sim3d-aviso { bottom: 130px; color: #ffd27a; white-space: normal; max-width: 60%; text-align: center; }
+.sim3d-teclas kbd {
+  background: #2f3542; border: 1px solid #4a5160; border-bottom-width: 2px; border-radius: 3px;
+  padding: 0 4px; font: inherit; color: #fff;
+}
+
+/* HUD de cada lado (estilo de la referencia: píldora arriba, tarjeta abajo) */
+.hud { position: absolute; inset: 0; pointer-events: none; }
+.hud > * { pointer-events: auto; }
+.hud-pildora {
+  position: absolute; top: 12px; left: 12px; display: flex; align-items: center; gap: 10px;
+  background: rgba(20, 23, 29, 0.82); color: #dfe6ee; padding: 6px 14px; border-radius: 18px;
+  font-size: 12px; letter-spacing: 0.02em; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); max-width: calc(100% - 300px);
+  flex-wrap: wrap;
+}
+.hud-pildora b { color: #fff; letter-spacing: 0.08em; }
+.hud-punto-estado { width: 9px; height: 9px; border-radius: 50%; display: inline-block; }
+.hud-punto-estado.sin { background: #ffb300; box-shadow: 0 0 6px #ffb300; }
+.hud-punto-estado.con { background: #29e36a; box-shadow: 0 0 6px #29e36a; }
+.hud-fase { color: #9fe8b8; font-variant-numeric: tabular-nums; }
+.hud-vacio {
+  position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+  background: rgba(14, 17, 22, 0.8); color: #fff; padding: 7px 14px; border-radius: 10px; text-align: center;
+}
+.hud-tarjeta {
+  position: absolute; bottom: 14px; right: 14px; display: flex; align-items: center; gap: 12px;
+  background: rgba(250, 250, 250, 0.96) !important; color: #1b1f24 !important; border: none !important;
+  border-radius: 14px !important; padding: 8px 14px !important; box-shadow: 0 6px 22px rgba(0, 0, 0, 0.35);
+  text-align: left; min-width: 280px;
+}
+.sim3d-vista:first-child .hud-tarjeta { right: auto; left: 14px; }
+.vista-a .sim3d-vista:first-child .hud-tarjeta { left: auto; right: 14px; }
+.hud-kmh { display: flex; flex-direction: column; align-items: center; line-height: 1; min-width: 46px; }
+.hud-kmh b { font-size: 30px; font-weight: 800; font-variant-numeric: tabular-nums; }
+.hud-kmh small { font-size: 10px; color: #6b7480; margin-top: 2px; }
+.hud-modo { background: #e0262f; color: #fff; padding: 6px 10px; border-radius: 10px; font-weight: 700; font-size: 12px; white-space: nowrap; }
+.hud-modo.manual { background: #1d6fd8; }
+.hud-estado { display: flex; flex-direction: column; gap: 4px; min-width: 150px; }
+.hud-estado b { font-size: 15px; font-weight: 700; }
+.hud-estado small { font-size: 11px; color: #5d6670; }
+.hud-barra-riesgo {
+  position: relative; height: 5px; border-radius: 3px; width: 130px;
+  background: linear-gradient(to right, #2ecc71, #ffb300 45%, #ff3b30);
+}
+.hud-barra-riesgo span {
+  position: absolute; top: -3px; width: 4px; height: 11px; margin-left: -2px; border-radius: 2px;
+  background: #1b1f24; transition: left 0.3s;
+}
+.hud-giros { display: flex; gap: 4px; font-style: normal; font-size: 18px; font-weight: 700; }
+.hud-giros i { font-style: normal; opacity: 0.55; }
+.hud-giros i.elegido { opacity: 1; text-shadow: 0 0 1px #000; }
+.hud-detalle {
+  position: absolute; bottom: 86px; right: 14px; width: 300px; max-height: calc(100% - 210px); overflow-y: auto;
+  background: rgba(14, 17, 22, 0.9); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 12px; padding: 10px;
+}
+.sim3d-vista:first-child .hud-detalle { right: auto; left: 14px; }
+.vista-a .sim3d-vista:first-child .hud-detalle { left: auto; right: 14px; }
+.hud-detalle-cab { color: #fff; display: flex; flex-wrap: wrap; gap: 6px; align-items: baseline; }
+.hud-texto-accion { color: #9ecbff; font-size: 11px; width: 100%; }
 .hud-id { color: var(--pd-tenue); font-size: 10px; }
-.hud-velocimetro { width: 130px; height: 104px; display: block; }
-.hud-vel-fondo { fill: none; stroke: #2c333d; stroke-width: 8; stroke-linecap: round; }
-.hud-vel-valor { fill: none; stroke-width: 8; stroke-linecap: round; }
-.hud-vel-limite { stroke: #ff3b30; stroke-width: 2.5; }
-.hud-vel-numero { fill: #fff; font-size: 22px; font-weight: 700; text-anchor: middle; font-variant-numeric: tabular-nums; }
-.hud-vel-unidad { fill: var(--pd-tenue); font-size: 7px; text-anchor: middle; }
-.hud-accion { text-align: center; font-weight: 700; padding: 3px 6px; border-radius: 4px; background: #2c333d; color: #fff; }
-.accion-acelera, .accion-crucero, .accion-camina { background: #1d5e3a; }
-.accion-frena, .accion-frena_cruce, .accion-cede_paso, .accion-en_cola, .accion-espera_cruzar { background: #7a5a00; }
-.accion-frenada_fuerte, .accion-frena_semaforo, .accion-espera_semaforo { background: #8a1f1a; }
-.accion-cambia_carril { background: #1f4f8a; }
-.hud-col-datos { width: 200px; }
-.hud-riesgo-cab { display: flex; justify-content: space-between; color: #fff; }
-.hud-barra { height: 7px; background: #2c333d; border-radius: 4px; overflow: hidden; margin: 4px 0; }
-.hud-barra span { display: block; height: 100%; transition: width 0.3s; }
-.hud-causa { color: var(--pd-tenue); font-size: 10px; }
-.hud-spark { width: 100%; height: 26px; margin-top: 3px; }
+.hud-causa { color: var(--pd-tenue); font-size: 10px; margin-top: 6px; }
+.hud-spark { width: 100%; height: 28px; margin-top: 3px; }
 .hud-spark polyline { fill: none; stroke: #00e5ff; stroke-width: 1.5; }
 .hud-spark-umbral { stroke: rgba(255, 59, 48, 0.5); stroke-dasharray: 3 3; }
 .hud-tabla { display: grid; grid-template-columns: auto auto; gap: 1px 8px; margin: 6px 0 0; font-size: 11px; }
 .hud-tabla dt { color: var(--pd-tenue); }
 .hud-tabla dd { margin: 0; color: #fff; text-align: right; font-variant-numeric: tabular-nums; }
 .hud-punto { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 3px; }
-.hud-decisiones { width: 210px; }
+.hud-decisiones { margin-top: 8px; }
 .hud-subcab { color: #fff; font-weight: 600; margin-bottom: 4px; }
 .hud-decisiones ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 3px; }
 .hud-decisiones li { display: flex; gap: 6px; align-items: center; padding: 2px 4px; border-radius: 4px; }
@@ -486,13 +535,20 @@ html, body, #root {
 .ps-lista button:hover, .ps-lista button.activo { border-color: var(--pd-acento); }
 .ps-lista-nombre { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .ps-punto { width: 8px; height: 8px; border-radius: 50%; flex: none; }
+.ps-evidencias { margin: 4px 0 6px; padding-left: 16px; color: var(--pd-texto); font-size: 11px; }
+.ps-evidencias li { margin: 1px 0; }
+.ps-filtros { display: flex; gap: 4px; flex-wrap: wrap; }
+.ps-filtros button { flex: 1 1 45%; font-size: 11px; }
+.ps-boton.activo { border-color: var(--pd-acento); color: #fff; }
 .ps-enlace { background: none; border: none; color: var(--pd-acento); cursor: pointer; font: var(--pd-fuente); padding: 0; align-self: flex-start; }
 
 @media (max-width: 900px) {
-  .sim3d-vistas { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; }
-  .sim3d-minimapa { width: 150px; height: 110px; }
-  .hud-metricas { max-width: calc(100% - 170px); }
-  .hud-col-datos, .hud-decisiones { width: auto; }
+  .sim3d-vistas.vista-comparar { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; }
+  .sim3d-minimapa { width: 140px; height: 100px; }
+  .hud-pildora { max-width: calc(100% - 170px); font-size: 11px; }
+  .hud-tarjeta { min-width: 0; left: 8px !important; right: 8px !important; }
+  .hud-detalle { left: 8px !important; right: 8px !important; width: auto; }
+  .sim3d-panel { top: auto; bottom: 8px; }
 }
 
 /* ── Tabla de comparación (TablaComparacion.jsx) ─────────────────────────── */

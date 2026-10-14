@@ -12,11 +12,14 @@ const nombre = (c) => (c.calles?.length ? c.calles.join(' × ') : `Cruce ${c.id}
  * Elegir un cruce sin semáforo (de la capa de priorización) y abrir el simulador 3D
  * que lo compara tal como está y con un semáforo propuesto.
  */
-export default function PanelSemaforizacion({ seleccionado, candidatos, priorizacionVisible, onMostrarPriorizacion, onElegir, onAbrir }) {
+export default function PanelSemaforizacion({ seleccionado, candidatos, notas = [], priorizacionVisible, onMostrarPriorizacion, onElegir, onAbrir }) {
   const [intensidades, setIntensidades] = useState(INTENSIDADES_DEFECTO);
   const [verMas, setVerMas] = useState(false);
+  const [nivel, setNivel] = useState('todos');
 
-  const top = [...candidatos].sort((a, b) => b.puntaje_total - a.puntaje_total).slice(0, verMas ? 30 : 8);
+  const conteo = candidatos.reduce((acc, c) => ({ ...acc, [c.nivel]: (acc[c.nivel] ?? 0) + 1 }), {});
+  const filtrados = candidatos.filter((c) => (nivel === 'todos' ? c.nivel !== 'observacion' : c.nivel === nivel));
+  const top = [...filtrados].sort((a, b) => b.puntaje_total - a.puntaje_total).slice(0, verMas ? 40 : 8);
 
   return (
     <div className="ps-panel">
@@ -39,6 +42,11 @@ export default function PanelSemaforizacion({ seleccionado, candidatos, prioriza
             Puntaje {Math.round(seleccionado.puntaje_total)}
             {seleccionado.distancia_semaforo_m != null && ` · semáforo más cercano a ${Math.round(seleccionado.distancia_semaforo_m)} m`}
           </div>
+          {seleccionado.evidencias?.length > 0 && (
+            <ul className="ps-evidencias" aria-label="Por qué es candidato">
+              {seleccionado.evidencias.map((e) => <li key={e}>{e}</li>)}
+            </ul>
+          )}
 
           <fieldset className="ps-intensidades">
             <legend>Tráfico de fondo de la zona (por hora)</legend>
@@ -68,7 +76,18 @@ export default function PanelSemaforizacion({ seleccionado, candidatos, prioriza
 
       {candidatos.length > 0 && (
         <>
-          <h4 className="ps-subtitulo">Cruces con mayor puntaje</h4>
+          <h4 className="ps-subtitulo">Cruces candidatos</h4>
+          <p className="pd-nota">
+            Reglas y evidencia como en Semáforos de Barranquilla: vía colectora o mayor, a nivel, con cruces reales y
+            sin semáforo a menos de 80 m; evidencia de siniestros (SDM), tramo largo sin semáforo y volumen simulado,
+            calibrada con los cruces que ya tienen semáforo. No reemplaza un estudio de tránsito con aforos.
+          </p>
+          <div className="ps-filtros" role="group" aria-label="Nivel">
+            {[['todos', `Mapa (${(conteo.prioritario ?? 0) + (conteo.recomendado ?? 0)})`], ['prioritario', `Prioritarios (${conteo.prioritario ?? 0})`],
+              ['recomendado', `Recomendados (${conteo.recomendado ?? 0})`], ['observacion', `En observación (${conteo.observacion ?? 0})`]].map(([id, et]) => (
+              <button key={id} type="button" className={`ps-boton ${nivel === id ? 'activo' : ''}`} onClick={() => setNivel(id)}>{et}</button>
+            ))}
+          </div>
           <ul className="ps-lista">
             {top.map((c) => (
               <li key={c.id}>
@@ -80,13 +99,14 @@ export default function PanelSemaforizacion({ seleccionado, candidatos, prioriza
               </li>
             ))}
           </ul>
-          {candidatos.length > 8 && (
+          {filtrados.length > 8 && (
             <button type="button" className="ps-enlace" onClick={() => setVerMas(!verMas)}>
               {verMas ? 'Ver menos' : 'Ver más'}
             </button>
           )}
         </>
       )}
+      {notas.map((n) => <p key={n} className="pd-nota">{n}</p>)}
     </div>
   );
 }

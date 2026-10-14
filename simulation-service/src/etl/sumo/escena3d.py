@@ -19,8 +19,11 @@ Incluye:
 - semáforo propuesto: un poste por acceso, con los linkIndex de cada giro,
 - terreno: grilla de alturas interpoladas de la red, para que suelo y edificios sigan la
   pendiente (Usaquén sube hacia los cerros),
-- edificios de Microsoft Building Footprints (data/processed/edificios_ms.geojson)
-  recortados a la zona; sin altura conocida se les asigna una de 6 a 21 m,
+- edificios: huellas de OpenStreetMap (edificios_osm.geojson) más las de Microsoft Building
+  Footprints (edificios_ms.geojson) que no repiten una de OSM; sin altura conocida se les
+  asigna una de 6 a 21 m. Ninguna de las dos fuentes cubre toda Usaquén: donde un frente de
+  manzana no tiene huellas se ponen edificios de relleno ilustrativo ("relleno": true),
+  solo para dar contexto visual,
 - las vías con nombre (para elegir qué mirar) y, por cada acceso al cruce, las rutas
   posibles según el giro (para inyectar el actor seguido).
 """
@@ -33,13 +36,16 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any
 
-from .configuration import EDIFICIOS_GEOJSON
+from .configuration import EDIFICIOS_GEOJSON, EDIFICIOS_OSM_GEOJSON
 from .intersecciones import _via_osm
 from .semaforo_nuevo import tipo_nodo
 
 LARGO_ANTES_M = 220      # tramo que recorre el actor antes de llegar al cruce
 LARGO_DESPUES_M = 160    # y después de cruzarlo
-MAX_EDIFICIOS = 2500
+MAX_EDIFICIOS = 3000
+MAX_RELLENO = 1500
+FRENTE_RELLENO_M = 12      # frente de cada edificio de relleno
+RETIRO_RELLENO_M = 3.8     # andén + antejardín desde el borde de la calzada
 AREA_MIN_EDIFICIO_M2 = 12
 PASO_TERRENO_M = 10
 MARGEN_TERRENO_M = 120
@@ -109,6 +115,32 @@ def _edificios_lonlat(path: Path) -> tuple[tuple[tuple[tuple[float, float], ...]
     return tuple(edificios)
 
 
+def _dentro(x: float, y: float, anillo) -> bool:
+    """Punto en polígono (rayo horizontal)."""
+    dentro = False
+    for (x0, y0), (x1, y1) in zip(anillo, anillo[1:] + anillo[:1]):
+        if (y0 > y) != (y1 > y) and x < (x1 - x0) * (y - y0) / (y1 - y0) + x0:
+            dentro = not dentro
+    return dentro
+
+
+@lru_cache(maxsize=1)
+def _edificios_combinados(path_osm: Path, path_ms: Path) -> tuple:
+    """OSM + las huellas de Microsoft cuyo centro no cae dentro de un edificio de OSM."""
+    osm = _edificios_lonlat(path_osm)
+    celda = 0.0005
+    indice: dict[tuple[int, int], list] = defaultdict(list)
+    for anillo, _, (cx, cy) in osm:
+        indice[(int(cx // celda), int(cy // celda))].append(anillo)
+    salida = list(osm)
+    for anillo, altura, (cx, cy) in _edificios_lonlat(path_ms):
+        i, j = int(cx // celda), int(cy // celda)
+        vecinos = (a for di in (-1, 0, 1) for dj in (-1, 0, 1) for a in indice.get((i + di, j + dj), ()))
+        if not any(_dentro(cx, cy, list(a)) for a in vecinos):
+            salida.append((anillo, altura, (cx, cy)))
+    return tuple(salida)
+
+
 def _area(puntos: list[tuple[float, float]]) -> float:
     return abs(sum(x0 * y1 - x1 * y0 for (x0, y0), (x1, y1) in zip(puntos, puntos[1:] + puntos[:1]))) / 2
 
@@ -118,6 +150,7 @@ def edificios_zona(
     a_xy,
     z_suelo,
     path: Path = EDIFICIOS_GEOJSON,
+    path_osm: Path | None = EDIFICIOS_OSM_GEOJSON,
 ) -> list[dict]:
     """Edificios cuyo centro cae en el bbox (w, s, e, n), en coordenadas de la red.
 
@@ -126,7 +159,8 @@ def edificios_zona(
     """
     w, s, e, n = bbox_lonlat
     salida = []
-    for anillo, altura, (cx, cy) in _edificios_lonlat(path):
+    fuente = _edificios_combinados(path_osm, path) if path_osm is not None else _edificios_lonlat(path)
+    for anillo, altura, (cx, cy) in fuente:
         if not (w <= cx <= e and s <= cy <= n):
             continue
         puntos = [a_xy(lon, lat) for lon, lat in anillo]
@@ -141,6 +175,107 @@ def edificios_zona(
         })
         if len(salida) >= MAX_EDIFICIOS:
             break
+    return salida
+
+
+def relleno_edificios(calzadas: list[dict], reales: list[dict], z_suelo, limites: list[float]) -> list[dict]:
+    """Edificios ilustrativos en los frentes de manzana sin huellas (a la derecha de cada vía).
+
+    Cajas de 12 m de frente y 9 a 15 m de fondo, retiradas del borde de la calzada; no se
+    ponen si tocan un carril, otro edificio (real o de relleno) o la esquina.
+    """
+    celda = 8.0
+    carriles: dict[tuple[int, int], list] = defaultdict(list)
+    for c in calzadas:
+        f = c["forma"]
+        for (x0, y0, _), (x1, y1, _) in zip(f, f[1:]):
+            largo = math.hypot(x1 - x0, y1 - y0)
+            for k in range(int(largo // 2) + 1):
+                t = min(k * 2 / largo, 1.0) if largo else 0.0
+                x, y = x0 + (x1 - x0) * t, y0 + (y1 - y0) * t
+                carriles[(int(x // celda), int(y // celda))].append((x, y, c["ancho"] / 2))
+    ocupado: dict[tuple[int, int], list] = defaultdict(list)       # vértices
+    poligonos: dict[tuple[int, int], list] = defaultdict(list)     # huellas, por celda de su bbox
+
+    def ocupar(contorno) -> None:
+        for x, y in contorno:
+            ocupado[(int(x // celda), int(y // celda))].append((x, y))
+        xs = [x for x, _ in contorno]
+        ys = [y for _, y in contorno]
+        for i in range(int(min(xs) // celda), int(max(xs) // celda) + 1):
+            for j in range(int(min(ys) // celda), int(max(ys) // celda) + 1):
+                poligonos[(i, j)].append(contorno)
+
+    for ed in reales:
+        ocupar([tuple(p) for p in ed["contorno"]])
+
+    def solapa(esquinas) -> bool:
+        """Algún vértice ocupado cae dentro del candidato, o el candidato dentro de una huella."""
+        cx = sum(x for x, _ in esquinas) / 4
+        cy = sum(y for _, y in esquinas) / 4
+        i, j = int(cx // celda), int(cy // celda)
+        for di in (-2, -1, 0, 1, 2):
+            for dj in (-2, -1, 0, 1, 2):
+                if any(_dentro(x, y, esquinas) for x, y in ocupado.get((i + di, j + dj), ())):
+                    return True
+        for x, y in esquinas + [(cx, cy)]:
+            if any(_dentro(x, y, pol) for pol in poligonos.get((int(x // celda), int(y // celda)), ())):
+                return True
+        return False
+
+    def libre(x: float, y: float, margen: float) -> bool:
+        i, j = int(x // celda), int(y // celda)
+        for di in (-2, -1, 0, 1, 2):
+            for dj in (-2, -1, 0, 1, 2):
+                for cx, cy, media in carriles.get((i + di, j + dj), ()):
+                    if math.hypot(cx - x, cy - y) < media + margen:
+                        return False
+                for ox, oy in ocupado.get((i + di, j + dj), ()):
+                    if math.hypot(ox - x, oy - y) < 0.6:
+                        return False
+        return True
+
+    x0, y0, x1, y1 = limites
+    salida = []
+    for c in calzadas:
+        if c["indice"] != 0 or c.get("solo_bus"):
+            continue
+        f = c["forma"]
+        acumulado = 0.0
+        total = sum(math.hypot(b[0] - a[0], b[1] - a[1]) for a, b in zip(f, f[1:]))
+        for a, b in zip(f, f[1:]):
+            largo = math.hypot(b[0] - a[0], b[1] - a[1])
+            if largo < 1:
+                continue
+            dx, dy = (b[0] - a[0]) / largo, (b[1] - a[1]) / largo
+            nx, ny = dy, -dx                                    # derecha del sentido de marcha
+            s = FRENTE_RELLENO_M / 2
+            while s < largo - FRENTE_RELLENO_M / 2:
+                pos = acumulado + s
+                semilla = zlib.crc32(f"{c['id']}{pos:.0f}".encode())
+                # lejos de las esquinas, y con lotes vacíos de vez en cuando (no es una muralla)
+                if 15 < pos < total - 15 and semilla % 4:
+                    fondo = 9 + semilla % 7
+                    retiro = c["ancho"] / 2 + RETIRO_RELLENO_M
+                    px, py = a[0] + dx * s, a[1] + dy * s
+                    cx, cy = px + nx * (retiro + fondo / 2), py + ny * (retiro + fondo / 2)
+                    hx, hy = dx * (FRENTE_RELLENO_M / 2 - 0.4), dy * (FRENTE_RELLENO_M / 2 - 0.4)
+                    fx, fy = nx * fondo / 2, ny * fondo / 2
+                    esquinas = [(cx - hx - fx, cy - hy - fy), (cx + hx - fx, cy + hy - fy),
+                                (cx + hx + fx, cy + hy + fy), (cx - hx + fx, cy - hy + fy)]
+                    if (x0 <= cx <= x1 and y0 <= cy <= y1 and not solapa(esquinas)
+                            and all(libre(x, y, 1.5) for x, y in esquinas + [(cx, cy)])):
+                        salida.append({
+                            "contorno": [[round(x, 2), round(y, 2)] for x, y in esquinas],
+                            "altura": 3.0 * (2 + (semilla >> 3) % 3),   # 2 a 4 pisos, como en los barrios
+                            "z": round(min(z_suelo(x, y) for x, y in esquinas), 2),
+                            "relleno": True,
+                        })
+                        ocupar(esquinas)
+                        if len(salida) >= MAX_RELLENO:
+                            return salida
+                s += FRENTE_RELLENO_M
+            acumulado += largo
     return salida
 
 
@@ -469,6 +604,11 @@ def geometria_escena(
             centro_edge[c["edge"]] = c["forma"][len(c["forma"]) // 2]
 
     accesos = rutas_por_acceso(zona, ids, nombres)
+
+    def z_terreno(x: float, y: float) -> float:
+        return altura_terreno(malla, x, y)
+
+    edificios = edificios_zona((w, s, e, n), a_xy, z_terreno)
     nlon, nlat = a_lonlat(centro["x"], centro["y"])
     return {
         "nodo": {"id": nodo_id, **centro, "tipo_actual": tipo_nodo(zona, nodo_id), "lon": nlon, "lat": nlat},
@@ -483,7 +623,7 @@ def geometria_escena(
         "bocas": _bocas(red["calzadas"], red["edges"], conjunto),
         "postes_semaforo": _postes_semaforo(red["conexiones_tl"], red["calzadas"], accesos),
         "terreno": malla,
-        "edificios": edificios_zona((w, s, e, n), a_xy, lambda x, y: altura_terreno(malla, x, y)),
+        "edificios": edificios + relleno_edificios(red["calzadas"], edificios, z_terreno, limites),
         "vias": sorted(
             (
                 {"nombre": nombre, "edges": eids, "centro": centro_edge.get(eids[0])}

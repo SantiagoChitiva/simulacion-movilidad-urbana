@@ -17,6 +17,8 @@ PRECALCULADAS_DIR = SUMO_DIR.parents[2] / "precalculadas"
 
 # Huellas de edificios (Microsoft Building Footprints) para la escena 3D (versionado en la raíz)
 EDIFICIOS_GEOJSON = SUMO_DIR.parents[3] / "data" / "processed" / "edificios_ms.geojson"
+# huellas de OpenStreetMap (python -m etl.sumo.evidencia edificios); se combinan con las de Microsoft
+EDIFICIOS_OSM_GEOJSON = SUMO_DIR.parents[3] / "data" / "processed" / "edificios_osm.geojson"
 
 # Evidencia para priorizar cruces (python -m etl.sumo.evidencia): siniestros SDM y POIs OSM
 SINIESTROS_GEOJSON = SUMO_DIR.parents[3] / "data" / "processed" / "siniestros_usaquen.geojson"
