@@ -28,7 +28,7 @@ from etl.sumo.enums.transport_mode import TransportMode
 from etl.sumo.estilos import EstiloConductor, INFO_ESTILOS, PARAMS_ESTILO
 from etl.sumo.cierres import CierreVial, escribir_rerouter
 from etl.sumo.geojson_reader import read_first_features
-from etl.sumo.priorizacion import a_geojson, puntuar_cruces
+from etl.sumo.priorizacion import a_geojson, analisis_con_cache, puntuar
 from etl.sumo.programas_tls import (
     ProgramaTLS, FasePrograma, leer_programas, leer_programa,
     escribir_programa, validar_programa, webster,
@@ -269,12 +269,19 @@ def listar_intersecciones(
 def listar_priorizacion(
     gestor: Gestor, run_id: str | None = None, precalculada: Preset | None = None
 ) -> dict:
-    """Cruces sin semáforo puntuados por criterios de priorización (Fase F)."""
+    """Cruces sin semáforo candidatos a uno nuevo, por niveles (reglas + evidencia)."""
     vols = _volumenes_corrida(gestor, run_id, precalculada)
-    semaforos = list(_semaforos().values())
     paths = ScenarioPaths.from_name(DEFAULT_SCENARIO)
-    cruces = puntuar_cruces(paths.net, semaforos_existentes=semaforos, volumenes_run_id=vols)
-    return a_geojson(cruces)
+    analisis = analisis_con_cache(paths.net, paths.nombres_vias, CACHE_DIR / "priorizacion.json")
+    cruces, umbrales = puntuar(analisis, vols)
+    notas = []
+    if not analisis["hay_siniestros"]:
+        notas.append("Sin datos de siniestros: ejecuta python -m etl.sumo.evidencia siniestros")
+    if not analisis["hay_pois"]:
+        notas.append("Sin colegios ni centros de salud: ejecuta python -m etl.sumo.evidencia pois")
+    if vols is None:
+        notas.append("La corrida no tiene vehroute-output: el volumen no cuenta como evidencia.")
+    return {**a_geojson(cruces, umbrales, notas), "descartes": analisis["descartes"]}
 
 
 @app.get("/intersecciones/{tl_id}")
@@ -577,6 +584,8 @@ class SolicitudComparacion3D(BaseModel):
     run_id: str | None = None
     # tráfico de fondo por modo (veh/h; "peaton" en personas/h)
     intensidades: dict[str, float] | None = None
+    # todos los nodos de SUMO del cruce (los da la priorización); vacío = solo nodo_id
+    nodos: list[str] | None = None
 
     @model_validator(mode="after")
     def _validar_intensidades(self) -> "SolicitudComparacion3D":
@@ -609,7 +618,9 @@ def crear_comparacion_3d(nodo_id: str, solicitud: SolicitudComparacion3D, gestor
     """
     run_id = solicitud.run_id if solicitud.run_id and not solicitud.run_id.startswith("precalculada-") else None
     try:
-        comp = gestor.crear(nodo_id, solicitud.lon, solicitud.lat, run_id, solicitud.intensidades)
+        comp = gestor.crear(
+            nodo_id, solicitud.lon, solicitud.lat, run_id, solicitud.intensidades, nodos=solicitud.nodos,
+        )
     except RuntimeError as exc:
         raise HTTPException(status_code=429, detail=str(exc)) from exc
     return comp.resumen()
@@ -674,7 +685,13 @@ async def ws_comparacion_3d(websocket: WebSocket, cid: str) -> None:
                     comp.velocidad = max(0.25, min(float(cmd["velocidad"]), 20.0))
                 if "periodo_riesgo" in cmd:
                     comp.periodo_riesgo = max(0.4, min(float(cmd["periodo_riesgo"]), 30.0))
-                if "seguir" in cmd or "inyectar" in cmd:
+                if "control" in cmd:
+                    # se lee en cada paso del bucle: no hace falta pasar por la cola
+                    try:
+                        comp.acelerar = max(-1, min(1, int((cmd["control"] or {}).get("acelerar", 0))))
+                    except (TypeError, ValueError, AttributeError):
+                        pass
+                if "seguir" in cmd or "inyectar" in cmd or "manual" in cmd or "giro" in cmd:
                     comp.comandos.put(cmd)
         except WebSocketDisconnect:
             pass

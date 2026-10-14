@@ -30,9 +30,16 @@ def red(tmp_path) -> Path:
 def test_to_args(tmp_path):
     cfg = SemaforoNuevoConfig(tmp_path / "z.net.xml", "123", tmp_path / "t.net.xml", ciclo_s=90)
     args = cfg.to_args("netconvert")
-    assert args[args.index("--tls.set") + 1] == "123"
+    assert args[args.index("-n") + 1] == str(tmp_path / "semaforo_propuesto.nod.xml")
     assert args[args.index("--tls.default-type") + 1] == "static"
     assert args[args.index("--tls.cycle.time") + 1] == "90"
+
+
+def test_parche_un_tl_para_todos_los_nodos(tmp_path):
+    cfg = SemaforoNuevoConfig(tmp_path / "z.net.xml", "1", tmp_path / "t.net.xml", nodos=("1", "2", "3"))
+    texto = cfg.escribir_parche({"1", "2"}).read_text(encoding="utf-8")
+    assert texto.count('type="traffic_light" tl="1"') == 2
+    assert 'id="3"' not in texto   # fuera de la zona
 
 
 def test_tipo_nodo(red):

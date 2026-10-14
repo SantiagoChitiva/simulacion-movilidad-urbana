@@ -281,8 +281,12 @@ def run_escenario_semaforo(
     ciclo_s: int | None = None,
     on_progreso: OnProgreso = _sin_aviso,
     cancelar: threading.Event | None = None,
+    nodos: list[str] | None = None,
 ) -> dict[str, Any]:
     """Prepara la comparación "sin semáforo / con semáforo propuesto" de un cruce.
+
+    `nodos` son todos los nodos de SUMO del cruce (p. ej. las dos calzadas de una
+    avenida); el semáforo propuesto los controla a todos con un único programa.
 
     Deja en runs/<run_id_destino>/:
     - zona.net.xml: la red recortada tal como está (escenario actual, sin semáforo),
@@ -323,12 +327,16 @@ def run_escenario_semaforo(
 
     on_progreso("instalando_semaforo", None)
     semaforo = agregar_semaforo(
-        SemaforoNuevoConfig(zona_net, nodo_id, destino_dir / "zona_tls.net.xml", ciclo_s=ciclo_s),
+        SemaforoNuevoConfig(
+            zona_net, nodo_id, destino_dir / "zona_tls.net.xml", ciclo_s=ciclo_s, nodos=tuple(nodos or ()),
+        ),
         cancelar=cancelar,
     )
 
     return {
         "nodo_id": nodo_id,
+        "nodos": list(dict.fromkeys([nodo_id, *(nodos or [])])),
+        "tl_id": semaforo.tl_id,
         "zona_net": str(zona_net),
         "zona_tls_net": str(semaforo.net),
         "demanda": [str(a) for a in demanda.archivos],
