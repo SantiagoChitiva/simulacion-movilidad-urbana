@@ -8,8 +8,10 @@ Se descarga una sola vez y se versiona en data/processed/ (son archivos pequeño
   en datosabiertos.bogota.gov.co), filtrados a la localidad de Usaquén.
 - pois_usaquen.geojson: generadores de viajes peatonales sensibles (colegios, jardines,
   universidades, hospitales y clínicas) de OpenStreetMap vía Overpass.
+- edificios_osm.geojson: huellas de edificios de OpenStreetMap (con altura o pisos si los
+  tienen) para la escena 3D; complementan las de Microsoft, que en Usaquén son incompletas.
 
-Uso: python -m etl.sumo.evidencia [siniestros|pois ...]
+Uso: python -m etl.sumo.evidencia [siniestros|pois|edificios ...]
 
 Si un archivo no existe, la priorización simplemente no usa esa evidencia.
 """
@@ -21,12 +23,14 @@ import urllib.request
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from .configuration import POIS_GEOJSON, SINIESTROS_GEOJSON
+from .configuration import EDIFICIOS_OSM_GEOJSON, POIS_GEOJSON, SINIESTROS_GEOJSON
 
 URL_SINIESTROS = (
     "https://services2.arcgis.com/NEwhEo9GGSHXcRXV/arcgis/rest/services/HistoricoSiniestros/FeatureServer/0/query"
 )
 URL_OVERPASS = "https://overpass-api.de/api/interpreter"
+# espejos de Overpass por si el principal está saturado
+URLS_OVERPASS = (URL_OVERPASS, "https://maps.mail.ru/osm/tools/overpass/api/interpreter")
 # bbox (s, w, n, e) de la red de Usaquén (origBoundary de usaquen_3d.net.xml)
 BBOX_USAQUEN = (4.663887, -74.058552, 4.851830, -73.996799)
 AMENIDADES = ("school", "kindergarten", "college", "university", "hospital", "clinic")
@@ -42,6 +46,7 @@ class EvidenciaError(RuntimeError):
 class EvidenciaConfig:
     siniestros: Path = SINIESTROS_GEOJSON
     pois: Path = POIS_GEOJSON
+    edificios: Path = EDIFICIOS_OSM_GEOJSON
     localidad: str = "USAQUEN"
     pagina: int = 2000          # maxRecordCount del servicio
     timeout_s: int = 120
@@ -51,6 +56,7 @@ class EvidenciaConfig:
 class EvidenciaStats:
     siniestros: int = 0
     pois: int = 0
+    edificios: int = 0
     paginas: int = 0
     pois_por_tipo: dict[str, int] = field(default_factory=dict)
 
@@ -129,7 +135,7 @@ def descargar_pois(cfg: EvidenciaConfig = EvidenciaConfig(), stats: EvidenciaSta
         f'(nwr["amenity"~"^({regex})$"]({s},{w},{n},{e}););'
         'out center tags;'
     )
-    datos = _leer_json(URL_OVERPASS, urllib.parse.urlencode({"data": consulta}).encode(), cfg.timeout_s)
+    datos = _overpass(consulta, cfg.timeout_s)
     features = []
     for el in datos.get("elements", []):
         lon = el.get("lon", el.get("center", {}).get("lon"))
@@ -149,6 +155,53 @@ def descargar_pois(cfg: EvidenciaConfig = EvidenciaConfig(), stats: EvidenciaSta
     return cfg.pois
 
 
+def _overpass(consulta: str, timeout: int) -> dict:
+    ultimo: Exception | None = None
+    for url in URLS_OVERPASS:
+        try:
+            datos = _leer_json(url, urllib.parse.urlencode({"data": consulta}).encode(), timeout, intentos=2)
+            if "elements" in datos:
+                return datos
+        except EvidenciaError as exc:
+            ultimo = exc
+    raise EvidenciaError(f"Ningún servidor Overpass respondió: {ultimo}")
+
+
+def _altura_osm(tags: dict) -> float | None:
+    """Altura en metros: `height` si existe; si no, `building:levels` x 3 m."""
+    for clave, factor in (("height", 1.0), ("building:levels", 3.0)):
+        valor = (tags.get(clave) or "").replace(",", ".").split(" ")[0].removesuffix("m")
+        try:
+            numero = float(valor) * factor
+        except ValueError:
+            continue
+        if 2 <= numero <= 250:
+            return round(numero, 1)
+    return None
+
+
+def descargar_edificios(cfg: EvidenciaConfig = EvidenciaConfig(), stats: EvidenciaStats | None = None) -> Path:
+    """Huellas de edificios de OSM dentro del bbox de la red."""
+    stats = stats if stats is not None else EvidenciaStats()
+    s, w, n, e = BBOX_USAQUEN
+    consulta = f'[out:json][timeout:{cfg.timeout_s * 2}];way["building"]({s},{w},{n},{e});out tags geom;'
+    datos = _overpass(consulta, cfg.timeout_s * 3)
+    features = []
+    for el in datos.get("elements", []):
+        anillo = [[round(p["lon"], 7), round(p["lat"], 7)] for p in el.get("geometry", [])]
+        if len(anillo) < 4 or anillo[0] != anillo[-1]:
+            continue
+        tags = el.get("tags", {})
+        features.append({
+            "type": "Feature",
+            "geometry": {"type": "Polygon", "coordinates": [anillo]},
+            "properties": {"height": _altura_osm(tags) or -1, "building": tags.get("building")},
+        })
+    stats.edificios = len(features)
+    _escribir(cfg.edificios, features, "OpenStreetMap (Overpass), ODbL")
+    return cfg.edificios
+
+
 def leer_puntos(path: Path) -> list[tuple[float, float, dict]]:
     """(lon, lat, propiedades) de un GeoJSON de puntos; vacío si el archivo no existe."""
     if not path.is_file():
@@ -163,14 +216,16 @@ def leer_puntos(path: Path) -> list[tuple[float, float, dict]]:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Descarga la evidencia para priorizar cruces.")
-    parser.add_argument("fuentes", nargs="*", choices=["siniestros", "pois"])
+    parser.add_argument("fuentes", nargs="*", choices=["siniestros", "pois", "edificios"])
     args = parser.parse_args()
-    args.fuentes = args.fuentes or ["siniestros", "pois"]
+    args.fuentes = args.fuentes or ["siniestros", "pois", "edificios"]
     stats = EvidenciaStats()
     if "siniestros" in args.fuentes:
         print(f"siniestros -> {descargar_siniestros(stats=stats)} ({stats.siniestros})")
     if "pois" in args.fuentes:
         print(f"pois -> {descargar_pois(stats=stats)} ({stats.pois}: {stats.pois_por_tipo})")
+    if "edificios" in args.fuentes:
+        print(f"edificios -> {descargar_edificios(stats=stats)} ({stats.edificios})")
 
 
 if __name__ == "__main__":

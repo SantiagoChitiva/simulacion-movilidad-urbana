@@ -78,7 +78,7 @@ const configPriorizacion = {
               { name: 'nivel', format: null },
               { name: 'puntaje_total', format: null },
               { name: 'calles', format: null },
-              { name: 'distancia_semaforo_m', format: null },
+              { name: 'evidencias', format: null },
             ],
           },
         },
@@ -160,10 +160,13 @@ const configSemaforos = {
 };
 
 // fila de la capa de priorización (kepler) → cruce candidato para el simulador 3D
+// (kepler no acepta listas en las columnas: nodos y evidencias viajan como texto)
 const aCandidato = (fila) => ({
   ...fila,
   lon: fila.lng,
   calles: fila.calles ? fila.calles.split(' × ') : [],
+  nodos: fila.nodos ? fila.nodos.split(',') : [fila.id],
+  evidencias: fila.evidencias ? fila.evidencias.split(' | ') : [],
 });
 
 const tickDePintado = () => new Promise((r) => setTimeout(r, 30)); // deja que React pinte antes de bloquear
@@ -212,6 +215,7 @@ function Visor() {
   const [cruceCandidato, setCruceCandidato] = useState(null);   // cruce sin semáforo elegido
   const [candidatos, setCandidatos] = useState([]);
   const [simulador, setSimulador] = useState(null);   // { cruce, corrida, intensidades }
+  const [notasPriorizacion, setNotasPriorizacion] = useState([]);
   const [cierres, setCierres] = useState([]);
   const abortar = useRef(null);
   const primeraCarga = useRef(true);
@@ -367,20 +371,26 @@ function Visor() {
     obtenerPriorizacion(corridaMapa)
       .then((fc) => {
         if (cancelado) return;
-        // Solo mostrar cruces con acción concreta (prioritario / recomendado)
-        const filas = fc.features
-          .filter((f) => f.properties.nivel === 'prioritario' || f.properties.nivel === 'recomendado')
-          .map((f) => ({
-            id: f.properties.id,
-            nivel: f.properties.nivel,
-            puntaje_total: f.properties.puntaje_total,
-            distancia_semaforo_m: f.properties.distancia_semaforo_m,
-            calles: (f.properties.calles ?? []).join(' × '),
-            lng: f.geometry.coordinates[0],
-            lat: f.geometry.coordinates[1],
-          }));
+        // En el mapa, como en Semáforos de Barranquilla: prioritarios y recomendados
+        // (los "en observación" quedan solo en la lista del panel)
+        const todas = fc.features.map((f) => ({
+          id: f.properties.id,
+          nivel: f.properties.nivel,
+          puntaje_total: f.properties.puntaje_total,
+          distancia_semaforo_m: f.properties.distancia_semaforo_m,
+          calles: (f.properties.calles ?? []).join(' × '),
+          nodos: (f.properties.nodos ?? []).join(','),
+          evidencias: (f.properties.evidencias ?? []).join(' | '),
+          siniestros: f.properties.siniestros,
+          generadores: f.properties.generadores,
+          tramo_m: f.properties.tramo_m,
+          lng: f.geometry.coordinates[0],
+          lat: f.geometry.coordinates[1],
+        }));
+        const filas = todas.filter((f) => f.nivel === 'prioritario' || f.nivel === 'recomendado');
         filasPriorizacion.current = filas;
-        setCandidatos(filas.map(aCandidato));
+        setCandidatos(todas.map(aCandidato));
+        setNotasPriorizacion(fc.notas ?? []);
         limpiarInteraccion();
         dispatch(removeDataset(DATASET_PRIORIZACION));
         dispatch(
@@ -435,8 +445,10 @@ function Visor() {
         <Suspense fallback={<div className="sim3d"><div className="sim3d-cortina"><div className="sim3d-spinner" /><p>Cargando el simulador 3D…</p></div></div>}>
           <Simulador3D
             cruce={simulador.cruce}
+            candidatos={candidatos.filter((c) => c.nivel !== 'observacion')}
             corrida={simulador.corrida}
             intensidades={simulador.intensidades}
+            onCambiarCruce={(c) => c && setSimulador((s) => ({ ...s, cruce: c }))}
             onCerrar={() => setSimulador(null)}
           />
         </Suspense>
@@ -495,6 +507,7 @@ function Visor() {
               <PanelSemaforizacion
                 seleccionado={cruceCandidato}
                 candidatos={candidatos}
+                notas={notasPriorizacion}
                 priorizacionVisible={priorizacionVisible}
                 onMostrarPriorizacion={() => setPriorizacionVisible(true)}
                 onElegir={setCruceCandidato}

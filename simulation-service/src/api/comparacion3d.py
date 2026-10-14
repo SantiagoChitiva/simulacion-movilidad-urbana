@@ -269,21 +269,35 @@ class Lado:
     # -- simulación
     def avanzar(self, hasta: float) -> None:
         self.con.simulationStep(hasta)
-        # en un salto largo (calentamiento) un actor puede entrar y salir en el mismo paso
-        for vid in self.con.simulation.getDepartedIDList():
-            try:
-                self.con.vehicle.subscribe(vid, self._vars_veh)
-            except self._traci_error:
-                pass
-        for pid in self.con.simulation.getDepartedPersonIDList():
-            try:
-                self.con.person.subscribe(pid, self._vars_per)
-            except self._traci_error:
-                pass
+        # En un salto largo (calentamiento) un actor puede entrar y salir en el mismo paso.
+        # No hay que suscribirlo: SUMO 1.27 acumula el texto de cada suscripción fallida y,
+        # cuando pasa de 255 bytes, se cae ("Storage::writeUnsignedByte(): Invalid value").
+        vehiculos = self.con.simulation.getDepartedIDList()
+        if vehiculos:
+            vivos = set(self.con.vehicle.getIDList())
+            for vid in vehiculos:
+                if vid in vivos:
+                    self.con.vehicle.subscribe(vid, self._vars_veh)
+        personas = self.con.simulation.getDepartedPersonIDList()
+        if personas:
+            vivas = set(self.con.person.getIDList())
+            for pid in personas:
+                if pid in vivas:
+                    self.con.person.subscribe(pid, self._vars_per)
         self.colisiones += self.con.simulation.getCollidingVehiclesNumber()
 
     def tiempo(self) -> float:
         return self.con.simulation.getTime()
+
+    def stderr(self, limite: int = 1500) -> str:
+        """Final de lo que SUMO escribió en stderr (para explicar una caída)."""
+        try:
+            self._err.flush()
+            self._err.seek(0)
+            lineas = [l for l in self._err.read().splitlines() if "is not known" not in l]
+            return "\n".join(lineas)[-limite:].strip()
+        except (OSError, ValueError):
+            return ""
 
     def cerrar(self) -> None:
         try:
@@ -762,8 +776,9 @@ def correr_comparacion(comp: Comparacion, cola: asyncio.Queue, bucle: asyncio.Ab
 
         publicar({"tipo": "fin", "t": t})
     except Exception as exc:   # noqa: BLE001
-        logger.exception("Falló la comparación %s", comp.cid)
-        publicar({"tipo": "error", "mensaje": str(exc)[:500]})
+        detalle = " | ".join(f"lado {l.nombre}: {l.stderr()}" for l in lados if l.stderr())
+        logger.exception("Falló la comparación %s. SUMO: %s", comp.cid, detalle)
+        publicar({"tipo": "error", "mensaje": f"{exc}"[:300] + (f" (SUMO: {detalle[-400:]})" if detalle else "")})
     finally:
         for lado in lados:
             lado.cerrar()

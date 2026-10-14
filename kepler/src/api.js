@@ -85,11 +85,12 @@ export const crearComparacion = (tlId, datos) =>
 export const obtenerComparacion = (compId) => pedir(`/comparaciones/${encodeURIComponent(compId)}`);
 
 // Simulador 3D comparativo: cruce sin semáforo (actual) vs. con semáforo propuesto
-export const crearComparacion3D = (nodoId, { lon, lat, corrida, intensidades }) =>
+// `nodos`: todos los nodos de SUMO del cruce (doble calzada), según la priorización
+export const crearComparacion3D = (nodoId, { lon, lat, corrida, intensidades, nodos }) =>
   pedir(`/cruces/${encodeURIComponent(nodoId)}/comparacion3d`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ lon, lat, run_id: corrida?.precalculada ? null : corrida?.id ?? null, intensidades }),
+    body: JSON.stringify({ lon, lat, run_id: corrida?.precalculada ? null : corrida?.id ?? null, intensidades, nodos }),
   });
 export const obtenerComparacion3D = (cid) => pedir(`/comparacion3d/${encodeURIComponent(cid)}`);
 export const obtenerGeometriaComparacion3D = (cid) => pedir(`/comparacion3d/${encodeURIComponent(cid)}/geometria`);
