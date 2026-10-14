@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useCallback, useEffect, useRef, useState } from 'react';
+import React, { Suspense, lazy, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import { taskMiddleware } from 'react-palm/tasks';
@@ -23,6 +23,7 @@ import PanelCierres from './components/PanelCierres';
 import PanelDemanda from './components/PanelDemanda';
 import TarjetaActividad from './components/TarjetaActividad';
 import PanelSemaforizacion from './components/PanelSemaforizacion';
+import LimiteErrores from './components/simulador3d/LimiteErrores';
 
 // three.js y maplibre solo se descargan al abrir el simulador
 const Simulador3D = lazy(() => import('./components/simulador3d/Simulador3D'));
@@ -216,6 +217,8 @@ function Visor() {
   const [candidatos, setCandidatos] = useState([]);
   const [simulador, setSimulador] = useState(null);   // { cruce, corrida, intensidades }
   const [notasPriorizacion, setNotasPriorizacion] = useState([]);
+  // estable entre renders: si cambia, el simulador reconstruye sus dos escenas 3D
+  const candidatosSimulador = useMemo(() => candidatos.filter((c) => c.nivel !== 'observacion'), [candidatos]);
   const [cierres, setCierres] = useState([]);
   const abortar = useRef(null);
   const primeraCarga = useRef(true);
@@ -442,16 +445,18 @@ function Visor() {
       />
 
       {simulador && (
-        <Suspense fallback={<div className="sim3d"><div className="sim3d-cortina"><div className="sim3d-spinner" /><p>Cargando el simulador 3D…</p></div></div>}>
-          <Simulador3D
-            cruce={simulador.cruce}
-            candidatos={candidatos.filter((c) => c.nivel !== 'observacion')}
-            corrida={simulador.corrida}
-            intensidades={simulador.intensidades}
-            onCambiarCruce={(c) => c && setSimulador((s) => ({ ...s, cruce: c }))}
-            onCerrar={() => setSimulador(null)}
-          />
-        </Suspense>
+        <LimiteErrores onCerrar={() => setSimulador(null)}>
+          <Suspense fallback={<div className="sim3d"><div className="sim3d-cortina"><div className="sim3d-spinner" /><p>Cargando el simulador 3D…</p></div></div>}>
+            <Simulador3D
+              cruce={simulador.cruce}
+              candidatos={candidatosSimulador}
+              corrida={simulador.corrida}
+              intensidades={simulador.intensidades}
+              onCambiarCruce={(c) => c && setSimulador((s) => ({ ...s, cruce: c }))}
+              onCerrar={() => setSimulador(null)}
+            />
+          </Suspense>
+        </LimiteErrores>
       )}
 
       <div className="columna-derecha">

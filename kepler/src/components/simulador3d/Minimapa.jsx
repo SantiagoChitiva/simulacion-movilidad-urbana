@@ -66,7 +66,8 @@ export default function Minimapa({ nodo, bbox, ego, egoId, rumbo = null, seguir 
   useEffect(() => {
     const m = mapa.current;
     if (!m || !listo.current) return;
-    if (!ego) {
+    // un actor que aún espera entrar a la vía no tiene posición
+    if (!ego || !Number.isFinite(ego.lon) || !Number.isFinite(ego.lat)) {
       rastro.current = [];
       m.getSource('ego')?.setData(vacio);
       m.getSource('rastro')?.setData(vacio);
@@ -80,7 +81,7 @@ export default function Minimapa({ nodo, bbox, ego, egoId, rumbo = null, seguir 
     m.getSource('ego')?.setData({ type: 'Feature', geometry: { type: 'Point', coordinates: punto } });
     m.getSource('rastro')?.setData({ type: 'Feature', geometry: { type: 'LineString', coordinates: rastro.current } });
     // como un navegador: el mapa gira para que el sentido de marcha quede hacia arriba
-    if (seguir) m.easeTo({ center: punto, bearing: rumbo ?? m.getBearing(), duration: 300 });
+    if (seguir) m.easeTo({ center: punto, bearing: Number.isFinite(rumbo) ? rumbo : m.getBearing(), duration: 300 });
   }, [ego, seguir, rumbo]);
 
   // maplibre le pone position: relative al contenedor del mapa: el posicionamiento va en un envoltorio

@@ -89,6 +89,10 @@ export default function Simulador3D({ cruce, candidatos = [], corrida, intensida
       detalle: detalle || 'Semáforo propuesto en estudio',
     };
   }, [cruce, ranking]);
+  // la valla solo cambia si cambia su texto: así no se reconstruyen las escenas por nada
+  const cartelClave = JSON.stringify(cartel);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const cartelEstable = useMemo(() => cartel, [cartelClave]);
 
   // 1. preparar la zona (recorte + demanda + semáforo propuesto) y esperar
   useEffect(() => {
@@ -137,8 +141,8 @@ export default function Simulador3D({ cruce, candidatos = [], corrida, intensida
   // 2. armar las dos escenas y el bucle de render
   useEffect(() => {
     if (!geometria || !refA.current || !refB.current) return undefined;
-    const a = new Escena3D(refA.current, geometria, { conSemaforo: false, cartel });
-    const b = new Escena3D(refB.current, geometria, { conSemaforo: true, cartel });
+    const a = new Escena3D(refA.current, geometria, { conSemaforo: false, cartel: cartelEstable });
+    const b = new Escena3D(refB.current, geometria, { conSemaforo: true, cartel: cartelEstable });
     escenas.current = { a, b };
     a.mirarA(geometria.nodo.x, geometria.nodo.y, geometria.nodo.z);
     b.mirarA(geometria.nodo.x, geometria.nodo.y, geometria.nodo.z);
@@ -168,7 +172,7 @@ export default function Simulador3D({ cruce, candidatos = [], corrida, intensida
       b.destruir();
       escenas.current = { a: null, b: null };
     };
-  }, [geometria, cartel]);
+  }, [geometria, cartelEstable]);
 
   // 3. WebSocket: frames → escenas + HUD
   useEffect(() => {
@@ -308,7 +312,9 @@ export default function Simulador3D({ cruce, candidatos = [], corrida, intensida
     if (!ego) setCamara('aerea');
   };
 
-  const egoMapa = frame?.lados.a.ego ?? frame?.lados.b.ego ?? null;
+  // el minimapa usa el lado donde el actor ya está en la vía (en el otro puede estar esperando entrar)
+  const conPosicion = (e) => (e && Number.isFinite(e.lon) ? e : null);
+  const egoMapa = conPosicion(frame?.lados.a.ego) ?? conPosicion(frame?.lados.b.ego);
   const rumboEgo = useMemo(() => {
     if (!frame || !ego) return null;
     for (const lado of [frame.lados.a, frame.lados.b]) {
