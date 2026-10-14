@@ -132,7 +132,7 @@ class GestorComparaciones:
             comp = self._comparaciones.pop(cid, None)
         if comp is not None:
             comp.activa = False
-            shutil.rmtree(comp.run_dir, ignore_errors=True)
+            _borrar_en_segundo_plano(comp.run_dir)
 
     def listar(self) -> list[dict]:
         with self._lock:
@@ -145,7 +145,20 @@ class GestorComparaciones:
             if not comp.conectada and ahora - comp.ultimo_ping > TIMEOUT_SIN_ACTIVIDAD:
                 self._comparaciones.pop(cid)
                 comp.activa = False
-                shutil.rmtree(comp.run_dir, ignore_errors=True)
+                _borrar_en_segundo_plano(comp.run_dir)
+
+
+def _borrar_en_segundo_plano(directorio: Path, intentos: int = 5) -> None:
+    """Borra el directorio de una comparación. En Windows, SUMO puede tardar unos segundos en
+    soltar sus archivos después de cerrar la conexión, así que se reintenta."""
+    def _borrar() -> None:
+        for _ in range(intentos):
+            shutil.rmtree(directorio, ignore_errors=True)
+            if not directorio.exists():
+                return
+            time.sleep(1.0)
+
+    threading.Thread(target=_borrar, daemon=True, name=f"borrar-{directorio.name}").start()
 
 
 def _preparar_zona(comp: Comparacion, nodo_id: str, lon: float, lat: float,
