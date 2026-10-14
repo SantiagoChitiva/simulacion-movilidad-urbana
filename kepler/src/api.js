@@ -84,16 +84,29 @@ export const crearComparacion = (tlId, datos) =>
   });
 export const obtenerComparacion = (compId) => pedir(`/comparaciones/${encodeURIComponent(compId)}`);
 
-// Fase E: sesiones 3D
-export const crearSesion3D = (tlId, datos) =>
-  pedir(`/intersecciones/${encodeURIComponent(tlId)}/sesiones`, {
+// Simulador 3D comparativo: cruce sin semáforo (actual) vs. con semáforo propuesto
+export const crearComparacion3D = (nodoId, { lon, lat, corrida, intensidades }) =>
+  pedir(`/cruces/${encodeURIComponent(nodoId)}/comparacion3d`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(datos),
+    body: JSON.stringify({ lon, lat, run_id: corrida?.precalculada ? null : corrida?.id ?? null, intensidades }),
   });
-export const obtenerGeometria3D = (sid) => pedir(`/sesiones/${encodeURIComponent(sid)}/geometria`);
-export const cerrarSesion3D = (sid) =>
-  fetch(`${BASE}/sesiones/${encodeURIComponent(sid)}`, { method: 'DELETE' });
+export const obtenerComparacion3D = (cid) => pedir(`/comparacion3d/${encodeURIComponent(cid)}`);
+export const obtenerGeometriaComparacion3D = (cid) => pedir(`/comparacion3d/${encodeURIComponent(cid)}/geometria`);
+export const cerrarComparacion3D = (cid) =>
+  fetch(`${BASE}/comparacion3d/${encodeURIComponent(cid)}`, { method: 'DELETE' });
+// WebSocket por el proxy de Vite (/api/* → ws://localhost:8000/*)
+export const urlWsComparacion3D = (cid) =>
+  `${window.location.origin.replace(/^http/, 'ws')}${BASE}/comparacion3d/${encodeURIComponent(cid)}`;
+
+export const ETAPA_COMPARACION = {
+  preparando: 'Preparando…',
+  recortando_red: 'Recortando la red alrededor del cruce',
+  recortando_demanda: 'Recortando los viajes reales que pasan por la zona',
+  generando_fondo: 'Generando el tráfico de fondo',
+  instalando_semaforo: 'Instalando el semáforo propuesto (netconvert)',
+  armando_escena: 'Armando la escena 3D (vías, edificios, accesos)',
+};
 
 // Fase F: priorización
 export const obtenerPriorizacion = (corrida) => pedir(conCorrida('/intersecciones/priorizacion', corrida));

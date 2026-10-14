@@ -300,7 +300,7 @@ function TabConfigurar({ id, ficha, corrida }) {
 // ─── Componente principal ─────────────────────────────────────────────────────
 
 /** Ficha de una intersección semaforizada: accesos con volumen simulado y programa del semáforo. */
-export default function FichaInterseccion({ id, corrida, etiquetaCorrida, onAbrir3D }) {
+export default function FichaInterseccion({ id, corrida, etiquetaCorrida }) {
   const [ficha, setFicha] = useState(null);
   const [error, setError] = useState(null);
   const [subpestana, setSubpestana] = useState('ficha');
@@ -331,7 +331,7 @@ export default function FichaInterseccion({ id, corrida, etiquetaCorrida, onAbri
           <strong>Ficha</strong> — accesos y volumen simulado por acceso, programa de fases actual.<br />
           <strong>Configurar</strong> — edita las duraciones de cada fase o calcula tiempos óptimos con Webster.<br />
           <strong>Comparar</strong> — lanza simulaciones con distintos programas y compara métricas (demora, cola, peatones).<br />
-          <strong>3D ▶</strong> — simulación en vivo de la intersección en tiempo real (requiere zona recortada).
+          Para ver en 3D un semáforo <strong>nuevo</strong> en un cruce que no lo tiene, usa la pestaña <strong>Semaforizar</strong>.
         </p>
       </div>
     );
@@ -356,11 +356,6 @@ export default function FichaInterseccion({ id, corrida, etiquetaCorrida, onAbri
             {label}
           </button>
         ))}
-        {onAbrir3D && (
-          <button type="button" className="fi-btn-3d" onClick={() => onAbrir3D(id)} title="Ver intersección en 3D en vivo">
-            3D ▶
-          </button>
-        )}
       </div>
 
       {subpestana === 'ficha' && <TabFicha ficha={ficha} etiquetaCorrida={etiquetaCorrida} />}

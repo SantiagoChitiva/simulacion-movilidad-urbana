@@ -9,7 +9,7 @@ SUMO en lockstep controlados por TraCI:
 Ambos cargan la misma demanda con la misma semilla, así que los mismos actores aparecen
 en los dos lados y se pueden seguir a la vez.
 
-Cada frame lleva, por lado, la posición de todos los actores, el estado de las luces,
+Cada actor viaja como [id, tipo, x, y, z, ángulo, velocidad, edge]. Cada frame lleva, por lado, la posición de todos los actores, el estado de las luces,
 métricas agregadas y la telemetría del actor seguido (velocidad, aceleración, líder,
 riesgo, acción que está tomando y decisiones posibles en el próximo cruce).
 
@@ -212,6 +212,7 @@ class Lado:
         self.nodo = nodo
         self.tl_id = tl_id
         self._tc = tc
+        self._traci_error = traci.exceptions.TraCIException
         sumo = shutil.which("sumo")
         if sumo is None:
             raise RuntimeError("'sumo' no está en el PATH.")
@@ -222,8 +223,8 @@ class Lado:
             cwd=sumocfg.parent, stdout=subprocess.DEVNULL, stderr=self._err,
         )
         self.con = traci.connect(puerto, numRetries=120, proc=self.proc, label=f"{nombre}-{uuid.uuid4().hex[:6]}")
-        self._vars_veh = [tc.VAR_POSITION3D, tc.VAR_ANGLE, tc.VAR_SPEED, tc.VAR_TYPE, tc.VAR_WAITING_TIME]
-        self._vars_per = [tc.VAR_POSITION3D, tc.VAR_ANGLE, tc.VAR_SPEED, tc.VAR_WAITING_TIME]
+        self._vars_veh = [tc.VAR_POSITION3D, tc.VAR_ANGLE, tc.VAR_SPEED, tc.VAR_TYPE, tc.VAR_WAITING_TIME, tc.VAR_ROAD_ID]
+        self._vars_per = [tc.VAR_POSITION3D, tc.VAR_ANGLE, tc.VAR_SPEED, tc.VAR_WAITING_TIME, tc.VAR_ROAD_ID]
         self.colisiones = 0
         self.historial: list[dict] = []
         self.riesgo: dict | None = None
@@ -235,12 +236,16 @@ class Lado:
     # -- simulación
     def avanzar(self, hasta: float) -> None:
         self.con.simulationStep(hasta)
+        # en un salto largo (calentamiento) un actor puede entrar y salir en el mismo paso
         for vid in self.con.simulation.getDepartedIDList():
-            self.con.vehicle.subscribe(vid, self._vars_veh)
+            try:
+                self.con.vehicle.subscribe(vid, self._vars_veh)
+            except self._traci_error:
+                pass
         for pid in self.con.simulation.getDepartedPersonIDList():
             try:
                 self.con.person.subscribe(pid, self._vars_per)
-            except Exception:   # noqa: BLE001 - la persona puede haber terminado en el mismo paso
+            except self._traci_error:
                 pass
         self.colisiones += self.con.simulation.getCollidingVehiclesNumber()
 
@@ -268,7 +273,7 @@ class Lado:
             x, y, z = d[tc.VAR_POSITION3D]
             v = d[tc.VAR_SPEED]
             vehiculos.append([vid, d[tc.VAR_TYPE].split("@")[0], round(x, 2), round(y, 2), round(z, 2),
-                              round(d[tc.VAR_ANGLE], 1), round(v, 2)])
+                              round(d[tc.VAR_ANGLE], 1), round(v, 2), d[tc.VAR_ROAD_ID]])
             if (x - nx) ** 2 + (y - ny) ** 2 < RADIO_CRUCE_M ** 2:
                 cerca += 1
                 suma_v += v
@@ -279,7 +284,7 @@ class Lado:
         for pid, d in self.con.person.getAllSubscriptionResults().items():
             x, y, z = d[tc.VAR_POSITION3D]
             personas.append([pid, "peaton", round(x, 2), round(y, 2), round(z, 2),
-                             round(d[tc.VAR_ANGLE], 1), round(d[tc.VAR_SPEED], 2)])
+                             round(d[tc.VAR_ANGLE], 1), round(d[tc.VAR_SPEED], 2), d[tc.VAR_ROAD_ID]])
         esperas = list(self.espera_cruce.values())
         metricas = {
             "vehiculos": len(vehiculos), "peatones": len(personas),
@@ -454,7 +459,7 @@ class Lado:
         lon, lat = self.con.simulation.convertGeo(x, y)
         espera = per.getWaitingTime(pid)
         cercano, dist_min, v_acerc = None, None, 0.0
-        for vid, _tipo, vx, vy, _vz, _ang, vv in actores_veh:
+        for vid, _tipo, vx, vy, _vz, _ang, vv, _edge in actores_veh:
             d = ((vx - x) ** 2 + (vy - y) ** 2) ** 0.5
             if d < 25 and (dist_min is None or d < dist_min):
                 cercano, dist_min, v_acerc = vid, d, vv

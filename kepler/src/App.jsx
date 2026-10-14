@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { Suspense, lazy, useCallback, useEffect, useRef, useState } from 'react';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import { taskMiddleware } from 'react-palm/tasks';
@@ -22,7 +22,10 @@ import LimiteError from './components/LimiteError';
 import PanelCierres from './components/PanelCierres';
 import PanelDemanda from './components/PanelDemanda';
 import TarjetaActividad from './components/TarjetaActividad';
-import Vista3D from './components/Vista3D';
+import PanelSemaforizacion from './components/PanelSemaforizacion';
+
+// three.js y maplibre solo se descargan al abrir el simulador
+const Simulador3D = lazy(() => import('./components/simulador3d/Simulador3D'));
 
 const reducers = combineReducers({
   keplerGl: keplerGlReducer,
@@ -74,6 +77,7 @@ const configPriorizacion = {
             [DATASET_PRIORIZACION]: [
               { name: 'nivel', format: null },
               { name: 'puntaje_total', format: null },
+              { name: 'calles', format: null },
               { name: 'distancia_semaforo_m', format: null },
             ],
           },
@@ -155,6 +159,13 @@ const configSemaforos = {
   },
 };
 
+// fila de la capa de priorización (kepler) → cruce candidato para el simulador 3D
+const aCandidato = (fila) => ({
+  ...fila,
+  lon: fila.lng,
+  calles: fila.calles ? fila.calles.split(' × ') : [],
+});
+
 const tickDePintado = () => new Promise((r) => setTimeout(r, 30)); // deja que React pinte antes de bloquear
 
 const fecha = (iso) => new Date(iso).toLocaleString('es-CO');
@@ -198,11 +209,14 @@ function Visor() {
   const [priorizacionVisible, setPriorizacionVisible] = useState(false);
   const [interseccion, setInterseccion] = useState(null);
   const [versionMapa, setVersionMapa] = useState(0);
-  const [sesion3d, setSesion3d] = useState(null);   // { id: tl_id, corrida }
+  const [cruceCandidato, setCruceCandidato] = useState(null);   // cruce sin semáforo elegido
+  const [candidatos, setCandidatos] = useState([]);
+  const [simulador, setSimulador] = useState(null);   // { cruce, corrida, intensidades }
   const [cierres, setCierres] = useState([]);
   const abortar = useRef(null);
   const primeraCarga = useRef(true);
   const filasSemaforos = useRef([]);
+  const filasPriorizacion = useRef([]);
 
   // Kepler conserva el objeto bajo el mouse y el tooltip fijado; si se reemplaza el
   // dataset sin limpiarlos, intenta dibujar un trip que ya no existe y se cae.
@@ -317,15 +331,26 @@ function Visor() {
     };
   }, [semaforosVisibles, corridaMapa, dispatch, limpiarInteraccion]);
 
-  // clic sobre un semáforo → ficha (kepler guarda el objeto clicado en visState.clicked)
+  // clic sobre un semáforo → ficha; sobre un cruce candidato → semaforizar
+  // (kepler guarda el objeto clicado en visState.clicked)
   const clicado = useSelector((s) => s.keplerGl?.[MAPA_ID]?.visState?.clicked);
   useEffect(() => {
-    if (!clicado?.layer?.id?.startsWith(CAPA_SEMAFOROS)) return;
-    const fila = filasSemaforos.current[clicado.object?.index ?? clicado.index];
-    if (fila) {
-      setInterseccion(fila.id);
-      setPestana('interseccion');
-      setPlegado(false);
+    const capa = clicado?.layer?.id ?? '';
+    const indice = clicado?.object?.index ?? clicado?.index;
+    if (capa.startsWith(CAPA_SEMAFOROS)) {
+      const fila = filasSemaforos.current[indice];
+      if (fila) {
+        setInterseccion(fila.id);
+        setPestana('interseccion');
+        setPlegado(false);
+      }
+    } else if (capa.startsWith(CAPA_PRIORIZACION)) {
+      const fila = filasPriorizacion.current[indice];
+      if (fila) {
+        setCruceCandidato(aCandidato(fila));
+        setPestana('semaforizar');
+        setPlegado(false);
+      }
     }
   }, [clicado]);
 
@@ -333,6 +358,8 @@ function Visor() {
 
   useEffect(() => {
     if (!priorizacionVisible) {
+      filasPriorizacion.current = [];
+      limpiarInteraccion();
       dispatch(removeDataset(DATASET_PRIORIZACION));
       return undefined;
     }
@@ -348,9 +375,13 @@ function Visor() {
             nivel: f.properties.nivel,
             puntaje_total: f.properties.puntaje_total,
             distancia_semaforo_m: f.properties.distancia_semaforo_m,
+            calles: (f.properties.calles ?? []).join(' × '),
             lng: f.geometry.coordinates[0],
             lat: f.geometry.coordinates[1],
           }));
+        filasPriorizacion.current = filas;
+        setCandidatos(filas.map(aCandidato));
+        limpiarInteraccion();
         dispatch(removeDataset(DATASET_PRIORIZACION));
         dispatch(
           addDataToMap({
@@ -367,7 +398,7 @@ function Visor() {
     return () => {
       cancelado = true;
     };
-  }, [priorizacionVisible, corridaMapa, dispatch]);
+  }, [priorizacionVisible, corridaMapa, dispatch, limpiarInteraccion]);
 
   const etiquetas = Object.fromEntries(modos.map((m) => [m.id, m.etiqueta]));
   let etiquetaCorrida = 'la corrida por defecto';
@@ -400,12 +431,15 @@ function Visor() {
         onAlternarPriorizacion={() => setPriorizacionVisible((v) => !v)}
       />
 
-      {sesion3d && (
-        <Vista3D
-          id={sesion3d.id}
-          corrida={sesion3d.corrida}
-          onCerrar={() => setSesion3d(null)}
-        />
+      {simulador && (
+        <Suspense fallback={<div className="sim3d"><div className="sim3d-cortina"><div className="sim3d-spinner" /><p>Cargando el simulador 3D…</p></div></div>}>
+          <Simulador3D
+            cruce={simulador.cruce}
+            corrida={simulador.corrida}
+            intensidades={simulador.intensidades}
+            onCerrar={() => setSimulador(null)}
+          />
+        </Suspense>
       )}
 
       <div className="columna-derecha">
@@ -425,6 +459,9 @@ function Visor() {
                 </button>
                 <button type="button" role="tab" aria-selected={pestana === 'cierres'} className={pestana === 'cierres' ? 'activa' : ''} onClick={() => setPestana('cierres')}>
                   Cierres
+                </button>
+                <button type="button" role="tab" aria-selected={pestana === 'semaforizar'} className={pestana === 'semaforizar' ? 'activa' : ''} onClick={() => setPestana('semaforizar')}>
+                  Semaforizar
                 </button>
               </div>
               <button type="button" className="pd-cerrar" onClick={() => setPlegado(true)} aria-label="Plegar panel">
@@ -449,11 +486,20 @@ function Visor() {
                 id={interseccion}
                 corrida={corridaMapa}
                 etiquetaCorrida={etiquetaCorrida}
-                onAbrir3D={(tlId) => setSesion3d({ id: tlId, corrida: corridaMapa })}
               />
             )}
             {pestana === 'cierres' && (
               <PanelCierres cierres={cierres} onChange={setCierres} />
+            )}
+            {pestana === 'semaforizar' && (
+              <PanelSemaforizacion
+                seleccionado={cruceCandidato}
+                candidatos={candidatos}
+                priorizacionVisible={priorizacionVisible}
+                onMostrarPriorizacion={() => setPriorizacionVisible(true)}
+                onElegir={setCruceCandidato}
+                onAbrir={(cruce, intensidades) => setSimulador({ cruce, corrida: corridaMapa, intensidades })}
+              />
             )}
           </aside>
         )}
