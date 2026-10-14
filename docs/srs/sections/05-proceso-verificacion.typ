@@ -59,7 +59,7 @@ Se realizará una sesión de validación del SRS con el Ing. Andrés Calderón R
 
 - Los requerimientos de la Sección 3 reflejan correctamente las necesidades discutidas en las entrevistas de elicitación.
 - Los criterios de aceptación (especialmente el umbral GEH $<$ 5 en $>=$ 85% de los puntos de aforo) son correctos y consensuados.
-- Las exclusiones de alcance documentadas (interfaz web, otras localidades) son aceptadas.
+- Las exclusiones de alcance documentadas (otras localidades, programas reales de la SDM, transporte público con GTFS) son aceptadas.
 - La distribución de requerimientos por módulo es coherente con la arquitectura esperada del sistema.
 
 == Verificación de Requerimientos Individuales
@@ -158,7 +158,42 @@ prueba está asociado a uno o más requerimientos y especifica el método de ver
     parámetros seleccionados. El módulo web muestra indicador de progreso y mensaje de éxito al finalizar.],
 
     [CP-020b], [RF-020], [D], [Ingresar factor de escala igual a 0 en el formulario y pulsar Confirmar.], [El formulario muestra mensaje de error visible.
-    No se envía ninguna petición al backend.]
+    No se envía ninguna petición al backend.],
+
+    [CP-029], [RF-021, RF-022], [T], [`test_demanda.py`: preset `encuesta` con conteos por defecto; presets alternos; conteos por modo.], [La demanda de
+    `encuesta` reproduce la expansión simple; los presets conservan el total; los conteos se cumplen por modo.],
+
+    [CP-030], [RF-025], [T], [`test_precalculadas.py`: generar una precalculada dos veces con los mismos insumos.], [Mismo `trips.geojson.gz` (gzip con
+    `mtime=0`) y mismo hash de insumos en `meta.json`.],
+
+    [CP-031], [RF-026], [T], [`test_api.py` con pipeline falso inyectado en `GestorCorridas`: lanzar, consultar y cancelar.], [El avance es monótono; tras
+    cancelar solo queda `estado.json` con estado `cancelada`.],
+
+    [CP-032], [RF-028], [T], [`test_intersecciones.py`: red de prueba con `tlLogic` y conexiones.], [Un semáforo por `tlLogic` con sus accesos, nombres de
+    vía y volúmenes por acceso.],
+
+    [CP-033], [RF-029], [T, D], [Recortar 300 m alrededor de un cruce con una corrida que tenga vehroute.], [`zona.net.xml` válido para SUMO y
+    `zona.rou.xml` con los viajes que cruzan la zona.],
+
+    [CP-034], [RF-030], [T, D], [Guardar un programa con una fase de largo incorrecto; calcular Webster con volúmenes de la ficha.], [El primero se
+    rechaza indicando la fase; el ciclo de Webster es ≥ 30 s.],
+
+    [CP-035], [RF-033], [T], [`test_semaforo_nuevo.py`: nodo sin semáforo, nodo con semáforo y nodo inexistente; `test_demanda_zona.py`: argumentos de
+    `randomTrips.py` por modo.], [Se instala el semáforo solo en el nodo válido; los otros fallan con mensaje claro; el período de cada modo es
+    3600 / intensidad.],
+
+    [CP-036], [RF-033, RF-034], [T], [`test_comparacion3d.py` (gestor con preparación falsa) y `test_escena3d.py` (edificios y geometría).], [Estados
+    `preparando` #sym.arrow `lista`/`error`; límite de 2 comparaciones (429); geometría con edificios recortados al bbox.],
+
+    [CP-037], [RF-035, RF-036, RF-040], [D], [Abrir una comparación sobre un cruce prioritario, lanzar una moto agresiva y luego un peatón por accesos
+    distintos.], [El actor aparece en ambos lados, la cámara lo sigue y el HUD muestra velocidad, acción, decisiones y métricas distintas por lado.
+    Verificado por integración vía el proxy del visor: 149 de 150 frames con el actor en ambos lados.],
+
+    [CP-038], [RF-037], [T], [`test_telemetria.py`: TTC, DRAC, PET, niveles y clasificación de acciones.], [TTC = 1 s #sym.arrow índice 100 (alto); sin
+    conflictos #sym.arrow 0 (bajo); cada combinación produce la acción esperada.],
+
+    [CP-039], [RF-038, RF-039], [D], [Seguir un actor y elegir una vía de la lista.], [El minimapa sigue al actor y deja su rastro; la lista de la vía
+    solo contiene actores sobre sus edges.],
   ),
   caption: [Plan de casos de prueba para requerimientos funcionales.]
 ) <tabCasosPruebaFuncionales>
@@ -206,6 +241,15 @@ prueba está asociado a uno o más requerimientos y especifica el método de ver
 
     [CP-028], [RNF-OBS-001], [T], [Ejecutar la fase F2 con el dataset completo y medir el tiempo entre mensajes de progreso en consola.], [Al menos un
     mensaje de progreso visible en consola por cada minuto de ejecución de F2.],
+
+    [CP-040], [RD-003], [T], [Script de integración: preparar una comparación sobre un cruce real y consumir 150 frames por WebSocket.], [Preparación
+    ≤ 60 s y ≥ 4 frames/s a 1×. Resultado medido: 14–40 s y 5 frames/s.],
+
+    [CP-041], [RD-004], [T], [Perfil de rendimiento del navegador durante 60 s de comparación.], [≥ 30 cuadros por segundo en la máquina de
+    referencia.],
+
+    [CP-042], [RNF-USA-001], [D], [Sesión con el director: lanzar una corrida, abrir una intersección y una comparación 3D sin asistencia.], [Las tres
+    tareas se completan sin ayuda del equipo.],
   ),
   caption: [Plan de casos de prueba para requerimientos no funcionales.]
 ) <tabCasosPruebaNoFuncionales>
@@ -215,7 +259,8 @@ prueba está asociado a uno o más requerimientos y especifica el método de ver
 
 El sistema se considerará verificado y listo para la entrega al director del proyecto cuando se cumplan simultáneamente los siguientes criterios:
 
-+ Todos los casos de prueba de requerimientos funcionales (CP-001 a CP-016) han sido ejecutados y su resultado es *Pasa*.
++ Todos los casos de prueba de requerimientos funcionales (CP-001 a CP-016 y CP-029 a CP-039) aplicables a la versión entregada han sido ejecutados
+  y su resultado es *Pasa*. La suite automatizada de `simulation-service/test/` (99 pruebas en v2.0) pasa completa.
 + Los casos de prueba de desempeño (CP-017 y CP-018) han sido ejecutados en la máquina de referencia definida en @tabHardwareDesc y su resultado es *Pasa*.
 + Al menos el 85% de los puntos de aforo HMD de Usaquén obtienen un GEH < 5 en la simulación de validación (criterio del requerimiento RF-014).
 + Los jobs de CI en GitHub Actions para Ubuntu y Windows están en estado *verde* (todos los steps exitosos) en el último commit de la rama principal.

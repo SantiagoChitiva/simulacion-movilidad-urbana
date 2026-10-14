@@ -96,7 +96,16 @@
     columns: 5,
     table.header([*Versión*],[*Fecha*],[*Sección modificada*],[*Descripción de cambios*],[*Responsables*]),
 // filas (contenido o registro de la tabla)
-    [Indica la versión del documento, que depende según la forma de administración de configuraciones seleccionada.],[Se incluye la fecha en la que fue realizado el cambio del documento.],[Permite especificar las secciones del documento que fueron modificadas.],[Es un pequeño resumen de los cambios más relevantes que fueron realizados en la versión],[Indica las personas del grupo de trabajo que son responsables del o los cambios realizados en el documento.]
+    [1.0], [2026-05-31], [Todas], [Versión inicial del SRS: pipeline ETL (F1–F5) y módulo web (F6–F7).], [Equipo EFSS],
+    [2.0], [2026-10-13], [1.2, 1.3, 2.1, 2.2, 2.5, 2.8, 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 4.1, 4.4, 5.3, 5.4],
+    [Se actualiza el documento al estado de la rama `feat/fases-b-f-estilos-cierres`. Cada requerimiento indica su estado (Implementado, Parcial,
+    Pendiente) y su módulo real. Se agregan:
+    - demanda parametrizable (RF-021 a RF-025) y progreso, cancelación y animación de viajes (RF-026, RF-027);
+    - intersecciones y semaforización (F8, RF-028 a RF-032);
+    - simulador 3D comparativo de semáforo propuesto (F9, RF-033 a RF-042) y transporte público con GTFS (RF-043, pendiente);
+    - RD-003, RD-004 y RNF-USA-001, con sus casos de prueba CP-029 a CP-042.
+    Se reescriben las interfaces de usuario, software y comunicaciones (visor web, WebSocket, TraCI).],
+    [Equipo EFSS],
   ),
   caption: [Historial de cambios.]
 )
