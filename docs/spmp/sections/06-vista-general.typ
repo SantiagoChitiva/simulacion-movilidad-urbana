@@ -44,6 +44,8 @@ especializado. El módulo desarrollado automatiza este proceso de extremo a extr
   priorización de cruces sin semáforo.
 - _(v2.0)_ Simulador 3D comparativo de semáforo propuesto, con seguimiento en tercera persona de cualquier actor, HUD de velocidad, riesgo (TTC,
   DRAC, PET) y decisiones, minimapa 2D y selección de vías.
+- _(v2.2)_ Usabilidad para perfiles no técnicos: lista y tarjeta de cruces al estilo de Semáforos de Barranquilla, cierres viales con un clic en el
+  mapa, ficha del semáforo en lenguaje sencillo, comparación de programas con métricas reales y resumen del viaje en el simulador 3D.
 
 *Alcance -- Excluye*
 - Integración en tiempo real con APIs de tráfico comerciales.
@@ -122,6 +124,7 @@ matrices origen-destino y archivos de rutas.
     [H6], [Escenarios hipotéticos analizados (Sprint 3–4)], [12–14],
     [H7], [Entrega informe final], [14–16],
     [H8 _(v2.0)_], [Módulo de intersecciones y simulador 3D comparativo operativos (Sprints 6 y 7)], [11–14],
+    [H9 _(v2.2)_], [Usabilidad para la toma de decisiones (Sprint 9), SDD y borrador de la memoria], [15],
   ),
   caption: [Hitos del proyecto.],
 ) <tabHitos>
@@ -132,8 +135,8 @@ matrices origen-destino y archivos de rutas.
   table(
     columns: (auto, 1fr, auto, auto),
     table.header([Ítem], [Descripción], [Cantidad], [Costo equivalente]),
-    [Horas-persona totales], [Línea base: 4 personas × 10 semanas × 14 h/semana + 40 h del Sprint 5. Extensión v2.0: Sprints 6 a 8 (120 h)],
-    [720 h], [—],
+    [Horas-persona totales], [Línea base: 4 personas × 10 semanas × 14 h/semana + 40 h del Sprint 5. Extensión v2.0: Sprints 6 a 8 (120 h).
+    Sprint 9 de usabilidad (40 h)], [760 h], [—],
     [Herramientas de software], [SUMO, Python, FastAPI, React, kepler.gl, three.js, GitHub, GitHub Actions, Typst (todos gratuitos)], [—], [\$0 COP],
     [Datos de entrada], [Encuesta Movilidad 2023, aforos, OSM, Microsoft Building Footprints (todos públicos)], [—], [\$0 COP],
     [Infraestructura de cómputo], [Equipos personales del equipo + Google Colab], [—], [\$0 COP],
@@ -144,7 +147,8 @@ matrices origen-destino y archivos de rutas.
 
 El proyecto no maneja presupuesto monetario. Todas las herramientas son de código abierto y los datos de entrada son de acceso público. El costo total
 equivalente se expresa en horas-persona: la línea base es de 600 h-p (560 h-p de 4 integrantes × 10 semanas × 14 h/semana, más 40 h del módulo web).
-La extensión v2.0 suma 120 h-p estimadas para los Sprints 6 a 8, para un total de 720 h-p.
+La extensión v2.0 suma 120 h-p estimadas para los Sprints 6 a 8 y la v2.2 otras 40 h-p del Sprint 9, para un total de 760 h-p (la justificación
+está en 9.3.4).
 
 == Evolución del Plan
 

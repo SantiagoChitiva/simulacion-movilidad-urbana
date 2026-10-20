@@ -56,6 +56,9 @@
     [Equipo EFSS],
     [2.1], [14/10/2026], [Alcance del Sprint 7 (9.3): escena 3D tipo videojuego, modo manual del actor seguido y priorización de cruces con reglas y
     evidencia (siniestros de la SDM, colegios y centros de salud de OSM), siguiendo el proyecto Semáforos de Barranquilla.], [Equipo EFSS],
+    [2.2], [20/10/2026], [Estructura alineada con la plantilla: 8.1.1 Análisis de Alternativas y Justificación (ampliado con criterios), 8.2.1
+    Alternativas, 8.4.2 Organigrama y Descripción de Roles y 9.3.1 a 9.3.4 (descomposición, calendarización, recursos y presupuesto). Sprint 9 de
+    usabilidad para perfiles no técnicos (F3.9) y estado de F3.8, F5.3 (SDD) y F5.5 (memoria) actualizados.], [Equipo EFSS],
   ),
   caption: [Historial de cambios del documento.],
 ) <tabHistorial>

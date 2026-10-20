@@ -554,14 +554,16 @@ reproduciendo la interacción entre sus componentes de forma controlada. Existen
 - *Simulación mesoscópica:* agrupa vehículos en paquetes o los mueve por colas sin posición continua exacta. Es un compromiso entre detalle y
   eficiencia computacional.
 - *Simulación macroscópica:* trata el tráfico como un fluido, describiendo densidad, velocidad promedio y flujo por segmento de vía mediante
-  ecuaciones diferenciales. Es eficiente para redes grandes, pero pierde el comportamiento individual.
+  ecuaciones diferenciales. Viene de la teoría de ondas cinemáticas de Lighthill y Whitham @lighthill, que Daganzo discretizó en el modelo de
+  transmisión de celdas @daganzo. Es eficiente para redes grandes, pero pierde el comportamiento individual.
 
 === Datos de movilidad urbana y su procesamiento
 
 Un proyecto de análisis de movilidad urbana es esencialmente un proyecto de datos. La calidad, cobertura y consistencia de los datos de entrada
 determinan directamente la validez de los resultados. En el contexto de este proyecto, los datos de entrada provienen de dos fuentes principales: aforos
 vehiculares en hora de máxima demanda, y la Encuesta de Movilidad de Bogotá, a partir de la cual se construyen las matrices origen-destino (O/D) que
-cuantifican el número de viajes entre pares de zonas geográficas.
+cuantifican el número de viajes entre pares de zonas geográficas. La ciudad hace esta encuesta cada cuatro años con la misma metodología; la
+edición de 2019 @sdm2019 sirve de referencia para comparar los patrones de viaje antes y después de la pandemia.
 
 El procesamiento de estos datos para alimentar un modelo de simulación implica un pipeline con varias etapas:
 - limpieza y validación de registros;

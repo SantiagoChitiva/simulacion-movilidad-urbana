@@ -85,9 +85,10 @@ horas/semana. Esta estimación contempla tanto actividades técnicas como docume
     desarrollo del módulo web (backend FastAPI + frontend de visualización).],
     [Fase 3 – Extensión v2.0 (Sprints 6 a 8)], [120 h-p], [Semaforización, simulador 3D comparativo y pendientes (reporte de la comparación,
     programa editable, transporte público con GTFS).],
+    [Fase 3 – Usabilidad v2.2 (Sprint 9)], [40 h-p], [Ajustes para perfiles no técnicos y comparación de programas con métricas reales.],
     [Fase 4 – Evaluación y análisis], [80 h-p], [Validación formal, análisis de resultados, documentación de conclusiones.],
     [Documentación y gestión (transversal)], [80 h-p], [SPMP, SRS, SDD, Plan de pruebas, Informe final, reuniones.],
-    [Total], [720 h-p], [Línea base de 600 h-p (560 h-p + 40 h del Sprint 5) más 120 h-p de la extensión v2.0.],
+    [Total], [760 h-p], [Línea base de 600 h-p (560 h-p + 40 h del Sprint 5), 120 h-p de la extensión v2.0 y 40 h-p del Sprint 9.],
   ),
   caption: [Asignación de recursos por fase.],
 ) <tabRecursos>
@@ -232,7 +233,14 @@ Responsables: Responsable de Infraestructura y todos los integrantes para la val
 
 == Planes de Trabajo del Proyecto
 
-=== Calendarización con ruta crítica
+=== Descomposición de Actividades
+
+El trabajo se descompone en cinco paquetes de primer nivel: las cuatro fases del ciclo de vida y la documentación y gestión, que es transversal. La
+@figWbs muestra la línea base. La @tabCalendario lista todos los paquetes de segundo nivel, incluidos los Sprints 6 a 9 que se agregaron en las
+versiones 2.x, con sus horas-persona, prerrequisitos y estado. Cada paquete termina en un artefacto verificable: un notebook con sus salidas, un
+módulo con pruebas en verde, una funcionalidad demostrada en el visor o un documento compilado.
+
+=== Calendarización
 
 La siguiente tabla presenta la descomposición completa de actividades (WBS) con la duración estimada, las semanas de ejecución, los prerrequisitos
 (actividades que deben estar completas antes de iniciar) y los co-requisitos (actividades que deben ejecutarse en paralelo). Las actividades resaltadas
@@ -264,7 +272,7 @@ crítico.
     [F2.5], [Procesamiento de red vial con netconvert (`.net.xml`, red 3D con elevación)], [28 h], [5], [F1.3], [—], [Terminada],
     [F2.6], [Generación de archivos vType por modo de transporte], [16 h], [5–6], [F2.3], [F2.5], [Terminada],
     [F2.7], [Validación cruzada O/D + red + aforos (GEH preliminar)], [20 h], [6], [F2.3, F2.5, F2.6], [—], [Pendiente (GEH)],
-    ..fase([F3], [FASE 3 – Construcción del escenario (Scrum, Sprints 1 a 8)], [320 h], [6–14], [F2], [—], [En curso]),
+    ..fase([F3], [FASE 3 – Construcción del escenario (Scrum, Sprints 1 a 9)], [360 h], [6–15], [F2], [—], [En curso]),
     [F3.1], [Sprint 1: Escenario base (`.rou.xml` + ejecución SUMO)], [40 h], [6–7], [F2.7], [—], [Terminada],
     [F3.2], [Sprint 2: Integración transporte público (SITP / TransMilenio)], [40 h], [7–8], [F3.1], [—], [Parcial (como caminata; GTFS en F3.8)],
     [F3.3], [Sprint 3: Integración motocicletas y calibración global del modelo], [40 h], [8–9], [F3.2], [—], [Parcial (calibración pendiente)],
@@ -277,7 +285,10 @@ crítico.
     [F3.7], [_(v2.0)_ Sprint 7: Simulador 3D comparativo (semáforo propuesto, lockstep, 3ª persona, HUD, riesgo, minimapa). _(v2.1)_ Escena tipo videojuego, modo manual y priorización con la lógica de Semáforos de Barranquilla (siniestros SDM, colegios y salud OSM)], [40 h], [12–13],
     [F3.6], [—], [Terminada],
     [F3.8], [_(v2.0)_ Sprint 8: Reporte de la comparación 3D, programa editable del semáforo propuesto, transporte público con GTFS], [40 h],
-    [13–14], [F3.7], [F4.1], [Pendiente],
+    [13–14], [F3.7], [F4.1], [Parcial: el resumen de la comparación se ve en pantalla; faltan su exportación, el programa editable y GTFS],
+    [F3.9], [_(v2.2)_ Sprint 9: Usabilidad para la toma de decisiones (tarjeta de cruces estilo Barranquilla, cierres por clic, ficha en lenguaje
+    sencillo, comparación de programas con SUMO, inserción simultánea y resumen del viaje en 3D, tema claro/oscuro)], [40 h], [15], [F3.7], [—],
+    [Terminada],
     ..fase([F4], [FASE 4 – Evaluación y análisis], [80 h], [9–14], [F3.5], [—], [Pendiente]),
     [F4.1], [Validación formal del pipeline (GEH < 5 en ≥ 85% de puntos)], [24 h], [9–10], [F3.4], [F4.2], [Pendiente],
     [F4.2], [Verificación de coherencia global del modelo simulado], [20 h], [9–10], [F3.4], [F4.1], [Pendiente],
@@ -285,15 +296,20 @@ crítico.
     ..fase([F5], [DOCUMENTACIÓN Y GESTIÓN (transversal)], [80 h], [1–16], [—], [—], [En curso]),
     [F5.1], [Elaboración y actualización del SPMP], [12 h], [1–3, 11], [—], [F5.2], [v2.0],
     [F5.2], [Elaboración del SRS], [16 h], [3–4, 11], [F5.1], [—], [v2.0],
-    [F5.3], [Elaboración del SDD], [16 h], [5–6], [F5.2], [—], [Pendiente],
+    [F5.3], [Elaboración del SDD], [16 h], [5–6, 15], [F5.2], [—], [v1.0 (20/10/2026)],
     [F5.4], [Elaboración del Plan de Pruebas], [10 h], [6–7], [F5.2], [—], [Pendiente],
-    [F5.5], [Elaboración del Informe Final], [18 h], [14–16], [F4.3], [—], [Pendiente],
+    [F5.5], [Elaboración del Informe Final (memoria del trabajo de grado)], [18 h], [14–16], [F4.3], [—], [Borrador],
     [F5.6], [Reuniones de equipo (lunes) y con director (quincenal)], [8 h], [1–16], [—], [Todos], [En curso],
   )),
   caption: [Calendarización con camino crítico (WBS + prerrequisitos).],
 ) <tabCalendario>
 
-=== Asignación de responsabilidades por fase
+=== Asignación de Recursos
+
+El recurso principal del proyecto es el tiempo del equipo. La @tabRecursos reparte las horas-persona por fase y la @tabAsignacion indica quién
+lidera cada una. El cómputo se hace en los equipos personales de los integrantes: las corridas completas de Usaquén tardan varios minutos en un
+portátil, y las comparaciones de zona y el simulador 3D corren en segundos. Google Colab se usó en la exploración de datos. No se necesitan
+servidores pagos ni licencias.
 
 #figure(
   table(
@@ -309,3 +325,13 @@ crítico.
   ),
   caption: [Asignación de responsabilidades por fase e integrante.],
 ) <tabAsignacion>
+
+=== Asignación de Presupuesto y Justificación
+
+El proyecto no tiene presupuesto monetario: el software es libre (SUMO, Python, FastAPI, React, kepler.gl, three.js, Typst), los datos son públicos
+(Encuesta de Movilidad 2023, OpenStreetMap, siniestros de la Secretaría Distrital de Movilidad y huellas de edificios de Microsoft) y el cómputo se
+hace en los equipos del equipo (@tabPresupuesto). Por eso el presupuesto se expresa en horas-persona y se reparte según el riesgo técnico de cada
+fase: la preparación de datos (160 h-p) y la construcción del escenario (360 h-p con los Sprints 6 a 9) se llevan la mayor parte porque concentran
+el trabajo nuevo y la incertidumbre; la evaluación y la documentación reciben lo necesario para cerrar con rigor. Las 160 h-p que se sumaron en las
+versiones 2.x salieron del margen de seis semanas que se dejó al planear solo diez semanas efectivas (9.1), sin tocar las fechas de entrega.
+
