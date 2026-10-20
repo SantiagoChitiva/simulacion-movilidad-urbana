@@ -14,7 +14,7 @@ from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field, model_validator
 
 from etl import precalculadas
-from etl.etl import run_recorte
+from etl.etl import run_comparacion_programas, run_recorte
 from etl.sumo.configuration import (
     CACHE_DIR, DEFAULT_SCENARIO, MAX_VIAJES, RUNS_DIR, ArchivosPrecalculada, ScenarioPaths,
 )
@@ -30,8 +30,8 @@ from etl.sumo.cierres import CierreVial, escribir_rerouter
 from etl.sumo.geojson_reader import read_first_features
 from etl.sumo.priorizacion import a_geojson, analisis_con_cache, puntuar
 from etl.sumo.programas_tls import (
-    ProgramaTLS, FasePrograma, leer_programas, leer_programa,
-    escribir_programa, validar_programa, webster,
+    ProgramaTLS, ProgramasTLSError, FasePrograma, leer_programas, leer_programa,
+    escribir_programa, programa_webster, validar_programa,
 )
 
 from .jobs import GestorCorridas
@@ -380,11 +380,16 @@ def listar_programas(tl_id: str) -> list[dict]:
     if semaforo is None:
         raise HTTPException(status_code=404, detail=f"No existe la intersección '{tl_id}'")
     paths = ScenarioPaths.from_name(DEFAULT_SCENARIO)
-    programas = leer_programas(paths.net, tl_id)
-    return [
-        {"program_id": p.program_id, "tipo": p.tipo, "ciclo_s": p.ciclo_s}
-        for p in programas
+    de_red = [
+        {"program_id": p.program_id, "tipo": p.tipo, "ciclo_s": p.ciclo_s, "guardado": False}
+        for p in leer_programas(paths.net, tl_id)
     ]
+    guardados = [
+        {"program_id": p.program_id, "tipo": p.tipo, "ciclo_s": p.ciclo_s, "guardado": True}
+        for archivo in sorted(paths.root.glob(f"programa_{tl_id}_*.xml"))
+        for p in leer_programas(archivo, tl_id)
+    ]
+    return de_red + guardados
 
 
 @app.get("/intersecciones/{tl_id}/programas/{program_id}")
@@ -433,143 +438,136 @@ def guardar_programa(tl_id: str, program_id: str, solicitud: SolicitudProgramaTL
     return {**prog.to_dict(), "guardado_en": str(destino)}
 
 
+def _programa_guardado(tl_id: str, program_id: str) -> ProgramaTLS | None:
+    archivo = ScenarioPaths.from_name(DEFAULT_SCENARIO).root / f"programa_{tl_id}_{program_id}.xml"
+    programas = leer_programas(archivo, tl_id) if archivo.is_file() else []
+    return programas[0] if programas else None
+
+
+def _webster(semaforo: Semaforo, vols: dict[str, Counter] | None) -> tuple[ProgramaTLS, dict]:
+    """Programa de Webster con los volúmenes por acceso de una corrida (veh/h)."""
+    if not vols:
+        raise HTTPException(
+            status_code=409,
+            detail="La corrida no tiene volúmenes por acceso (vehroute-output): no se puede calcular Webster.",
+        )
+    base = leer_programa(ScenarioPaths.from_name(DEFAULT_SCENARIO).net, semaforo.id, semaforo.programa)
+    if base is None:
+        raise HTTPException(status_code=404, detail=f"El semáforo '{semaforo.id}' no tiene programa en la red")
+    volumenes_hora = {
+        a.edge: sum(n for tipo, n in vols.get(a.edge, Counter()).items() if tipo not in ("peaton", "transporte_publico"))
+        / HORAS_VENTANA
+        for a in semaforo.accesos
+    }
+    try:
+        programa, info = programa_webster(
+            base, [f.luces for f in semaforo.fases], volumenes_hora, {a.edge: a.carriles for a in semaforo.accesos},
+        )
+    except ProgramasTLSError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    return programa, {**info, "volumenes_hora": {k: round(v) for k, v in volumenes_hora.items()}}
+
+
 class SolicitudWebster(BaseModel):
     run_id: str | None = None
-    num_fases: int = Field(default=2, ge=1, le=8)
+    precalculada: Preset | None = None
 
 
 @app.post("/intersecciones/{tl_id}/programas/webster")
 def calcular_webster(tl_id: str, solicitud: SolicitudWebster, gestor: Gestor) -> dict:
-    """Calcula el programa óptimo de Webster con los volúmenes de una corrida."""
+    """Tiempos de verde de Webster con los volúmenes simulados que llegan por cada acceso."""
     semaforo = _semaforos().get(tl_id)
     if semaforo is None:
         raise HTTPException(status_code=404, detail=f"No existe la intersección '{tl_id}'")
-
-    vols = _volumenes_corrida(gestor, solicitud.run_id)
-
-    # volúmenes por acceso (veh/h)
-    volumenes_acceso: dict[str, int] = {}
-    for acceso in semaforo.accesos:
-        if vols and acceso.edge in vols:
-            total = sum(vols[acceso.edge].values())
-            volumenes_acceso[acceso.edge] = round(total / HORAS_VENTANA)
-        else:
-            # fallback: estimar con velocidad libre (solo para demostración)
-            volumenes_acceso[acceso.edge] = 300
-
-    try:
-        resultado = webster(volumenes_acceso, solicitud.num_fases)
-    except Exception as exc:
-        raise HTTPException(status_code=422, detail=str(exc)) from exc
-
-    return {
-        "tl_id": tl_id,
-        "movimientos": semaforo.movimientos,
-        **resultado,
-        "nota": "Cálculo simplificado. Los verdes son proporcionales al flujo crítico de cada fase.",
-    }
+    programa, info = _webster(semaforo, _volumenes_corrida(gestor, solicitud.run_id, solicitud.precalculada))
+    nota = (
+        "La demanda supera lo que el cruce puede despachar: se usa el ciclo máximo (150 s)."
+        if info["saturado"] else
+        "Cada fase recibe verde en proporción al acceso más cargado que atiende."
+    )
+    return {"tl_id": tl_id, **info, "programa": programa.to_dict(), "nota": nota}
 
 
-# ------------------------------------ Fase D: comparaciones
+# ------------------------------------ Fase D: comparaciones de programas
+
+ETIQUETA_PROGRAMA = {"actual": "Programa actual", "webster": "Optimizado (Webster)"}
+
 
 class SolicitudComparacion(BaseModel):
-    escenario_run_id: str
-    programas: list[str]   # lista de program_id a comparar
-    semilla: int | None = None
+    run_id: str | None = None               # corrida de la que se recortan los viajes reales
+    precalculada: Preset | None = None      # solo para los volúmenes de Webster
+    # "actual" (el de la red), "webster" o el program_id de un programa guardado
+    programas: list[str] = Field(default_factory=lambda: ["actual", "webster"], min_length=1, max_length=4)
+    semilla: int = 42
 
 
 _comparaciones: dict[str, dict] = {}
 
 
-def _metricas_corrida(run_id: str) -> dict:
-    """Lee las métricas básicas de una corrida de zona terminada."""
-    from etl.sumo.simulation import leer_estadisticas
-    paths = ScenarioPaths.from_name(DEFAULT_SCENARIO, run_id)
-    stats = leer_estadisticas(paths.statistics)
-    return {
-        "teleports": stats.get("teleports", 0),
-        "vehiculos_insertados": stats.get("vehiculos_insertados", 0),
-        "personas_cargadas": stats.get("personas_cargadas", 0),
-    }
-
-
 @app.post("/intersecciones/{tl_id}/comparaciones", status_code=202)
 def crear_comparacion(tl_id: str, solicitud: SolicitudComparacion, gestor: Gestor) -> dict:
-    """Encola N corridas de zona (una por programa) para comparar métricas (Fase D)."""
+    """Corre la zona del semáforo una vez por programa, con la misma demanda (Fase D)."""
     semaforo = _semaforos().get(tl_id)
     if semaforo is None:
         raise HTTPException(status_code=404, detail=f"No existe la intersección '{tl_id}'")
 
+    programas: dict[str, ProgramaTLS | None] = {}
+    for nombre in dict.fromkeys(solicitud.programas):
+        if nombre == "actual":
+            programas[nombre] = None
+        elif nombre == "webster":
+            vols = _volumenes_corrida(gestor, solicitud.run_id, solicitud.precalculada)
+            programas[nombre] = _webster(semaforo, vols)[0]
+        else:
+            guardado = _programa_guardado(tl_id, nombre)
+            if guardado is None:
+                raise HTTPException(status_code=404, detail=f"No hay un programa guardado '{nombre}' para '{tl_id}'")
+            programas[nombre] = guardado
+
     comparacion_id = uuid.uuid4().hex[:12]
-    corridas_comp: list[dict] = []
-
-    for prog_id in solicitud.programas:
-        run_id_comp = f"comp-{comparacion_id[:6]}-{prog_id[:8]}"
-        corridas_comp.append({"run_id": run_id_comp, "prog_id": prog_id, "estado": "en_cola"})
-
-        def _correr_comparacion(rid=run_id_comp, pid=prog_id):
-            try:
-                paths = ScenarioPaths.from_name(DEFAULT_SCENARIO)
-                prog = leer_programa(paths.net, tl_id, pid)
-                estado_path = RUNS_DIR / rid / "estado.json"
-                estado_path.parent.mkdir(parents=True, exist_ok=True)
-                estado_path.write_text(
-                    json.dumps({"id": rid, "estado": "en_curso", "prog_id": pid}),
-                    encoding="utf-8",
-                )
-                # Corrida simplificada: solo recortar + SUMO mínimo
-                resultado = run_recorte(
-                    semaforo_lon=semaforo.lon,
-                    semaforo_lat=semaforo.lat,
-                    run_id_origen=solicitud.escenario_run_id,
-                    radio_m=300,
-                    run_id_destino=rid,
-                )
-                metricas = _metricas_corrida(rid)
-                estado_path.write_text(
-                    json.dumps({"id": rid, "estado": "terminado", "prog_id": pid,
-                                "metricas": metricas, **resultado}),
-                    encoding="utf-8",
-                )
-                # actualizar comparación
-                _comparaciones[comparacion_id]["corridas"] = [
-                    c if c["run_id"] != rid
-                    else {**c, "estado": "terminado", "metricas": metricas}
-                    for c in _comparaciones[comparacion_id]["corridas"]
-                ]
-                todo_terminado = all(
-                    c["estado"] in ("terminado", "error")
-                    for c in _comparaciones[comparacion_id]["corridas"]
-                )
-                if todo_terminado:
-                    _comparaciones[comparacion_id]["estado"] = "terminado"
-            except Exception as exc:
-                try:
-                    estado_path.write_text(
-                        json.dumps({"id": rid, "estado": "error", "error": str(exc)[:500]}),
-                        encoding="utf-8",
-                    )
-                    _comparaciones[comparacion_id]["corridas"] = [
-                        c if c["run_id"] != rid else {**c, "estado": "error"}
-                        for c in _comparaciones[comparacion_id]["corridas"]
-                    ]
-                except Exception:
-                    pass
-
-        threading.Thread(target=_correr_comparacion, daemon=True).start()
-
-    _comparaciones[comparacion_id] = {
+    comp = {
         "id": comparacion_id,
         "tl_id": tl_id,
         "estado": "en_curso",
-        "corridas": corridas_comp,
+        "etapa": "preparando",
+        "programas": [
+            {"nombre": n, "etiqueta": ETIQUETA_PROGRAMA.get(n, f"Tu programa ({n})"),
+             "ciclo_s": p.ciclo_s if p else semaforo.ciclo, "estado": "en_cola", "metricas": None}
+            for n, p in programas.items()
+        ],
+        "error": None,
     }
+    _comparaciones[comparacion_id] = comp
+
+    def _marcar(nombre: str, **cambios) -> None:
+        comp["programas"] = [{**p, **cambios} if p["nombre"] == nombre else p for p in comp["programas"]]
+
+    def _progreso(etapa: str, _avance: float | None) -> None:
+        comp["etapa"] = etapa
+        if etapa.startswith("simulando:"):
+            _marcar(etapa.split(":", 1)[1], estado="simulando")
+
+    def _correr() -> None:
+        try:
+            run_comparacion_programas(
+                semaforo.lon, semaforo.lat, [a.edge for a in semaforo.accesos], programas,
+                run_id_destino=f"comp-{comparacion_id}", run_id_origen=solicitud.run_id,
+                semilla=solicitud.semilla,
+                on_programa=lambda n, m: _marcar(n, estado="terminado", metricas=m),
+                on_progreso=_progreso,
+            )
+            comp["estado"] = "terminado"
+        except Exception as exc:  # el error se muestra en el visor
+            comp["estado"] = "error"
+            comp["error"] = str(exc)[:500]
+
+    threading.Thread(target=_correr, daemon=True).start()
     return {"comparacion_id": comparacion_id}
 
 
 @app.get("/comparaciones/{comparacion_id}")
 def obtener_comparacion(comparacion_id: str) -> dict:
-    """Estado y métricas de una comparación de configuraciones (Fase D)."""
+    """Estado y métricas de una comparación de programas (Fase D)."""
     comp = _comparaciones.get(comparacion_id)
     if comp is None:
         raise HTTPException(status_code=404, detail=f"No existe la comparación '{comparacion_id}'")

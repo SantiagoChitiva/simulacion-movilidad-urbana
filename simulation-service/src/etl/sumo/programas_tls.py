@@ -209,6 +209,67 @@ def webster(
     }
 
 
+CICLO_MIN_S = 30
+CICLO_MAX_S = 150
+VERDE_MIN_S = 7
+PERDIDA_ARRANQUE_S = 2.0
+
+
+def es_fase_verde(estado: str) -> bool:
+    """Fase con verde y sin amarillos: las de cambio pueden mantener giros permitidos ('g')."""
+    return ("G" in estado or "g" in estado) and not any(c in "yYu" for c in estado)
+
+
+def programa_webster(
+    base: ProgramaTLS,
+    luces_por_fase: list[dict[str, str]],
+    volumenes_hora: dict[str, float],
+    carriles: dict[str, int],
+    flujo_saturacion: int = 1800,
+) -> tuple[ProgramaTLS, dict[str, Any]]:
+    """Programa con los verdes de Webster sobre la estructura de fases de `base`.
+
+    A diferencia de `webster`, cada acceso cuenta en las fases en que de verdad tiene
+    verde (`luces_por_fase`, como Fase.luces de intersecciones.py). El flujo crítico de
+    una fase es el mayor v/s de sus accesos en verde, con s = flujo de saturación por
+    carril. Las fases sin verde (amarillos y todo rojo) conservan su duración y cuentan
+    como tiempo perdido, junto con 2 s de arranque por fase verde.
+    """
+    if len(luces_por_fase) != len(base.fases):
+        raise ProgramasTLSError("Las luces por fase no corresponden al programa base.")
+    verdes = [i for i, f in enumerate(base.fases) if es_fase_verde(f.estado)]
+    if not verdes:
+        raise ProgramasTLSError("El programa no tiene fases con verde.")
+    y = []
+    for i in verdes:
+        en_verde = [a for a, luz in luces_por_fase[i].items() if luz == "verde"]
+        y.append(max(
+            (volumenes_hora.get(a, 0) / (flujo_saturacion * max(carriles.get(a, 1), 1)) for a in en_verde),
+            default=0.0,
+        ))
+    Y = sum(y)
+    entreverdes = sum(f.duracion_s for i, f in enumerate(base.fases) if i not in verdes)
+    perdida = entreverdes + PERDIDA_ARRANQUE_S * len(verdes)
+    saturado = Y >= 0.9
+    ciclo = CICLO_MAX_S if saturado else (1.5 * perdida + 5) / (1 - Y)
+    ciclo = min(max(round(ciclo), CICLO_MIN_S, round(entreverdes + VERDE_MIN_S * len(verdes))), CICLO_MAX_S)
+    verde_total = ciclo - entreverdes
+    reparto = [
+        max(round(verde_total * (yi / Y if Y > 0 else 1 / len(verdes))), VERDE_MIN_S) for yi in y
+    ]
+    fases = list(base.fases)
+    for i, g in zip(verdes, reparto):
+        fases[i] = FasePrograma(duracion_s=float(g), estado=base.fases[i].estado)
+    programa = ProgramaTLS(tl_id=base.tl_id, program_id="webster", tipo="static", offset=base.offset, fases=fases)
+    return programa, {
+        "ciclo_optimo_s": programa.ciclo_s,
+        "Y": round(Y, 3),
+        "perdida_total_s": round(perdida, 1),
+        "saturado": saturado,
+        "verdes_s": [float(g) for g in reparto],
+    }
+
+
 # ─────────────────────────────────────── agregar semáforo (netconvert)
 
 def agregar_semaforo(

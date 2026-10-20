@@ -280,3 +280,37 @@ def test_cancelar_corrida_en_cola(bloqueado):
 
     assert c.post(f"/simulaciones/{segunda}/cancelar").json()["estado"] == "cancelada"
     assert c.get(f"/simulaciones/{primera}").json()["estado"] == "simulando"   # la otra sigue
+
+
+# ------------------------------------------------------------ comparación de programas
+
+def test_comparacion_de_programas(con_catalogo, monkeypatch):
+    c, _ = con_catalogo
+    tl_id = c.get("/intersecciones").json()["features"][0]["properties"]["id"]
+    llamadas = {}
+
+    def _comparacion_falsa(lon, lat, accesos, programas, *, run_id_destino, run_id_origen, semilla, on_programa,
+                           on_progreso, **_kwargs):
+        llamadas["programas"] = programas
+        for nombre in programas:
+            on_progreso(f"simulando:{nombre}", None)
+            on_programa(nombre, {"demora_media_s": 10.0})
+        return {}
+
+    monkeypatch.setattr(api, "run_comparacion_programas", _comparacion_falsa)
+    cid = c.post(f"/intersecciones/{tl_id}/comparaciones", json={"programas": ["actual"]}).json()["comparacion_id"]
+    comp = c.get(f"/comparaciones/{cid}").json()
+    for _ in range(50):
+        if comp["estado"] != "en_curso":
+            break
+        threading.Event().wait(0.05)
+        comp = c.get(f"/comparaciones/{cid}").json()
+    assert comp["estado"] == "terminado"
+    assert comp["programas"][0]["etiqueta"] == "Programa actual"
+    assert comp["programas"][0]["metricas"] == {"demora_media_s": 10.0}
+    assert llamadas["programas"] == {"actual": None}
+
+    # un programa guardado que no existe, y Webster sin volúmenes
+    assert c.post(f"/intersecciones/{tl_id}/comparaciones", json={"programas": ["mio"]}).status_code == 404
+    monkeypatch.setattr(api, "_volumenes_corrida", lambda *_a, **_k: None)
+    assert c.post(f"/intersecciones/{tl_id}/programas/webster", json={}).status_code == 409

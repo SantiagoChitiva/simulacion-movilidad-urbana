@@ -68,19 +68,25 @@ export const guardarPrograma = (tlId, progId, datos) =>
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(datos),
   });
-export const calcularWebster = (tlId, datos) =>
+// La corrida en el cuerpo de un POST: sus volúmenes (Webster) y sus viajes (comparaciones)
+const corridaEnCuerpo = (corrida) => ({
+  run_id: corrida?.precalculada ? null : corrida?.id ?? null,
+  precalculada: corrida?.precalculada ? corrida.preset : null,
+});
+
+export const calcularWebster = (tlId, corrida) =>
   pedir(`/intersecciones/${encodeURIComponent(tlId)}/programas/webster`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(datos),
+    body: JSON.stringify(corridaEnCuerpo(corrida)),
   });
 
-// Fase D: comparaciones
-export const crearComparacion = (tlId, datos) =>
+// Fase D: comparaciones de programas ("actual", "webster" o un programa guardado)
+export const crearComparacion = (tlId, { corrida, programas, semilla }) =>
   pedir(`/intersecciones/${encodeURIComponent(tlId)}/comparaciones`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(datos),
+    body: JSON.stringify({ ...corridaEnCuerpo(corrida), programas, semilla }),
   });
 export const obtenerComparacion = (compId) => pedir(`/comparaciones/${encodeURIComponent(compId)}`);
 
