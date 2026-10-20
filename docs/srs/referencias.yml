@@ -1,0 +1,86 @@
+ieee830:
+  type: report
+  title: IEEE Std 830-1998 – IEEE Recommended Practice for Software Requirements Specifications
+  author: IEEE
+  date: 1998
+
+ieee1058:
+  type: report
+  title: IEEE Std 1058-1998 – IEEE Standard for Software Project Management Plans
+  author: IEEE
+  date: 1998
+
+sumo:
+  type: article
+  title: Microscopic Traffic Simulation using SUMO
+  author: ["Lopez, Pablo Alvarez", "Behrisch, Michael", "Bieker-Walz, Laura", "Erdmann, Jakob"]
+  date: 2018
+  parent:
+    type: proceedings
+    title: 21st International Conference on Intelligent Transportation Systems (ITSC)
+  page-range: 2575-2582
+  serial-number:
+    doi: 10.1109/ITSC.2018.8569938
+
+sumodocs:
+  type: web
+  title: "Eclipse SUMO – Simulation of Urban MObility: User Documentation"
+  author: Eclipse Foundation
+  date: 2025
+  url: https://sumo.dlr.de/docs/
+
+encuesta:
+  type: report
+  title: Encuesta de Movilidad de Bogotá 2023
+  author: Secretaría Distrital de Movilidad de Bogotá
+  publisher: Alcaldía Mayor de Bogotá
+  date: 2023
+  url: https://www.movilidadbogota.gov.co
+
+tomtom:
+  type: web
+  title: TomTom Traffic Index 2025
+  author: TomTom International BV
+  date: 2025
+  url: https://www.tomtom.com/traffic-index/
+
+osm:
+  type: web
+  title: OpenStreetMap
+  author: OpenStreetMap contributors
+  date: 2024
+  url: https://www.openstreetmap.org
+
+pep8:
+  type: web
+  title: "PEP 8 – Style Guide for Python Code"
+  author: ["van Rossum, Guido", "Warsaw, Barry", "Coghlan, Alyssa"]
+  publisher: Python Software Foundation
+  date: 2001
+  url: https://peps.python.org/pep-0008/
+
+webster:
+  type: report
+  title: Traffic Signal Settings (Road Research Technical Paper No. 39)
+  author: "Webster, F. V."
+  publisher: Her Majesty's Stationery Office
+  date: 1958
+
+ssam:
+  type: report
+  title: Surrogate Safety Assessment Model and Validation (FHWA-HRT-08-051)
+  author: ["Gettman, Douglas", "Pu, Lili", "Sayed, Tarek", "Shelby, Steven"]
+  publisher: Federal Highway Administration
+  date: 2008
+
+barranquilla:
+  type: repository
+  title: "Semáforos de Barranquilla: priorización de cruces para estudiar semáforos nuevos"
+  author: Victorpay1
+  url: https://github.com/Victorpay1/semaforos-barranquilla
+
+siniestros:
+  type: web
+  title: Histórico de siniestros viales de Bogotá D.C. (servicio de datos abiertos HistoricoSiniestros)
+  author: Secretaría Distrital de Movilidad de Bogotá
+  url: https://services2.arcgis.com/NEwhEo9GGSHXcRXV/arcgis/rest/services/HistoricoSiniestros/FeatureServer

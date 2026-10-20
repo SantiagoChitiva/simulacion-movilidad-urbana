@@ -2,7 +2,7 @@
 
 #let introduccion(info) = [
 
-#align(center)[= Introduccion]
+#align(center)[= Introducción]
 
 == Propósito
 
@@ -171,20 +171,12 @@ del proyecto.
 
 == Referencias
 
-#set enum(numbering: "[1]")
-
-+ IEEE Std 830-1998, _IEEE Recommended Practice for Software Requirements Specifications_, IEEE, 1998.
-+ IEEE Std 1058-1998, _IEEE Standard for Software Project Management Plans_, IEEE, 1998.
-+ P. A. Lopez et al., "Microscopic Traffic Simulation using SUMO," in _Proc. 21st IEEE International Conference on Intelligent Transportation Systems
-  (ITSC)_, Maui, HI, USA, 2018, pp. 2575–2582. DOI: 10.1109/ITSC.2018.8569938.
-+ Secretaría Distrital de Movilidad de Bogotá, _Encuesta de Movilidad de Bogotá 2023_, Alcaldía Mayor de Bogotá, 2023. [En línea]. Disponible en:
-  https://www.movilidadbogota.gov.co
-+ TomTom International BV, _TomTom Traffic Index 2025_, 2025. [En línea]. Disponible en: https://www.tomtom.com/traffic-index/
-+ OpenStreetMap contributors, _OpenStreetMap_, 2024. [En línea]. Disponible en: https://www.openstreetmap.org
-+ Eclipse Foundation, _Eclipse SUMO — Simulation of Urban MObility: User Documentation_, versión 1.19, 2023. [En línea]. Disponible en:
-  https://sumo.dlr.de/docs/
-+ G. Van Rossum y el equipo de Python, _PEP 8 — Style Guide for Python Code_, Python Software Foundation, 2001. [En línea]. Disponible en:
-  https://peps.python.org/pep-0008/
+El documento sigue la práctica recomendada IEEE 830 @ieee830 y se apoya en el plan de proyecto, escrito según IEEE 1058 @ieee1058. El modelo
+de simulación es SUMO @sumo @sumodocs; la demanda viene de la Encuesta de Movilidad de Bogotá 2023 @encuesta y la red vial de OpenStreetMap
+@osm. Para la motivación se usa el TomTom Traffic Index @tomtom. El código sigue PEP 8 @pep8. Los programas de semáforo optimizados usan el método
+de Webster @webster y los indicadores de seguridad del simulador 3D (TTC, DRAC, PET) siguen la definición del modelo SSAM de la FHWA @ssam. La
+priorización de cruces adapta la lógica del proyecto Semáforos de Barranquilla @barranquilla con los siniestros publicados por la Secretaría
+Distrital de Movilidad @siniestros. La lista completa, en formato IEEE, está al final del documento.
 
 == Apreciación Global
 

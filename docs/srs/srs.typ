@@ -97,7 +97,7 @@
     table.header([*Versión*],[*Fecha*],[*Sección modificada*],[*Descripción de cambios*],[*Responsables*]),
 // filas (contenido o registro de la tabla)
     [1.0], [2026-05-31], [Todas], [Versión inicial del SRS: pipeline ETL (F1–F5) y módulo web (F6–F7).], [Equipo EFSS],
-    [2.0], [2026-10-13], [1.2, 1.3, 2.1, 2.2, 2.5, 2.8, 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 4.1, 4.4, 5.3, 5.4],
+    [2.0], [2026-10-13], [1.2, 1.3, 2.1, 2.2, 2.5, 2.7, 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 4.1, 4.4, 5.3, 5.4],
     [Se actualiza el documento al estado de la rama `feat/fases-b-f-estilos-cierres`. Cada requerimiento indica su estado (Implementado, Parcial,
     Pendiente) y su módulo real. Se agregan:
     - demanda parametrizable (RF-021 a RF-025) y progreso, cancelación y animación de viajes (RF-026, RF-027);
@@ -106,9 +106,16 @@
     - RD-003, RD-004 y RNF-USA-001, con sus casos de prueba CP-029 a CP-042.
     Se reescriben las interfaces de usuario, software y comunicaciones (visor web, WebSocket, TraCI).],
     [Equipo EFSS],
-    [2.1], [2026-10-14], [2.8, 3.1, 3.3, 4.4, 5.3],
+    [2.1], [2026-10-14], [2.7, 3.1, 3.3, 4.4, 5.3],
     [Priorización con la lógica de Semáforos de Barranquilla y evidencia externa (RF-032 reescrito, RF-045). Simulador 3D: escena y HUD como la
     referencia, edificios OSM + Microsoft, un poste por acceso, sin cámara libre (RF-034, RF-035) y modo manual (RF-044). Casos CP-043 y CP-044.],
+    [Equipo EFSS],
+    [2.2], [2026-10-20], [1.4, 2.2, 2.3, 2.7, 3.2, 3.5, 5.3, Referencias],
+    [Usabilidad para perfiles no técnicos: pestaña Semaforizar al estilo de Semáforos de Barranquilla (RF-046), cierres viales con un clic en el
+    mapa (RF-024), ficha del semáforo en lenguaje sencillo con editor visual (RF-030) y comparación de programas que corre SUMO de verdad (RF-031,
+    ahora implementado). Simulador 3D: inserción simultánea del actor en los dos escenarios (RF-047), un minimapa por escenario (RF-038) y resumen
+    del viaje con balance del cruce (RF-048). Tema claro/oscuro y textos sin jerga (RNF-USA-002). Se agrega el cruce de funcionalidades (3.2.11), la
+    lista final de referencias y se corrige la numeración de secciones del historial.],
     [Equipo EFSS],
   ),
   caption: [Historial de cambios.]
@@ -138,6 +145,10 @@
 #procesoIngenieriaRequerimientos() // seccion 04
 #procesoVerificacion() // seccion 05
 #anexos() // seccion 06
+
+#pagebreak()
+#heading(numbering: none)[Referencias]
+#bibliography("referencias.yml", title: none, style: "ieee", full: true)
 
 // ==============================
 // END - contenido

@@ -201,6 +201,23 @@ prueba está asociado a uno o más requerimientos y especifica el método de ver
     [CP-044], [RF-044, RF-034], [T, D], [Integración con SUMO real: comparación sobre un cruce de varios nodos, ego inyectado en modo manual y cambio
     de giro; capturas del visor con Chrome sin interfaz.], [Un solo tlLogic para todos los nodos del cruce; el ego acelera y frena igual en ambos
     lados; el giro pedido se aplica; la escena muestra calles, edificios, un poste por acceso y el HUD.],
+
+    [CP-045], [RF-046], [T, D], [`test_priorizacion.py` (textos, tipo de vías, brazos, colegios y salud) y recorrido del visor: elegir un cruce de la
+    lista, cambiar entre Street View, satélite y mapa.], [El porqué sale en frases ("1 colegio o jardín a menos de 200 m"); el anillo aparece sobre
+    el cruce y el mapa se centra; las tres vistas cargan.],
+
+    [CP-046], [RF-047], [D], [Script por WebSocket contra SUMO real: seis actores por los tres accesos de un cruce prioritario.], [Todos entran en el
+    mismo paso en los dos escenarios (0 s de diferencia).],
+
+    [CP-047], [RF-048], [T, D], [`test_telemetria.py` y un viaje completo a 10× en el visor.], [El resumen llega una vez por viaje, con las dos columnas
+    y el balance; el veredicto coincide con las cifras.],
+
+    [CP-048], [RF-024], [T, D], [`test_api.py::test_vias_de_la_red` y clic sobre una calle en la pestaña Cierres.], [Cada vía trae su sentido
+    contrario; no aparecen peatonales ni vías de servicio; el cierre se pinta en rojo y la lista muestra el nombre.],
+
+    [CP-049], [RF-030, RF-031], [T, D], [`test_comparacion_programas.py`, `test_api.py::test_comparacion_de_programas` y una comparación real en la
+    Avenida Calle 134 × Avenida Carrera 9.], [Webster da más verde al acceso más cargado y no toca los amarillos; la comparación real corre las dos
+    simulaciones y muestra la diferencia de tiempo perdido por vehículo.],
   ),
   caption: [Plan de casos de prueba para requerimientos funcionales.]
 ) <tabCasosPruebaFuncionales>

@@ -297,12 +297,15 @@ especificando parámetros como el período horario, los modos de transporte acti
 - consultar cada intersección semaforizada (accesos, volúmenes y fases);
 - recortar la red a una zona alrededor de un cruce;
 - editar el programa del semáforo o calcularlo con Webster, y comparar programas;
-- ver una priorización de los cruces sin semáforo donde podría valer la pena instalar uno.
+- ver una priorización de los cruces sin semáforo donde podría valer la pena instalar uno, con el porqué en frases sencillas, las cifras del
+  cruce y fotos (Street View, satélite y mapa) para reconocerlo;
+- cerrar vías eligiéndolas con un clic en el mapa.
 
 *F9 -- Simulador 3D Comparativo:* para un cruce sin semáforo, el sistema prepara el escenario actual y una variante con un semáforo propuesto y los
 simula a la par, mostrándolos lado a lado en 3D con la red, los edificios y los actores reales de la zona. El usuario sigue en tercera persona a un
-vehículo o peatón y ve su velocidad, su riesgo, la acción que toma y las decisiones posibles en el próximo cruce. Un minimapa 2D lo ubica en la
-ciudad.
+vehículo o peatón y ve su velocidad, su riesgo, la acción que toma y las decisiones posibles en el próximo cruce. Cada escenario tiene su propio
+minimapa 2D. Cuando el viaje termina, el sistema compara lo que tardó, cuánto estuvo detenido, cuántas veces frenó en seco y qué tan cerca estuvo
+de un choque en cada escenario, y lo resume en una frase junto con el balance del cruce durante la sesión.
 
 #figure(
   table(
@@ -356,7 +359,15 @@ Se identifican dos clases de usuarios que interactuarán con el pipeline en la v
     [Usuario estándar],
     [Consume los resultados de simulación a través del módulo web y configura nuevos escenarios sin necesidad de usar la línea de comandos.],
     [Ocasional (por campaña de análisis)],
-    [Sin conocimiento de Python ni de SUMO. Familiaridad con conceptos de movilidad urbana. Accede al sistema únicamente a través de la interfaz web.]
+    [Sin conocimiento de Python ni de SUMO. Familiaridad con conceptos de movilidad urbana. Accede al sistema únicamente a través de la interfaz web.],
+
+    [Directivo o tomador de decisiones (v2.2)],
+    [Usuario estándar],
+    [Revisa qué cruces conviene estudiar, mira la comparación con y sin semáforo y lee el resumen para justificar o descartar un estudio de
+    tránsito.],
+    [Esporádica (comités, presentaciones)],
+    [Sin formación en ingeniería de tránsito. Necesita textos en lenguaje cotidiano, cifras redondeadas, colores consistentes y advertencias claras
+    sobre lo que el modelo no mide.]
   ),
   caption: [Características de las clases de usuario.]
 ) <tabUsuarios>
@@ -484,28 +495,31 @@ y mantenimiento:
     [`etl/sumo/duarouter.py`, `simulation.py`, `proceso.py`], [RF-012, RNF-OBS-001], [Ruteo, simulación por TraCI, avance y cancelación de
     procesos.],
 
-    [`etl/sumo/estilos.py`, `cierres.py`], [RF-023, RF-024], [Estilos de conducción y cierres viales.],
+    [`etl/sumo/estilos.py`, `cierres.py`, `vias.py`], [RF-023, RF-024], [Estilos de conducción, cierres viales y vías de la red para elegirlos
+    en el mapa.],
 
     [`etl/sumo/fcd.py`, `kepler.py`], [RF-027], [Exportación de las trayectorias para el visor.],
 
     [`etl/precalculadas.py`], [RF-025, RNF-REP-001], [Simulaciones precalculadas reproducibles.],
 
-    [`etl/sumo/intersecciones.py`, `programas_tls.py`, `subred.py`, `priorizacion.py`, `evidencia.py`], [RF-028 a RF-032, RF-045],
-    [Intersecciones, programas, Webster, recorte de zonas, priorización y evidencia externa.],
+    [`etl/sumo/intersecciones.py`, `programas_tls.py`, `subred.py`, `priorizacion.py`, `evidencia.py`, `comparacion_programas.py`],
+    [RF-028 a RF-032, RF-045, RF-046], [Intersecciones, programas, Webster por fases, recorte de zonas, comparación de programas, priorización y
+    evidencia externa.],
 
-    [`etl/sumo/semaforo_nuevo.py`, `demanda_zona.py`, `escena3d.py`, `telemetria.py`], [RF-033, RF-034, RF-036, RF-037, RF-039], [Semáforo
-    propuesto, demanda de la zona, geometría de la escena e indicadores de riesgo.],
+    [`etl/sumo/semaforo_nuevo.py`, `demanda_zona.py`, `escena3d.py`, `telemetria.py`], [RF-033, RF-034, RF-036, RF-037, RF-039, RF-048],
+    [Semáforo propuesto, demanda de la zona, geometría de la escena, indicadores de riesgo, resumen del viaje y balance del cruce.],
 
-    [`api/api.py`, `api/jobs.py`, `api/comparacion3d.py`], [RF-015, RF-018, RF-026, RF-031, RF-035, RF-040, RF-044, RD-003], [API REST/WebSocket, gestor de
+    [`api/api.py`, `api/jobs.py`, `api/comparacion3d.py`], [RF-015, RF-018, RF-026, RF-031, RF-035, RF-040, RF-044, RF-047, RD-003], [API REST/WebSocket, gestor de
     corridas y bucle lockstep de las comparaciones 3D.],
 
-    [`kepler/src/`], [RF-017, RF-019, RF-020, RF-027, RF-034 a RF-039, RF-044, RD-004, RNF-USA-001], [Visor web: mapa, paneles y simulador 3D.],
+    [`kepler/src/`], [RF-017, RF-019, RF-020, RF-027, RF-034 a RF-039, RF-044, RF-046, RF-048, RD-004, RNF-USA-001, RNF-USA-002], [Visor web:
+    mapa, paneles y simulador 3D.],
 
     [Por definir], [RF-014, RF-016, RF-041, RF-043], [Validación GEH, reanudación por fase, reporte de la comparación 3D y transporte público real.],
 
     [Pipeline completo], [RD-001, RD-002, RNF-PORT-001, RNF-PORT-002], [Requerimientos que aplican al sistema como un todo.],
   ),
-  caption: [Distribución de requerimientos por módulo (v2.0).]
+  caption: [Distribución de requerimientos por módulo (v2.2).]
 ) <tabDistribucion>
 
 ]

@@ -455,13 +455,15 @@ redactan con la forma \"El sistema debe #sym.dots\", y se organizan en cinco fun
   id: [RF-024],
   tipo: [Funcional],
   cu: [CU-05],
-  descripcion: [El sistema debe permitir cerrar vías durante una corrida. Cada cierre genera un `<rerouter>` con `<closingReroute>` sobre el edge
-  correspondiente, para que los vehículos recalculen su ruta.],
+  descripcion: [El sistema debe permitir cerrar vías durante una corrida. El usuario elige la vía con un clic en el mapa (capa de vías visible
+  en la pestaña Cierres, con nombre, clase y carriles), decide si cierra los dos sentidos y fija la franja horaria. Cada cierre genera un
+  `<rerouter>` con `<closingReroute>` sobre el edge correspondiente, para que los vehículos recalculen su ruta. El id del edge solo se pide en
+  opciones avanzadas.],
   razon: [Los cierres por obras o eventos son uno de los escenarios hipotéticos centrales de la propuesta.],
   criterio: [Una corrida con un cierre incluye `cierres.xml` en sus *additional files* y ningún vehículo atraviesa el edge cerrado en la ventana del
-  cierre.],
+  cierre. `GET /red/vias` devuelve un LineString por edge vehicular con el edge del sentido contrario cuando existe.],
   prioridad: [Media],
-  modulo: [`simulation-service/src/etl/sumo/cierres.py`, `kepler/src/components/PanelCierres.jsx`],
+  modulo: [`simulation-service/src/etl/sumo/cierres.py`, `vias.py`, `kepler/src/components/PanelCierres.jsx`],
   estado: [Implementado.],
   version: "2.0",
   fecha: []
@@ -475,8 +477,8 @@ redactan con la forma \"El sistema debe #sym.dots\", y se organizan en cinco fun
   `trips.geojson.gz`, `volumenes.json` y `meta.json`, con el hash de los insumos. La API debe servirlas comprimidas. El visor debe cargarlas como
   corridas terminadas y abrir la del preset `encuesta` al iniciar.],
   razon: [Una corrida completa tarda varios minutos; las precalculadas permiten explorar los presets de inmediato.],
-  criterio: [Al abrir el visor sin corridas propias se muestra la simulación `encuesta`. Si el panel coincide con un preset, el botón ofrece "Cargar
-  simulación" en lugar de ejecutar.],
+  criterio: [Al abrir el visor sin corridas propias se muestra la simulación `encuesta`. Si el panel coincide con un preset, sin cierres viales y
+  con el estilo de conducción normal, el botón ofrece "Cargar simulación" en lugar de ejecutar.],
   prioridad: [Media],
   modulo: [`simulation-service/src/etl/precalculadas.py`, `kepler/src/App.jsx`],
   estado: [Implementado.],
@@ -682,11 +684,14 @@ redactan con la forma \"El sistema debe #sym.dots\", y se organizan en cinco fun
   tipo: [Funcional],
   cu: [CU-10],
   descripcion: [El sistema debe permitir editar las duraciones y estados de las fases de un semáforo y calcular un programa con el método de Webster
-  a partir de los volúmenes por acceso. Antes de guardarlo debe validar que el estado de cada fase tenga un carácter por movimiento, que haya al menos
+  @webster a partir de los volúmenes por acceso. La ficha describe cada fase en palabras ("pasan los de la Calle 134 de frente y a la derecha") y el
+  editor cambia la luz de un acceso con un clic; las cadenas de estado de SUMO quedan en opciones avanzadas. En Webster cada acceso cuenta en las
+  fases en las que tiene verde, con un flujo de saturación de 1800 veh/h por carril, y las fases de amarillo conservan su duración. Antes de
+  guardarlo debe validar que el estado de cada fase tenga un carácter por movimiento, que haya al menos
   una fase amarilla de 3 s o más si hay verdes, y que el ciclo sea de al menos 15 s.],
   razon: [Ajustar tiempos es la intervención más común y barata sobre una intersección.],
   criterio: [Un programa inválido se rechaza con un mensaje que indica la regla incumplida (y la fase, cuando aplica). El ciclo de Webster
-  $C = (1,5 L + 5)/(1 - Y)$ nunca es menor a 30 s.],
+  $C = (1,5 L + 5)/(1 - Y)$ queda entre 30 y 150 s (150 s cuando $Y >= 0,9$).],
   prioridad: [Alta],
   modulo: [`simulation-service/src/etl/sumo/programas_tls.py`, `FichaInterseccion.jsx`],
   estado: [Implementado.],
@@ -698,15 +703,17 @@ redactan con la forma \"El sistema debe #sym.dots\", y se organizan en cinco fun
   id: [RF-031],
   tipo: [Funcional],
   cu: [CU-10],
-  descripcion: [El sistema debe comparar dos o más programas de semáforo sobre la misma zona y demanda (una corrida de zona por programa), reportar
-  por programa las métricas de la simulación y marcar el mejor en cada métrica. La versión actual reporta teleports, vehículos insertados y personas
-  cargadas; se deben agregar demora media, longitud de cola y espera peatonal por acceso.],
+  descripcion: [El sistema debe comparar el programa actual con el de Webster y con los que guarde el usuario sobre la misma zona (300 m) y la
+  misma demanda, con una hora punta de SUMO por programa. Por programa reporta el tiempo perdido y detenido por vehículo, la cola más larga y las
+  detenciones en los accesos (detectores E2 por carril), el tiempo perdido por peatón y los vehículos atendidos; resalta el mejor valor de cada
+  fila y resume el resultado en una frase.],
   razon: [La decisión entre programas debe sustentarse con métricas cuantitativas comparables.],
   criterio: [`POST /intersecciones/{id}/comparaciones` devuelve un id; al terminar, `GET /comparaciones/{id}` trae una fila por programa con las
   métricas.],
   prioridad: [Media],
-  modulo: [`simulation-service/src/api/api.py`, `kepler/src/components/TablaComparacion.jsx`],
-  estado: [Parcial: la comparación funciona con las métricas de `statistics.xml`; demora, cola y espera peatonal están pendientes.],
+  modulo: [`simulation-service/src/etl/sumo/comparacion_programas.py`, `etl/etl.py` (`run_comparacion_programas`), `api/api.py`,
+  `kepler/src/components/TablaComparacion.jsx`],
+  estado: [Implementado en v2.2. Antes la comparación no aplicaba el programa a la simulación y solo leía teleports.],
   version: "2.0",
   fecha: []
 )
@@ -857,10 +864,11 @@ datos, su riesgo y sus decisiones.
   id: [RF-038],
   tipo: [Funcional],
   cu: [CU-12],
-  descripcion: [El simulador debe mostrar en la esquina superior derecha un minimapa 2D tipo Maps con el cruce estudiado, el límite de la zona
-  simulada, la posición del actor seguido y el rastro de su recorrido.],
+  descripcion: [Cada escenario debe tener en su esquina superior derecha un minimapa 2D tipo Maps con el cruce estudiado, el límite de la zona
+  simulada, la posición del actor seguido en ese escenario, el rastro de su recorrido y, en gris, dónde va el mismo actor en el otro escenario.],
   razon: [Ubica al usuario en la ciudad mientras ve la escena en 3D.],
-  criterio: [El punto del actor en el minimapa sigue sus coordenadas lon/lat reportadas por TraCI y el rastro se borra al cambiar de actor.],
+  criterio: [El punto del actor en cada minimapa sigue las coordenadas lon/lat que TraCI reporta en ese escenario; el rastro se borra al cambiar de
+  actor y un actor que aún no entra a la vía no se dibuja.],
   prioridad: [Media],
   modulo: [`kepler/src/components/simulador3d/Minimapa.jsx`],
   estado: [Implementado.],
@@ -915,7 +923,7 @@ datos, su riesgo y sus decisiones.
   criterio: [Al cerrar una comparación, el usuario puede descargar el reporte con los valores de ambos lados.],
   prioridad: [Media],
   modulo: [Por definir],
-  estado: [Pendiente (por desarrollar).],
+  estado: [Parcial: el resumen de la comparación se muestra en pantalla (RF-048); falta exportarlo a PDF o CSV.],
   version: "2.0",
   fecha: []
 )
@@ -984,6 +992,91 @@ datos, su riesgo y sus decisiones.
   version: "2.1",
   fecha: []
 )
+
+
+=== F10 -- Usabilidad para la toma de decisiones (v2.2)
+
+Las funciones de semaforización eran correctas pero estaban escritas para quien conoce SUMO. Esta versión las acerca a un directivo de la
+Secretaría de Movilidad: frases en vez de códigos, una tarjeta por cruce como la de Semáforos de Barranquilla @barranquilla y un resumen final que
+dice si el semáforo ayudó en la simulación.
+
+#reqTable(
+  id: [RF-046],
+  tipo: [Funcional],
+  cu: [CU-11],
+  descripcion: [La pestaña Semaforizar debe mostrar:
+  - una lista de cruces sin semáforo con el conteo por nivel (prioritario, recomendado, en observación y con semáforo), búsqueda por nombre de
+    calle y filtros "cerca de colegio" y "cerca de hospital";
+  - al elegir un cruce, en el mapa o en la lista, un anillo sobre él y una tarjeta con el nivel, el tipo de vías ("Primaria × Residencial"), la
+    medida sugerida, el porqué en frases simples, las cifras (siniestros con su gravedad, semáforo más cercano, accesos) y la vista del cruce en
+    Street View, satélite y mapa;
+  - el botón "Ver simulación: hoy y con semáforo", que abre el simulador 3D (F9);
+  - el aviso de que la lista sirve para priorizar estudios y no es un dictamen.],
+  razon: [Un directivo debe entender en segundos por qué un cruce está en la lista y reconocerlo en la calle.],
+  criterio: [Elegir un cruce de la lista centra el mapa y dibuja el anillo; las tres vistas del cruce cargan sin clave de API; la búsqueda ignora tildes.],
+  prioridad: [Alta],
+  modulo: [`kepler/src/components/PanelSemaforizacion.jsx`, `VistaCruce.jsx`, `MapaCruce.jsx`, `priorizacion.py`],
+  estado: [Implementado.],
+  version: "2.2",
+  fecha: []
+)
+
+#reqTable(
+  id: [RF-047],
+  tipo: [Funcional],
+  cu: [CU-12],
+  descripcion: [Al lanzar un actor, el sistema debe agregarlo con la misma ruta en los dos escenarios o en ninguno: valida la ruta en ambos antes de
+  insertar, retira por igual el tráfico de fondo de los primeros 40 m de la vía de entrada y, si después de 1 s simulado el actor sigue esperando
+  en algún lado, libera más vía en los dos (hasta 8 intentos). Un peatón usa la misma ruta calculada una sola vez.],
+  razon: [La cola del semáforo propuesto podía llegar al borde de la zona y el actor entraba en un escenario y en el otro no, lo que rompía la comparación.],
+  criterio: [Prueba por WebSocket con SUMO real: seis actores lanzados por los tres accesos de un cruce prioritario entran en el mismo paso en los dos lados.],
+  prioridad: [Alta],
+  modulo: [`simulation-service/src/api/comparacion3d.py` (`inyectar_en_lados`, `Lado.despejar_entrada`, `_ViajeEgo`)],
+  estado: [Implementado.],
+  version: "2.2",
+  fecha: []
+)
+
+#reqTable(
+  id: [RF-048],
+  tipo: [Funcional],
+  cu: [CU-12],
+  descripcion: [Cuando el actor seguido termina su viaje en los dos escenarios (o en uno y pasan 90 s), el simulador debe mostrar un resumen con la
+  duración, el tiempo detenido, las paradas, las frenadas en seco (desaceleración de 4,5 m/s² o más), el riesgo máximo, el CO₂ emitido y la
+  velocidad media de cada lado, y una frase de veredicto que no afirme mejoras que no ocurrieron. Debe incluir el balance del cruce durante la
+  sesión, por hora: frenadas en seco, casi choques (PET < 1,5 s, cada par una vez cada 10 s), choques sin contar el calentamiento, cola más larga y
+  espera media en la vía principal y en la que cede. El resumen también se abre con el botón "Resumen" y recuerda que el tráfico de fondo es un
+  supuesto, no un aforo.],
+  razon: [La pregunta del usuario es si de verdad sirve poner el semáforo; la vista 3D sola no la responde.],
+  criterio: [`test_telemetria.py`: paradas, frenadas, tiempo detenido, veredictos (más seguro, solo más espera, sin cambios) y balance por hora.],
+  prioridad: [Alta],
+  modulo: [`etl/sumo/telemetria.py`, `api/comparacion3d.py`, `kepler/src/components/simulador3d/ResumenComparacion.jsx`],
+  estado: [Implementado.],
+  version: "2.2",
+  fecha: []
+)
+
+=== Cruce de funcionalidades
+
+La tabla relaciona cada funcionalidad con sus requerimientos y con las demás funcionalidades de las que depende.
+
+#figure(
+  table(
+    columns: (auto, auto, 1fr),
+    table.header([*Funcionalidad*], [*Requerimientos*], [*Depende de*]),
+    [F1 -- Ingestión], [RF-001 a RF-003], [--],
+    [F2 -- Matrices O/D], [RF-004 a RF-006], [F1],
+    [F3 -- Red y TAZ], [RF-007 a RF-010], [F1],
+    [F4 -- Archivos de simulación], [RF-011, RF-012], [F2, F3],
+    [F5 -- Escenarios], [RF-013, RF-021 a RF-025], [F4],
+    [F6 -- Módulo web], [RF-017 a RF-020, RF-026, RF-027], [F4, F5],
+    [F7 -- Validación y reportes], [RF-014 a RF-016], [F4, aforos HMD georreferenciados (pendiente)],
+    [F8 -- Intersecciones], [RF-028 a RF-032, RF-045], [F3, F4 (volúmenes por acceso), F6],
+    [F9 -- Simulador 3D], [RF-033 a RF-044, RF-047, RF-048], [F3, F4, F8 (cruce candidato)],
+    [F10 -- Usabilidad], [RF-046, RNF-USA-002], [F6, F8, F9],
+  ),
+  caption: [Cruce de funcionalidades.]
+) <tabCruceFuncionalidades>
 
 == Requerimientos de Desempeño
 
@@ -1254,6 +1347,22 @@ Document).
   modulo: [`kepler/src/`],
   estado: [Implementado; pendiente la prueba de usuario.],
   version: "2.0",
+  fecha: []
+)
+
+#reqTable(
+  id: [RNF-USA-002],
+  tipo: [No Funcional -- Usabilidad],
+  cu: [CU-07 a CU-12],
+  descripcion: [El visor debe ofrecer un tema claro (por defecto) y uno oscuro con un botón, recordado entre visitas. Los textos para el usuario final deben
+  evitar la jerga de SUMO: las cadenas de estado, ids de edges, semillas y tipos de programa solo aparecen en "Opciones avanzadas", y cada métrica
+  lleva una explicación corta.],
+  razon: [Un perfil directivo abandona una herramienta que le habla en códigos.],
+  criterio: [Recorrido con Chrome sin interfaz: el tema cambia mapa base, paneles y capas; ninguna pantalla principal muestra ids de SUMO.],
+  prioridad: [Media],
+  modulo: [`kepler/src/App.jsx`, `index.css`, `FichaInterseccion.jsx`, `TablaComparacion.jsx`, `PanelCierres.jsx`],
+  estado: [Implementado.],
+  version: "2.2",
   fecha: []
 )
 
