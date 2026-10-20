@@ -14,119 +14,124 @@ function horaASegundos(str) {
   return parseInt(h, 10) * 3600 + parseInt(m, 10) * 60;
 }
 
+const nombreVia = (v) => v?.nombre ?? 'Vía sin nombre';
+
 /**
- * Panel para gestionar cierres viales antes de ejecutar una simulación.
- * Los cierres se pasan al crear la simulación.
+ * Cierres viales para la próxima simulación: se elige la vía con un clic en el mapa
+ * (capa "Vías", visible mientras esta pestaña está abierta) y la franja horaria.
  */
-export default function PanelCierres({ cierres, onChange }) {
-  const [nuevoEdge, setNuevoEdge] = useState('');
-  const [nuevoInicio, setNuevoInicio] = useState('07:00');
-  const [nuevoFin, setNuevoFin] = useState('10:00');
+export default function PanelCierres({ cierres, onChange, via, cargandoVias, errorVias, onDescartarVia, onIrADemanda }) {
+  const [ambos, setAmbos] = useState(true);
+  const [inicio, setInicio] = useState('07:00');
+  const [fin, setFin] = useState('10:00');
+  const [manual, setManual] = useState('');
   const [error, setError] = useState(null);
 
-  const agregar = () => {
-    const edgeId = nuevoEdge.trim();
-    if (!edgeId) {
-      setError('Introduce el id del edge a cerrar.');
-      return;
-    }
-    const inicio = horaASegundos(nuevoInicio);
-    const fin = horaASegundos(nuevoFin);
-    if (fin <= inicio) {
-      setError('La hora de fin debe ser posterior al inicio.');
-      return;
-    }
-    if (inicio < HORA_INI || fin > HORA_FIN) {
-      setError(`La ventana simulada es 07:00–10:00. Usa horas dentro de ese rango.`);
-      return;
-    }
-    setError(null);
-    onChange([...cierres, { edge_id: edgeId, hora_inicio: inicio, hora_fin: fin }]);
-    setNuevoEdge('');
+  const franja = () => {
+    const ini = horaASegundos(inicio);
+    const fn = horaASegundos(fin);
+    let problema = null;
+    if (fn <= ini) problema = 'La hora de fin debe ser posterior a la de inicio.';
+    else if (ini < HORA_INI || fn > HORA_FIN) problema = 'La simulación va de 07:00 a 10:00: usa horas dentro de ese rango.';
+    setError(problema);
+    return problema ? null : [ini, fn];
   };
 
-  const eliminar = (i) => onChange(cierres.filter((_, idx) => idx !== i));
+  const agregar = (edges, nombre) => {
+    const horas = franja();
+    if (!horas) return;
+    const nuevos = edges
+      .filter((e) => !cierres.some((c) => c.edge_id === e))
+      .map((e) => ({ edge_id: e, nombre, hora_inicio: horas[0], hora_fin: horas[1] }));
+    onChange([...cierres, ...nuevos]);
+  };
+
+  const cerrarVia = () => {
+    agregar(ambos && via.contrario ? [via.id, via.contrario] : [via.id], nombreVia(via));
+    onDescartarVia();
+  };
 
   return (
-    <div className="pd-contenido">
+    <div className="pd-contenido ci">
+      <p className="pd-nota">
+        Haz clic en una calle del mapa para cerrarla (las vías se ven en gris mientras esta pestaña está abierta). Los
+        vehículos que pasaban por ahí buscan otra ruta. Los cierres se aplican al <strong>ejecutar una simulación nueva</strong>{' '}
+        desde la pestaña Demanda.
+      </p>
+      {cargandoVias && <p className="pd-nota">Cargando las vías de la red…</p>}
+      {errorVias && <p className="pd-error">{errorVias}</p>}
+
+      {via ? (
+        <div className="ci-via">
+          <b>{nombreVia(via)}</b>
+          <span className="pd-nota">Vía {via.clase} · {via.carriles} carril{via.carriles === 1 ? '' : 'es'} por sentido</span>
+          {via.contrario && (
+            <label className="ci-check">
+              <input type="checkbox" checked={ambos} onChange={(e) => setAmbos(e.target.checked)} />
+              Cerrar los dos sentidos
+            </label>
+          )}
+          <div className="ci-horas">
+            <label>
+              Desde
+              <input type="time" min="07:00" max="10:00" value={inicio} onChange={(e) => setInicio(e.target.value)} />
+            </label>
+            <label>
+              Hasta
+              <input type="time" min="07:00" max="10:00" value={fin} onChange={(e) => setFin(e.target.value)} />
+            </label>
+          </div>
+          <div className="ci-acciones">
+            <button type="button" className="ps-primario" onClick={cerrarVia}>Cerrar esta vía</button>
+            <button type="button" onClick={onDescartarVia}>Cancelar</button>
+          </div>
+        </div>
+      ) : (
+        <p className="ci-vacio">Ninguna vía elegida todavía.</p>
+      )}
+      {error && <p className="pd-error">{error}</p>}
+
       <section>
-        <h3>Cierres viales activos</h3>
+        <h3>Cierres para la próxima simulación ({cierres.length})</h3>
         {cierres.length === 0 ? (
-          <p className="pd-nota">Sin cierres. La simulación usará la red completa.</p>
+          <p className="pd-nota">Sin cierres: se simula la red completa.</p>
         ) : (
-          <table className="fi-tabla">
-            <thead>
-              <tr>
-                <th>Edge</th>
-                <th>Inicio</th>
-                <th>Fin</th>
-                <th />
-              </tr>
-            </thead>
-            <tbody>
-              {cierres.map((c, i) => (
-                <tr key={i}>
-                  <td>
-                    <code>{c.edge_id}</code>
-                  </td>
-                  <td>{segundosAHora(c.hora_inicio)}</td>
-                  <td>{segundosAHora(c.hora_fin)}</td>
-                  <td>
-                    <button type="button" onClick={() => eliminar(i)} aria-label="Eliminar cierre">
-                      ×
-                    </button>
-                  </td>
-                </tr>
+          <>
+            <ul className="ci-lista">
+              {cierres.map((c) => (
+                <li key={c.edge_id}>
+                  <span>
+                    <b>{c.nombre ?? 'Vía sin nombre'}</b>
+                    <small>{segundosAHora(c.hora_inicio)}–{segundosAHora(c.hora_fin)} · tramo {c.edge_id}</small>
+                  </span>
+                  <button type="button" onClick={() => onChange(cierres.filter((x) => x.edge_id !== c.edge_id))} aria-label="Quitar cierre">×</button>
+                </li>
               ))}
-            </tbody>
-          </table>
+            </ul>
+            <div className="ci-acciones">
+              <button type="button" onClick={onIrADemanda}>Ir a simular</button>
+              <button type="button" onClick={() => onChange([])}>Quitar todos</button>
+            </div>
+          </>
         )}
       </section>
 
-      <section>
-        <h3>Agregar cierre</h3>
-        <div className="pd-grupo">
-          <label>
-            Edge ID
-            <input
-              type="text"
-              value={nuevoEdge}
-              onChange={(e) => setNuevoEdge(e.target.value)}
-              placeholder="-123456789#0"
-              className="fi-input-estado"
-            />
-          </label>
-          <label>
-            Inicio
-            <input
-              type="time"
-              min="07:00"
-              max="10:00"
-              value={nuevoInicio}
-              onChange={(e) => setNuevoInicio(e.target.value)}
-            />
-          </label>
-          <label>
-            Fin
-            <input
-              type="time"
-              min="07:00"
-              max="10:00"
-              value={nuevoFin}
-              onChange={(e) => setNuevoFin(e.target.value)}
-            />
-          </label>
-          <button type="button" onClick={agregar}>
-            + Agregar cierre
+      <details className="fi-detalles">
+        <summary>Opciones avanzadas</summary>
+        <p className="pd-nota">Cerrar un tramo por su id de SUMO (edge), por ejemplo <code>-123456789#0</code>.</p>
+        <div className="ci-acciones">
+          <input type="text" value={manual} onChange={(e) => setManual(e.target.value)} placeholder="id del edge" className="fi-input-estado" aria-label="Id del edge" />
+          <button
+            type="button"
+            onClick={() => {
+              if (manual.trim()) agregar([manual.trim()], null);
+              setManual('');
+            }}
+          >
+            Agregar
           </button>
         </div>
-        {error && <p className="pd-error">{error}</p>}
-        <p className="pd-nota">
-          El Edge ID es el identificador interno de SUMO del segmento de vía. Puedes encontrarlo
-          en el panel de kepler al seleccionar una arista, o en el archivo .net.xml.
-          Los vehículos afectados buscarán rutas alternativas (rerouter SUMO).
-        </p>
-      </section>
+      </details>
     </div>
   );
 }

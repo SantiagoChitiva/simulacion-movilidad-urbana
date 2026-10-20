@@ -15,7 +15,7 @@ import {
 } from '@kepler.gl/actions';
 import { processGeojson, processRowObject } from '@kepler.gl/processors';
 import KeplerGl from '@kepler.gl/components';
-import { descargarJson, listarPrecalculadas, obtenerIntersecciones, obtenerModos, obtenerPriorizacion, urlTrips } from './api';
+import { descargarJson, listarPrecalculadas, obtenerIntersecciones, obtenerModos, obtenerPriorizacion, obtenerVias, urlTrips } from './api';
 import { useCorridas, useTamanoVentana } from './hooks';
 import { COLOR_SEMAFORO, hexARgb, modeColorRange, modosPresentes } from './modos';
 import FichaInterseccion from './components/FichaInterseccion';
@@ -41,10 +41,14 @@ const DATASET_TRIPS = 'usaquen_trips';
 const DATASET_SEMAFOROS = 'intersecciones';
 const DATASET_PRIORIZACION = 'priorizacion';
 const DATASET_SELECCION = 'seleccion';
+const DATASET_VIAS = 'vias';
+const DATASET_CIERRES = 'cierres';
 const CAPA_TRIPS = 'trips_layer';
 const CAPA_SEMAFOROS = 'semaforos_layer';
 const CAPA_PRIORIZACION = 'priorizacion_layer';
 const CAPA_SELECCION = 'seleccion_layer';
+const CAPA_VIAS = 'vias_layer';
+const CAPA_CIERRES = 'cierres_layer';
 
 // Tema de la interfaz (claro u oscuro) y estilo de mapa base que le corresponde
 const CLAVE_TEMA = 'visor.tema';
@@ -97,8 +101,9 @@ const configPriorizacion = (niveles) => ({
   },
 });
 
-// Anillo alrededor del cruce elegido (en el mapa o en la lista del panel)
-const configSeleccion = {
+// Anillo alrededor del cruce elegido (en el mapa o en la lista del panel): oscuro sobre el
+// mapa claro, blanco sobre el oscuro
+const configSeleccion = (color) => ({
   version: 'v1',
   config: {
     visState: {
@@ -111,15 +116,15 @@ const configSeleccion = {
             label: 'Cruce elegido',
             columns: { lat: 'lat', lng: 'lng', altitude: null },
             isVisible: true,
-            color: [17, 24, 39],
-            visConfig: { radius: 30, opacity: 1, filled: false, outline: true, thickness: 3, strokeColor: [17, 24, 39] },
+            color,
+            visConfig: { radius: 30, opacity: 1, filled: false, outline: true, thickness: 3, strokeColor: color },
           },
           visualChannels: { colorField: null, sizeField: null },
         },
       ],
     },
   },
-};
+});
 
 const VISTA_INICIAL = { latitude: 4.7345, longitude: -74.0395, zoom: 12.4, pitch: 45, bearing: 0 };
 
@@ -193,6 +198,36 @@ const configSemaforos = {
   },
 };
 
+// Líneas de la red (pestaña Cierres): gris para elegir, rojo para lo ya cerrado
+const configLineas = (id, dataId, label, color, thickness) => ({
+  version: 'v1',
+  config: {
+    visState: {
+      layers: [
+        {
+          id,
+          type: 'geojson',
+          config: {
+            dataId,
+            label,
+            columns: { geojson: '_geojson' },
+            isVisible: true,
+            color,
+            visConfig: { opacity: 0.8, thickness, strokeColor: color, stroked: true, filled: false },
+          },
+          visualChannels: { colorField: null, sizeField: null, strokeColorField: null },
+        },
+      ],
+      interactionConfig: {
+        tooltip: {
+          enabled: true,
+          fieldsToShow: { [dataId]: [{ name: 'nombre', format: null }, { name: 'clase', format: null }] },
+        },
+      },
+    },
+  },
+});
+
 // feature de /intersecciones/priorizacion → cruce candidato (panel y simulador 3D)
 const aCandidato = (f) => ({
   ...f.properties,
@@ -203,7 +238,7 @@ const aCandidato = (f) => ({
 
 // Orden de dibujo, de arriba hacia abajo. reorderLayer reemplaza el orden completo: una
 // lista parcial dejaría fuera (ocultas) las capas que no nombra.
-const ORDEN_CAPAS = [CAPA_SELECCION, CAPA_PRIORIZACION, CAPA_SEMAFOROS, CAPA_TRIPS];
+const ORDEN_CAPAS = [CAPA_SELECCION, CAPA_PRIORIZACION, CAPA_SEMAFOROS, CAPA_CIERRES, CAPA_VIAS, CAPA_TRIPS];
 const ordenCapas = (layerOrder) => [
   ...ORDEN_CAPAS.filter((id) => layerOrder.includes(id)),
   ...layerOrder.filter((id) => !ORDEN_CAPAS.includes(id)),
@@ -261,10 +296,14 @@ function Visor() {
   // estable entre renders: si cambia, el simulador reconstruye sus dos escenas 3D
   const candidatosSimulador = useMemo(() => candidatos.filter((c) => c.nivel !== 'observacion'), [candidatos]);
   const [cierres, setCierres] = useState([]);
+  const [viaElegida, setViaElegida] = useState(null);
+  const [vias, setVias] = useState(null);   // FeatureCollection de /red/vias (se pide una vez)
+  const [estadoVias, setEstadoVias] = useState({ cargando: false, error: null });
   const abortar = useRef(null);
   const primeraCarga = useRef(true);
   const filasSemaforos = useRef([]);
   const filasPriorizacion = useRef([]);
+  const filasVias = useRef([]);
 
   // Kepler conserva el objeto bajo el mouse y el tooltip fijado; si se reemplaza el
   // dataset sin limpiarlos, intenta dibujar un trip que ya no existe y se cae.
@@ -399,6 +438,9 @@ function Visor() {
         setPestana('interseccion');
         setPlegado(false);
       }
+    } else if (capa.startsWith(CAPA_VIAS)) {
+      const via = filasVias.current[indice];
+      if (via) setViaElegida(via);
     } else if (capa.startsWith(CAPA_PRIORIZACION)) {
       const fila = filasPriorizacion.current[indice];
       if (fila) {
@@ -459,6 +501,54 @@ function Visor() {
     };
   }, [priorizacionVisible, corridaMapa, dispatch, limpiarInteraccion]);
 
+  // ─── cierres viales ─────────────────────────────────────────────────────────
+
+  const enCierres = pestana === 'cierres' && !plegado;
+  useEffect(() => {
+    if (!enCierres || vias) return;
+    setEstadoVias({ cargando: true, error: null });
+    obtenerVias()
+      .then((fc) => {
+        setVias(fc);
+        setEstadoVias({ cargando: false, error: null });
+      })
+      .catch((e) => setEstadoVias({ cargando: false, error: `Vías: ${e.message}` }));
+  }, [enCierres, vias]);
+
+  // la capa de vías solo está mientras se eligen cierres: con 15 000 tramos taparía el resto
+  useEffect(() => {
+    if (!enCierres || !vias) {
+      filasVias.current = [];
+      dispatch(removeDataset(DATASET_VIAS));
+      return;
+    }
+    filasVias.current = vias.features.map((f) => f.properties);
+    limpiarInteraccion();
+    dispatch(
+      addDataToMap({
+        datasets: { info: { label: 'Vías', id: DATASET_VIAS }, data: processGeojson(vias) },
+        options: { centerMap: false, keepExistingConfig: true },
+        config: configLineas(CAPA_VIAS, DATASET_VIAS, 'Vías', [140, 150, 165], 3),
+      })
+    );
+  }, [enCierres, vias, dispatch, limpiarInteraccion]);
+
+  // los tramos cerrados se ven en rojo mientras haya cierres
+  useEffect(() => {
+    dispatch(removeDataset(DATASET_CIERRES));
+    if (!vias || !cierres.length) return;
+    const cerrados = new Set(cierres.map((c) => c.edge_id));
+    const features = vias.features.filter((f) => cerrados.has(f.properties.id));
+    if (!features.length) return;
+    dispatch(
+      addDataToMap({
+        datasets: { info: { label: 'Cierres viales', id: DATASET_CIERRES }, data: processGeojson({ type: 'FeatureCollection', features }) },
+        options: { centerMap: false, keepExistingConfig: true },
+        config: configLineas(CAPA_CIERRES, DATASET_CIERRES, 'Cierres viales', [214, 40, 40], 6),
+      })
+    );
+  }, [cierres, vias, dispatch]);
+
   // anillo sobre el cruce elegido; se dibuja encima de las demás capas
   useEffect(() => {
     dispatch(removeDataset(DATASET_SELECCION));
@@ -470,10 +560,10 @@ function Visor() {
           data: processRowObject([{ lat: cruceCandidato.lat, lng: cruceCandidato.lon }]),
         },
         options: { centerMap: false, keepExistingConfig: true },
-        config: configSeleccion,
+        config: configSeleccion(tema === 'claro' ? [17, 24, 39] : [255, 255, 255]),
       })
     );
-  }, [cruceCandidato, dispatch]);
+  }, [cruceCandidato, tema, dispatch]);
 
   const elegirCruce = useCallback(
     (cruce, { centrar = false } = {}) => {
@@ -588,6 +678,7 @@ function Visor() {
                 cargando={!!carga}
                 enCurso={corridas.enCurso}
                 error={corridas.error}
+                cierres={cierres.length}
                 onEjecutar={(params) => corridas.lanzar({ ...params, cierres })}
                 onVerCorrida={cargarCorrida}
               />
@@ -600,7 +691,15 @@ function Visor() {
               />
             )}
             {pestana === 'cierres' && (
-              <PanelCierres cierres={cierres} onChange={setCierres} />
+              <PanelCierres
+                cierres={cierres}
+                onChange={setCierres}
+                via={viaElegida}
+                cargandoVias={estadoVias.cargando}
+                errorVias={estadoVias.error}
+                onDescartarVia={() => setViaElegida(null)}
+                onIrADemanda={() => setPestana('demanda')}
+              />
             )}
             {pestana === 'semaforizar' && (
               <PanelSemaforizacion

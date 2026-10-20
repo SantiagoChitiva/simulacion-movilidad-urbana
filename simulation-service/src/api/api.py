@@ -29,6 +29,7 @@ from etl.sumo.estilos import EstiloConductor, INFO_ESTILOS, PARAMS_ESTILO
 from etl.sumo.cierres import CierreVial, escribir_rerouter
 from etl.sumo.geojson_reader import read_first_features
 from etl.sumo.priorizacion import a_geojson, analisis_con_cache, puntuar
+from etl.sumo.vias import vias_con_cache
 from etl.sumo.programas_tls import (
     ProgramaTLS, ProgramasTLSError, FasePrograma, leer_programas, leer_programa,
     escribir_programa, programa_webster, validar_programa,
@@ -282,6 +283,13 @@ def listar_priorizacion(
     if vols is None:
         notas.append("La corrida no tiene vehroute-output: el volumen no cuenta como evidencia.")
     return {**a_geojson(cruces, umbrales, notas), "descartes": analisis["descartes"]}
+
+
+@app.get("/red/vias")
+def listar_vias() -> dict:
+    """Edges vehiculares de la red como LineStrings (para elegir cierres en el mapa)."""
+    paths = ScenarioPaths.from_name(DEFAULT_SCENARIO)
+    return vias_con_cache(paths.net, paths.nombres_vias, CACHE_DIR / "vias.json")
 
 
 @app.get("/intersecciones/{tl_id}")

@@ -55,6 +55,7 @@ export default function PanelDemanda({
   cargando,
   enCurso,
   error,
+  cierres = 0,
   onEjecutar,
   onVerCorrida,
 }) {
@@ -86,8 +87,11 @@ export default function PanelDemanda({
   // precalculada que corresponde exactamente a lo que está en el panel
   const precalculada = precalculadas.find((p) => p.preset === presetId);
   const semillaPedida = semilla === '' ? SEMILLA_SUMOCFG : Number(semilla);
+  // la precalculada no tiene cierres ni otro estilo de conducción: con ellos hay que simular
   const lista =
     !!precalculada &&
+    cierres === 0 &&
+    estiloId === 'normal' &&
     mismosConteos(conteos, precalculada.conteos) &&
     semillaPedida === (precalculada.semilla ?? SEMILLA_SUMOCFG);
   const enMapa = lista && corridaCargada === precalculada.id;
@@ -188,6 +192,10 @@ export default function PanelDemanda({
 
       <section>
         <h3>Viajes por actor vial (07:00–10:00)</h3>
+        <p className="pd-nota">
+          Un día hábil típico según la Encuesta de Movilidad 2023, de 7:00 a 10:00, con los viajes que empiezan y terminan
+          en Usaquén. No es el promedio de varios días ni incluye el tráfico que solo atraviesa la localidad.
+        </p>
         {GRUPOS.map(([grupo, titulo]) => {
           const delGrupo = modos.filter((m) => m.grupo === grupo);
           if (!delGrupo.length) return null;
@@ -230,6 +238,11 @@ export default function PanelDemanda({
         </label>
       </section>
 
+      {cierres > 0 && (
+        <p className="pd-aviso">
+          {cierres === 1 ? 'Hay 1 cierre vial' : `Hay ${cierres} cierres viales`} (pestaña Cierres): se aplican a esta simulación.
+        </p>
+      )}
       {lista ? (
         <>
           <button type="button" className="pd-ejecutar" onClick={() => onVerCorrida(precalculada)} disabled={cargando || enMapa}>

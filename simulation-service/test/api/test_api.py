@@ -314,3 +314,14 @@ def test_comparacion_de_programas(con_catalogo, monkeypatch):
     assert c.post(f"/intersecciones/{tl_id}/comparaciones", json={"programas": ["mio"]}).status_code == 404
     monkeypatch.setattr(api, "_volumenes_corrida", lambda *_a, **_k: None)
     assert c.post(f"/intersecciones/{tl_id}/programas/webster", json={}).status_code == 409
+
+
+def test_vias_de_la_red(con_catalogo, tmp_path, monkeypatch):
+    c, _ = con_catalogo
+    fc = c.get("/red/vias").json()
+    assert fc["features"] and (tmp_path / "cache" / "vias.json").is_file()
+    props = {f["properties"]["id"]: f["properties"] for f in fc["features"]}
+    con_contrario = next(p for p in props.values() if p["contrario"])
+    assert props[con_contrario["contrario"]]["contrario"] == con_contrario["id"]
+    assert all(f["geometry"]["type"] == "LineString" for f in fc["features"][:50])
+    assert not any(p["clase"] in ("peatonal", "ciclorruta", "de servicio") for p in props.values())

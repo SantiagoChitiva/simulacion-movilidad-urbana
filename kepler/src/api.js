@@ -115,6 +115,9 @@ export const ETAPA_COMPARACION = {
   armando_escena: 'Armando la escena 3D (vías, edificios, accesos)',
 };
 
+// Vías de la red (LineStrings por edge), para elegir cierres en el mapa
+export const obtenerVias = () => pedir('/red/vias');
+
 // Fase F: priorización
 export const obtenerPriorizacion = (corrida) => pedir(conCorrida('/intersecciones/priorizacion', corrida));
 

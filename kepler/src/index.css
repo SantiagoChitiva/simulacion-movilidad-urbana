@@ -68,7 +68,7 @@ html, body, #root {
   top: 12px;
   right: 56px;
   bottom: 110px;
-  width: 380px;
+  width: 400px;
   max-width: calc(100vw - 68px);
   display: flex;
   flex-direction: column;
@@ -94,6 +94,7 @@ html, body, #root {
   flex: 0 1 auto;
   min-height: 0;
   overflow-y: auto;
+  overflow-x: hidden;
   box-sizing: border-box;
   padding: 10px 14px 12px;
   background: var(--pd-fondo);
@@ -144,9 +145,11 @@ html, body, #root {
   z-index: 1;
 }
 .pd-cerrar, .pd-tema { font-size: 15px; line-height: 1; }
-.pd-acciones { display: flex; gap: 4px; }
+.pd-acciones { display: flex; gap: 3px; flex: none; }
+.pd-panel .pd-acciones button { padding: 3px 7px; }
 
-.cd-pestanas { display: flex; gap: 4px; }
+.cd-pestanas { display: flex; gap: 3px; flex-wrap: wrap; min-width: 0; }
+.pd-panel .cd-pestanas button { padding: 4px 6px; font-size: 11.5px; }
 .cd-pestanas button { font-weight: 600 !important; }
 .cd-pestanas button.activa { border-color: var(--pd-acento) !important; color: #fff !important; background: var(--pd-acento-fuerte) !important; }
 
@@ -282,7 +285,7 @@ html, body, #root {
   position: fixed;
   top: 12px;
   left: 330px;
-  right: 452px;
+  right: 472px;
   display: flex;
   justify-content: center;
   pointer-events: none;
@@ -677,3 +680,19 @@ html, body, #root {
 .tc-ayuda { color: var(--pd-tenue); cursor: help; }
 .tc-semilla { display: flex; align-items: center; gap: 6px; }
 .tc-semilla input { width: 70px; }
+
+/* ── Cierres viales ─────────────────────────────────────────────────────────── */
+.ci { display: flex; flex-direction: column; gap: 8px; }
+.ci-via { display: flex; flex-direction: column; gap: 6px; padding: 10px; border-radius: 10px; background: var(--pd-fondo-2); }
+.ci-via b { font-size: 14px; color: var(--pd-fuerte); }
+.ci-check { display: flex; align-items: center; gap: 6px; }
+.ci-horas { display: flex; gap: 10px; }
+.ci-horas label { display: flex; flex-direction: column; gap: 2px; color: var(--pd-tenue); }
+.ci-acciones { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.ci-acciones .ps-primario { width: auto; flex: 1; }
+.ci-vacio { color: var(--pd-tenue); font-style: italic; margin: 0; }
+.ci-lista { list-style: none; margin: 0 0 6px; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.ci-lista li { display: flex; justify-content: space-between; align-items: center; gap: 6px; padding: 4px 0; border-bottom: 1px solid var(--pd-borde); }
+.ci-lista span { display: flex; flex-direction: column; min-width: 0; }
+.ci-lista b { color: var(--pd-fuerte); }
+.ci-lista small { color: var(--pd-tenue); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
