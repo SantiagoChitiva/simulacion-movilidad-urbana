@@ -696,3 +696,24 @@ html, body, #root {
 .ci-lista span { display: flex; flex-direction: column; min-width: 0; }
 .ci-lista b { color: var(--pd-fuerte); }
 .ci-lista small { color: var(--pd-tenue); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ── Resumen de la comparación 3D (ResumenComparacion.jsx) ─────────────────── */
+.rc-fondo { position: absolute; inset: 0; z-index: 20; background: rgba(8, 10, 14, 0.6); display: flex; align-items: center; justify-content: center; padding: 16px; }
+.rc { width: min(760px, 100%); max-height: 100%; overflow-y: auto; background: #fff; color: #1f2937; border-radius: 14px; padding: 18px 22px; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45); font-size: 13px; }
+.rc-cab { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.rc-cab small { text-transform: uppercase; letter-spacing: 0.06em; color: #6b7280; font-size: 11px; }
+.rc-cab h3 { margin: 2px 0 0; font-size: 19px; color: #111827; }
+.sim3d .rc .sim3d-cerrar { background: #f3f4f6; color: #111827; border-color: #e5e7eb; }
+.rc h4 { margin: 16px 0 6px; font-size: 13px; color: #111827; }
+.rc-veredicto { margin: 0 0 8px; padding: 10px 12px; border-radius: 10px; background: #f3f4f6; font-size: 14px; line-height: 1.45; color: #111827; }
+.rc-veredicto.bueno { background: #e7f6ec; border-left: 4px solid #2a9d43; }
+.rc-veredicto.malo { background: #fdecec; border-left: 4px solid #d62828; }
+.rc-veredicto.neutro { border-left: 4px solid #9ca3af; }
+.rc-tabla { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+.rc-tabla th { text-align: right; font-weight: 600; color: #374151; padding: 4px 6px; border-bottom: 1px solid #e5e7eb; white-space: nowrap; }
+.rc-tabla th:first-child, .rc-tabla td:first-child { text-align: left; }
+.rc-tabla td { padding: 5px 6px; text-align: right; border-bottom: 1px solid #f0f1f3; }
+.rc-tabla td.rc-mejor { color: #1d7f36; font-weight: 700; }
+.rc-nota { margin: 14px 0 0; padding: 10px 12px; border-radius: 10px; background: #f7f8fa; color: #4b5563; font-size: 12px; line-height: 1.5; }
+.rc-acciones { display: flex; gap: 8px; justify-content: flex-end; margin-top: 12px; }
+.sim3d .rc-acciones button:not(.sim3d-primario) { background: #f3f4f6; color: #111827; border-color: #e5e7eb; }

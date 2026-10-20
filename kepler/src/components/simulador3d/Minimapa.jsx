@@ -22,7 +22,7 @@ const vacio = { type: 'FeatureCollection', features: [] };
  * Mapa 2D "tipo Maps" en la esquina: el cruce estudiado, la zona simulada, el actor
  * seguido y el rastro que ha dejado.
  */
-export default function Minimapa({ nodo, bbox, ego, egoId, rumbo = null, seguir = true }) {
+export default function Minimapa({ nodo, bbox, ego, otro = null, egoId, rumbo = null, seguir = true }) {
   const contenedor = useRef(null);
   const mapa = useRef(null);
   const listo = useRef(false);
@@ -48,6 +48,9 @@ export default function Minimapa({ nodo, bbox, ego, egoId, rumbo = null, seguir 
       m.addLayer({ id: 'cruce', type: 'circle', source: 'cruce', paint: { 'circle-radius': 7, 'circle-color': '#ffb300', 'circle-stroke-color': '#000', 'circle-stroke-width': 1.5 } });
       m.addSource('rastro', { type: 'geojson', data: vacio });
       m.addLayer({ id: 'rastro', type: 'line', source: 'rastro', paint: { 'line-color': '#00bcd4', 'line-width': 3, 'line-opacity': 0.8 } });
+      // el mismo actor en el otro escenario: deja ver cuál de los dos va más adelante
+      m.addSource('otro', { type: 'geojson', data: vacio });
+      m.addLayer({ id: 'otro', type: 'circle', source: 'otro', paint: { 'circle-radius': 5, 'circle-color': '#9aa3ad', 'circle-stroke-color': '#3a414c', 'circle-stroke-width': 1.5 } });
       m.addSource('ego', { type: 'geojson', data: vacio });
       m.addLayer({ id: 'ego', type: 'circle', source: 'ego', paint: { 'circle-radius': 6, 'circle-color': '#00e5ff', 'circle-stroke-color': '#003040', 'circle-stroke-width': 2 } });
       listo.current = true;
@@ -57,6 +60,13 @@ export default function Minimapa({ nodo, bbox, ego, egoId, rumbo = null, seguir 
       m.remove();
     };
   }, [nodo.lon, nodo.lat, bbox]);
+
+  useEffect(() => {
+    const m = mapa.current;
+    if (!m || !listo.current) return;
+    const valido = otro && Number.isFinite(otro.lon) && Number.isFinite(otro.lat);
+    m.getSource('otro')?.setData(valido ? { type: 'Feature', geometry: { type: 'Point', coordinates: [otro.lon, otro.lat] } } : vacio);
+  }, [otro]);
 
   // otro actor seguido: se borra el rastro del anterior
   useEffect(() => {

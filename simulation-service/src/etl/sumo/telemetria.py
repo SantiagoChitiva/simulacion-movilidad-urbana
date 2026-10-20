@@ -156,3 +156,154 @@ def opcion_enlace(direccion: str, estado: str, prioridad: bool, abierto: bool, c
         "puede_pasar": abierto,
         "conflicto": conflicto,
     }
+
+
+# ─────────────────────────────── viaje del actor seguido y balance del cruce
+
+FRENADA_EN_SECO = 4.5   # m/s² de desaceleración: frenada brusca (más que un frenado normal, ~3 m/s²)
+V_DETENIDO = 0.3        # m/s
+
+
+def acumular_viaje(viaje: dict | None, tele: dict, t: float, dt: float) -> dict:
+    """Suma un frame de telemetría del actor seguido a las cifras de su viaje en un lado."""
+    if viaje is None:
+        # arranca "detenido" para que la salida desde cero no cuente como parada
+        viaje = {"inicio_t": t, "fin_t": t, "detenido_s": 0.0, "paradas": 0, "frenadas": 0,
+                 "riesgo_max": 0.0, "co2_g": 0.0, "distancia_m": 0.0, "perdida_s": 0.0,
+                 "_detenido": True, "_frenando": False}
+    v = (tele.get("velocidad_kmh") or 0.0) / 3.6
+    detenido = v < V_DETENIDO
+    if detenido:
+        viaje["detenido_s"] += dt
+        if not viaje["_detenido"]:
+            viaje["paradas"] += 1
+    a = tele.get("aceleracion")
+    frenando = a is not None and a <= -FRENADA_EN_SECO
+    if frenando and not viaje["_frenando"]:
+        viaje["frenadas"] += 1
+    viaje["_detenido"], viaje["_frenando"] = detenido, frenando
+    riesgo = (tele.get("riesgo") or {}).get("indice")
+    if riesgo is not None:
+        viaje["riesgo_max"] = max(viaje["riesgo_max"], riesgo)
+    viaje["co2_g"] += (tele.get("co2_mg_s") or 0.0) * dt / 1000
+    if tele.get("distancia_m") is not None:
+        viaje["distancia_m"] = tele["distancia_m"]
+    else:   # los peatones no reportan distancia: se integra la velocidad
+        viaje["distancia_m"] += v * dt
+    if tele.get("perdida_s") is not None:
+        viaje["perdida_s"] = tele["perdida_s"]
+    # con frames largos (simulación acelerada) el muestreo se pierde paradas cortas: SUMO
+    # lleva la cuenta exacta de lo que el vehículo ha estado detenido
+    if tele.get("espera_acum_s") is not None:
+        viaje["detenido_s"] = max(viaje["detenido_s"], tele["espera_acum_s"])
+    viaje["fin_t"] = t
+    return viaje
+
+
+def resumen_viaje(viaje: dict | None, terminado: bool) -> dict | None:
+    """Cifras para mostrar de un viaje (sin los campos internos)."""
+    if viaje is None:
+        return None
+    duracion = viaje["fin_t"] - viaje["inicio_t"]
+    return {
+        "terminado": terminado,
+        "duracion_s": round(duracion, 1),
+        "detenido_s": round(viaje["detenido_s"], 1),
+        "paradas": viaje["paradas"],
+        "frenadas": viaje["frenadas"],
+        "riesgo_max": round(viaje["riesgo_max"]),
+        "co2_g": round(viaje["co2_g"], 1),
+        "distancia_m": round(viaje["distancia_m"]),
+        "perdida_s": round(viaje["perdida_s"], 1),
+        "velocidad_media_kmh": round(3.6 * viaje["distancia_m"] / duracion, 1) if duracion > 0 else None,
+    }
+
+
+def comparar_viajes(sin: dict | None, con: dict | None) -> dict:
+    """Frase que resume el mismo viaje sin semáforo (`sin`) y con el semáforo propuesto (`con`)."""
+    if not sin or not con:
+        falta = "sin semáforo" if not sin else "con semáforo"
+        return {"veredicto": f"El viaje no se pudo completar en el escenario {falta}: no hay comparación.",
+                "tono": "neutro", "diferencia_s": None}
+    if not (sin["terminado"] and con["terminado"]):
+        return {"veredicto": "El viaje no terminó en los dos escenarios: las cifras son parciales.",
+                "tono": "neutro", "diferencia_s": None}
+    dt = con["duracion_s"] - sin["duracion_s"]
+    d_riesgo = sin["riesgo_max"] - con["riesgo_max"]   # > 0: más seguro con semáforo
+    d_frenadas = sin["frenadas"] - con["frenadas"]
+    tiempo = (f"tardó {abs(dt):.0f} s más" if dt > 2 else f"tardó {abs(dt):.0f} s menos" if dt < -2
+              else "tardó casi lo mismo")
+    partes = [f"Con el semáforo el viaje {tiempo}"]
+    if abs(d_riesgo) >= 10:
+        partes.append(f"el riesgo máximo {'bajó' if d_riesgo > 0 else 'subió'} de {sin['riesgo_max']} a {con['riesgo_max']} sobre 100")
+    if d_frenadas:
+        partes.append(f"hubo {con['frenadas']} frenadas en seco frente a {sin['frenadas']}")
+    frase = ", ".join(partes[:-1]) + (" y " if len(partes) > 1 else "") + partes[-1] + "."
+    mas_seguro = d_riesgo >= 10 or d_frenadas > 0
+    menos_seguro = d_riesgo <= -10 or d_frenadas < 0
+    if menos_seguro and not mas_seguro:
+        conclusion, tono = "Con el semáforo este viaje fue menos seguro: frenó más fuerte o pasó más cerca de otro.", "malo"
+    elif mas_seguro and dt <= 2:
+        conclusion, tono = "El semáforo hizo este viaje más seguro sin hacerlo más lento.", "bueno"
+    elif mas_seguro and dt <= 30:
+        conclusion, tono = "El semáforo hizo este viaje más seguro a cambio de una espera corta.", "bueno"
+    elif mas_seguro:
+        conclusion, tono = "Más seguro, pero con una espera larga: convendría revisar el ciclo del semáforo.", "neutro"
+    elif dt < -2:
+        conclusion, tono = "Con el semáforo este viaje fue más rápido.", "bueno"
+    elif dt > 2:
+        conclusion, tono = "Para este viaje el semáforo agregó espera sin una mejora clara de seguridad.", "malo"
+    else:
+        conclusion, tono = "Para este viaje el semáforo no cambió ni el tiempo ni el riesgo.", "neutro"
+    return {"veredicto": f"{frase} {conclusion}", "tono": tono, "diferencia_s": round(dt, 1)}
+
+
+def nuevo_balance() -> dict:
+    return {"observado_s": 0.0, "frenadas": 0, "frenadas_principal": 0, "cola_max": {"principal": 0, "lateral": 0},
+            "espera": {"principal": {}, "lateral": {}}, "_frenando": set()}
+
+
+def actualizar_balance(balance: dict, vehiculos: list[tuple[str, float, float | None, float, str | None]], dt: float) -> dict:
+    """Suma un frame al balance del cruce de un lado.
+
+    `vehiculos`: (id, velocidad m/s, aceleración m/s² o None, espera s, grupo) de los
+    vehículos cerca del cruce; grupo es "principal" o "lateral" si está en un acceso
+    del cruce, None si ya lo cruzó o va por otra vía.
+    """
+    balance["observado_s"] += dt
+    frenando = set()
+    colas = {"principal": 0, "lateral": 0}
+    for vid, v, a, espera, grupo in vehiculos:
+        if a is not None and a <= -FRENADA_EN_SECO:
+            frenando.add(vid)
+            if vid not in balance["_frenando"]:
+                balance["frenadas"] += 1
+                balance["frenadas_principal"] += grupo == "principal"
+        if grupo is not None:
+            if v < V_DETENIDO:
+                colas[grupo] += 1
+            balance["espera"][grupo][vid] = max(balance["espera"][grupo].get(vid, 0.0), espera)
+    balance["_frenando"] = frenando
+    for grupo, n in colas.items():
+        balance["cola_max"][grupo] = max(balance["cola_max"][grupo], n)
+    return balance
+
+
+def resumen_balance(balance: dict, conflictos: int, colisiones: int) -> dict:
+    """Cifras por hora del cruce en un lado, como las de Semáforos de Barranquilla."""
+    horas = balance["observado_s"] / 3600
+    por_hora = lambda n: round(n / horas) if horas > 0 else None   # noqa: E731
+    espera = {
+        g: round(sum(e.values()) / len(e), 1) if e else None for g, e in balance["espera"].items()
+    }
+    return {
+        "minutos": round(balance["observado_s"] / 60, 1),
+        "frenadas_hora": por_hora(balance["frenadas"]),
+        "frenadas_principal_hora": por_hora(balance["frenadas_principal"]),
+        "conflictos_hora": por_hora(conflictos),
+        "colisiones": colisiones,
+        "cola_max_principal": balance["cola_max"]["principal"],
+        "cola_max_lateral": balance["cola_max"]["lateral"],
+        "espera_principal_s": espera["principal"],
+        "espera_lateral_s": espera["lateral"],
+    }

@@ -6,6 +6,7 @@ import {
 import Escena3D from './escena';
 import HUD from './HUD';
 import Minimapa from './Minimapa';
+import ResumenComparacion from './ResumenComparacion';
 
 const TIPOS = [
   ['auto', 'Carro'], ['moto', 'Moto'], ['taxi', 'Taxi'], ['bici', 'Bicicleta'], ['bus_pt', 'Bus'], ['peaton', 'Peatón'],
@@ -53,6 +54,8 @@ export default function Simulador3D({ cruce, candidatos = [], corrida, intensida
   const [frame, setFrame] = useState(null);
   const [ego, setEgo] = useState(null);
   const [aviso, setAviso] = useState(null);
+  const [resumen, setResumen] = useState(null);       // viaje del actor seguido, al terminar
+  const [verResumen, setVerResumen] = useState(false);
 
   const [pausada, setPausada] = useState(false);
   const [velocidad, setVelocidad] = useState(1);
@@ -200,6 +203,10 @@ export default function Simulador3D({ cruce, candidatos = [], corrida, intensida
       } else if (msg.tipo === 'ego') {
         setEgo(msg.id);
         setAviso(null);
+        setResumen(null);
+      } else if (msg.tipo === 'resumen_viaje') {
+        setResumen(msg);
+        setVerResumen(true);
       } else if (msg.tipo === 'giro') {
         setAviso(`Tomará ${GIRO[msg.direccion]?.toLowerCase() ?? msg.direccion} en el próximo cruce (en los dos escenarios).`);
       } else if (msg.tipo === 'aviso') {
@@ -312,17 +319,16 @@ export default function Simulador3D({ cruce, candidatos = [], corrida, intensida
     if (!ego) setCamara('aerea');
   };
 
-  // el minimapa usa el lado donde el actor ya está en la vía (en el otro puede estar esperando entrar)
+  // un minimapa por escenario: cada uno sigue a su actor y muestra en gris dónde va el del otro
+  // (un actor que aún espera entrar a la vía no tiene posición)
   const conPosicion = (e) => (e && Number.isFinite(e.lon) ? e : null);
-  const egoMapa = conPosicion(frame?.lados.a.ego) ?? conPosicion(frame?.lados.b.ego);
-  const rumboEgo = useMemo(() => {
-    if (!frame || !ego) return null;
-    for (const lado of [frame.lados.a, frame.lados.b]) {
-      const act = [...lado.vehiculos, ...lado.personas].find((x) => x[0] === ego);
-      if (act) return act[5];
-    }
-    return null;
+  const egoA = conPosicion(frame?.lados.a.ego);
+  const egoB = conPosicion(frame?.lados.b.ego);
+  const rumbos = useMemo(() => {
+    const rumbo = (lado) => (lado && ego ? [...lado.vehiculos, ...lado.personas].find((x) => x[0] === ego)?.[5] ?? null : null);
+    return { a: rumbo(frame?.lados.a), b: rumbo(frame?.lados.b) };
   }, [frame, ego]);
+  const balance = frame ? { a: frame.lados.a.metricas.balance, b: frame.lados.b.metricas.balance } : null;
   const tipoActual = geometria?.nodo.tipo_actual === 'priority' ? 'cruce con prioridad (la secundaria cede)'
     : geometria?.nodo.tipo_actual === 'right_before_left' ? 'prioridad a la derecha' : geometria?.nodo.tipo_actual ?? '';
 
@@ -378,6 +384,9 @@ export default function Simulador3D({ cruce, candidatos = [], corrida, intensida
               </button>
             ))}
           </div>
+          <button type="button" className={verResumen ? 'activo' : ''} onClick={() => setVerResumen(!verResumen)} disabled={!frame}>
+            Resumen
+          </button>
           <button type="button" className="sim3d-cerrar" onClick={onCerrar} aria-label="Cerrar simulador">×</button>
         </div>
       </header>
@@ -387,14 +396,34 @@ export default function Simulador3D({ cruce, candidatos = [], corrida, intensida
           <section className="sim3d-vista" aria-label="Sin semáforo (actual)">
             <div ref={refA} className="sim3d-lienzo" />
             {geometria && <HUD conSemaforo={false} lado={frame?.lados.a} egoId={ego} manual={manual} subtitulo={`Hoy: ${tipoActual}`} />}
+            {geometria && (
+              <Minimapa nodo={geometria.nodo} bbox={geometria.bbox_lonlat} ego={egoA} otro={egoB} egoId={ego}
+                rumbo={camara === 'persecucion' ? rumbos.a : 0} />
+            )}
           </section>
           <section className="sim3d-vista" aria-label="Con semáforo propuesto">
             <div ref={refB} className="sim3d-lienzo" />
             {geometria && <HUD conSemaforo lado={frame?.lados.b} egoId={ego} manual={manual} subtitulo="Programa de tiempos fijos generado por netconvert" />}
+            {geometria && (
+              <Minimapa nodo={geometria.nodo} bbox={geometria.bbox_lonlat} ego={egoB} otro={egoA} egoId={ego}
+                rumbo={camara === 'persecucion' ? rumbos.b : 0} />
+            )}
           </section>
         </div>
 
-        {geometria && <Minimapa nodo={geometria.nodo} bbox={geometria.bbox_lonlat} ego={egoMapa} egoId={ego} rumbo={camara === 'persecucion' ? rumboEgo : 0} />}
+        {verResumen && (
+          <ResumenComparacion
+            resumen={resumen}
+            balance={balance}
+            info={info}
+            nombreCruce={nombreCruce(cruce)}
+            onOtro={() => {
+              setVerResumen(false);
+              setPanelAbierto(true);
+            }}
+            onCerrar={() => setVerResumen(false)}
+          />
+        )}
 
         {manual && fase === 'en_vivo' && (
           <div className="sim3d-teclas" aria-live="polite">

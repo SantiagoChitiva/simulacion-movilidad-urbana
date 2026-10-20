@@ -20,7 +20,7 @@ const ESTADO = {
   acelera: 'En camino', crucero: 'En camino', camina: 'Caminando', frena: 'Frenando', frena_cruce: 'Frena antes del cruce',
   cede_paso: 'Cede el paso', en_cola: 'En la fila', espera_cruzar: 'Espera para cruzar', frenada_fuerte: '¡Frenada fuerte!',
   frena_semaforo: 'Frena: semáforo', espera_semaforo: 'Espera el verde', cambia_carril: 'Cambia de carril',
-  detenido: 'Detenido', esperando_entrar: 'Esperando entrar',
+  detenido: 'Detenido', esperando_entrar: 'Entrando a la vía…',
 };
 
 const n = (v, d = 0) => (v == null ? '—' : Number(v).toFixed(d));
