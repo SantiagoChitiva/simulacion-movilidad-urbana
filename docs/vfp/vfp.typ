@@ -562,7 +562,7 @@ reproduciendo la interacción entre sus componentes de forma controlada. Existen
 Un proyecto de análisis de movilidad urbana es esencialmente un proyecto de datos. La calidad, cobertura y consistencia de los datos de entrada
 determinan directamente la validez de los resultados. En el contexto de este proyecto, los datos de entrada provienen de dos fuentes principales: aforos
 vehiculares en hora de máxima demanda, y la Encuesta de Movilidad de Bogotá, a partir de la cual se construyen las matrices origen-destino (O/D) que
-cuantifican el número de viajes entre pares de zonas geográficas. La ciudad hace esta encuesta cada cuatro años con la misma metodología; la
+cuantifican el número de viajes entre pares de zonas geográficas. La ciudad repite esta encuesta cada cuatro años; la
 edición de 2019 @sdm2019 sirve de referencia para comparar los patrones de viaje antes y después de la pandemia.
 
 El procesamiento de estos datos para alimentar un modelo de simulación implica un pipeline con varias etapas:
