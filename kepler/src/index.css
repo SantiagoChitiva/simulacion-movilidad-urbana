@@ -12,11 +12,51 @@ html, body, #root {
   --pd-borde: #3a414c;
   --pd-texto: #d3d8e0;
   --pd-tenue: #8c939e;
+  --pd-fuerte: #ffffff;
   --pd-acento: #1fbad6;
+  --pd-acento-fuerte: #1f6f80;
+  --pd-boton-fuerte: #f3f4f6;
+  --pd-boton-fuerte-texto: #111827;
+  --pd-fondo-leyenda: rgba(36, 39, 48, 0.92);
+  --pd-sombra: 0 4px 16px rgba(0, 0, 0, 0.4);
   --pd-error: #f25f5c;
   --pd-ok: #2ecc71;
   --pd-aviso: #ffd21f;
   --pd-fuente: 12px/1.4 system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+/* Tema claro (como Semáforos de Barranquilla); se elige con el botón del panel */
+:root[data-tema="claro"] {
+  --pd-fondo: #ffffff;
+  --pd-fondo-2: #f3f5f8;
+  --pd-borde: #e2e6ec;
+  --pd-texto: #374151;
+  --pd-tenue: #6b7280;
+  --pd-fuerte: #111827;
+  --pd-acento: #0e7490;
+  --pd-acento-fuerte: #0e7490;
+  --pd-boton-fuerte: #111827;
+  --pd-boton-fuerte-texto: #ffffff;
+  --pd-fondo-leyenda: rgba(255, 255, 255, 0.95);
+  --pd-sombra: 0 6px 24px rgba(15, 23, 42, 0.14);
+  --pd-error: #d62828;
+  --pd-ok: #2a9d43;
+  --pd-aviso: #b7791f;
+}
+
+/* El simulador 3D es siempre oscuro (la escena y el HUD están pensados así) */
+.sim3d {
+  --pd-fondo: #242730;
+  --pd-fondo-2: #29323c;
+  --pd-borde: #3a414c;
+  --pd-texto: #d3d8e0;
+  --pd-tenue: #8c939e;
+  --pd-fuerte: #ffffff;
+  --pd-acento: #1fbad6;
+  --pd-acento-fuerte: #1f6f80;
+  --pd-error: #f25f5c;
+  --pd-ok: #2ecc71;
+  --pd-aviso: #ffd21f;
 }
 
 /* ------------------------------------------------------- columna derecha */
@@ -28,7 +68,7 @@ html, body, #root {
   top: 12px;
   right: 56px;
   bottom: 110px;
-  width: 340px;
+  width: 380px;
   max-width: calc(100vw - 68px);
   display: flex;
   flex-direction: column;
@@ -59,8 +99,8 @@ html, body, #root {
   background: var(--pd-fondo);
   color: var(--pd-texto);
   border: 1px solid var(--pd-borde);
-  border-radius: 6px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+  box-shadow: var(--pd-sombra);
   font: var(--pd-fuente);
 }
 
@@ -103,15 +143,16 @@ html, body, #root {
   border-bottom: 1px solid var(--pd-borde);
   z-index: 1;
 }
-.pd-cerrar { font-size: 16px; line-height: 1; }
+.pd-cerrar, .pd-tema { font-size: 15px; line-height: 1; }
+.pd-acciones { display: flex; gap: 4px; }
 
 .cd-pestanas { display: flex; gap: 4px; }
 .cd-pestanas button { font-weight: 600 !important; }
-.cd-pestanas button.activa { border-color: var(--pd-acento) !important; color: #fff !important; background: #1f6f80 !important; }
+.cd-pestanas button.activa { border-color: var(--pd-acento) !important; color: #fff !important; background: var(--pd-acento-fuerte) !important; }
 
 /* ---------------------------------------------------------- demanda */
 .pd-presets { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-.pd-presets button.activo { border-color: var(--pd-acento); color: #fff; background: #1f6f80; }
+.pd-presets button.activo { border-color: var(--pd-acento); color: #fff; background: var(--pd-acento-fuerte); }
 .pd-lista { color: var(--pd-ok); font-size: 10px; }
 .pd-presets button.activo .pd-lista { color: #b8f5d0; }
 .pd-descripcion { color: var(--pd-tenue); margin: 6px 0 0; }
@@ -160,7 +201,7 @@ html, body, #root {
   margin-top: 12px;
   padding: 8px !important;
   font-weight: 600 !important;
-  background: #1f6f80 !important;
+  background: var(--pd-acento-fuerte) !important;
   color: #fff !important;
 }
 
@@ -241,7 +282,7 @@ html, body, #root {
   position: fixed;
   top: 12px;
   left: 330px;
-  right: 412px;
+  right: 452px;
   display: flex;
   justify-content: center;
   pointer-events: none;
@@ -254,7 +295,7 @@ html, body, #root {
   justify-content: center;
   gap: 4px 12px;
   padding: 6px 12px;
-  background: rgba(36, 39, 48, 0.92);
+  background: var(--pd-fondo-leyenda);
   color: var(--pd-texto);
   border: 1px solid var(--pd-borde);
   border-radius: 6px;
@@ -273,7 +314,7 @@ html, body, #root {
   padding: 1px 8px;
   cursor: pointer;
 }
-.leyenda-boton.activo { color: #fff; border-color: #00e0ff; }
+.leyenda-boton.activo { color: var(--pd-fuerte); border-color: #00e0ff; }
 
 /* ---------------------------------------------------- error del mapa */
 .limite-error {
@@ -301,7 +342,7 @@ html, body, #root {
 
 /* --------------------------------------------------------------- ficha */
 .fi-vacia p { color: var(--pd-tenue); }
-.fi-nombre { font-size: 14px !important; color: #fff !important; text-transform: none !important; letter-spacing: 0 !important; margin-top: 12px !important; }
+.fi-nombre { font-size: 14px !important; color: var(--pd-fuerte) !important; text-transform: none !important; letter-spacing: 0 !important; margin-top: 12px !important; }
 
 .fi-tabla { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
 .fi-tabla th { color: var(--pd-tenue); font-weight: 500; text-align: right; padding: 3px 4px; border-bottom: 1px solid var(--pd-borde); }
@@ -507,40 +548,74 @@ html, body, #root {
 .hud-flecha { font-size: 18px; width: 18px; text-align: center; }
 .hud-intencion { margin-top: 5px; color: #9ecbff; font-size: 11px; }
 
-/* pestaña Semaforizar */
-.ps-panel { display: flex; flex-direction: column; gap: 8px; }
-.ps-boton {
-  padding: 6px; font: var(--pd-fuente); cursor: pointer; background: var(--pd-fondo-2);
-  color: var(--pd-texto); border: 1px solid var(--pd-borde); border-radius: 4px;
+/* pestaña Semaforizar (estilo Semáforos de Barranquilla) */
+.ps-panel, .ps-tarjeta { display: flex; flex-direction: column; gap: 10px; font-size: 13px; }
+.ps-titulo { margin: 2px 0 0; font-size: 18px; line-height: 1.25; color: var(--pd-fuerte); font-weight: 650; }
+.ps-sub { margin: 0; color: var(--pd-tenue); font-size: 13px; }
+.ps-aviso { margin: 0; padding: 8px 10px; border: 1px solid var(--pd-borde); border-radius: 8px; background: var(--pd-fondo-2); font-size: 12px; }
+.ps-aviso strong { color: var(--pd-fuerte); }
+.pd-panel .ps-primario {
+  width: 100%; padding: 9px 10px; border-radius: 8px; font-weight: 650; font-size: 13px;
+  background: var(--pd-boton-fuerte); color: var(--pd-boton-fuerte-texto); border-color: var(--pd-boton-fuerte);
 }
-.ps-seleccion { background: var(--pd-fondo-2); border: 1px solid var(--pd-borde); border-radius: 6px; padding: 8px; }
-.ps-nombre { color: #fff; font-weight: 600; }
-.ps-detalle { color: var(--pd-tenue); font-size: 11px; margin: 3px 0 6px; }
-.ps-nivel { padding: 1px 6px; border-radius: 8px; margin-right: 6px; font-weight: 600; color: #111; }
-.nivel-prioritario { background: #f44336; }
-.nivel-recomendado { background: #ff9800; }
-.nivel-observacion { background: #ffeb3b; }
-.ps-intensidades { border: 1px solid var(--pd-borde); border-radius: 4px; padding: 6px; margin: 0; }
-.ps-intensidades legend { color: var(--pd-tenue); padding: 0 4px; }
-.ps-intensidades label { display: grid; grid-template-columns: 70px 1fr 38px; align-items: center; gap: 4px; }
+.pd-panel .ps-primario:hover { filter: brightness(1.15); }
+.ps-niveles { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.pd-panel .ps-niveles button, .pd-panel .ps-lista button {
+  width: 100%; display: flex; align-items: center; gap: 10px; text-align: left;
+  background: transparent; border: 1px solid transparent; border-radius: 8px; padding: 6px 6px;
+}
+.pd-panel .ps-niveles button.activo { border-color: var(--pd-borde); background: var(--pd-fondo-2); }
+.ps-nivel-texto { flex: 1; display: flex; flex-direction: column; }
+.ps-nivel-texto b { font-weight: 600; color: var(--pd-fuerte); font-size: 13px; }
+.ps-nivel-texto small, .ps-lista-nombre small { color: var(--pd-tenue); font-size: 11px; }
+.ps-conteo { color: var(--pd-tenue); font-variant-numeric: tabular-nums; }
+.ps-punto { width: 12px; height: 12px; border-radius: 50%; flex: none; box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.15); }
+.ps-punto.semaforo { background: #00c2db; }
+.pd-panel .ps-buscar { width: 100%; box-sizing: border-box; padding: 8px 10px; border-radius: 8px; font-size: 13px; }
+.ps-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.pd-panel .ps-chips button { border-radius: 16px; padding: 5px 12px; }
+.pd-panel .ps-chips button.activo { background: var(--pd-boton-fuerte); color: var(--pd-boton-fuerte-texto); }
+.pd-panel h3.ps-lista-cab { display: flex; justify-content: space-between; margin: 4px 0 0; }
+.ps-lista { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.pd-panel .ps-lista button { align-items: flex-start; }
+.pd-panel .ps-lista button:hover { background: var(--pd-fondo-2); }
+.ps-lista .ps-punto { margin-top: 3px; width: 10px; height: 10px; }
+.ps-lista-nombre { flex: 1; display: flex; flex-direction: column; gap: 1px; color: var(--pd-fuerte); min-width: 0; }
+.ps-lista-nombre small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pd-panel .ps-enlace { background: none; border: none; color: var(--pd-acento); padding: 0; align-self: flex-start; }
+.ps-como summary, .ps-intensidades summary { cursor: pointer; color: var(--pd-acento); }
+.ps-como p { color: var(--pd-tenue); font-size: 12px; }
+
+.ps-tarjeta-cab { display: flex; justify-content: space-between; align-items: center; }
+.pd-panel .ps-x { background: none; border: none; font-size: 20px; line-height: 1; color: var(--pd-tenue); }
+.ps-insignia { align-self: flex-start; color: #fff; font-weight: 650; padding: 3px 10px; border-radius: 12px; font-size: 12px; }
+.ps-medida { display: flex; flex-direction: column; gap: 4px; padding: 12px; border-radius: 10px; background: var(--pd-fondo-2); }
+.ps-medida small { text-transform: uppercase; letter-spacing: 0.06em; color: var(--pd-tenue); font-size: 11px; }
+.ps-medida b { font-size: 16px; color: var(--pd-fuerte); }
+.ps-medida > span { color: var(--pd-tenue); margin-bottom: 6px; }
+.ps-porque { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 5px; }
+.ps-porque li::marker { color: var(--pd-tenue); }
+.ps-cifras { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; border-top: 1px solid var(--pd-borde); padding-top: 10px; }
+.ps-cifra { display: flex; flex-direction: column; gap: 2px; }
+.ps-cifra span { color: var(--pd-tenue); font-size: 12px; }
+.ps-cifra b { font-size: 16px; color: var(--pd-fuerte); }
+.ps-intensidades { margin-top: 6px; }
+.ps-intensidades label { display: grid; grid-template-columns: 70px 1fr 38px; align-items: center; gap: 4px; margin-top: 4px; }
 .ps-intensidades b { text-align: right; font-variant-numeric: tabular-nums; }
-.ps-intensidades small { color: var(--pd-tenue); display: block; margin-top: 4px; }
-.ps-subtitulo { margin: 4px 0 0; color: #fff; font-size: 12px; }
-.ps-lista { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
-.ps-lista button {
-  width: 100%; display: flex; align-items: center; gap: 6px; text-align: left; cursor: pointer;
-  background: transparent; color: var(--pd-texto); border: 1px solid transparent; border-radius: 4px;
-  padding: 3px 5px; font: var(--pd-fuente);
-}
-.ps-lista button:hover, .ps-lista button.activo { border-color: var(--pd-acento); }
-.ps-lista-nombre { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.ps-punto { width: 8px; height: 8px; border-radius: 50%; flex: none; }
-.ps-evidencias { margin: 4px 0 6px; padding-left: 16px; color: var(--pd-texto); font-size: 11px; }
-.ps-evidencias li { margin: 1px 0; }
-.ps-filtros { display: flex; gap: 4px; flex-wrap: wrap; }
-.ps-filtros button { flex: 1 1 45%; font-size: 11px; }
-.ps-boton.activo { border-color: var(--pd-acento); color: #fff; }
-.ps-enlace { background: none; border: none; color: var(--pd-acento); cursor: pointer; font: var(--pd-fuente); padding: 0; align-self: flex-start; }
+.ps-intensidades small { color: var(--pd-tenue); display: block; margin-top: 6px; }
+
+/* "Ver el cruce": Street View, satélite y mapa */
+.vc { display: flex; flex-direction: column; gap: 8px; border-top: 1px solid var(--pd-borde); padding-top: 10px; }
+.vc-cabecera { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+.pd-panel .vc-cabecera h3 { margin: 0; }
+.vc-modos { display: inline-flex; background: var(--pd-fondo-2); border-radius: 8px; padding: 2px; }
+.pd-panel .vc-modos button { border: none; background: transparent; border-radius: 6px; padding: 4px 9px; color: var(--pd-tenue); }
+.pd-panel .vc-modos button.activo { background: var(--pd-fondo); color: var(--pd-fuerte); box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15); }
+.vc-marco { position: relative; height: 260px; border-radius: 10px; overflow: hidden; background: var(--pd-fondo-2); }
+.vc-mapa { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.vc-cargando { display: flex; align-items: center; justify-content: center; color: var(--pd-tenue); }
+.vc-enlace { color: var(--pd-acento); font-size: 12px; align-self: flex-start; }
+.mc-anillo { width: 34px; height: 34px; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 2px #111827; }
 
 @media (max-width: 900px) {
   .sim3d-vistas.vista-comparar { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; }

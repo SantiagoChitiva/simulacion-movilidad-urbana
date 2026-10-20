@@ -5,11 +5,13 @@ import { taskMiddleware } from 'react-palm/tasks';
 import keplerGlReducer from '@kepler.gl/reducers';
 import {
   addDataToMap,
+  mapStyleChange,
   onLayerHover,
   onMapClick,
   removeDataset,
   reorderLayer,
   toggleModal,
+  updateMap,
 } from '@kepler.gl/actions';
 import { processGeojson, processRowObject } from '@kepler.gl/processors';
 import KeplerGl from '@kepler.gl/components';
@@ -22,7 +24,7 @@ import LimiteError from './components/LimiteError';
 import PanelCierres from './components/PanelCierres';
 import PanelDemanda from './components/PanelDemanda';
 import TarjetaActividad from './components/TarjetaActividad';
-import PanelSemaforizacion from './components/PanelSemaforizacion';
+import PanelSemaforizacion, { NIVELES } from './components/PanelSemaforizacion';
 import LimiteErrores from './components/simulador3d/LimiteErrores';
 
 // three.js y maplibre solo se descargan al abrir el simulador
@@ -38,19 +40,25 @@ const MAPA_ID = 'map';
 const DATASET_TRIPS = 'usaquen_trips';
 const DATASET_SEMAFOROS = 'intersecciones';
 const DATASET_PRIORIZACION = 'priorizacion';
+const DATASET_SELECCION = 'seleccion';
 const CAPA_TRIPS = 'trips_layer';
 const CAPA_SEMAFOROS = 'semaforos_layer';
 const CAPA_PRIORIZACION = 'priorizacion_layer';
+const CAPA_SELECCION = 'seleccion_layer';
 
-// Colores por nivel de priorización
-const COLORES_NIVEL = {
-  prioritario: [244, 67, 54],     // rojo
-  recomendado: [255, 152, 0],     // naranja
-  observacion: [255, 235, 59],    // amarillo
-  sin_accion: [144, 164, 174],    // gris
+// Tema de la interfaz (claro u oscuro) y estilo de mapa base que le corresponde
+const CLAVE_TEMA = 'visor.tema';
+const MAPA_BASE = { claro: 'positron', oscuro: 'dark-matter' };
+const temaGuardado = () => {
+  try {
+    return localStorage.getItem(CLAVE_TEMA) === 'oscuro' ? 'oscuro' : 'claro';
+  } catch {
+    return 'claro';
+  }
 };
 
-const configPriorizacion = {
+// Como los modos, kepler asigna los colores ordinales en orden alfabético de los niveles presentes
+const configPriorizacion = (niveles) => ({
   version: 'v1',
   config: {
     visState: {
@@ -63,7 +71,10 @@ const configPriorizacion = {
             label: 'Priorización de cruces',
             columns: { lat: 'lat', lng: 'lng', altitude: null },
             isVisible: true,
-            visConfig: { radius: 20, opacity: 0.9, filled: true },
+            visConfig: {
+              radius: 14, opacity: 0.95, filled: true, outline: true, thickness: 1.5, strokeColor: [255, 255, 255],
+              colorRange: { name: 'niveles', type: 'qualitative', category: 'Custom', colors: niveles.map((n) => NIVELES[n].color) },
+            },
           },
           visualChannels: {
             colorField: { name: 'nivel', type: 'string' },
@@ -76,14 +87,36 @@ const configPriorizacion = {
           enabled: true,
           fieldsToShow: {
             [DATASET_PRIORIZACION]: [
-              { name: 'nivel', format: null },
-              { name: 'puntaje_total', format: null },
-              { name: 'calles', format: null },
-              { name: 'evidencias', format: null },
+              { name: 'cruce', format: null },
+              { name: 'prioridad', format: null },
             ],
           },
         },
       },
+    },
+  },
+});
+
+// Anillo alrededor del cruce elegido (en el mapa o en la lista del panel)
+const configSeleccion = {
+  version: 'v1',
+  config: {
+    visState: {
+      layers: [
+        {
+          id: CAPA_SELECCION,
+          type: 'point',
+          config: {
+            dataId: DATASET_SELECCION,
+            label: 'Cruce elegido',
+            columns: { lat: 'lat', lng: 'lng', altitude: null },
+            isVisible: true,
+            color: [17, 24, 39],
+            visConfig: { radius: 30, opacity: 1, filled: false, outline: true, thickness: 3, strokeColor: [17, 24, 39] },
+          },
+          visualChannels: { colorField: null, sizeField: null },
+        },
+      ],
     },
   },
 };
@@ -160,15 +193,21 @@ const configSemaforos = {
   },
 };
 
-// fila de la capa de priorización (kepler) → cruce candidato para el simulador 3D
-// (kepler no acepta listas en las columnas: nodos y evidencias viajan como texto)
-const aCandidato = (fila) => ({
-  ...fila,
-  lon: fila.lng,
-  calles: fila.calles ? fila.calles.split(' × ') : [],
-  nodos: fila.nodos ? fila.nodos.split(',') : [fila.id],
-  evidencias: fila.evidencias ? fila.evidencias.split(' | ') : [],
+// feature de /intersecciones/priorizacion → cruce candidato (panel y simulador 3D)
+const aCandidato = (f) => ({
+  ...f.properties,
+  lon: f.geometry.coordinates[0],
+  lat: f.geometry.coordinates[1],
+  nodos: f.properties.nodos?.length ? f.properties.nodos : [f.properties.id],
 });
+
+// Orden de dibujo, de arriba hacia abajo. reorderLayer reemplaza el orden completo: una
+// lista parcial dejaría fuera (ocultas) las capas que no nombra.
+const ORDEN_CAPAS = [CAPA_SELECCION, CAPA_PRIORIZACION, CAPA_SEMAFOROS, CAPA_TRIPS];
+const ordenCapas = (layerOrder) => [
+  ...ORDEN_CAPAS.filter((id) => layerOrder.includes(id)),
+  ...layerOrder.filter((id) => !ORDEN_CAPAS.includes(id)),
+];
 
 const tickDePintado = () => new Promise((r) => setTimeout(r, 30)); // deja que React pinte antes de bloquear
 
@@ -217,6 +256,8 @@ function Visor() {
   const [candidatos, setCandidatos] = useState([]);
   const [simulador, setSimulador] = useState(null);   // { cruce, corrida, intensidades }
   const [notasPriorizacion, setNotasPriorizacion] = useState([]);
+  const [umbralesPriorizacion, setUmbralesPriorizacion] = useState({});
+  const [tema, setTema] = useState(temaGuardado);
   // estable entre renders: si cambia, el simulador reconstruye sus dos escenas 3D
   const candidatosSimulador = useMemo(() => candidatos.filter((c) => c.nivel !== 'observacion'), [candidatos]);
   const [cierres, setCierres] = useState([]);
@@ -231,6 +272,14 @@ function Visor() {
     dispatch(onLayerHover(null));
     dispatch(onMapClick());
   }, [dispatch]);
+
+  // las capas nuevas entran arriba: después de cada cambio se reordenan
+  const layerOrder = useSelector((s) => s.keplerGl?.[MAPA_ID]?.visState?.layerOrder);
+  useEffect(() => {
+    if (!layerOrder?.length) return;
+    const orden = ordenCapas(layerOrder);
+    if (orden.some((id, i) => id !== layerOrder[i])) dispatch(reorderLayer(orden));
+  }, [layerOrder, dispatch]);
 
   // ---------------------------------------------------------------- trips
 
@@ -266,7 +315,6 @@ function Visor() {
           })
         );
         primeraCarga.current = false;
-        if (filasSemaforos.current.length) dispatch(reorderLayer([CAPA_SEMAFOROS, CAPA_TRIPS]));
         setPresentes(modosCorrida);
         setCorridaMapa(corrida);
         setCarga(null);
@@ -354,7 +402,7 @@ function Visor() {
     } else if (capa.startsWith(CAPA_PRIORIZACION)) {
       const fila = filasPriorizacion.current[indice];
       if (fila) {
-        setCruceCandidato(aCandidato(fila));
+        setCruceCandidato(fila);
         setPestana('semaforizar');
         setPlegado(false);
       }
@@ -376,24 +424,22 @@ function Visor() {
         if (cancelado) return;
         // En el mapa, como en Semáforos de Barranquilla: prioritarios y recomendados
         // (los "en observación" quedan solo en la lista del panel)
-        const todas = fc.features.map((f) => ({
-          id: f.properties.id,
-          nivel: f.properties.nivel,
-          puntaje_total: f.properties.puntaje_total,
-          distancia_semaforo_m: f.properties.distancia_semaforo_m,
-          calles: (f.properties.calles ?? []).join(' × '),
-          nodos: (f.properties.nodos ?? []).join(','),
-          evidencias: (f.properties.evidencias ?? []).join(' | '),
-          siniestros: f.properties.siniestros,
-          generadores: f.properties.generadores,
-          tramo_m: f.properties.tramo_m,
-          lng: f.geometry.coordinates[0],
-          lat: f.geometry.coordinates[1],
-        }));
-        const filas = todas.filter((f) => f.nivel === 'prioritario' || f.nivel === 'recomendado');
-        filasPriorizacion.current = filas;
-        setCandidatos(todas.map(aCandidato));
+        const todos = fc.features.map(aCandidato);
+        const enMapa = todos.filter((c) => c.nivel === 'prioritario' || c.nivel === 'recomendado');
+        filasPriorizacion.current = enMapa;
+        setCandidatos(todos);
         setNotasPriorizacion(fc.notas ?? []);
+        setUmbralesPriorizacion(fc.umbrales ?? {});
+        // kepler no acepta listas en las columnas: al mapa solo va lo que se dibuja y el tooltip
+        const filas = enMapa.map((c) => ({
+          id: c.id,
+          nivel: c.nivel,
+          cruce: c.calles?.length ? c.calles.join(' × ') : `Cruce ${c.id}`,
+          prioridad: NIVELES[c.nivel].etiqueta,
+          lng: c.lon,
+          lat: c.lat,
+        }));
+        const niveles = [...new Set(filas.map((f) => f.nivel))].sort();
         limpiarInteraccion();
         dispatch(removeDataset(DATASET_PRIORIZACION));
         dispatch(
@@ -403,7 +449,7 @@ function Visor() {
               data: processRowObject(filas),
             },
             options: { centerMap: false, keepExistingConfig: true },
-            config: configPriorizacion,
+            config: configPriorizacion(niveles),
           })
         );
       })
@@ -412,6 +458,42 @@ function Visor() {
       cancelado = true;
     };
   }, [priorizacionVisible, corridaMapa, dispatch, limpiarInteraccion]);
+
+  // anillo sobre el cruce elegido; se dibuja encima de las demás capas
+  useEffect(() => {
+    dispatch(removeDataset(DATASET_SELECCION));
+    if (!cruceCandidato) return;
+    dispatch(
+      addDataToMap({
+        datasets: {
+          info: { label: 'Cruce elegido', id: DATASET_SELECCION },
+          data: processRowObject([{ lat: cruceCandidato.lat, lng: cruceCandidato.lon }]),
+        },
+        options: { centerMap: false, keepExistingConfig: true },
+        config: configSeleccion,
+      })
+    );
+  }, [cruceCandidato, dispatch]);
+
+  const elegirCruce = useCallback(
+    (cruce, { centrar = false } = {}) => {
+      setCruceCandidato(cruce);
+      if (cruce && centrar) dispatch(updateMap({ latitude: cruce.lat, longitude: cruce.lon, zoom: 16 }));
+    },
+    [dispatch]
+  );
+
+  // ─── tema ───────────────────────────────────────────────────────────────────
+
+  useEffect(() => {
+    document.documentElement.dataset.tema = tema;
+    dispatch(mapStyleChange(MAPA_BASE[tema]));
+    try {
+      localStorage.setItem(CLAVE_TEMA, tema);
+    } catch {
+      // sin almacenamiento (ventana privada): el tema dura lo que dure la pestaña
+    }
+  }, [tema, dispatch, versionMapa]);
 
   const etiquetas = Object.fromEntries(modos.map((m) => [m.id, m.etiqueta]));
   let etiquetaCorrida = 'la corrida por defecto';
@@ -430,6 +512,7 @@ function Visor() {
           key={versionMapa}
           id={MAPA_ID}
           mapboxApiAccessToken={import.meta.env.VITE_MAPBOX_TOKEN}
+          theme={tema === 'claro' ? 'light' : undefined}
           width={ancho}
           height={alto}
         />
@@ -481,9 +564,20 @@ function Visor() {
                   Semaforizar
                 </button>
               </div>
-              <button type="button" className="pd-cerrar" onClick={() => setPlegado(true)} aria-label="Plegar panel">
-                ›
-              </button>
+              <div className="pd-acciones">
+                <button
+                  type="button"
+                  className="pd-tema"
+                  onClick={() => setTema(tema === 'claro' ? 'oscuro' : 'claro')}
+                  aria-label={tema === 'claro' ? 'Cambiar a tema oscuro' : 'Cambiar a tema claro'}
+                  title={tema === 'claro' ? 'Tema oscuro' : 'Tema claro'}
+                >
+                  {tema === 'claro' ? '☾' : '☀'}
+                </button>
+                <button type="button" className="pd-cerrar" onClick={() => setPlegado(true)} aria-label="Plegar panel">
+                  ›
+                </button>
+              </div>
             </header>
             {pestana === 'demanda' && (
               <PanelDemanda
@@ -513,9 +607,13 @@ function Visor() {
                 seleccionado={cruceCandidato}
                 candidatos={candidatos}
                 notas={notasPriorizacion}
+                periodoSiniestros={umbralesPriorizacion.anios_siniestros}
+                totalSemaforizados={umbralesPriorizacion.semaforizados}
                 priorizacionVisible={priorizacionVisible}
+                semaforosVisibles={semaforosVisibles}
                 onMostrarPriorizacion={() => setPriorizacionVisible(true)}
-                onElegir={setCruceCandidato}
+                onAlternarSemaforos={() => setSemaforosVisibles((v) => !v)}
+                onElegir={elegirCruce}
                 onAbrir={(cruce, intensidades) => setSimulador({ cruce, corrida: corridaMapa, intensidades })}
               />
             )}
