@@ -32,7 +32,9 @@ function describirFase(estado, accesos, enlaces) {
   const detalle = accesos.flatMap((a, i) => {
     const propios = enlaces.filter((e) => e.acceso === a.edge && e.indice < estado.length);
     const preferentes = [...new Set(propios.filter((e) => estado[e.indice] === 'G').map((e) => GIROS[e.giro] ?? e.giro))];
-    const cediendo = [...new Set(propios.filter((e) => estado[e.indice] === 'g').map((e) => GIROS[e.giro] ?? e.giro))];
+    // un mismo giro puede tener un carril con prioridad y otro que cede: se nombra una vez
+    const cediendo = [...new Set(propios.filter((e) => estado[e.indice] === 'g').map((e) => GIROS[e.giro] ?? e.giro))]
+      .filter((g) => !preferentes.includes(g));
     if (!preferentes.length && !cediendo.length) return [];
     const partes = [];
     if (preferentes.length) partes.push(lista(preferentes));
@@ -119,7 +121,7 @@ function TabFicha({ ficha, accesos, etiquetaCorrida }) {
                 <td>
                   <strong>{letraAcceso(i)}.</strong> {a.calle ?? 'Sin nombre'}
                   <span className="fi-sub">
-                    Vía {a.clase} · {a.carriles} carril{a.carriles === 1 ? '' : 'es'} · {a.velocidad_kmh} km/h · puede ir {giros(a.edge)}
+                    {a.clase === 'ciclorruta' ? 'Ciclorruta' : `Vía ${a.clase}`} · {a.carriles} carril{a.carriles === 1 ? '' : 'es'} · {a.velocidad_kmh} km/h · puede ir {giros(a.edge)}
                   </span>
                 </td>
                 <td>{numero(a.volumen)}</td>

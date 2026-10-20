@@ -92,7 +92,8 @@ export default function TablaComparacion({ id, corrida }) {
   const terminados = programas.filter((p) => p.metricas);
   const mejorDe = (m) => {
     const valores = terminados.map((p) => p.metricas[m.id]).filter((v) => v != null);
-    if (valores.length < 2) return null;
+    // con un empate no hay "mejor": no se resalta nada
+    if (valores.length < 2 || valores.every((v) => v === valores[0])) return null;
     return m.menosEsMejor ? Math.min(...valores) : Math.max(...valores);
   };
   const frase = veredicto(programas);

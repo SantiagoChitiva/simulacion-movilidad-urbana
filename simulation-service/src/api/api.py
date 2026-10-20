@@ -498,7 +498,7 @@ def calcular_webster(tl_id: str, solicitud: SolicitudWebster, gestor: Gestor) ->
 
 # ------------------------------------ Fase D: comparaciones de programas
 
-ETIQUETA_PROGRAMA = {"actual": "Programa actual", "webster": "Optimizado (Webster)"}
+ETIQUETA_PROGRAMA = {"actual": "Programa actual", "webster": "Tiempos óptimos (Webster)"}
 
 
 class SolicitudComparacion(BaseModel):
