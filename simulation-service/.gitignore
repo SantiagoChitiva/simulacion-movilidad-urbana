@@ -14,3 +14,5 @@ cache/
 # precalculadas/ se versiona, pero solo comprimido (python -m etl.precalculadas)
 precalculadas/**/*.geojson
 precalculadas/**/*.tmp
+# programas de semáforo que guarda el usuario desde la ficha (Configurar)
+src/etl/sumo/scenarios/*/programa_*.xml
