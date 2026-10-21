@@ -92,7 +92,7 @@ matrices origen-destino y archivos de rutas.
 
 #figure(
   table(
-    columns: (auto, auto, 1fr, auto, auto),
+    columns: (2fr, 2fr, 3fr, auto, 2fr),
     table.header([Entregable], [Estándar], [Descripción], [Audiencia], [Semana]),
     [SPMP corregido], [IEEE 1058-1998], [Plan de administración del proyecto (fuente Typst + PDF)], [Equipo / Director / Jurados], [3],
     [SRS corregido], [IEEE 830-1998], [Especificación de requisitos del software @ieee830 (fuente Typst + PDF)], [Equipo / Director / Jurados], [4],

@@ -40,7 +40,7 @@
 #let estudiante(nombre, doc, cel, correo) = [
   #text(weight: "bold")[#nombre] \
   #table(
-    columns: (auto, auto, auto, 1fr), stroke: none, inset: 2pt,
+    columns: (1fr, 1fr, 1fr, 2fr), stroke: none, inset: 2pt,
     [#campo[Documento]], [#campo[Celular]], [#campo[Teléfono fijo]], [#campo[Correo Javeriano]],
     [#doc], [#cel], [N/A], [#correo],
   )
@@ -65,7 +65,7 @@
   [#campo[DIRECTOR] \
     #text(weight: "bold")[Ing. Andrés Oswaldo Calderon Romero] \
     #table(
-      columns: (auto, auto, auto, auto, 1fr), stroke: none, inset: 2pt,
+      columns: (1fr, 1fr, 1fr, 2fr, 1fr), stroke: none, inset: 2pt,
       [#campo[Documento]], [#campo[Celular]], [#campo[Teléfono fijo]], [#campo[Correo Javeriano]], [#campo[Empresa donde trabaja y cargo]],
       [C.C. 75.088.955], [323-338-5956], [320 8320 Ext. 5275 - 5276], [andrescalderonr\@javeriana.edu.co],
       [Pontificia Universidad Javeriana; Profesor Departamento de Sistemas],

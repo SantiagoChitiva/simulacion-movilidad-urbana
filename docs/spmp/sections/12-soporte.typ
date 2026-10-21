@@ -3,7 +3,7 @@
 == Ambiente de Trabajo
 
 El equipo opera bajo las siguientes reglas de trabajo:
-- Dos reuniones semanales fijas: lunes (planeación y seguimiento, 1 hora) y viernes (revisión y retrospectiva, 30 minutos).
+- Dos reuniones semanales fijas: miércoles (planeación y seguimiento, 30 minutos) y viernes (revisión y retrospectiva, 30 minutos).
 - Toda comunicación técnica y de decisiones relevantes debe quedar documentada en GitHub (Issues, Pull Requests, comentarios).
 - El código se escribe en ramas `feat/*` y solo se integra a `develop` cuando es aprobado por al menos un compañero.
 - Los documentos formales se redactan colaborativamente en Typst dentro del repositorio y se compilan a PDF para cada entrega.
@@ -151,7 +151,7 @@ Roles: desarrollador, revisor y CI automático.
 
 #figure(
   table(
-    columns: (1fr, auto, auto, auto, 1fr),
+    columns: (2fr, 1fr, 1fr, 1fr, 2fr),
     table.header([Métrica], [Sección de uso], [Quién recolecta], [Cuándo], [Herramienta]),
     [Tareas completadas / sprint], [10.2], [Scrum Master], [Fin de sprint], [GitHub Projects],
     [Burndown del sprint], [10.2], [Scrum Master], [Diario], [GitHub Projects],
@@ -180,7 +180,7 @@ Roles: desarrollador, revisor, director y CI automático.
 
 #figure(
   table(
-    columns: (1fr, auto, auto, 1fr),
+    columns: (2fr, 2fr, 1fr, 2fr),
     table.header([Proceso de calidad], [Momento], [Responsable], [Herramienta]),
     [Revisión de cambios (peer review)], [Por cada PR], [Al menos 1 compañero], [GitHub PR reviews],
     [Pruebas unitarias automatizadas (CI)], [Por cada commit], [GitHub Actions], [pytest + pylint],

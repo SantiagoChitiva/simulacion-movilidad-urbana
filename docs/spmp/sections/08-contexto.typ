@@ -39,7 +39,7 @@ estructura de fases no cambia.
 
 #figure(
   table(
-    columns: (auto, 1fr, 1fr),
+    columns: (1fr, 2fr, 2fr),
     table.header([Herramienta], [Propósito], [Justificación]),
     [Python 3.11+], [Lenguaje principal del pipeline ETL, la API y el control de SUMO], [Ecosistema estándar para análisis de datos. Requerido por la
     API TraCI de SUMO.],
@@ -84,7 +84,7 @@ estructura de fases no cambia.
 
 #figure(
   table(
-    columns: (auto, 1fr, auto),
+    columns: (1fr, 2fr, 2fr),
     table.header([Entregable], [Criterio de aceptación], [Herramienta de verificación]),
     [SPMP], [Cubre todas las secciones del estándar IEEE 1058. Consistencia interna entre secciones. Aprobado por el director.], [Revisión documental del
     director],
@@ -112,7 +112,7 @@ estructura de fases no cambia.
 
 #figure(
   table(
-    columns: (auto, 1fr, auto),
+    columns: (1fr, 2fr, 2fr),
     table.header([Entidad], [Rol en el proyecto], [Medio de contacto]),
     [Ing. Andrés Calderón Romero (Director)], [Revisor, aprobador de entregables y asesor técnico], [andrescalderonr\@javeriana.edu.co / Teams],
     [Secretaría Distrital de Movilidad], [Propietaria de los datos de entrada (encuesta y aforos)], [Portal de datos abiertos de Bogotá],
@@ -130,14 +130,14 @@ La estructura organizacional del equipo se presenta en la @figOrganigrama.
 
 #figure(
   table(
-    columns: (auto, auto, 1fr),
+    columns: (1fr, 1fr, 2fr),
     table.header([Rol], [Integrante(s)], [Responsabilidades principales]),
     [Scrum Master (rotativo por sprint)], [Rotación entre integrantes], [Facilitar ceremonias Scrum y actualizar burndown chart.],
-    [Responsable de datos], [], [Liderar Fases 1 y 2 (CRISP-DM): exploración, limpieza, matrices O/D.],
-    [Responsable de simulación], [], [Liderar Fase 3 (Scrum): construcción y calibración del escenario en SUMO.],
+    [Responsable de datos], [Rotación entre integrantes], [Liderar Fases 1 y 2 (CRISP-DM): exploración, limpieza, matrices O/D.],
+    [Responsable de simulación], [Rotación entre integrantes], [Liderar Fase 3 (Scrum): construcción y calibración del escenario en SUMO.],
     [Responsable de documentación], [Rotación por entregable], [Coordinar redacción y revisión de cada entregable formal.],
-    [Responsable de pruebas], [], [Definir y ejecutar pruebas unitarias del pipeline y validación del modelo.],
-    [Responsable de infraestructura], [], [Configurar y mantener GitHub, Actions, entornos Python y SUMO.],
+    [Responsable de pruebas], [Rotación entre integrantes], [Definir y ejecutar pruebas unitarias del pipeline y validación del modelo.],
+    [Responsable de infraestructura], [Rotación entre integrantes], [Configurar y mantener GitHub, Actions, entornos Python y SUMO.],
   ),
   caption: [Roles del equipo y responsabilidades.],
 ) <tabRoles>

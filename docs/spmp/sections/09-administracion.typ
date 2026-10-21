@@ -118,7 +118,7 @@ Las estimaciones podrán ajustarse durante el desarrollo si aparecen riesgos o c
 
 #figure(
   table(
-    columns: (auto, auto, 1fr, auto),
+    columns: (2fr, 1fr, 2fr, auto),
     table.header([Conocimiento / Habilidad], [Estado actual], [Plan de entrenamiento], [Semana]),
     [SUMO (configuración y uso básico)], [Nivel básico], [Tutoriales oficiales SUMO + documentación TraCI + práctica con dataset de ejemplo.], [1–2],
     [netconvert y duarouter], [Sin experiencia], [Práctica guiada con la red OSM de Usaquén descargada.], [2],
@@ -144,7 +144,7 @@ Todas las herramientas seleccionadas son de código abierto o gratuitas para uso
 
 #figure(
   table(
-    columns: (1fr, auto, auto),
+    columns: (2fr, 1fr, auto),
     table.header([Tarea], [Responsable], [Semana]),
     [Crear repositorio GitHub con estructura base (`src/`, `tests/`, `docs/`, `data/`)], [Erick Salazar], [1],
     [Configurar GitHub Actions con pytest + pylint], [Erick Salazar], [1],
@@ -219,7 +219,7 @@ Responsables: Responsable de Infraestructura y todos los integrantes para la val
 
 #figure(
   table(
-    columns: (1fr, auto, 1fr),
+    columns: (1fr, auto, 2fr),
     table.header([Riesgo], [Impacto], [Mitigación]),
     [Incompatibilidad de versiones], [Alto], [Uso de `requirements.txt` / `pyproject.toml` y documentación detallada],
     [Fallos en GitHub Actions], [Medio], [Validación manual temporal],
@@ -248,7 +248,7 @@ crítico.
 
 #figure(
   text(size: 8.5pt, table(
-    columns: (7%, 1fr, 7%, 9%, 12%, 8%, 15%),
+    columns: (auto, 3fr, auto, auto, auto, 2fr, auto),
     table.header([ID], [Actividad], [H-P], [Semana(s)], [Prerreq.], [Co-req.], [Estado]),
     ..fase([F1], [FASE 1 – Comprensión del dominio y los datos], [80 h], [1–3], [—], [—], [Terminada]),
     [F1.1], [Exploración y caracterización de aforos vehiculares HMD], [20 h], [1], [—], [F1.2], [Terminada],

@@ -30,7 +30,7 @@ cuantitativas y validaciones técnicas específicas para proyectos de simulació
 
 #figure(
   table(
-    columns: (1fr, 1fr, auto, auto),
+    columns: (2fr, 2fr, 1fr, 1fr),
     table.header([Métrica], [Unidad], [Frecuencia], [Responsable]),
     [Tareas completadas vs. planificadas], [Issues cerrados / total sprint], [Fin de cada sprint], [Scrum Master],
     [Burndown del sprint], [Horas restantes], [Diario], [Scrum Master],
