@@ -1,11 +1,9 @@
 // Memoria final del trabajo de grado, con el formato "Formato TG ISIST" de la carrera.
 // Compilar desde docs/: python -c "import typst; typst.compile('memoria/memoria.typ', output='memoria/memoria.pdf', root='memoria')"
-// Los campos resaltados en amarillo (#pendiente) los completa el equipo antes de entregar.
 
 #import "@preview/fletcher:0.5.8" as fletcher: diagram, node, edge
 
 #let info = (
-  codigo: "<CÓDIGO>",
   titulo: "Generación de escenarios de movilidad urbana para la toma de decisiones en localidades de Bogotá: caso Usaquén",
   autores: ("Samuel Esteban Campos", "Erick Salazar Suárez", "Santiago Chitiva Contreras", "Felipe Andrés Garrido Flores"),
   director: "Andrés Oswaldo Calderón Romero",
@@ -13,11 +11,10 @@
   mes: "Noviembre",
 )
 
-#let pendiente(cuerpo) = highlight(fill: rgb("#fff3a3"), cuerpo)
-
 #set document(title: info.titulo, author: info.autores)
 #set page(paper: "us-letter", margin: (top: 3.17cm, right: 3.17cm, bottom: 3.81cm, left: 3.81cm))
 #set text(lang: "es", font: ("Calibri", "Carlito", "Liberation Sans"), size: 11pt)
+#show raw: set text(font: ("Calibri", "Carlito", "Liberation Sans"), size: 1.25em)
 #set par(justify: true, leading: 0.72em, spacing: 1.1em)
 #show heading: set text(font: ("Times New Roman", "Liberation Serif"))
 #show heading.where(level: 1): it => {
@@ -52,7 +49,7 @@
 #page(margin: (top: 2.5cm, bottom: 2.5cm, left: 3cm, right: 3cm), numbering: none)[
   #set align(center)
   #set par(justify: false)
-  #pendiente(info.codigo)
+  // falta poner el código del trabajo de grado
   #v(1.5cm)
   #text(size: 16pt, weight: "bold", font: ("Times New Roman", "Liberation Serif"))[#upper(info.titulo)]
   #v(2cm)
@@ -74,7 +71,7 @@
 #page(numbering: none)[
   #set align(center)
   #set par(justify: false)
-  #pendiente(info.codigo) \
+  // falta poner el código del trabajo de grado
   #v(0.8cm)
   #text(weight: "bold")[#upper(info.titulo)]
   #v(1cm)
@@ -86,8 +83,7 @@
   Director \ Ing. #info.director
   #v(0.8cm)
   Jurados del Proyecto Final de Grado \
-  Ing. #pendiente[\<Nombre del jurado\>] \
-  Ing. #pendiente[\<Nombre del jurado\>]
+  // falta poner los nombres de los dos jurados
   #v(1fr)
   PONTIFICIA UNIVERSIDAD JAVERIANA \
   FACULTAD DE INGENIERÍA \
@@ -105,13 +101,13 @@
   FACULTAD DE INGENIERÍA \
   PROGRAMA DE INGENIERÍA DE SISTEMAS
   #v(1.2cm)
-  *Rector de la Pontificia Universidad Javeriana* \ #pendiente[\<Nombre del rector de la universidad\>]
+  *Rector de la Pontificia Universidad Javeriana* \ // falta poner el nombre del rector
   #v(0.6cm)
-  *Decano de la Facultad de Ingeniería* \ #pendiente[\<Nombre del decano\>]
+  *Decano de la Facultad de Ingeniería* \ // falta poner el nombre del decano
   #v(0.6cm)
-  *Jefe del Departamento de Ingeniería de Sistemas* \ #pendiente[\<Nombre del jefe del departamento\>]
+  *Jefe del Departamento de Ingeniería de Sistemas* \ // falta poner el nombre del jefe del departamento
   #v(0.6cm)
-  *Director de la carrera de Ingeniería de Sistemas* \ #pendiente[\<Nombre del director de carrera\>]
+  *Director de la carrera de Ingeniería de Sistemas* \ // falta poner el nombre del director de carrera
   #v(1fr)
   #set align(left)
   #set par(justify: true)
@@ -130,15 +126,15 @@
 #align(center)[#text(size: 14pt, weight: "bold", font: ("Times New Roman", "Liberation Serif"))[AGRADECIMIENTOS]]
 #v(0.5cm)
 
-Al ingeniero Andrés Oswaldo Calderón Romero, que dirigió el proyecto, nos pidió que el sistema sirviera para algo más que para mostrar carros en un
-mapa y no dejó de preguntar cómo lo usaría alguien de la Secretaría de Movilidad. Esa pregunta terminó dándole forma a la segunda mitad del trabajo.
+Al ingeniero Andrés Oswaldo Calderón Romero, director de este trabajo, por proponernos la idea que dio origen al proyecto y por guiarnos
+en cada etapa con sus observaciones y su acompañamiento constante.
 
-A los profesores de la carrera que revisaron el plan, los requisitos y los pósters, y cuyas correcciones se notan en cada versión de los documentos.
+A los profesores de la carrera, por las correcciones al plan, a los requisitos y a los demás documentos, que se notan en cada versión.
 
-A nuestras familias, por la paciencia durante las semanas en que las simulaciones corrían de noche y el portátil no se podía apagar.
+A nuestras familias, por su apoyo incondicional durante la carrera y a lo largo de este trabajo.
 
-A las comunidades de SUMO, OpenStreetMap y kepler.gl, y al autor de Semáforos de Barranquilla, por publicar abiertamente las herramientas y las
-ideas sobre las que se construyó buena parte de este proyecto. #pendiente[(Ajustar o ampliar con los agradecimientos personales del equipo.)]
+A Victor Pay, autor de Semáforos de Barranquilla, cuyo trabajo publicado de forma abierta sirvió de base para el módulo de priorización de cruces,
+y a las comunidades de SUMO, OpenStreetMap y kepler.gl, por las herramientas libres sobre las que se construyó este proyecto.
 
 #pagebreak()
 

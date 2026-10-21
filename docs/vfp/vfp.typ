@@ -7,6 +7,7 @@
 
 #set document(title: "Propuesta para Proyecto de Grado -- Generación de Escenarios de Movilidad Urbana")
 #set text(lang: "es", size: 11pt)
+#show raw: set text(font: "Libertinus Serif", size: 1.25em)
 #set par(justify: true, leading: 0.75em)
 #set page(
   paper: "us-letter",

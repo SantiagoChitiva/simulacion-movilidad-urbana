@@ -168,11 +168,19 @@ La estructura organizacional del equipo se presenta en la @figOrganigrama.
     columns: (auto, auto, 1fr),
     table.header([Rol], [Integrante(s)], [Responsabilidades principales]),
     [Scrum Master (rotativo por sprint)], [Rotación entre integrantes], [Facilitar ceremonias Scrum y actualizar burndown chart.],
-    [Responsable de datos], [], [Liderar Fases 1 y 2 (CRISP-DM): exploración, limpieza, matrices O/D.],
-    [Responsable de simulación], [], [Liderar Fase 3 (Scrum): construcción y calibración del escenario en SUMO.],
+    [Responsable de datos], [
+      // falta poner quién es el responsable de datos
+    ], [Liderar Fases 1 y 2 (CRISP-DM): exploración, limpieza, matrices O/D.],
+    [Responsable de simulación], [
+      // falta poner quién es el responsable de simulación
+    ], [Liderar Fase 3 (Scrum): construcción y calibración del escenario en SUMO.],
     [Responsable de documentación], [Rotación por entregable], [Coordinar redacción y revisión de cada entregable formal.],
-    [Responsable de pruebas], [], [Definir y ejecutar pruebas unitarias del pipeline y validación del modelo.],
-    [Responsable de infraestructura], [], [Configurar y mantener GitHub, Actions, entornos Python y SUMO.],
+    [Responsable de pruebas], [
+      // falta poner quién es el responsable de pruebas
+    ], [Definir y ejecutar pruebas unitarias del pipeline y validación del modelo.],
+    [Responsable de infraestructura], [
+      // falta poner quién es el responsable de infraestructura
+    ], [Configurar y mantener GitHub, Actions, entornos Python y SUMO.],
   ),
   caption: [Roles del equipo y responsabilidades.],
 ) <tabRoles>

@@ -13,7 +13,7 @@
   prioridad: "",
   modulo: "",
   version: "1.0",
-  fecha: "",
+  fecha: "", // falta poner la fecha de aprobación de cada requerimiento
   estado: none,
 ) = figure(
   table(
@@ -23,7 +23,7 @@
     [*Casos de uso*],        [#cu],
     [*Descripción*],         [#descripcion],
     [*Razón*],               [#razon],
-    [*Autor*],               [EFSS],
+    [*Autor*],               [Todos],
     [*Criterio de medición*],[#criterio],
     [*Prioridad*],           [#prioridad],
     [*Módulo asociado*],     [#modulo],

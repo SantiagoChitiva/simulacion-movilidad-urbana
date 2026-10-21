@@ -6,6 +6,7 @@
 
 #set document(title: "SPMP -- " + info.nombreProyecto, author: info.autores)
 #set text(lang: "es", size: 11pt)
+#show raw: set text(font: "Libertinus Serif", size: 1.25em)
 #set par(justify: true)
 #set page(
   margin: 2.5cm,
@@ -53,12 +54,12 @@
       6.5, 11);
     - herramientas reales del sistema (8.2), criterios de aceptación (8.3), WBS y calendarización con los Sprints 6 a 8 (9.3);
     - riesgos R8 a R11 (12.2), ítems de configuración y estructura del repositorio (12.3, Anexo A) y nueva métrica de pruebas automatizadas (12.4).],
-    [Equipo EFSS],
+    [Todos],
     [2.1], [14/10/2026], [Alcance del Sprint 7 (9.3): escena 3D tipo videojuego, modo manual del actor seguido y priorización de cruces con reglas y
-    evidencia (siniestros de la SDM, colegios y centros de salud de OSM), siguiendo el proyecto Semáforos de Barranquilla.], [Equipo EFSS],
+    evidencia (siniestros de la SDM, colegios y centros de salud de OSM), siguiendo el proyecto Semáforos de Barranquilla.], [Todos],
     [2.2], [20/10/2026], [Estructura alineada con la plantilla: 8.1.1 Análisis de Alternativas y Justificación (ampliado con criterios), 8.2.1
     Alternativas, 8.4.2 Organigrama y Descripción de Roles y 9.3.1 a 9.3.4 (descomposición, calendarización, recursos y presupuesto). Sprint 9 de
-    usabilidad para perfiles no técnicos (F3.9) y estado de F3.8, F5.3 (SDD) y F5.5 (memoria) actualizados.], [Equipo EFSS],
+    usabilidad para perfiles no técnicos (F3.9) y estado de F3.8, F5.3 (SDD) y F5.5 (memoria) actualizados.], [Todos],
   ),
   caption: [Historial de cambios del documento.],
 ) <tabHistorial>

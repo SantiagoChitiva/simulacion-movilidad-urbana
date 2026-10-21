@@ -5,7 +5,7 @@
 
 #let info = (
   nombreProyecto: "Generación de Escenarios de Movilidad Urbana para la Toma de Decisiones en Localidades de Bogotá",
-  nombreEmpresa: "Empresa EFSS",
+  nombreEmpresa: "Grupo 3",
   version: "1.0",
   fecha: "20 de octubre de 2026",
   autores: ("Erick Salazar Suárez", "Felipe Andrés Garrido Flores", "Samuel Esteban Campos", "Santiago Chitiva Contreras"),
@@ -13,6 +13,7 @@
 
 #set document(title: "SDD – " + info.nombreProyecto, author: info.autores)
 #set text(lang: "es", size: 11pt)
+#show raw: set text(font: "Libertinus Serif", size: 1.25em)
 #set par(justify: true)
 
 // ─────────────────────────────────────────── ayudas para los diagramas
@@ -88,7 +89,7 @@
   },
   footer: context {
     line(length: 100%)
-    grid(columns: (1fr, auto), text(size: 9pt)[*EFSS* · Ingeniería de Sistemas PUJ], counter(page).display())
+    grid(columns: (1fr, auto), text(size: 9pt)[*Grupo 3* · Ingeniería de Sistemas PUJ], counter(page).display())
   },
 )
 #counter(page).update(1)
@@ -104,7 +105,7 @@
     table.header([*Versión*], [*Fecha*], [*Descripción*], [*Responsables*]),
     [1.0], [20/10/2026], [Primera versión del SDD. Describe la arquitectura del sistema tal como está implementada al cierre del Sprint 9:
     pipeline ETL, API, visor web, módulo de semáforos, simulador 3D comparativo y las mejoras de usabilidad de la versión 2.2 del SRS.],
-    [Equipo EFSS],
+    [Todos],
   ),
   caption: [Historial de cambios.],
 )

@@ -1,6 +1,6 @@
 #let info = (
   nombreProyecto: "Generación de Escenarios de Movilidad Urbana para la Toma de Decisiones en Localidades de Bogotá",
-  nombreEmpresa: "Empresa EFSS",
+  nombreEmpresa: "Grupo 3",
   logoEmpresaUri: "/figures/logo_javeriana.png",
   version: "2.2",
   fecha: "20 de octubre de 2026",

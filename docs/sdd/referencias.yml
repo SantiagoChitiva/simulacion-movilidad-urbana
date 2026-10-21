@@ -76,7 +76,7 @@ ssam:
 barranquilla:
   type: repository
   title: "Semáforos de Barranquilla: priorización de cruces para estudiar semáforos nuevos"
-  author: Victorpay1
+  author: Pay, Victor
   url: https://github.com/Victorpay1/semaforos-barranquilla
 
 siniestros:
