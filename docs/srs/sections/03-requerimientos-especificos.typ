@@ -378,7 +378,7 @@ redactan con la forma \"El sistema debe #sym.dots\", y se organizan en cinco fun
   matriz .od.],
   prioridad: [Alta],
   modulo: [`simulation-service/src/etl/sumo/duarouter.py`],
-  estado: [Implementado (`--ignore-errors --repair`, viajes ordenados por `depart`).],
+  estado: [Parcial: una sola pasada de duarouter (`--ignore-errors --repair`, viajes ordenados por `depart`); las iteraciones de asignación dinámica (duaIterate) no se implementaron.],
   fecha: [],
 )
 
