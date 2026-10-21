@@ -1,0 +1,325 @@
+eltiempo:
+  type: web
+  title: Bogotá está entre las diez ciudades del mundo con más tráfico
+  author: El Tiempo
+  url: https://www.eltiempo.com/bogota/bogota-esta-entre-las-diez-ciudades-del-mundo-con-mas-trafico-la-congestion-subio-7-7-por-ciento-en-3527699
+
+portafolio2025:
+  type: web
+  title: Bogotá, cada año con un tráfico que sigue empeorando
+  author: Portafolio
+  url: https://www.portafolio.co/economia/regiones/bogota-cada-ano-con-un-trafico-que-sigue-empeorando-nivel-de-congestion-en-la-ciudad-crecio-7-7-en-487350
+
+infobae:
+  type: web
+  title: "Moverse en Bogotá se volvió una odisea: recorrer 5 kilómetros puede tomar hasta 40 minutos"
+  author: Infobae
+  date: 2026-03-05
+  url: https://www.infobae.com/colombia/2026/03/05/moverse-en-bogota-se-volvio-una-odisea-recorrer-5-kilometros-puede-tomar-hasta-40-minutos/
+
+alcaldia:
+  type: web
+  title: Más de 4 millones de personas se benefician con TransMilenio
+  author: Alcaldía de Bogotá
+  url: https://bogota.gov.co/mi-ciudad/movilidad/transmilenio-en-bogota-personas-beneficiadas-flota-viajes-y-mas
+
+portafolio2023:
+  type: web
+  title: "En transporte público y a pie: preferencias de transporte para los bogotanos en 2023"
+  author: Portafolio
+  url: https://www.portafolio.co/economia/regiones/en-transporte-publico-y-a-pie-asi-se-transportaron-los-bogotanos-en-2023-606118
+
+daganzo:
+  type: article
+  title: "The cell transmission model: A dynamic representation of highway traffic consistent with the hydrodynamic theory"
+  author: "Daganzo, Carlos F."
+  date: 1994
+  parent:
+    type: periodical
+    title: "Transportation Research Part B: Methodological"
+    volume: 28
+    issue: 4
+  page-range: 269-287
+
+krajzewicz2012:
+  type: article
+  title: Recent Development and Applications of SUMO – Simulation of Urban MObility
+  author: ["Krajzewicz, Daniel", "Erdmann, Jakob", "Behrisch, Michael", "Bieker, Laura"]
+  date: 2012
+  parent:
+    type: periodical
+    title: International Journal on Advances in Systems and Measurements
+    volume: 5
+    issue: "3&4"
+  page-range: 128-138
+
+lighthill:
+  type: article
+  title: "On kinematic waves II. A theory of traffic flow on long crowded roads"
+  author: ["Lighthill, M. J.", "Whitham, G. B."]
+  date: 1955
+  parent:
+    type: periodical
+    title: "Proceedings of the Royal Society of London. Series A"
+    volume: 229
+    issue: 1178
+  page-range: 317-345
+
+mcnally:
+  type: chapter
+  title: The four-step model
+  author: "McNally, Michael G."
+  date: 2007
+  parent:
+    type: book
+    title: Handbook of Transport Modelling
+    editor: ["Hensher, David A.", "Button, Kenneth J."]
+    edition: 2
+    publisher: Elsevier
+  page-range: 35-53
+
+ortuzar:
+  type: book
+  title: Modelling Transport
+  author: ["Ortúzar, Juan de Dios", "Willumsen, Luis G."]
+  edition: 4
+  publisher: Wiley
+  date: 2011
+
+sdm2019:
+  type: report
+  title: Encuesta de Movilidad de Bogotá 2019
+  author: Secretaría Distrital de Movilidad de Bogotá
+  publisher: Alcaldía Mayor de Bogotá
+  date: 2019
+
+vlahogianni:
+  type: article
+  title: "Short-term traffic forecasting: Where we are and where we are going"
+  author: ["Vlahogianni, Eleni I.", "Karlaftis, Matthew G.", "Golias, John C."]
+  date: 2014
+  parent:
+    type: periodical
+    title: "Transportation Research Part C: Emerging Technologies"
+    volume: 43
+  page-range: 3-19
+
+webster:
+  type: report
+  title: Traffic Signal Settings (Road Research Technical Paper No. 39)
+  author: "Webster, F. V."
+  publisher: Her Majesty's Stationery Office
+  date: 1958
+
+gettman:
+  type: report
+  title: Surrogate Safety Assessment Model and Validation (FHWA-HRT-08-051)
+  author: ["Gettman, Douglas", "Pu, Lili", "Sayed, Tarek", "Shelby, Steven"]
+  publisher: Federal Highway Administration
+  date: 2008
+
+ieee1058:
+  type: report
+  title: IEEE Std 1058-1998 – IEEE Standard for Software Project Management Plans
+  author: IEEE
+  date: 1998
+
+iso12207:
+  type: report
+  title: ISO/IEC 12207:2008 – Systems and software engineering – Software life cycle processes
+  author: ISO/IEC
+  date: 2008
+
+bpmn:
+  type: report
+  title: Business Process Model and Notation (BPMN) Version 2.0
+  author: Object Management Group
+  date: 2011
+
+sumo:
+  type: article
+  title: Microscopic Traffic Simulation using SUMO
+  author: ["Lopez, Pablo Alvarez", "Behrisch, Michael", "Bieker-Walz, Laura", "Erdmann, Jakob"]
+  date: 2018
+  parent:
+    type: proceedings
+    title: 21st International Conference on Intelligent Transportation Systems (ITSC)
+  page-range: 2575-2582
+
+encuesta:
+  type: report
+  title: Encuesta de Movilidad de Bogotá 2023
+  author: Secretaría Distrital de Movilidad de Bogotá
+  publisher: Alcaldía Mayor de Bogotá
+  date: 2023
+
+crispdm:
+  type: article
+  title: "CRISP-DM: Towards a standard process model for data mining"
+  author: ["Wirth, Rüdiger", "Hipp, Jochen"]
+  date: 2000
+
+scrum:
+  type: book
+  title: The Scrum Guide
+  author: ["Schwaber, Ken", "Sutherland, Jeff"]
+  date: 2020
+
+ieee830:
+  type: report
+  title: IEEE Std 830-1998 – IEEE Recommended Practice for Software Requirements Specifications
+  author: IEEE
+  date: 1998
+
+ieee1016:
+  type: report
+  title: IEEE Std 1016-2009 – IEEE Standard for Information Technology – Systems Design – Software Design Descriptions
+  author: IEEE
+  date: 2009
+
+iso29119:
+  type: report
+  title: ISO/IEC/IEEE 29119-1:2022 – Software and systems engineering – Software testing
+  author: ISO/IEC/IEEE
+  date: 2022
+
+
+sumodocs:
+  type: web
+  title: "Eclipse SUMO – Simulation of Urban MObility: User Documentation"
+  author: Eclipse Foundation
+  date: 2025
+  url: https://sumo.dlr.de/docs/
+
+tomtom:
+  type: web
+  title: TomTom Traffic Index 2025
+  author: TomTom International BV
+  date: 2025
+  url: https://www.tomtom.com/traffic-index/
+
+osm:
+  type: web
+  title: OpenStreetMap
+  author: OpenStreetMap contributors
+  date: 2024
+  url: https://www.openstreetmap.org
+
+pep8:
+  type: web
+  title: "PEP 8 – Style Guide for Python Code"
+  author: ["van Rossum, Guido", "Warsaw, Barry", "Coghlan, Alyssa"]
+  publisher: Python Software Foundation
+  date: 2001
+  url: https://peps.python.org/pep-0008/
+
+barranquilla:
+  type: repository
+  title: "Semáforos de Barranquilla: priorización de cruces para estudiar semáforos nuevos"
+  author: Victorpay1
+  url: https://github.com/Victorpay1/semaforos-barranquilla
+
+siniestros:
+  type: web
+  title: Histórico de siniestros viales de Bogotá D.C. (servicio de datos abiertos HistoricoSiniestros)
+  author: Secretaría Distrital de Movilidad de Bogotá
+  url: https://services2.arcgis.com/NEwhEo9GGSHXcRXV/arcgis/rest/services/HistoricoSiniestros/FeatureServer
+
+kruchten:
+  type: article
+  title: "Architectural Blueprints – The \"4+1\" View Model of Software Architecture"
+  author: "Kruchten, Philippe"
+  date: 1995
+  parent:
+    type: periodical
+    title: IEEE Software
+    volume: 12
+    issue: 6
+  page-range: 42-50
+
+fastapi:
+  type: web
+  title: FastAPI – Documentación oficial
+  author: Ramírez, Sebastián
+  url: https://fastapi.tiangolo.com
+
+keplergl:
+  type: web
+  title: kepler.gl – Documentación
+  author: Comunidad kepler.gl (OpenJS Foundation)
+  url: https://docs.kepler.gl
+
+threejs:
+  type: web
+  title: three.js – Documentación
+  author: Autores de three.js
+  url: https://threejs.org/docs/
+
+traci:
+  type: web
+  title: "TraCI – Traffic Control Interface"
+  author: Eclipse Foundation
+  url: https://sumo.dlr.de/docs/TraCI.html
+
+matsim:
+  type: book
+  title: The Multi-Agent Transport Simulation MATSim
+  editor: ["Horni, Andreas", "Nagel, Kai", "Axhausen, Kay W."]
+  publisher: Ubiquity Press
+  date: 2016
+
+krauss:
+  type: thesis
+  title: "Microscopic Modeling of Traffic Flow: Investigation of Collision Free Vehicle Dynamics"
+  author: "Krauß, Stefan"
+  organization: Universität zu Köln
+  date: 1998
+
+wardrop:
+  type: article
+  title: Some theoretical aspects of road traffic research
+  author: "Wardrop, John Glen"
+  date: 1952
+  parent:
+    type: periodical
+    title: Proceedings of the Institution of Civil Engineers
+    volume: 1
+    issue: 3
+  page-range: 325-378
+
+dmrb:
+  type: report
+  title: "Design Manual for Roads and Bridges, Volume 12, Section 2: Traffic Appraisal in Urban Areas"
+  author: Highways Agency
+  publisher: The Stationery Office
+  date: 1996
+
+msfootprints:
+  type: repository
+  title: Global ML Building Footprints
+  author: Microsoft
+  url: https://github.com/microsoft/GlobalMLBuildingFootprints
+
+vissim:
+  type: web
+  title: PTV Vissim – Microscopic traffic simulation software
+  author: PTV Group
+  url: https://www.ptvgroup.com/en/products/ptv-vissim
+
+aimsun:
+  type: web
+  title: Aimsun Next – Traffic modelling software
+  author: Aimsun SLU
+  url: https://www.aimsun.com/aimsun-next/
+
+osmwebwizard:
+  type: web
+  title: "OSMWebWizard: tutorial para generar escenarios de SUMO desde OpenStreetMap"
+  author: Eclipse Foundation
+  url: https://sumo.dlr.de/docs/Tutorials/OSMWebWizard.html
+
+duaiterate:
+  type: web
+  title: "Dynamic User Assignment (duaIterate.py)"
+  author: Eclipse Foundation
+  url: https://sumo.dlr.de/docs/Demand/Dynamic_User_Assignment.html
