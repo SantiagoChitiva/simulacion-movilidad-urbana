@@ -430,7 +430,8 @@ function Visor() {
   const clicado = useSelector((s) => s.keplerGl?.[MAPA_ID]?.visState?.clicked);
   useEffect(() => {
     const capa = clicado?.layer?.id ?? '';
-    const indice = clicado?.object?.index ?? clicado?.index;
+    // capas de puntos: object.index; capas GeoJSON (vías): kepler guarda la fila en object.properties.index
+    const indice = clicado?.object?.properties?.index ?? clicado?.object?.index ?? clicado?.index;
     if (capa.startsWith(CAPA_SEMAFOROS)) {
       const fila = filasSemaforos.current[indice];
       if (fila) {
