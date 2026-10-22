@@ -1,0 +1,16 @@
+.venv
+.pytest_cache/
+__pycache__
+simulation_service.egg-info/
+
+# se ignoran archivos generados por el ETL
+*rou*.xml
+*trips.xml
+output/
+# corridas lanzadas desde la API (src/api/jobs.py)
+runs/
+# catálogo de semáforos y otros derivados de la red
+cache/
+# precalculadas/ se versiona, pero solo comprimido (python -m etl.precalculadas)
+precalculadas/**/*.geojson
+precalculadas/**/*.tmp

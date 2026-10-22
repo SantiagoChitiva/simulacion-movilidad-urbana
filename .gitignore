@@ -4,6 +4,7 @@ data/raw/*
 
 # Entorno Python
 venv/
+.venv/
 __pycache__/
 *.pyc
 .ipynb_checkpoints/
@@ -16,7 +17,10 @@ __pycache__/
 .vscode/
 .idea/
 
-#Cache
+# *.egg-info directorio compilado resultado del pyproject.toml
+*.egg-info/
+
+# Cache
 **/cache/
 **/.cache/
 **/.ipynb_checkpoints/

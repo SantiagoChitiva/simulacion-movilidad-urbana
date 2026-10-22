@@ -2,7 +2,7 @@
   nombreProyecto: "Generación de Escenarios Movilidad",
   nombreEmpresa: "Empresa EFSS",
   logoEmpresaUri: "/figures/logo_javeriana.png",
-  version: "1.0",
+  version: "2.1",
   autores: (
     "Erick Salazar Suarez",
     "Felipe Garrido Flores",

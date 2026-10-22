@@ -23,15 +23,15 @@ La audiencia de este documento incluye:
 - *Investigadores y analistas de movilidad:* potenciales usuarios del sistema en futuras
   iteraciones del producto.
 
-El alcance del documento cubre la versión 1.0 del módulo, cuyo caso de validación está delimitado
-a la localidad de Usaquén en Bogotá, Colombia.
+El alcance del documento cubre la versión 2.0 del sistema, que corresponde al estado de la rama de desarrollo actual más los requerimientos aún por
+desarrollar (marcados como *Pendiente* en la Sección 3). El caso de validación está delimitado a la localidad de Usaquén en Bogotá, Colombia.
 
 == Alcance
 
 El producto de software especificado en este documento es un módulo de procesamiento de datos que automatiza la transformación de fuentes de datos de
 movilidad urbana disponibles para Bogotá en archivos de entrada válidos para el simulador de tráfico SUMO (Simulation of Urban MObility).
 
-*Nombre del producto:* \<nombre del producto\>
+*Nombre del producto:* Generación de Escenarios de Movilidad Urbana -- Usaquén (servicio de simulación `simulation-service` y visor web `kepler`).
 
 *Funcionalidades principales que incluirá el sistema:*
 
@@ -44,6 +44,12 @@ movilidad urbana disponibles para Bogotá en archivos de entrada válidos para e
 - Módulo web que permite visualizar de forma interactiva los resultados producidos por SUMO (métricas de congestión, tiempos de viaje, flujos vehiculares
   por segmento) y parametrizar nuevas simulaciones desde una interfaz gráfica, sin necesidad de editar archivos XML ni interactuar con la línea de
   comandos.
+- Demanda parametrizable con presets de transferencia modal (encuesta, más vehículos, más peatones, día sin carro), conteos por modo, semilla, estilos de
+  conducción y cierres viales; simulaciones precalculadas de cada preset; avance real y cancelación de corridas.
+- Módulo de intersecciones: catálogo de semáforos con volúmenes por acceso, edición de programas, cálculo de Webster, recorte de zonas, comparación de
+  programas y priorización de cruces sin semáforo.
+- Simulador 3D comparativo: vista en pantalla partida de un cruce sin semáforo y del mismo cruce con un semáforo propuesto, con la red 3D real,
+  edificios, seguimiento en tercera persona de cualquier vehículo o peatón, HUD de velocidad, riesgo (TTC, DRAC, PET) y decisiones, y minimapa 2D.
 
 *Utilidad y objetivos del producto:*
 
@@ -64,6 +70,8 @@ accesibles.
 - Integración en tiempo real con APIs de tráfico comerciales.
 - Despliegue en sistemas de producción institucionales.
 - Calibración del modelo para localidades distintas a Usaquén.
+- Programas semafóricos reales de la Secretaría Distrital de Movilidad: los programas provienen de netconvert/OpenStreetMap.
+- Datos de siniestralidad en la priorización de cruces (criterio reservado).
 
 == Definiciones, Acrónimos y Abreviaciones
 
@@ -133,7 +141,30 @@ del proyecto.
     web para exponer los resultados de SUMO al frontend.],
 
     [*Frontend*], [Capa de presentación del módulo web. Interfaz gráfica accesible desde el navegador que permite visualizar resultados de simulación y
-    configurar nuevos escenarios sin interacción directa con la línea de comandos.]
+    configurar nuevos escenarios sin interacción directa con la línea de comandos.],
+
+    [*WebSocket*], [Protocolo de comunicación bidireccional sobre una conexión TCP. Lo usa el simulador 3D para recibir frames y enviar comandos en vivo.],
+
+    [*tlLogic*], [Elemento de la red de SUMO que define el programa de un semáforo: sus fases, con duración y estado por conexión controlada.],
+
+    [*Webster*], [Método clásico para calcular el ciclo óptimo de un semáforo, $C = (1,5 L + 5)/(1 - Y)$, a partir de las pérdidas por fase y de la razón
+    entre flujo y flujo de saturación de los accesos críticos.],
+
+    [*SSM*], [Surrogate Safety Measures. Indicadores sustitutos de seguridad que estiman la cercanía a un choque sin que ocurra (TTC, DRAC, PET).],
+
+    [*TTC*], [Time To Collision. Tiempo hasta alcanzar al vehículo de adelante si ambos mantienen su velocidad. Crítico por debajo de 1,5 s.],
+
+    [*DRAC*], [Deceleration Rate to Avoid Collision. Frenado necesario para no alcanzar al vehículo de adelante. Crítico por encima de 3,35 m/s².],
+
+    [*PET*], [Post-Encroachment Time. Diferencia de tiempo entre el paso de dos actores por el mismo punto de conflicto. Crítico por debajo de 1,5 s.],
+
+    [*Lockstep*], [Ejecución de dos simulaciones avanzando exactamente el mismo intervalo en cada paso, para compararlas instante a instante.],
+
+    [*Ego*], [Actor (vehículo o peatón) que el usuario sigue con la cámara en tercera persona en el simulador 3D.],
+
+    [*FCD*], [Floating Car Data. Salida de SUMO con la posición de cada actor en cada paso; base de la animación de viajes en el visor.],
+
+    [*kepler.gl / three.js*], [Bibliotecas de visualización del visor: kepler.gl para el mapa animado de viajes y three.js para el render 3D.]
   ),
   caption: [Definiciones, acrónimos y abreviaciones del proyecto.]
 ) <tabAcronimos>

@@ -1,0 +1,86 @@
+ieee1058:
+  type: report
+  title: IEEE Std 1058-1998 – IEEE Standard for Software Project Management Plans
+  author: IEEE
+  date: 1998
+
+iso12207:
+  type: report
+  title: ISO/IEC 12207:2008 – Systems and software engineering – Software life cycle processes
+  author: ISO/IEC
+  date: 2008
+
+bpmn:
+  type: report
+  title: Business Process Model and Notation (BPMN) Version 2.0
+  author: Object Management Group
+  date: 2011
+
+sumo:
+  type: article
+  title: Microscopic Traffic Simulation using SUMO
+  author: ["Lopez, Pablo Alvarez", "Behrisch, Michael", "Bieker-Walz, Laura", "Erdmann, Jakob"]
+  date: 2018
+  parent:
+    type: proceedings
+    title: 21st International Conference on Intelligent Transportation Systems (ITSC)
+  page-range: 2575-2582
+
+ortuzar:
+  type: book
+  title: Modelling Transport
+  author: ["Ortúzar, Juan de Dios", "Willumsen, Luis G."]
+  edition: 4
+  publisher: Wiley
+  date: 2011
+
+encuesta:
+  type: report
+  title: Encuesta de Movilidad de Bogotá 2023
+  author: Secretaría Distrital de Movilidad de Bogotá
+  publisher: Alcaldía Mayor de Bogotá
+  date: 2023
+
+crispdm:
+  type: article
+  title: "CRISP-DM: Towards a standard process model for data mining"
+  author: ["Wirth, Rüdiger", "Hipp, Jochen"]
+  date: 2000
+
+scrum:
+  type: book
+  title: The Scrum Guide
+  author: ["Schwaber, Ken", "Sutherland, Jeff"]
+  date: 2020
+
+ieee830:
+  type: report
+  title: IEEE Std 830-1998 – IEEE Recommended Practice for Software Requirements Specifications
+  author: IEEE
+  date: 1998
+
+ieee1016:
+  type: report
+  title: IEEE Std 1016-2009 – IEEE Standard for Information Technology – Systems Design – Software Design Descriptions
+  author: IEEE
+  date: 2009
+
+iso29119:
+  type: report
+  title: ISO/IEC/IEEE 29119-1:2022 – Software and systems engineering – Software testing
+  author: ISO/IEC/IEEE
+  date: 2022
+
+webster:
+  type: report
+  title: Traffic Signal Settings (Road Research Technical Paper No. 39)
+  author: "Webster, F. V."
+  publisher: Her Majesty's Stationery Office
+  date: 1958
+
+ssm:
+  type: report
+  title: Surrogate Safety Assessment Model and Validation (FHWA-HRT-08-051)
+  author: ["Gettman, Douglas", "Pu, Lili", "Sayed, Tarek", "Shelby, Steven"]
+  publisher: Federal Highway Administration
+  date: 2008

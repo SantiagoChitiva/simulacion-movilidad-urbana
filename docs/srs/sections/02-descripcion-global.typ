@@ -72,24 +72,40 @@ herramientas que el pipeline invoca como procesos externos.
     [Fuente de datos de volúmenes vehiculares reales en Hora de Máxima Demanda para los
      puntos de aforo de Usaquén. Usada exclusivamente en la fase de validación (F5) para
      calcular el estadístico GEH.],
+
+    [TraCI (SUMO)],
+    [Socket TCP local],
+    [La API controla SUMO paso a paso para medir el avance de las corridas y, en el simulador 3D, para correr dos simulaciones en lockstep, leer el
+    estado de cada actor e inyectar el actor seguido.],
+
+    [`cutRoutes.py` / `randomTrips.py`],
+    [Proceso externo (Python)],
+    [Herramientas de SUMO para recortar la demanda real a una zona y generar el tráfico de fondo por modo de las comparaciones 3D.],
+
+    [Microsoft Building Footprints],
+    [Archivo GeoJSON (lectura)],
+    [Huellas de edificios de Usaquén (`data/processed/edificios_ms.geojson`) que se extruyen en la escena 3D.],
+
+    [Mapbox / OpenStreetMap tiles],
+    [HTTPS (navegador)],
+    [Mapas base del visor: Mapbox para el mapa principal de kepler.gl y teselas de OpenStreetMap para el minimapa del simulador 3D.],
   ),
-  caption: [Interfaces del IronWorks Mobility Pipeline con sistemas externos.]
+  caption: [Interfaces del sistema con sistemas externos.]
 ) <tabInterfacesSistema>
 
 === Interfaces con el Usuario
 
 El sistema ofrece dos formas de interacción:
 
-*Línea de comandos (CLI):* el usuario lanza el pipeline desde una terminal con un comando Python al que puede pasar argumentos para seleccionar el período
-horario, el modo de transporte y la localidad. El sistema imprime el progreso de cada fase en consola con mensajes de estado y marcas de tiempo.
+*Visor web (interfaz principal):* aplicación en el navegador que permite:
++ ver los viajes simulados animados sobre el mapa de Usaquén;
++ parametrizar y lanzar corridas (preset, conteos por modo, semilla, estilo de conducción, cierres viales) y seguir su avance;
++ consultar y configurar intersecciones semaforizadas (ficha, programa, Webster, comparación);
++ ver la priorización de cruces sin semáforo;
++ abrir el simulador 3D comparativo de un semáforo propuesto, con pantalla partida, cámara en tercera persona, HUD de datos y minimapa 2D.
 
-*Archivo de configuración YAML:* los parámetros avanzados del pipeline (rutas de archivos de entrada, umbrales de validación, parámetros de netconvert,
-factor de escala de demanda) se definen en un archivo `config.yaml` que el usuario edita con cualquier editor de texto antes de ejecutar el pipeline.
-
-*Módulo web (interfaz gráfica):* el sistema dispone de una interfaz web accesible desde el navegador que permite: (1) visualizar de forma interactiva los
-resultados producidos por SUMO, incluyendo métricas de congestión, tiempos de viaje y flujos vehiculares por segmento; y (2) parametrizar y lanzar nuevas
-simulaciones definiendo variables como el escenario geográfico, el período horario y los modos de transporte activos, sin necesidad de editar archivos XML
-ni usar la línea de comandos.
+*Línea de comandos (CLI):* reservada al equipo de desarrollo para ejecutar el pipeline por defecto (`python -m etl.etl`), regenerar las simulaciones
+precalculadas (`python -m etl.precalculadas`) y levantar la API y el visor.
 
 === Interfaces con el Hardware
 
@@ -178,8 +194,15 @@ No se requieren tarjetas gráficas dedicadas, aceleradores GPU, dispositivos de 
     [FastAPI], [0.100+], [pypi.org], [Backend del módulo web. Expone los resultados de SUMO mediante una API REST consumida por el frontend. Integrado con
     el pipeline ETL existente.],
 
-    [Jinja2 / HTML+JS], [--], [--], [Frontend del módulo web. Interfaz gráfica accesible desde el navegador para visualización de resultados y
-    parametrización de simulaciones.]
+    [TraCI / sumolib], [1.27.1], [pypi.org], [Control en vivo de SUMO y lectura de la red desde Python.],
+
+    [React + Vite], [18.3 / 6], [npmjs.com], [Frontend del módulo web (visor `kepler/`).],
+
+    [kepler.gl], [3.1], [npmjs.com], [Mapa animado de viajes y capas de semáforos y priorización.],
+
+    [three.js], [0.169.0], [npmjs.com], [Render 3D del simulador comparativo.],
+
+    [maplibre-gl], [4.7.1], [npmjs.com], [Minimapa 2D del simulador con teselas de OpenStreetMap.]
   ),
   caption: [Interfaces con el software.]
 ) <tabInterfacesSoftware>
@@ -188,10 +211,13 @@ Todas las herramientas y bibliotecas listadas son de código abierto o de uso ac
 
 === Interfaces de Comunicación
 
-El pipeline no implementa comunicación en red durante su operación principal. El único protocolo de red utilizado es *HTTPS sobre el puerto 443*,
-exclusivamente durante la descarga inicial de la red vial desde OpenStreetMap (API Overpass o descarga directa del dump OSM). Una vez que los datos de
-entrada están disponibles en disco, todas las fases del pipeline (F2 a F5) operan completamente offline. No se utilizan sockets, APIs REST, bases de datos
-remotas ni ningún otro protocolo de comunicación.
+El pipeline de datos opera offline. El sistema completo usa:
+- HTTP REST con JSON entre el visor y la API (`localhost:8000`, a través del proxy `/api` de Vite);
+- un WebSocket para el simulador 3D;
+- TraCI sobre TCP local entre la API y SUMO;
+- HTTPS hacia los proveedores de mapas base.
+
+El detalle está en la tabla de interfaces de comunicaciones de la Sección 3.
 
 === Restricciones de Memoria
 
@@ -220,6 +246,9 @@ produciendo todos los artefactos de salida. El tiempo estimado de ejecución com
 
 *Ejecución de escenario hipotético:* el usuario modifica el archivo `config.yaml` (por ejemplo, ajustando el factor de escala de demanda o el período
 horario) y relanza el pipeline para generar un conjunto de artefactos distinto sin modificar el código fuente (ver RF-013).
+
+*Uso interactivo (v2.0):* el usuario abre el visor, carga una simulación (precalculada o propia), lanza nuevas corridas desde el panel, explora
+intersecciones y abre comparaciones 3D. La API ejecuta una corrida a la vez y como máximo dos comparaciones 3D simultáneas.
 
 No se definen períodos de mantenimiento ni ventanas de inactividad programadas, dado que el sistema es una herramienta de escritorio de uso bajo demanda.
 El respaldo de datos está delegado al sistema de control de versiones Git y a las copias locales de los datasets de entrada.
@@ -262,6 +291,19 @@ los volúmenes simulados con los aforos reales HMD calculando el estadístico GE
 (métricas de congestión, tiempos de viaje, flujos por segmento y niveles de servicio) y configurar nuevos escenarios de simulación desde el navegador,
 especificando parámetros como el período horario, los modos de transporte activos y el factor de escala de demanda.
 
+*F7 -- Validación y Reportes:* comparación de los volúmenes simulados contra los aforos reales (GEH) y registro de la ejecución.
+
+*F8 -- Intersecciones y Semaforización:*
+- consultar cada intersección semaforizada (accesos, volúmenes y fases);
+- recortar la red a una zona alrededor de un cruce;
+- editar el programa del semáforo o calcularlo con Webster, y comparar programas;
+- ver una priorización de los cruces sin semáforo donde podría valer la pena instalar uno.
+
+*F9 -- Simulador 3D Comparativo:* para un cruce sin semáforo, el sistema prepara el escenario actual y una variante con un semáforo propuesto y los
+simula a la par, mostrándolos lado a lado en 3D con la red, los edificios y los actores reales de la zona. El usuario sigue en tercera persona a un
+vehículo o peatón y ve su velocidad, su riesgo, la acción que toma y las decisiones posibles en el próximo cruce. Un minimapa 2D lo ubica en la
+ciudad.
+
 #figure(
   table(
     columns: (auto, auto, 1fr),
@@ -272,7 +314,11 @@ especificando parámetros como el período horario, los modos de transporte acti
     [F3 -- Red y TAZ], [CU-03], [`usaquen.net.xml`, `usaquen.taz.xml`],
     [F4 -- Simulación], [CU-04], [`vehiculos.vtype.xml`, `rutas.rou.xml`],
     [F5 -- Escenarios/Val.], [CU-05, CU-06], [`validacion_geh.csv`, conjuntos de artefactos por escenario],
-    [F6 -- Módulo Web], [CU-07, CU-08], [Interfaz web de visualización de resultados SUMO y formulario de parametrización de nuevas simulaciones]
+    [F6 -- Módulo Web], [CU-07, CU-08], [Interfaz web de visualización de resultados SUMO y formulario de parametrización de nuevas simulaciones],
+    [F8 -- Intersecciones], [CU-09 a CU-11], [Ficha de intersección, programas `programa_<tl>_<id>.xml`, zonas `runs/zona-*`, tabla de comparación,
+    capa de priorización],
+    [F9 -- Simulador 3D], [CU-12], [`runs/sem-*` (zona, variante con semáforo, demanda), frames en vivo por WebSocket, vista 3D partida con HUD y
+    minimapa]
   ),
   caption: [Funciones del producto y artefactos generados.]
 ) <tabFunciones>
@@ -335,7 +381,7 @@ Se identifican dos clases de usuarios que interactuarán con el pipeline en la v
   Python.
 - *Sin base de datos relacional:* el almacenamiento intermedio es por archivos en disco (Parquet, CSV, XML). No se usa PostgreSQL, SQLite ni ningún motor
   de BD.
-- *Sin interfaz web:* no se implementa frontend en esta versión (requerimiento diferido).
+- *Interfaz web:* el frontend es una aplicación React; requiere un navegador con WebGL 2 para el simulador 3D.
 
 === Restricciones de Hardware
 
@@ -346,7 +392,7 @@ Se identifican dos clases de usuarios que interactuarán con el pipeline en la v
 
 == Modelo del Dominio
 
-El modelo del dominio del *IronWorks Mobility Pipeline* representa las entidades del mundo real que el sistema maneja, transforma y produce. No es un
+El modelo del dominio del sistema representa las entidades del mundo real que el sistema maneja, transforma y produce. No es un
 modelo de clases de software sino una representación conceptual del dominio de movilidad urbana y simulación de tráfico.
 
 #figure(
@@ -384,6 +430,16 @@ Las entidades centrales del dominio y sus relaciones son:
 
     [Escenario de Simulación], [Conjunto completo de artefactos SUMO (red, TAZ, rutas, tipos de vehículo) que define una configuración específica de la
     simulación. Distintos escenarios se generan variando los parámetros del pipeline.], [Conjunto de archivos generados],
+
+    [Intersección semaforizada], [Nodo de la red controlado por un `tlLogic`, con accesos, conexiones y un programa de fases.], [`.net.xml`],
+
+    [Cruce candidato], [Cruce sin semáforo (uno o varios nodos de SUMO) que cumple las reglas de priorización; posible ubicación de un semáforo
+    nuevo.], [Priorización (RF-032)],
+
+    [Escenario comparativo], [Par de zonas idénticas (sin y con semáforo propuesto) con la misma demanda, simuladas en lockstep.], [`runs/sem-*`],
+
+    [Actor seguido (ego)], [Vehículo o peatón que el usuario observa en tercera persona; tiene telemetría e índice de riesgo por lado.], [Frames del
+    WebSocket],
   ),
   caption: [Entidades del modelo del dominio.]
 ) <tabModeloDominio>
@@ -417,32 +473,39 @@ y mantenimiento:
     columns: (2fr,3fr,4fr),
     table.header([*Módulo*], [*Requerimientos asociados*], [*Descripción del módulo*]),
 
-    [`etl/ingestion.py`], [RF-001, RF-002, RF-003, RF-004, RF-005, \ RNF-CON-001], [Lectura, validación y limpieza del dataset de la encuesta y descarga
-    de la red OSM.],
+    [`notebooks/F1.x`, `F2.x`], [RF-001, RF-002, RF-003, RF-009, RF-010], [Exploración, limpieza de la encuesta y los aforos y construcción de
+    la red 3D y las TAZ (artefactos en `data/processed/`).],
 
-    [`etl/od_builder.py`], [RF-006, RF-007, RF-008, RNF-SEG-001], [Construcción y exportación de matrices O/D por modo y período horario.],
+    [`etl/sumo/trips.py`, `vtypes.py`], [RF-004, RF-005, RF-006, RF-008, RF-011, RNF-CON-001, RNF-SEG-001], [Generación de viajes TAZ ordenados por
+    salida y tipos de vehículo.],
 
-    [`etl/network.py`], [RF-009, RF-010], [Invocación de netconvert y construcción del archivo de zonas TAZ.],
+    [`etl/sumo/demanda.py`], [RF-013, RF-021, RF-022], [Presets de transferencia modal y conteos por modo.],
 
-    [`etl/simulation.py`], [RF-011, RF-012], [Generación del archivo `.vtype.xml` e invocación de duarouter.],
+    [`etl/sumo/duarouter.py`, `simulation.py`, `proceso.py`], [RF-012, RNF-OBS-001], [Ruteo, simulación por TraCI, avance y cancelación de
+    procesos.],
 
-    [`etl/config.py`], [RF-013], [Lectura y validación del archivo `config.yaml`; soporte a variación paramétrica.],
+    [`etl/sumo/estilos.py`, `cierres.py`], [RF-023, RF-024], [Estilos de conducción y cierres viales.],
 
-    [`etl/validation.py`], [RF-014], [Comparación de volúmenes simulados vs. aforos HMD y cálculo del estadístico GEH.],
+    [`etl/sumo/fcd.py`, `kepler.py`], [RF-027], [Exportación de las trayectorias para el visor.],
 
-    [`etl/logger.py`], [RF-015, RNF-OBS-001], [Registro estructurado de eventos del pipeline en consola y archivo.],
+    [`etl/precalculadas.py`], [RF-025, RNF-REP-001], [Simulaciones precalculadas reproducibles.],
 
-    [`etl/checkpoint.py`], [RF-016, RNF-CON-002], [Persistencia del estado por fase y reanudación de ejecuciones interrumpidas.],
+    [`etl/sumo/intersecciones.py`, `programas_tls.py`, `subred.py`, `priorizacion.py`, `evidencia.py`], [RF-028 a RF-032, RF-045],
+    [Intersecciones, programas, Webster, recorte de zonas, priorización y evidencia externa.],
 
-    [Pipeline completo], [RD-001, RD-002, RNF-PORT-001, RNF-PORT-002, RNF-REP-001], [Requerimientos que aplican al sistema como un todo, verificados en
-    CI o en prueba de integración completa.],
+    [`etl/sumo/semaforo_nuevo.py`, `demanda_zona.py`, `escena3d.py`, `telemetria.py`], [RF-033, RF-034, RF-036, RF-037, RF-039], [Semáforo
+    propuesto, demanda de la zona, geometría de la escena e indicadores de riesgo.],
 
-    [`web/api.py`], [RF-017, RF-018], [Backend REST del módulo web. Expone los resultados de SUMO y recibe parámetros de configuración para nuevas
-    simulaciones.],
+    [`api/api.py`, `api/jobs.py`, `api/comparacion3d.py`], [RF-015, RF-018, RF-026, RF-031, RF-035, RF-040, RF-044, RD-003], [API REST/WebSocket, gestor de
+    corridas y bucle lockstep de las comparaciones 3D.],
 
-    [`web/frontend/`], [RF-019, RF-020], [Frontend del módulo web. Visualización de resultados y formulario de parametrización de simulaciones.]
+    [`kepler/src/`], [RF-017, RF-019, RF-020, RF-027, RF-034 a RF-039, RF-044, RD-004, RNF-USA-001], [Visor web: mapa, paneles y simulador 3D.],
+
+    [Por definir], [RF-014, RF-016, RF-041, RF-043], [Validación GEH, reanudación por fase, reporte de la comparación 3D y transporte público real.],
+
+    [Pipeline completo], [RD-001, RD-002, RNF-PORT-001, RNF-PORT-002], [Requerimientos que aplican al sistema como un todo.],
   ),
-  caption: [Distribución de requerimientos por módulo del pipeline.]
+  caption: [Distribución de requerimientos por módulo (v2.0).]
 ) <tabDistribucion>
 
 ]
