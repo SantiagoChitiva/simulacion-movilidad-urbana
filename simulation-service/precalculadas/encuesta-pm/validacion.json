@@ -1,0 +1,1515 @@
+{
+ "periodo": "PM",
+ "etiqueta": "solo viajes de la encuesta",
+ "puntos": 52,
+ "cumplen": 0,
+ "porcentaje": 0.0,
+ "cumple_criterio": false,
+ "geh_mediano": 37.23,
+ "razon_volumen": 0.032,
+ "criterio_porcentaje": 85.0,
+ "umbral_geh": 5.0,
+ "por_grupo": {
+  "calibracion": {
+   "puntos": 26,
+   "cumplen": 0,
+   "porcentaje": 0.0,
+   "cumple_criterio": false,
+   "geh_mediano": 31.64,
+   "razon_volumen": 0.04
+  },
+  "control": {
+   "puntos": 26,
+   "cumplen": 0,
+   "porcentaje": 0.0,
+   "cumple_criterio": false,
+   "geh_mediano": 41.87,
+   "razon_volumen": 0.028
+  }
+ },
+ "modos_simulados": [
+  "auto",
+  "moto",
+  "taxi",
+  "especial",
+  "escolar",
+  "bici",
+  "bus"
+ ],
+ "estaciones_no_simuladas": [],
+ "filas": [
+  {
+   "id": "BC_32",
+   "direccion": "AK 45 X CL 168",
+   "sentido": "N-S",
+   "edge": "-1078633690#17",
+   "via": null,
+   "lon": -74.046506,
+   "lat": 4.749379,
+   "modos": [
+    "bici"
+   ],
+   "hora_pico_simulada": null,
+   "simulado": 0.0,
+   "real": 157.0,
+   "geh": 17.72,
+   "cumple": false,
+   "grupo": "calibracion",
+   "simulado_por_modo": {
+    "bici": 0.0
+   },
+   "real_por_modo": {
+    "bici": 157.0
+   }
+  },
+  {
+   "id": "BC_32",
+   "direccion": "AK 45 X CL 168",
+   "sentido": "S-N",
+   "edge": "1078633690#17",
+   "via": null,
+   "lon": -74.046506,
+   "lat": 4.749379,
+   "modos": [
+    "bici"
+   ],
+   "hora_pico_simulada": null,
+   "simulado": 0.0,
+   "real": 163.5,
+   "geh": 18.08,
+   "cumple": false,
+   "grupo": "calibracion",
+   "simulado_por_modo": {
+    "bici": 0.0
+   },
+   "real_por_modo": {
+    "bici": 163.5
+   }
+  },
+  {
+   "id": "BC_33",
+   "direccion": "AK 7 X AC 170",
+   "sentido": "E-W",
+   "edge": "914692682#1",
+   "via": "Avenida Calle 170",
+   "lon": -74.022578,
+   "lat": 4.747007,
+   "modos": [
+    "bici"
+   ],
+   "hora_pico_simulada": null,
+   "simulado": 0.0,
+   "real": 45.0,
+   "geh": 9.49,
+   "cumple": false,
+   "grupo": "control",
+   "simulado_por_modo": {
+    "bici": 0.0
+   },
+   "real_por_modo": {
+    "bici": 45.0
+   }
+  },
+  {
+   "id": "BC_33",
+   "direccion": "AK 7 X AC 170",
+   "sentido": "W-E",
+   "edge": "1327209644#0",
+   "via": "Avenida Calle 170",
+   "lon": -74.022578,
+   "lat": 4.747007,
+   "modos": [
+    "bici"
+   ],
+   "hora_pico_simulada": null,
+   "simulado": 0.0,
+   "real": 118.0,
+   "geh": 15.36,
+   "cumple": false,
+   "grupo": "control",
+   "simulado_por_modo": {
+    "bici": 0.0
+   },
+   "real_por_modo": {
+    "bici": 118.0
+   }
+  },
+  {
+   "id": "BC_35",
+   "direccion": "AC 116 X AK 15",
+   "sentido": "E-W",
+   "edge": "1289641380#0",
+   "via": "Avenida Calle 116",
+   "lon": -74.043145,
+   "lat": 4.696338,
+   "modos": [
+    "bici"
+   ],
+   "hora_pico_simulada": null,
+   "simulado": 0.0,
+   "real": 425.5,
+   "geh": 29.17,
+   "cumple": false,
+   "grupo": "calibracion",
+   "simulado_por_modo": {
+    "bici": 0.0
+   },
+   "real_por_modo": {
+    "bici": 425.5
+   }
+  },
+  {
+   "id": "BC_35",
+   "direccion": "AC 116 X AK 15",
+   "sentido": "W-E",
+   "edge": "908623444#1",
+   "via": "Avenida Calle 116",
+   "lon": -74.043145,
+   "lat": 4.696338,
+   "modos": [
+    "bici"
+   ],
+   "hora_pico_simulada": 57600.0,
+   "simulado": 50.0,
+   "real": 185.0,
+   "geh": 12.45,
+   "cumple": false,
+   "grupo": "calibracion",
+   "simulado_por_modo": {
+    "bici": 50.0
+   },
+   "real_por_modo": {
+    "bici": 185.0
+   }
+  },
+  {
+   "id": "BC_42",
+   "direccion": "AC 183 X KR 19",
+   "sentido": "E-W",
+   "edge": "600399346#6",
+   "via": "Avenida Calle 183",
+   "lon": -74.040095,
+   "lat": 4.760315,
+   "modos": [
+    "bici"
+   ],
+   "hora_pico_simulada": null,
+   "simulado": 0.0,
+   "real": 105.0,
+   "geh": 14.49,
+   "cumple": false,
+   "grupo": "control",
+   "simulado_por_modo": {
+    "bici": 0.0
+   },
+   "real_por_modo": {
+    "bici": 105.0
+   }
+  },
+  {
+   "id": "BC_42",
+   "direccion": "AC 183 X KR 19",
+   "sentido": "W-E",
+   "edge": "1047040250#0",
+   "via": "Avenida Calle 183",
+   "lon": -74.040095,
+   "lat": 4.760315,
+   "modos": [
+    "bici"
+   ],
+   "hora_pico_simulada": null,
+   "simulado": 0.0,
+   "real": 234.0,
+   "geh": 21.63,
+   "cumple": false,
+   "grupo": "control",
+   "simulado_por_modo": {
+    "bici": 0.0
+   },
+   "real_por_modo": {
+    "bici": 234.0
+   }
+  },
+  {
+   "id": "BC_43",
+   "direccion": "AK 45 X AC 134",
+   "sentido": "E-W",
+   "edge": "24445846",
+   "via": null,
+   "lon": -74.051629,
+   "lat": 4.718899,
+   "modos": [
+    "bici"
+   ],
+   "hora_pico_simulada": null,
+   "simulado": 0.0,
+   "real": 212.0,
+   "geh": 20.59,
+   "cumple": false,
+   "grupo": "calibracion",
+   "simulado_por_modo": {
+    "bici": 0.0
+   },
+   "real_por_modo": {
+    "bici": 212.0
+   }
+  },
+  {
+   "id": "BC_43",
+   "direccion": "AK 45 X AC 134",
+   "sentido": "W-E",
+   "edge": "181376559",
+   "via": null,
+   "lon": -74.051629,
+   "lat": 4.718899,
+   "modos": [
+    "bici"
+   ],
+   "hora_pico_simulada": null,
+   "simulado": 0.0,
+   "real": 55.0,
+   "geh": 10.49,
+   "cumple": false,
+   "grupo": "calibracion",
+   "simulado_por_modo": {
+    "bici": 0.0
+   },
+   "real_por_modo": {
+    "bici": 55.0
+   }
+  },
+  {
+   "id": "BC_44",
+   "direccion": "AC 127 X AK 19",
+   "sentido": "N-S",
+   "edge": "89132109",
+   "via": "Avenida Carrera 19",
+   "lon": -74.048627,
+   "lat": 4.705579,
+   "modos": [
+    "bici"
+   ],
+   "hora_pico_simulada": null,
+   "simulado": 0.0,
+   "real": 32.0,
+   "geh": 8.0,
+   "cumple": false,
+   "grupo": "calibracion",
+   "simulado_por_modo": {
+    "bici": 0.0
+   },
+   "real_por_modo": {
+    "bici": 32.0
+   }
+  },
+  {
+   "id": "BC_44",
+   "direccion": "AC 127 X AK 19",
+   "sentido": "S-N",
+   "edge": "89438964",
+   "via": "Avenida Carrera 19",
+   "lon": -74.048627,
+   "lat": 4.705579,
+   "modos": [
+    "bici"
+   ],
+   "hora_pico_simulada": null,
+   "simulado": 0.0,
+   "real": 89.5,
+   "geh": 13.38,
+   "cumple": false,
+   "grupo": "calibracion",
+   "simulado_por_modo": {
+    "bici": 0.0
+   },
+   "real_por_modo": {
+    "bici": 89.5
+   }
+  },
+  {
+   "id": "BC_46",
+   "direccion": "AK 19 X  CL 142",
+   "sentido": "N-S",
+   "edge": "89086578#2",
+   "via": "Avenida Carrera 19",
+   "lon": -74.046205,
+   "lat": 4.724103,
+   "modos": [
+    "bici"
+   ],
+   "hora_pico_simulada": null,
+   "simulado": 0.0,
+   "real": 140.0,
+   "geh": 16.73,
+   "cumple": false,
+   "grupo": "calibracion",
+   "simulado_por_modo": {
+    "bici": 0.0
+   },
+   "real_por_modo": {
+    "bici": 140.0
+   }
+  },
+  {
+   "id": "BC_46",
+   "direccion": "AK 19 X  CL 142",
+   "sentido": "S-N",
+   "edge": "89111097#1",
+   "via": "Avenida Carrera 19",
+   "lon": -74.046205,
+   "lat": 4.724103,
+   "modos": [
+    "bici"
+   ],
+   "hora_pico_simulada": 57600.0,
+   "simulado": 1.0,
+   "real": 395.0,
+   "geh": 28.0,
+   "cumple": false,
+   "grupo": "calibracion",
+   "simulado_por_modo": {
+    "bici": 1.0
+   },
+   "real_por_modo": {
+    "bici": 395.0
+   }
+  },
+  {
+   "id": "BC_47",
+   "direccion": "AC 127 X AK 9",
+   "sentido": "N-S",
+   "edge": "1289380406",
+   "via": "Avenida Carrera 9",
+   "lon": -74.032898,
+   "lat": 4.703431,
+   "modos": [
+    "bici"
+   ],
+   "hora_pico_simulada": null,
+   "simulado": 0.0,
+   "real": 181.0,
+   "geh": 19.03,
+   "cumple": false,
+   "grupo": "control",
+   "simulado_por_modo": {
+    "bici": 0.0
+   },
+   "real_por_modo": {
+    "bici": 181.0
+   }
+  },
+  {
+   "id": "BC_47",
+   "direccion": "AC 127 X AK 9",
+   "sentido": "S-N",
+   "edge": "89131803",
+   "via": "Avenida Carrera 9",
+   "lon": -74.032898,
+   "lat": 4.703431,
+   "modos": [
+    "bici"
+   ],
+   "hora_pico_simulada": null,
+   "simulado": 0.0,
+   "real": 693.0,
+   "geh": 37.23,
+   "cumple": false,
+   "grupo": "control",
+   "simulado_por_modo": {
+    "bici": 0.0
+   },
+   "real_por_modo": {
+    "bici": 693.0
+   }
+  },
+  {
+   "id": "BC_53",
+   "direccion": "AC 134 X AK 9",
+   "sentido": "N-S",
+   "edge": "1289355710#0",
+   "via": "Avenida Carrera 9",
+   "lon": -74.032739,
+   "lat": 4.71288,
+   "modos": [
+    "bici"
+   ],
+   "hora_pico_simulada": 66600.0,
+   "simulado": 53.0,
+   "real": 150.0,
+   "geh": 9.63,
+   "cumple": false,
+   "grupo": "calibracion",
+   "simulado_por_modo": {
+    "bici": 53.0
+   },
+   "real_por_modo": {
+    "bici": 150.0
+   }
+  },
+  {
+   "id": "BC_53",
+   "direccion": "AC 134 X AK 9",
+   "sentido": "S-N",
+   "edge": "1289355712#0",
+   "via": "Avenida Carrera 9",
+   "lon": -74.032739,
+   "lat": 4.71288,
+   "modos": [
+    "bici"
+   ],
+   "hora_pico_simulada": null,
+   "simulado": 0.0,
+   "real": 812.0,
+   "geh": 40.3,
+   "cumple": false,
+   "grupo": "calibracion",
+   "simulado_por_modo": {
+    "bici": 0.0
+   },
+   "real_por_modo": {
+    "bici": 812.0
+   }
+  },
+  {
+   "id": "TPU_53",
+   "direccion": "AK 45 X CL 194",
+   "sentido": "S-N",
+   "edge": "601794960#1",
+   "via": "Avenida Carrera 45",
+   "lon": -74.042123,
+   "lat": 4.775341,
+   "modos": [
+    "bus"
+   ],
+   "hora_pico_simulada": 61200.0,
+   "simulado": 42.0,
+   "real": 6617.9,
+   "geh": 113.96,
+   "cumple": false,
+   "grupo": "control",
+   "simulado_por_modo": {
+    "bus": 42.0
+   },
+   "real_por_modo": {
+    "bus": 6617.9
+   }
+  },
+  {
+   "id": "TPU_54",
+   "direccion": "AC 134 X AK 9",
+   "sentido": "E-W",
+   "edge": "89131807#1",
+   "via": "Avenida Calle 134",
+   "lon": -74.033527,
+   "lat": 4.713094,
+   "modos": [
+    "bus"
+   ],
+   "hora_pico_simulada": 64800.0,
+   "simulado": 49.0,
+   "real": 2440.6,
+   "geh": 67.79,
+   "cumple": false,
+   "grupo": "control",
+   "simulado_por_modo": {
+    "bus": 49.0
+   },
+   "real_por_modo": {
+    "bus": 2440.6
+   }
+  },
+  {
+   "id": "TPU_54",
+   "direccion": "AC 134 X AK 9",
+   "sentido": "W-E",
+   "edge": "1155265828",
+   "via": "Avenida Calle 134",
+   "lon": -74.033527,
+   "lat": 4.713094,
+   "modos": [
+    "bus"
+   ],
+   "hora_pico_simulada": 57600.0,
+   "simulado": 10.0,
+   "real": 1222.5,
+   "geh": 48.84,
+   "cumple": false,
+   "grupo": "control",
+   "simulado_por_modo": {
+    "bus": 10.0
+   },
+   "real_por_modo": {
+    "bus": 1222.5
+   }
+  },
+  {
+   "id": "TPU_55",
+   "direccion": "AC 116 X AK 15",
+   "sentido": "E-W",
+   "edge": "89438686#1",
+   "via": "Avenida Calle 116",
+   "lon": -74.043565,
+   "lat": 4.696483,
+   "modos": [
+    "bus"
+   ],
+   "hora_pico_simulada": 65700.0,
+   "simulado": 25.0,
+   "real": 880.0,
+   "geh": 40.19,
+   "cumple": false,
+   "grupo": "calibracion",
+   "simulado_por_modo": {
+    "bus": 25.0
+   },
+   "real_por_modo": {
+    "bus": 880.0
+   }
+  },
+  {
+   "id": "TPU_55",
+   "direccion": "AC 116 X AK 15",
+   "sentido": "W-E",
+   "edge": "89442368#3",
+   "via": "Avenida Calle 116",
+   "lon": -74.043565,
+   "lat": 4.696483,
+   "modos": [
+    "bus"
+   ],
+   "hora_pico_simulada": 59400.0,
+   "simulado": 25.0,
+   "real": 571.2,
+   "geh": 31.64,
+   "cumple": false,
+   "grupo": "calibracion",
+   "simulado_por_modo": {
+    "bus": 25.0
+   },
+   "real_por_modo": {
+    "bus": 571.2
+   }
+  },
+  {
+   "id": "TPU_56",
+   "direccion": "AC 127 X AK 19",
+   "sentido": "N-S",
+   "edge": "932279441#3",
+   "via": "Avenida Carrera 19",
+   "lon": -74.048074,
+   "lat": 4.709806,
+   "modos": [
+    "bus"
+   ],
+   "hora_pico_simulada": 59400.0,
+   "simulado": 20.0,
+   "real": 498.8,
+   "geh": 29.73,
+   "cumple": false,
+   "grupo": "calibracion",
+   "simulado_por_modo": {
+    "bus": 20.0
+   },
+   "real_por_modo": {
+    "bus": 498.8
+   }
+  },
+  {
+   "id": "TPU_56",
+   "direccion": "AC 127 X AK 19",
+   "sentido": "S-N",
+   "edge": "89132048#5",
+   "via": "Avenida Carrera 19",
+   "lon": -74.048074,
+   "lat": 4.709806,
+   "modos": [
+    "bus"
+   ],
+   "hora_pico_simulada": 59400.0,
+   "simulado": 17.0,
+   "real": 732.5,
+   "geh": 36.96,
+   "cumple": false,
+   "grupo": "calibracion",
+   "simulado_por_modo": {
+    "bus": 17.0
+   },
+   "real_por_modo": {
+    "bus": 732.5
+   }
+  },
+  {
+   "id": "TPU_64",
+   "direccion": "CL 183 KR 19",
+   "sentido": "E-W",
+   "edge": "600399346#1",
+   "via": "Avenida Calle 183",
+   "lon": -74.038031,
+   "lat": 4.760242,
+   "modos": [
+    "bus"
+   ],
+   "hora_pico_simulada": 60300.0,
+   "simulado": 30.0,
+   "real": 2336.1,
+   "geh": 67.05,
+   "cumple": false,
+   "grupo": "control",
+   "simulado_por_modo": {
+    "bus": 30.0
+   },
+   "real_por_modo": {
+    "bus": 2336.1
+   }
+  },
+  {
+   "id": "TPU_64",
+   "direccion": "CL 183 KR 19",
+   "sentido": "W-E",
+   "edge": "1047040250#5",
+   "via": "Avenida Calle 183",
+   "lon": -74.038031,
+   "lat": 4.760242,
+   "modos": [
+    "bus"
+   ],
+   "hora_pico_simulada": 62100.0,
+   "simulado": 32.0,
+   "real": 3422.1,
+   "geh": 81.58,
+   "cumple": false,
+   "grupo": "control",
+   "simulado_por_modo": {
+    "bus": 32.0
+   },
+   "real_por_modo": {
+    "bus": 3422.1
+   }
+  },
+  {
+   "id": "TPU_65",
+   "direccion": "KR 47 X AC 134",
+   "sentido": "E-W",
+   "edge": "24445846",
+   "via": null,
+   "lon": -74.051642,
+   "lat": 4.718901,
+   "modos": [
+    "bus"
+   ],
+   "hora_pico_simulada": null,
+   "simulado": 0.0,
+   "real": 1358.8,
+   "geh": 52.13,
+   "cumple": false,
+   "grupo": "calibracion",
+   "simulado_por_modo": {
+    "bus": 0.0
+   },
+   "real_por_modo": {
+    "bus": 1358.8
+   }
+  },
+  {
+   "id": "TPU_65",
+   "direccion": "KR 47 X AC 134",
+   "sentido": "W-E",
+   "edge": "181376559",
+   "via": null,
+   "lon": -74.051642,
+   "lat": 4.718901,
+   "modos": [
+    "bus"
+   ],
+   "hora_pico_simulada": null,
+   "simulado": 0.0,
+   "real": 1118.0,
+   "geh": 47.29,
+   "cumple": false,
+   "grupo": "calibracion",
+   "simulado_por_modo": {
+    "bus": 0.0
+   },
+   "real_por_modo": {
+    "bus": 1118.0
+   }
+  },
+  {
+   "id": "TPU_69",
+   "direccion": "AC 147 X AK 9",
+   "sentido": "N-S",
+   "edge": "1067312448",
+   "via": "Avenida Carrera 9",
+   "lon": -74.032328,
+   "lat": 4.725622,
+   "modos": [
+    "bus"
+   ],
+   "hora_pico_simulada": 62100.0,
+   "simulado": 27.0,
+   "real": 1433.2,
+   "geh": 52.04,
+   "cumple": false,
+   "grupo": "calibracion",
+   "simulado_por_modo": {
+    "bus": 27.0
+   },
+   "real_por_modo": {
+    "bus": 1433.2
+   }
+  },
+  {
+   "id": "TPU_69",
+   "direccion": "AC 147 X AK 9",
+   "sentido": "S-N",
+   "edge": "1067312449#1",
+   "via": "Avenida Carrera 9",
+   "lon": -74.032328,
+   "lat": 4.725622,
+   "modos": [
+    "bus"
+   ],
+   "hora_pico_simulada": 64800.0,
+   "simulado": 24.0,
+   "real": 1225.0,
+   "geh": 48.06,
+   "cumple": false,
+   "grupo": "calibracion",
+   "simulado_por_modo": {
+    "bus": 24.0
+   },
+   "real_por_modo": {
+    "bus": 1225.0
+   }
+  },
+  {
+   "id": "TPU_70",
+   "direccion": "AK 7 X AC 170",
+   "sentido": "E-W",
+   "edge": "914692686#5",
+   "via": "Avenida Calle 170",
+   "lon": -74.027035,
+   "lat": 4.747662,
+   "modos": [
+    "bus"
+   ],
+   "hora_pico_simulada": 60300.0,
+   "simulado": 27.0,
+   "real": 2203.0,
+   "geh": 65.17,
+   "cumple": false,
+   "grupo": "control",
+   "simulado_por_modo": {
+    "bus": 27.0
+   },
+   "real_por_modo": {
+    "bus": 2203.0
+   }
+  },
+  {
+   "id": "TPU_70",
+   "direccion": "AK 7 X AC 170",
+   "sentido": "W-E",
+   "edge": "914693382#1",
+   "via": "Avenida Calle 170",
+   "lon": -74.027035,
+   "lat": 4.747662,
+   "modos": [
+    "bus"
+   ],
+   "hora_pico_simulada": 58500.0,
+   "simulado": 16.0,
+   "real": 913.8,
+   "geh": 41.64,
+   "cumple": false,
+   "grupo": "control",
+   "simulado_por_modo": {
+    "bus": 16.0
+   },
+   "real_por_modo": {
+    "bus": 913.8
+   }
+  },
+  {
+   "id": "TPU_77",
+   "direccion": "AK 19 X  CL 142",
+   "sentido": "N-S",
+   "edge": "89086578#2",
+   "via": "Avenida Carrera 19",
+   "lon": -74.046116,
+   "lat": 4.724097,
+   "modos": [
+    "bus"
+   ],
+   "hora_pico_simulada": 64800.0,
+   "simulado": 14.0,
+   "real": 1080.2,
+   "geh": 45.58,
+   "cumple": false,
+   "grupo": "control",
+   "simulado_por_modo": {
+    "bus": 14.0
+   },
+   "real_por_modo": {
+    "bus": 1080.2
+   }
+  },
+  {
+   "id": "TPU_77",
+   "direccion": "AK 19 X  CL 142",
+   "sentido": "S-N",
+   "edge": "89111097#1",
+   "via": "Avenida Carrera 19",
+   "lon": -74.046116,
+   "lat": 4.724097,
+   "modos": [
+    "bus"
+   ],
+   "hora_pico_simulada": 63900.0,
+   "simulado": 24.0,
+   "real": 2894.6,
+   "geh": 75.15,
+   "cumple": false,
+   "grupo": "control",
+   "simulado_por_modo": {
+    "bus": 24.0
+   },
+   "real_por_modo": {
+    "bus": 2894.6
+   }
+  },
+  {
+   "id": "TPU_78",
+   "direccion": "CL 192 X KR 2",
+   "sentido": "N-S",
+   "edge": "102645118#2",
+   "via": "Calle 190A",
+   "lon": -74.02573,
+   "lat": 4.767272,
+   "modos": [
+    "bus"
+   ],
+   "hora_pico_simulada": 59400.0,
+   "simulado": 29.0,
+   "real": 841.0,
+   "geh": 38.93,
+   "cumple": false,
+   "grupo": "control",
+   "simulado_por_modo": {
+    "bus": 29.0
+   },
+   "real_por_modo": {
+    "bus": 841.0
+   }
+  },
+  {
+   "id": "TPU_78",
+   "direccion": "CL 192 X KR 2",
+   "sentido": "S-N",
+   "edge": "-526225113#0",
+   "via": "Carrera 5B",
+   "lon": -74.02573,
+   "lat": 4.767272,
+   "modos": [
+    "bus"
+   ],
+   "hora_pico_simulada": 60300.0,
+   "simulado": 21.0,
+   "real": 626.8,
+   "geh": 33.66,
+   "cumple": false,
+   "grupo": "control",
+   "simulado_por_modo": {
+    "bus": 21.0
+   },
+   "real_por_modo": {
+    "bus": 626.8
+   }
+  },
+  {
+   "id": "TP_102",
+   "direccion": "SUBIDA EL CODITO",
+   "sentido": "N-S",
+   "edge": "-88854171#1",
+   "via": "Carrera 5",
+   "lon": -74.025245,
+   "lat": 4.766555,
+   "modos": [
+    "auto",
+    "moto",
+    "taxi",
+    "especial",
+    "escolar",
+    "bici"
+   ],
+   "hora_pico_simulada": null,
+   "simulado": 0.0,
+   "real": 237.4,
+   "geh": 21.79,
+   "cumple": false,
+   "grupo": "control",
+   "simulado_por_modo": {
+    "auto": 0.0,
+    "moto": 0.0,
+    "taxi": 0.0,
+    "especial": 0.0,
+    "escolar": 0.0,
+    "bici": 0.0
+   },
+   "real_por_modo": {
+    "auto": 69.0,
+    "moto": 127.0,
+    "taxi": 6.8,
+    "especial": 0.6,
+    "escolar": 21.0,
+    "bici": 13.0
+   }
+  },
+  {
+   "id": "TP_102",
+   "direccion": "SUBIDA EL CODITO",
+   "sentido": "S-N",
+   "edge": "88854171#1",
+   "via": "Carrera 5",
+   "lon": -74.025245,
+   "lat": 4.766555,
+   "modos": [
+    "auto",
+    "moto",
+    "taxi",
+    "especial",
+    "escolar",
+    "bici"
+   ],
+   "hora_pico_simulada": null,
+   "simulado": 0.0,
+   "real": 202.2,
+   "geh": 20.11,
+   "cumple": false,
+   "grupo": "control",
+   "simulado_por_modo": {
+    "auto": 0.0,
+    "moto": 0.0,
+    "taxi": 0.0,
+    "especial": 0.0,
+    "escolar": 0.0,
+    "bici": 0.0
+   },
+   "real_por_modo": {
+    "auto": 85.0,
+    "moto": 92.0,
+    "taxi": 5.2,
+    "especial": 0.0,
+    "escolar": 14.0,
+    "bici": 6.0
+   }
+  },
+  {
+   "id": "TP_67",
+   "direccion": "AC 183 X KR 15",
+   "sentido": "E-W",
+   "edge": "600399346#6",
+   "via": "Avenida Calle 183",
+   "lon": -74.040095,
+   "lat": 4.760315,
+   "modos": [
+    "auto",
+    "moto",
+    "taxi",
+    "especial",
+    "escolar",
+    "bici"
+   ],
+   "hora_pico_simulada": 61200.0,
+   "simulado": 56.0,
+   "real": 2040.0,
+   "geh": 61.29,
+   "cumple": false,
+   "grupo": "calibracion",
+   "simulado_por_modo": {
+    "auto": 56.0,
+    "moto": 0.0,
+    "taxi": 0.0,
+    "especial": 0.0,
+    "escolar": 0.0,
+    "bici": 0.0
+   },
+   "real_por_modo": {
+    "auto": 984.0,
+    "moto": 880.0,
+    "taxi": 0.0,
+    "especial": 0.0,
+    "escolar": 106.0,
+    "bici": 70.0
+   }
+  },
+  {
+   "id": "TP_67",
+   "direccion": "AC 183 X KR 15",
+   "sentido": "W-E",
+   "edge": "1047040250#0",
+   "via": "Avenida Calle 183",
+   "lon": -74.040095,
+   "lat": 4.760315,
+   "modos": [
+    "auto",
+    "moto",
+    "taxi",
+    "especial",
+    "escolar",
+    "bici"
+   ],
+   "hora_pico_simulada": 61200.0,
+   "simulado": 50.0,
+   "real": 1800.0,
+   "geh": 57.54,
+   "cumple": false,
+   "grupo": "calibracion",
+   "simulado_por_modo": {
+    "auto": 50.0,
+    "moto": 0.0,
+    "taxi": 0.0,
+    "especial": 0.0,
+    "escolar": 0.0,
+    "bici": 0.0
+   },
+   "real_por_modo": {
+    "auto": 824.0,
+    "moto": 780.0,
+    "taxi": 0.0,
+    "especial": 0.0,
+    "escolar": 66.0,
+    "bici": 130.0
+   }
+  },
+  {
+   "id": "TP_70",
+   "direccion": "AC170 X KR8",
+   "sentido": "E-W",
+   "edge": "914692682#1",
+   "via": "Avenida Calle 170",
+   "lon": -74.022578,
+   "lat": 4.747007,
+   "modos": [
+    "auto",
+    "moto",
+    "taxi",
+    "especial",
+    "escolar",
+    "bici"
+   ],
+   "hora_pico_simulada": null,
+   "simulado": 0.0,
+   "real": 629.9,
+   "geh": 35.49,
+   "cumple": false,
+   "grupo": "calibracion",
+   "simulado_por_modo": {
+    "auto": 0.0,
+    "moto": 0.0,
+    "taxi": 0.0,
+    "especial": 0.0,
+    "escolar": 0.0,
+    "bici": 0.0
+   },
+   "real_por_modo": {
+    "auto": 301.0,
+    "moto": 278.0,
+    "taxi": 13.8,
+    "especial": 1.1,
+    "escolar": 18.0,
+    "bici": 18.0
+   }
+  },
+  {
+   "id": "TP_70",
+   "direccion": "AC170 X KR8",
+   "sentido": "W-E",
+   "edge": "1327209644#0",
+   "via": "Avenida Calle 170",
+   "lon": -74.022578,
+   "lat": 4.747007,
+   "modos": [
+    "auto",
+    "moto",
+    "taxi",
+    "especial",
+    "escolar",
+    "bici"
+   ],
+   "hora_pico_simulada": 57600.0,
+   "simulado": 100.0,
+   "real": 692.1,
+   "geh": 29.75,
+   "cumple": false,
+   "grupo": "calibracion",
+   "simulado_por_modo": {
+    "auto": 0.0,
+    "moto": 100.0,
+    "taxi": 0.0,
+    "especial": 0.0,
+    "escolar": 0.0,
+    "bici": 0.0
+   },
+   "real_por_modo": {
+    "auto": 288.0,
+    "moto": 321.0,
+    "taxi": 22.2,
+    "especial": 2.9,
+    "escolar": 48.0,
+    "bici": 10.0
+   }
+  },
+  {
+   "id": "TP_73",
+   "direccion": "AC 134 X AK 9",
+   "sentido": "E-W",
+   "edge": "89131807#1",
+   "via": "Avenida Calle 134",
+   "lon": -74.032739,
+   "lat": 4.71288,
+   "modos": [
+    "auto",
+    "moto",
+    "taxi",
+    "especial",
+    "escolar",
+    "bici"
+   ],
+   "hora_pico_simulada": 58500.0,
+   "simulado": 28.0,
+   "real": 1042.2,
+   "geh": 43.84,
+   "cumple": false,
+   "grupo": "control",
+   "simulado_por_modo": {
+    "auto": 28.0,
+    "moto": 0.0,
+    "taxi": 0.0,
+    "especial": 0.0,
+    "escolar": 0.0,
+    "bici": 0.0
+   },
+   "real_por_modo": {
+    "auto": 699.0,
+    "moto": 269.0,
+    "taxi": 36.5,
+    "especial": 5.7,
+    "escolar": 16.0,
+    "bici": 16.0
+   }
+  },
+  {
+   "id": "TP_73",
+   "direccion": "AC 134 X AK 9",
+   "sentido": "W-E",
+   "edge": "89132240#0",
+   "via": "Avenida Calle 134",
+   "lon": -74.032739,
+   "lat": 4.71288,
+   "modos": [
+    "auto",
+    "moto",
+    "taxi",
+    "especial",
+    "escolar",
+    "bici"
+   ],
+   "hora_pico_simulada": 57600.0,
+   "simulado": 50.0,
+   "real": 1067.8,
+   "geh": 43.05,
+   "cumple": false,
+   "grupo": "control",
+   "simulado_por_modo": {
+    "auto": 50.0,
+    "moto": 0.0,
+    "taxi": 0.0,
+    "especial": 0.0,
+    "escolar": 0.0,
+    "bici": 0.0
+   },
+   "real_por_modo": {
+    "auto": 794.0,
+    "moto": 194.0,
+    "taxi": 28.5,
+    "especial": 3.3,
+    "escolar": 19.0,
+    "bici": 29.0
+   }
+  },
+  {
+   "id": "TP_75",
+   "direccion": "AK9 X AC127",
+   "sentido": "N-S",
+   "edge": "1289380406",
+   "via": "Avenida Carrera 9",
+   "lon": -74.032898,
+   "lat": 4.703431,
+   "modos": [
+    "auto",
+    "moto",
+    "taxi",
+    "especial",
+    "escolar",
+    "bici"
+   ],
+   "hora_pico_simulada": 61200.0,
+   "simulado": 193.0,
+   "real": 1847.9,
+   "geh": 51.81,
+   "cumple": false,
+   "grupo": "calibracion",
+   "simulado_por_modo": {
+    "auto": 193.0,
+    "moto": 0.0,
+    "taxi": 0.0,
+    "especial": 0.0,
+    "escolar": 0.0,
+    "bici": 0.0
+   },
+   "real_por_modo": {
+    "auto": 1234.0,
+    "moto": 503.0,
+    "taxi": 53.1,
+    "especial": 15.8,
+    "escolar": 37.0,
+    "bici": 5.0
+   }
+  },
+  {
+   "id": "TP_75",
+   "direccion": "AK9 X AC127",
+   "sentido": "S-N",
+   "edge": "89131803",
+   "via": "Avenida Carrera 9",
+   "lon": -74.032898,
+   "lat": 4.703431,
+   "modos": [
+    "auto",
+    "moto",
+    "taxi",
+    "especial",
+    "escolar",
+    "bici"
+   ],
+   "hora_pico_simulada": 60300.0,
+   "simulado": 173.0,
+   "real": 2456.1,
+   "geh": 62.97,
+   "cumple": false,
+   "grupo": "calibracion",
+   "simulado_por_modo": {
+    "auto": 123.0,
+    "moto": 50.0,
+    "taxi": 0.0,
+    "especial": 0.0,
+    "escolar": 0.0,
+    "bici": 0.0
+   },
+   "real_por_modo": {
+    "auto": 1650.0,
+    "moto": 652.0,
+    "taxi": 65.9,
+    "especial": 11.2,
+    "escolar": 44.0,
+    "bici": 33.0
+   }
+  },
+  {
+   "id": "TP_89",
+   "direccion": "AUTONORTE X AC116",
+   "sentido": "S-N",
+   "edge": "948520236",
+   "via": "Avenida Carrera 45",
+   "lon": -74.055137,
+   "lat": 4.699514,
+   "modos": [
+    "auto",
+    "moto",
+    "taxi",
+    "especial",
+    "escolar",
+    "bici"
+   ],
+   "hora_pico_simulada": null,
+   "simulado": 0.0,
+   "real": 5323.0,
+   "geh": 103.18,
+   "cumple": false,
+   "grupo": "control",
+   "simulado_por_modo": {
+    "auto": 0.0,
+    "moto": 0.0,
+    "taxi": 0.0,
+    "especial": 0.0,
+    "escolar": 0.0,
+    "bici": 0.0
+   },
+   "real_por_modo": {
+    "auto": 3545.0,
+    "moto": 1641.0,
+    "taxi": 32.7,
+    "especial": 3.3,
+    "escolar": 70.0,
+    "bici": 31.0
+   }
+  },
+  {
+   "id": "TP_90",
+   "direccion": "AK19 X  CL142",
+   "sentido": "N-S",
+   "edge": "89086578#2",
+   "via": "Avenida Carrera 19",
+   "lon": -74.046205,
+   "lat": 4.724103,
+   "modos": [
+    "auto",
+    "moto",
+    "taxi",
+    "especial",
+    "escolar",
+    "bici"
+   ],
+   "hora_pico_simulada": 57600.0,
+   "simulado": 50.0,
+   "real": 1037.5,
+   "geh": 42.35,
+   "cumple": false,
+   "grupo": "control",
+   "simulado_por_modo": {
+    "auto": 0.0,
+    "moto": 0.0,
+    "taxi": 0.0,
+    "especial": 0.0,
+    "escolar": 50.0,
+    "bici": 0.0
+   },
+   "real_por_modo": {
+    "auto": 484.0,
+    "moto": 473.0,
+    "taxi": 40.2,
+    "especial": 17.3,
+    "escolar": 16.0,
+    "bici": 7.0
+   }
+  },
+  {
+   "id": "TP_90",
+   "direccion": "AK19 X  CL142",
+   "sentido": "S-N",
+   "edge": "89111097#1",
+   "via": "Avenida Carrera 19",
+   "lon": -74.046205,
+   "lat": 4.724103,
+   "modos": [
+    "auto",
+    "moto",
+    "taxi",
+    "especial",
+    "escolar",
+    "bici"
+   ],
+   "hora_pico_simulada": 57600.0,
+   "simulado": 1.0,
+   "real": 879.5,
+   "geh": 41.87,
+   "cumple": false,
+   "grupo": "control",
+   "simulado_por_modo": {
+    "auto": 0.0,
+    "moto": 0.0,
+    "taxi": 0.0,
+    "especial": 0.0,
+    "escolar": 0.0,
+    "bici": 1.0
+   },
+   "real_por_modo": {
+    "auto": 484.0,
+    "moto": 309.0,
+    "taxi": 33.8,
+    "especial": 13.7,
+    "escolar": 13.0,
+    "bici": 26.0
+   }
+  },
+  {
+   "id": "TP_92",
+   "direccion": "AK9 X AC147",
+   "sentido": "N-S",
+   "edge": "353082119",
+   "via": "Avenida Carrera 9",
+   "lon": -74.032187,
+   "lat": 4.725351,
+   "modos": [
+    "auto",
+    "moto",
+    "taxi",
+    "especial",
+    "escolar",
+    "bici"
+   ],
+   "hora_pico_simulada": 62100.0,
+   "simulado": 218.0,
+   "real": 1121.0,
+   "geh": 34.9,
+   "cumple": false,
+   "grupo": "control",
+   "simulado_por_modo": {
+    "auto": 218.0,
+    "moto": 0.0,
+    "taxi": 0.0,
+    "especial": 0.0,
+    "escolar": 0.0,
+    "bici": 0.0
+   },
+   "real_por_modo": {
+    "auto": 728.0,
+    "moto": 349.0,
+    "taxi": 0.0,
+    "especial": 0.0,
+    "escolar": 44.0,
+    "bici": 0.0
+   }
+  },
+  {
+   "id": "TP_92",
+   "direccion": "AK9 X AC147",
+   "sentido": "S-N",
+   "edge": "1067312450#0",
+   "via": "Avenida Carrera 9",
+   "lon": -74.032187,
+   "lat": 4.725351,
+   "modos": [
+    "auto",
+    "moto",
+    "taxi",
+    "especial",
+    "escolar",
+    "bici"
+   ],
+   "hora_pico_simulada": 61200.0,
+   "simulado": 436.0,
+   "real": 1315.0,
+   "geh": 29.71,
+   "cumple": false,
+   "grupo": "control",
+   "simulado_por_modo": {
+    "auto": 196.0,
+    "moto": 121.0,
+    "taxi": 64.0,
+    "especial": 50.0,
+    "escolar": 0.0,
+    "bici": 5.0
+   },
+   "real_por_modo": {
+    "auto": 799.0,
+    "moto": 459.0,
+    "taxi": 0.0,
+    "especial": 0.0,
+    "escolar": 29.0,
+    "bici": 28.0
+   }
+  }
+ ]
+}
