@@ -11,10 +11,11 @@ precalculadas/<preset>/:
 - meta.json: parámetros, resumen y la huella de los insumos con que se generó.
 
 Cada precalculada se identifica por una clave: el preset ("encuesta") o, para la ventana
-de la tarde, el preset con "-pm" ("encuesta-pm"). Todas incluyen los buses del GTFS y el
-tráfico de paso calibrado con los aforos si el escenario los tiene.
+de la tarde, el preset con "-pm" ("encuesta-pm"). Incluyen los buses del GTFS si el
+escenario los tiene. El tráfico de paso es opcional (--paso): con él cada corrida tarda más
+de una hora y la red se satura (ver trafico_paso.py), así que por defecto no se incluye.
 
-Uso: python -m etl.precalculadas [preset ...] [--pm] [--semilla N]   (sin presets: los cuatro)
+Uso: python -m etl.precalculadas [preset ...] [--pm] [--paso] [--semilla N]   (sin presets: los cuatro)
 """
 import argparse
 import gzip
@@ -89,6 +90,7 @@ def generar(
     on_progreso: OnProgreso = _sin_aviso,
     ejecutar: Callable[..., Any] = run_pipeline,
     ventana: str = "am",
+    trafico_paso: bool = False,
 ) -> dict[str, Any]:
     """Simula un preset con sus conteos por defecto y guarda lo que necesita el visor."""
     escenario = ScenarioPaths.from_name(DEFAULT_SCENARIO)
@@ -99,7 +101,7 @@ def generar(
     shutil.rmtree(paths.run_dir, ignore_errors=True)   # restos de un intento anterior
     demanda = DemandaConfig(
         preset, conteos, ventana=ventana,
-        trafico_paso=archivo_trafico_paso(VENTANAS[ventana][0]) is not None,
+        trafico_paso=trafico_paso and archivo_trafico_paso(VENTANAS[ventana][0]) is not None,
         transporte_publico=archivos_transporte_publico(escenario) is not None,
     )
 
@@ -207,13 +209,14 @@ def main(argv: list[str] | None = None) -> None:
                         help=f"presets a generar (por defecto todos): {', '.join(p.value for p in Preset)}")
     parser.add_argument("--semilla", type=int, default=None, help="semilla de SUMO (por defecto la del .sumocfg)")
     parser.add_argument("--pm", action="store_true", help="ventana de la tarde (16:00-19:00) en vez de la mañana")
+    parser.add_argument("--paso", action="store_true", help="incluir el tráfico de paso calibrado con los aforos")
     args = parser.parse_args(argv)
 
     ventana = "pm" if args.pm else "am"
     for valor in args.presets or [p.value for p in Preset]:
         preset = Preset(valor)
         print(f"Generando '{clave(preset, ventana)}'...", flush=True)
-        meta = generar(preset, args.semilla, _imprimir_avance(valor), ventana=ventana)
+        meta = generar(preset, args.semilla, _imprimir_avance(valor), ventana=ventana, trafico_paso=args.paso)
         mb = lambda n: f"{n / 1e6:.1f} MB"
         # solo ASCII: la consola de Windows suele estar en cp1252
         print(f"  listo: {meta['resultado'].get('trips_kepler', 0)} trips, "

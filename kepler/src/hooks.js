@@ -5,6 +5,7 @@ import {
   crearSimulacion,
   listarSimulaciones,
   obtenerSimulacion,
+  reanudarSimulacion,
 } from './api';
 
 const INTERVALO_CONSULTA_MS = 2000;
@@ -45,7 +46,8 @@ export function useCorridas(onTerminada) {
   // al abrir: historial, y retomar una corrida que siga en curso
   useEffect(() => {
     refrescar().then((h) => {
-      const pendiente = h?.find((c) => !ESTADOS_FINALES.has(c.estado));
+      // una en curso, o la última si quedó interrumpida por un reinicio del servicio (se puede reanudar)
+      const pendiente = h?.find((c) => !ESTADOS_FINALES.has(c.estado)) ?? (h?.[0]?.estado === 'error' ? h[0] : null);
       if (pendiente) setActiva(pendiente);
     });
   }, [refrescar]);
@@ -88,10 +90,18 @@ export function useCorridas(onTerminada) {
       .catch((e) => setError(e.message));
   }, [activa]);
 
+  const reanudar = useCallback(() => {
+    if (!activa) return;
+    setError(null);
+    reanudarSimulacion(activa.id)
+      .then(setActiva)
+      .catch((e) => setError(e.message));
+  }, [activa]);
+
   const descartar = useCallback(() => {
     setActiva(null);
     setError(null);
   }, []);
 
-  return { historial, activa, enCurso, error, lanzar, cancelar, descartar };
+  return { historial, activa, enCurso, error, lanzar, cancelar, reanudar, descartar };
 }

@@ -71,7 +71,7 @@ export default function PanelDemanda({
   const [estiloId, setEstiloId] = useState('normal');
   const [opciones, setOpciones] = useState(null);   // /demanda/opciones
   const [ventana, setVentana] = useState('am');
-  const [traficoPaso, setTraficoPaso] = useState(true);
+  const [traficoPaso, setTraficoPaso] = useState(false);
   const [transportePublico, setTransportePublico] = useState(true);
   const [asignacion, setAsignacion] = useState(false);
 
@@ -184,7 +184,7 @@ export default function PanelDemanda({
         <div className="pd-opciones">
           <label title={hayPaso ? '' : 'No hay tráfico de paso generado para este horario'}>
             <input type="checkbox" checked={pasoPedido} disabled={!hayPaso} onChange={(e) => setTraficoPaso(e.target.checked)} />
-            Tráfico que atraviesa Usaquén (calibrado con los aforos)
+            Tráfico que atraviesa Usaquén (calibrado con los aforos; más de una hora de simulación)
           </label>
           <label title={hayPublico ? '' : 'El escenario no tiene los buses del GTFS'}>
             <input type="checkbox" checked={publicoPedido} disabled={!hayPublico} onChange={(e) => setTransportePublico(e.target.checked)} />

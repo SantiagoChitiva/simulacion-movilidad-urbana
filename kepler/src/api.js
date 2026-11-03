@@ -42,6 +42,9 @@ export const listarPrecalculadas = () =>
 export const obtenerSimulacion = (id) => pedir(`/simulaciones/${encodeURIComponent(id)}`);
 export const cancelarSimulacion = (id) =>
   pedir(`/simulaciones/${encodeURIComponent(id)}/cancelar`, { method: 'POST' });
+// vuelve a correr una simulación con error, reutilizando las etapas que ya terminaron
+export const reanudarSimulacion = (id) =>
+  pedir(`/simulaciones/${encodeURIComponent(id)}/reanudar`, { method: 'POST' });
 
 export const crearSimulacion = ({
   preset, conteos, semilla, estilo, cierres, ventana, trafico_paso, transporte_publico, asignacion_iterativa,

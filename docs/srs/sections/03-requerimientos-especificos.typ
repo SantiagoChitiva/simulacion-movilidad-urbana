@@ -298,7 +298,7 @@ redactan con la forma \"El sistema debe #sym.dots\", y se organizan en cinco fun
   contener únicamente viajes con hora de inicio entre 6:00 y 8:59.],
   prioridad: [Alta],
   modulo: [`simulation-service/src/etl/sumo/configuration.py`],
-  estado: [Parcial. La versión actual simula la ventana AM de 7:00 a 10:00 (`HORA_INI`, `HORA_FIN`); PM y nocturno quedan pendientes.],
+  estado: [Implementado para las puntas AM (7:00 a 10:00) y PM (16:00 a 19:00), las dos con aforos (`VENTANAS` en `configuration.py`, `DemandaConfig.ventana`); la ventana nocturna no se simula.],
   fecha: [],
 )
 
@@ -378,7 +378,7 @@ redactan con la forma \"El sistema debe #sym.dots\", y se organizan en cinco fun
   matriz .od.],
   prioridad: [Alta],
   modulo: [`simulation-service/src/etl/sumo/duarouter.py`],
-  estado: [Parcial: una sola pasada de duarouter (`--ignore-errors --repair`, viajes ordenados por `depart`); las iteraciones de asignación dinámica (duaIterate) no se implementaron.],
+  estado: [Implementado: una pasada de duarouter por defecto (`--ignore-errors --repair`, viajes ordenados por `depart`) y, como opción, asignación iterativa con duaIterate en mesosim (`asignacion.py`).],
   fecha: [],
 )
 
@@ -501,7 +501,7 @@ redactan con la forma \"El sistema debe #sym.dots\", y se organizan en cinco fun
   usuario selecciona la simulación. Verificable con prueba manual ante el director.],
   prioridad: [Alta],
   modulo: [`kepler/src/App.jsx`],
-  estado: [Parcial. El visor anima los viajes por modo y muestra volúmenes por acceso de cada intersección; tiempos de viaje y GEH por punto de aforo quedan pendientes.],
+  estado: [Implementado. El visor anima los viajes por modo, muestra volúmenes por acceso de cada intersección y, en la pestaña Validar, el GEH por punto de aforo en tabla y mapa.],
   fecha: [],
 )
 
@@ -604,7 +604,7 @@ redactan con la forma \"El sistema debe #sym.dots\", y se organizan en cinco fun
   porcentaje de puntos con GEH $<$ 5.],
   prioridad: [Alta],
   modulo: [Módulo de Validación (etl/validation.py)],
-  estado: [Pendiente (planeado para la Fase 4).],
+  estado: [Implementado en `etl/sumo/aforos.py` y `etl/sumo/validacion.py`: los aforos HMD de la EODI se ubican en la red por los shapefiles de estaciones y cada corrida escribe `validacion.csv` y `validacion.json`, con el porcentaje de puntos con GEH < 5 por grupo de calibración y de control.],
   fecha: [],
 )
 
@@ -638,7 +638,7 @@ redactan con la forma \"El sistema debe #sym.dots\", y se organizan en cinco fun
   sistema debe saltar las fases F1-F3 y comenzar desde F4, produciendo artefactos idénticos a una ejecución completa.],
   prioridad: [Media],
   modulo: [Módulo transversal (etl/checkpoint.py)],
-  estado: [Pendiente. Las simulaciones precalculadas (RF-025) evitan recalcular los presets, pero no hay reanudación por fase.],
+  estado: [Implementado: una corrida con error se reanuda (`POST /simulaciones/{id}/reanudar`) reutilizando las rutas y la simulación si ya habían terminado.],
   fecha: [],
 )
 
@@ -923,7 +923,7 @@ datos, su riesgo y sus decisiones.
   criterio: [Al cerrar una comparación, el usuario puede descargar el reporte con los valores de ambos lados.],
   prioridad: [Media],
   modulo: [Por definir],
-  estado: [Parcial: el resumen de la comparación se muestra en pantalla (RF-048); falta exportarlo a PDF o CSV.],
+  estado: [Implementado: el resumen se muestra en pantalla (RF-048) y se exporta a CSV o PDF (`exportar.js`).],
   version: "2.0",
   fecha: []
 )
@@ -938,7 +938,7 @@ datos, su riesgo y sus decisiones.
   criterio: [El ciclo elegido se refleja en `GET /comparacion3d/{id}` y en la fase mostrada en el HUD del lado con semáforo.],
   prioridad: [Media],
   modulo: [`semaforo_nuevo.py` (`ciclo_s` ya soportado por la API interna), `programas_tls.py`],
-  estado: [Parcial: el backend acepta `ciclo_s`; falta exponerlo en el visor.],
+  estado: [Implementado: el visor deja elegir el ciclo del programa de netconvert o un programa de Webster calculado con los volúmenes de la zona, antes de abrir el simulador o desde él.],
   version: "2.0",
   fecha: []
 )

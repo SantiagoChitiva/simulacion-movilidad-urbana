@@ -32,6 +32,7 @@ from pathlib import Path
 from .configuration import DEFAULT_SCENARIO, ScenarioPaths
 from .proceso import ejecutar
 from .subred import SubredError, encontrar_herramienta
+from .vtypes import BUS_PT_ID
 
 # agency_id del GTFS de SIMUR: 1 Transmilenio-Troncal, 2 Alimentadores, 3 Zonal-Urbano,
 # 4 Zonal-Complementario, 5 Zonal-Especial, 6 Transmilenio-Dual, 7 TransMiCable
@@ -216,9 +217,26 @@ def generar_transporte_publico(
         shutil.rmtree(trabajo, ignore_errors=True)
     if salida.returncode != 0 or not cfg.vehiculos.is_file():
         raise TransportePublicoError(f"gtfs2pt.py falló (código {salida.returncode}):\n{salida.stderr[-2000:]}")
+    usar_vtype_del_proyecto(cfg.vehiculos)
     stats.buses = contar(cfg.vehiculos, "vehicle")
     stats.paradas = contar(cfg.paradas, "busStop")
     return TransportePublicoResult(cfg.paradas, cfg.vehiculos, cfg.vtypes)
+
+
+def usar_vtype_del_proyecto(vehiculos: Path) -> None:
+    """gtfs2pt usa un vType "bus" genérico: los buses pasan al bus_pt del proyecto (vtypes.py),
+    que ya está en todas las demandas, cuenta como "bus" en la validación y tiene su color en
+    el visor."""
+    import xml.etree.ElementTree as ET
+
+    arbol = ET.parse(vehiculos)
+    raiz = arbol.getroot()
+    for vtype in raiz.findall("vType"):
+        raiz.remove(vtype)
+    for elem in raiz.iter():
+        if elem.tag in ("vehicle", "flow") and elem.get("type") in (None, "bus"):
+            elem.set("type", BUS_PT_ID)
+    arbol.write(str(vehiculos), encoding="UTF-8", xml_declaration=True)
 
 
 def contar(path: Path, etiqueta: str) -> int:

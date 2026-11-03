@@ -50,7 +50,7 @@ function BotonCancelar({ onConfirmar, etiqueta = 'Cancelar' }) {
   );
 }
 
-function Simulacion({ corrida, onCancelar, onDescartar }) {
+function Simulacion({ corrida, onCancelar, onDescartar, onReanudar }) {
   const final = ESTADOS_FINALES.has(corrida.estado);
   const desde = corrida.iniciada ?? corrida.creada;
   const transcurrido = segundosDesde(desde);
@@ -89,7 +89,16 @@ function Simulacion({ corrida, onCancelar, onDescartar }) {
           insertados · {numero(corrida.resultado.trips_kepler)} trips. Se carga sola en el mapa.
         </p>
       )}
-      {corrida.estado === 'error' && <p className="ta-error">{corrida.error}</p>}
+      {corrida.estado === 'error' && (
+        <>
+          <p className="ta-error">{corrida.error}</p>
+          {onReanudar && (
+            <button type="button" className="ta-cancelar" onClick={onReanudar} title="Reutiliza las rutas y la simulación si ya habían terminado">
+              Reanudar
+            </button>
+          )}
+        </>
+      )}
       {corrida.estado === 'cancelada' && <p>La simulación se canceló y sus archivos se borraron.</p>}
     </div>
   );
@@ -143,6 +152,7 @@ export default function TarjetaActividad({
   aviso,
   onCancelarCorrida,
   onDescartarCorrida,
+  onReanudarCorrida,
   onCancelarCarga,
   onDescartarError,
   onDescartarAviso,
@@ -158,7 +168,9 @@ export default function TarjetaActividad({
   if (!corrida && !carga && !errorCarga && !aviso) return null;
   return (
     <section className="tarjeta-actividad" aria-live="polite" aria-label="Actividad">
-      {corrida && <Simulacion corrida={corrida} onCancelar={onCancelarCorrida} onDescartar={onDescartarCorrida} />}
+      {corrida && (
+        <Simulacion corrida={corrida} onCancelar={onCancelarCorrida} onDescartar={onDescartarCorrida} onReanudar={onReanudarCorrida} />
+      )}
       {carga && <CargaMapa carga={carga} onCancelar={onCancelarCarga} />}
       {aviso && <AvisoCarga aviso={aviso} onDescartar={onDescartarAviso} />}
       {errorCarga && (

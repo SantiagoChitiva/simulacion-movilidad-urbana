@@ -2,6 +2,7 @@
 export const MODE_COLORS = {
   auto: '#ff5c5c',
   bici: '#2ecc71',
+  bus_pt: '#1f5fbf',   // buses del SITP (GTFS)
   escolar: '#ff9ecf',
   especial: '#b57bff',
   informal: '#c0793a',

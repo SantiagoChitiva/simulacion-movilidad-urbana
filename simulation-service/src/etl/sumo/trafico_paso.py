@@ -23,6 +23,13 @@ validación independiente (validacion.py reporta los dos grupos).
 Supuesto: el aforo es la hora de máxima demanda de su periodo y se usa como meta en cada
 hora de la ventana; en las horas fuera del pico eso sobreestima el tráfico de paso.
 
+Resultado medido (mañana, preset encuesta, 2026-11-03): la simulación pasa de llevar el
+6 % del volumen aforado a 27 % (38 % en las estaciones de calibración), pero solo 2 de 33
+puntos quedan con GEH < 5. La red no alcanza a mover esos volúmenes: hay 3.790
+teletransportes y ~10.000 vehículos atascados al final. Lo que falta es calibrar la capacidad
+de la red (programas reales de los semáforos, carriles), no más demanda. Por eso es una
+opción y las precalculadas no lo incluyen por defecto.
+
 El resultado se versiona en scenarios/default/trafico_paso_<periodo>.rou.xml.gz y se agrega a
 la demanda cuando DemandaConfig.trafico_paso está activo.
 

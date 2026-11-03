@@ -326,3 +326,31 @@ def test_vias_de_la_red(con_catalogo, tmp_path, monkeypatch):
     assert props[con_contrario["contrario"]]["contrario"] == con_contrario["id"]
     assert all(f["geometry"]["type"] == "LineString" for f in fc["features"][:50])
     assert not any(p["clase"] in ("peatonal", "ciclorruta", "de servicio") for p in props.values())
+
+
+def test_reanudar_corrida_con_error(tmp_path, monkeypatch):
+    monkeypatch.setattr(configuration, "RUNS_DIR", tmp_path)
+    llamadas = []
+
+    def falla_una_vez(*args, **kwargs):
+        llamadas.append(kwargs)
+        if len(llamadas) == 1:
+            raise RuntimeError("Interrumpida")
+        return _pipeline_falso(*args, **kwargs)
+
+    gestor = GestorCorridas(ejecutar=falla_una_vez)
+    api.app.dependency_overrides[api.obtener_gestor] = lambda: gestor
+    try:
+        c = TestClient(api.app)
+        run_id = c.post("/simulaciones", json={"conteos": {"auto": 10}, "ventana": "pm"}).json()["id"]
+        gestor.esperar(run_id, timeout=10)
+        assert c.get(f"/simulaciones/{run_id}").json()["estado"] == "error"
+
+        assert c.post(f"/simulaciones/{run_id}/reanudar").status_code == 202
+        gestor.esperar(run_id, timeout=10)
+        assert c.get(f"/simulaciones/{run_id}").json()["estado"] == "terminado"
+        # la segunda vez reutiliza lo hecho y conserva las opciones de la corrida
+        assert llamadas[1]["reanudar"] is True and llamadas[1]["demanda"].ventana == "pm"
+        assert c.post(f"/simulaciones/{run_id}/reanudar").status_code == 409   # ya terminó
+    finally:
+        api.app.dependency_overrides.clear()

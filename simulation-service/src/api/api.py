@@ -214,6 +214,16 @@ def cancelar_simulacion(run_id: str, gestor: Gestor) -> dict:
         raise HTTPException(status_code=409, detail=str(exc)) from exc
 
 
+@app.post("/simulaciones/{run_id}/reanudar", status_code=202)
+def reanudar_simulacion(run_id: str, gestor: Gestor) -> dict:
+    """Reanuda una simulación que terminó con error, reutilizando las etapas ya completas."""
+    _corrida(gestor, run_id)
+    try:
+        return asdict(gestor.reanudar(run_id))
+    except ValueError as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
+
+
 @app.get("/simulaciones")
 def listar_simulaciones(gestor: Gestor) -> list[dict]:
     return [asdict(c) for c in gestor.listar()]

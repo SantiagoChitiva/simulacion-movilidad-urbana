@@ -123,6 +123,7 @@ def escribir_sumocfg_corrida(
     route_files: list[Path] | None = None,
     ventana: tuple[int, int] | None = None,
     max_vehiculos: int | None = None,
+    periodo_fcd: int | None = None,
 ) -> Path:
     """Copia la plantilla .sumocfg al directorio de la corrida apuntando a sus insumos.
 
@@ -146,6 +147,8 @@ def escribir_sumocfg_corrida(
         valores["begin"], valores["end"] = str(ventana[0]), str(ventana[1])
     if max_vehiculos is not None:
         valores["max-num-vehicles"] = str(max_vehiculos)
+    if periodo_fcd is not None:
+        valores["device.fcd.period"] = str(periodo_fcd)
     for elem in tree.getroot().iter():
         if elem.tag in valores:
             elem.set("value", valores[elem.tag])

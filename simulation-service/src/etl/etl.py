@@ -73,6 +73,7 @@ def run_etl(
     run_id: str | None = None,
     on_progreso: OnProgreso = _sin_aviso,
     cancelar: threading.Event | None = None,
+    reutilizar_rutas: bool = False,
 ) -> EtlResult:
     paths = ScenarioPaths.from_name(scenario_name, run_id)
     demanda = demanda or DemandaConfig()
@@ -89,6 +90,9 @@ def run_etl(
     revisar_cancelacion(cancelar)
 
     on_progreso("ruteando", 0.0)
+    if reutilizar_rutas and _rutas_completas(paths.routes):
+        # reanudación: el ruteo ya había terminado (los viajes se regeneran igual, son deterministas)
+        return EtlResult(trips, DuarouterResult(output_file=paths.routes, stdout="", stderr=""))
     if demanda.asignacion_iterativa:
         if publico is not None:
             raise ValueError("La asignación iterativa todavía no admite transporte público real; desactiva una de las dos.")
@@ -113,6 +117,20 @@ def run_etl(
             cancelar=cancelar,
         )
     return EtlResult(trips, routes)
+
+
+def _xml_cerrado(path: Path, cierre: bytes) -> bool:
+    """El archivo existe y ya tiene su etiqueta de cierre (SUMO y duarouter escriben en streaming
+    y crean el archivo al empezar, así que existir no basta)."""
+    if not path.is_file() or path.stat().st_size < 100:
+        return False
+    with path.open("rb") as f:
+        f.seek(max(0, path.stat().st_size - 200))
+        return cierre in f.read()
+
+
+def _rutas_completas(rutas: Path) -> bool:
+    return _xml_cerrado(rutas, b"</routes>")
 
 
 def simulate(
@@ -144,6 +162,8 @@ def simulate(
             paths, additional_files=adicionales, route_files=rutas_extra, ventana=demanda.horas,
             # con el tráfico de paso hay varias veces más vehículos a la vez en la red
             max_vehiculos=MAX_VEHICULOS_PASO if paso is not None else None,
+            # el FCD con el tráfico de paso pasa de 4 GB; kepler muestrea cada 8 s, así que 4 s basta
+            periodo_fcd=4 if paso is not None else None,
         )
 
     paths.fcd.parent.mkdir(parents=True, exist_ok=True)  # SUMO no crea output/
@@ -203,8 +223,13 @@ def run_pipeline(
     cancelar: threading.Event | None = None,
     estilo: EstiloConductor | None = None,
     cierres: list[CierreVial] | None = None,
+    reanudar: bool = False,
 ) -> PipelineResult:
-    """Encuesta → trips → duarouter → SUMO → GeoJSON. Lanza Cancelado si se activa `cancelar`."""
+    """Encuesta → trips → duarouter → SUMO → GeoJSON. Lanza Cancelado si se activa `cancelar`.
+
+    Con `reanudar` se aprovecha lo que una corrida interrumpida ya terminó: las rutas si
+    duarouter alcanzó a cerrarlas y la simulación si SUMO escribió sus estadísticas finales.
+    """
     # Preparar archivos adicionales para el sumocfg
     additional_files: list[Path] = []
 
@@ -244,13 +269,18 @@ def run_pipeline(
                 puntos_aforo, paths_run.conteos_add, salida.resolve(), *(demanda or DemandaConfig()).horas,
             ))
 
-    etl = run_etl(scenario_name, demanda, run_id, on_progreso, cancelar)
+    etl = run_etl(scenario_name, demanda, run_id, on_progreso, cancelar, reutilizar_rutas=reanudar)
     revisar_cancelacion(cancelar)
-    simulation = simulate(
-        scenario_name, seed, run_id, on_progreso, cancelar,
-        additional_files=additional_files if additional_files else None,
-        demanda=demanda,
-    )
+    paths = ScenarioPaths.from_name(scenario_name, run_id)
+    if reanudar and _xml_cerrado(paths.statistics, b"</statistics>") and _xml_cerrado(paths.fcd, b"</fcd-export>"):
+        # SUMO cierra el statistic-output y el FCD solo al terminar: la simulación estaba completa
+        simulation = SimulationResult(sumocfg=paths.sumocfg, stdout="", stderr="")
+    else:
+        simulation = simulate(
+            scenario_name, seed, run_id, on_progreso, cancelar,
+            additional_files=additional_files if additional_files else None,
+            demanda=demanda,
+        )
     revisar_cancelacion(cancelar)
     geojson = export_geojson(scenario_name, sample_every, run_id) if exportar_puntos else None
     kepler = export_kepler_trips(scenario_name, run_id=run_id, on_progreso=on_progreso, cancelar=cancelar)

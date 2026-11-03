@@ -815,6 +815,7 @@ function Visor() {
           onDescartarAviso={descartarAviso}
           onCancelarCorrida={corridas.cancelar}
           onDescartarCorrida={corridas.descartar}
+          onReanudarCorrida={corridas.reanudar}
           onCancelarCarga={cancelarCarga}
           onDescartarError={() => setErrorCarga(null)}
         />
