@@ -62,7 +62,8 @@ DESPEJE_M = 40                  # m al inicio de la vía de entrada que se liber
 REINTENTO_INSERCION_S = 1.0     # s simulados entre despejes si el actor aún no pudo entrar
 MAX_REINTENTOS = 8
 MEMORIA_CONFLICTO_S = 10        # un par en conflicto se vuelve a contar solo pasados estos segundos
-ESPERA_OTRO_LADO_S = 90         # s que se espera al otro escenario cuando el viaje ya terminó en uno
+ESPERA_OTRO_LADO_S = 300        # s que se espera al otro escenario cuando el viaje ya terminó en uno (con
+                                # semáforo el mismo viaje puede tardar el doble: 86 s contra 179 s medidos)
 TELEPORTE_S = 60                # s detenido antes de que SUMO teletransporte un vehículo atascado
 BLOQUEO_CRUCE_S = 15            # s tras los que se ignora a un vehículo que bloquea el cruce
 
