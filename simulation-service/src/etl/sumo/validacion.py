@@ -26,7 +26,7 @@ from pathlib import Path
 
 from .aforos import grupo_estacion
 from .configuration import AFOROS_JSON, HORA_INI
-from .vtypes import BUS_PT_ID
+from .vtypes import BUS_PT_ID, BUS_SITP_ID
 
 PERIODO_BIN_S = 900
 BINS_HORA = 3600 // PERIODO_BIN_S
@@ -41,7 +41,7 @@ VTYPES_MODO: dict[str, tuple[str, ...]] = {
     "especial": ("especial",),
     "escolar": ("escolar",),
     "bici": ("bici",),
-    "bus": (BUS_PT_ID,),
+    "bus": (BUS_PT_ID, BUS_SITP_ID),
 }
 # modos que se comparan según el tipo de estación (prefijo del ID)
 MODOS_ESTACION = {

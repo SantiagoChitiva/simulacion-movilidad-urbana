@@ -11,17 +11,22 @@ le sirva y camina hasta su destino (SUMO elige la combinación con el router int
    día hábil que tienen al menos dos paradas dentro de la caja de Usaquén, sin TransMilenio
    troncal ni TransMiCable (van por carriles exclusivos que la red no modela como tales y
    los aforos de transporte público tampoco los cuentan).
-2. `generar_transporte_publico` corre gtfs2pt.py de SUMO sobre ese GTFS reducido: ubica las
-   paradas en la red, rutea cada línea entre sus paradas y escribe, versionados en
-   scenarios/default/: pt_paradas.add.xml (paradas y rutas de las líneas),
-   pt_vehiculos.rou.xml (un bus por viaje programado) y pt_vtypes.add.xml.
+2. `generar_por_paradas` (por defecto) ubica cada parada en el carril con buses más cercano
+   y deja que duarouter rutee cada viaje pasando por sus paradas. Escribe, versionados en
+   scenarios/default/: pt_paradas.add.xml (paradas) y pt_vehiculos.rou.xml (un bus por
+   viaje programado, con la hora de cada parada). `generar_transporte_publico` hace lo mismo
+   con gtfs2pt.py de SUMO, que además ajusta el recorrido a la forma (shape) de la línea,
+   pero su map matching en Python tarda horas con esta red (--gtfs2pt).
 
 Uso: python -m etl.sumo.transporte_publico data/raw/gtfs/GTFS-2026-04-29.zip [--fecha AAAAMMDD]
 GTFS: https://storage.googleapis.com/gtfs-estaticos/GTFS-2026-04-29.zip (SIMUR, vía Mobility Database).
 """
 import argparse
 import csv
+import gzip
 import io
+import re
+import math
 import shutil
 import sys
 import zipfile
@@ -32,13 +37,14 @@ from pathlib import Path
 from .configuration import DEFAULT_SCENARIO, ScenarioPaths
 from .proceso import ejecutar
 from .subred import SubredError, encontrar_herramienta
-from .vtypes import BUS_PT_ID
+from .vtypes import BUS_SITP_ID, PARAMS_BUS_SITP, VTYPE_BUS_SITP
 
 # agency_id del GTFS de SIMUR: 1 Transmilenio-Troncal, 2 Alimentadores, 3 Zonal-Urbano,
 # 4 Zonal-Complementario, 5 Zonal-Especial, 6 Transmilenio-Dual, 7 TransMiCable
 AGENCIAS_SIMULADAS = ("2", "3", "4", "5", "6")
 # caja (oeste, sur, este, norte) de la red de Usaquén (origBoundary de usaquen_3d.net.xml)
 BBOX_USAQUEN = (-74.058552, 4.663887, -73.996799, 4.851830)
+DEPURAR = False
 FECHA_HABIL = "20260506"   # miércoles sin festivo dentro de la vigencia del GTFS
 # los buses que salen un poco antes de la ventana ya están en la red cuando empieza
 INICIO_S = 6 * 3600
@@ -71,7 +77,8 @@ class TransportePublicoConfig:
 
     @property
     def vehiculos(self) -> Path:
-        return self.destino_dir / "pt_vehiculos.rou.xml"
+        # comprimido: sin comprimir pesa ~25 MB (SUMO y duarouter lo leen así)
+        return self.destino_dir / "pt_vehiculos.rou.xml.gz"
 
     @property
     def vtypes(self) -> Path:
@@ -223,19 +230,196 @@ def generar_transporte_publico(
     return TransportePublicoResult(cfg.paradas, cfg.vehiculos, cfg.vtypes)
 
 
+def generar_por_paradas(
+    cfg: TransportePublicoConfig, stats: TransportePublicoStats | None = None, radio_m: float = 40.0,
+) -> TransportePublicoResult:
+    """Buses y paradas sin el map matching de gtfs2pt (horas en Python con esta red).
+
+    Cada parada del GTFS reducido va al carril más cercano (a menos de `radio_m`) que admite
+    buses, como un <busStop> de 20 m. Cada viaje programado es un <trip> de bus_sitp con sus
+    <stop busStop until=hora> en orden, y duarouter (C++) arma la ruta pasando por las paradas
+    en segundos. Las paradas que no quedan sobre una vía con buses se omiten; un viaje con
+    menos de dos paradas ubicadas se descarta.
+    """
+    import xml.etree.ElementTree as ET
+
+    import sumolib
+
+    stats = stats if stats is not None else TransportePublicoStats()
+    filtrar_gtfs(cfg, stats)
+    net = sumolib.net.readNet(str(cfg.net))
+    with zipfile.ZipFile(cfg.gtfs_reducido) as zf:
+        paradas_gtfs = {p["stop_id"]: p for p in _leer(zf, "stops.txt")}
+        rutas = {r["route_id"]: r for r in _leer(zf, "routes.txt")}
+        viajes = {v["trip_id"]: v for v in _leer(zf, "trips.txt")}
+        horarios: dict[str, list[dict]] = {}
+        for fila in _leer(zf, "stop_times.txt"):
+            horarios.setdefault(fila["trip_id"], []).append(fila)
+
+    # paradas -> carriles candidatos: el carril con buses más a la derecha de cada edge a
+    # menos de `radio_m`. Una parada en una avenida de doble calzada queda cerca de las dos;
+    # cada viaje usa la que va en su sentido (la que apunta hacia la parada siguiente).
+    candidatas: dict[str, list[tuple]] = {}
+    raiz_paradas = ET.Element("additional")
+    for stop_id, parada in sorted(paradas_gtfs.items()):
+        x, y = net.convertLonLat2XY(float(parada["stop_lon"]), float(parada["stop_lat"]))
+        cercanos = sorted(
+            ((e, d) for e, d in net.getNeighboringEdges(x, y, radio_m)
+             if e.getFunction() != "internal" and e.allows("bus") and e.getLength() >= 5),
+            key=lambda ed: ed[1],
+        )[:4]
+        for k, (edge, _dist) in enumerate(cercanos):
+            carril = next(l for l in edge.getLanes() if l.allows("bus"))   # el de más a la derecha
+            pos, _ = carril.getClosestLanePosAndDist((x, y))
+            largo = carril.getLength()
+            inicio = max(0.0, min(pos - 10, largo - 20))
+            id_parada = f"pt_{stop_id}_{k}"
+            ET.SubElement(raiz_paradas, "busStop", {
+                "id": id_parada, "lane": carril.getID(), "startPos": f"{inicio:.1f}",
+                "endPos": f"{min(largo, inicio + 20):.1f}", "name": parada.get("stop_name", stop_id),
+                "friendlyPos": "true",
+            })
+            forma = edge.getShape()
+            rumbo_edge = (forma[-1][0] - forma[0][0], forma[-1][1] - forma[0][1])
+            candidatas.setdefault(stop_id, []).append((id_parada, edge.getID(), inicio, rumbo_edge, (x, y)))
+    arbol = ET.ElementTree(raiz_paradas)
+    ET.indent(arbol, space="  ")
+    arbol.write(str(cfg.paradas), encoding="UTF-8", xml_declaration=True)
+    stats.paradas = len(candidatas)
+
+    def elegir(opciones: list[tuple], hacia: tuple[float, float]) -> tuple:
+        """La candidata cuyo edge apunta más hacia `hacia` (dirección del viaje)."""
+        def alineacion(o):
+            (dx, dy), norma = o[3], math.hypot(*o[3]) or 1.0
+            return (dx * hacia[0] + dy * hacia[1]) / (norma * (math.hypot(*hacia) or 1.0))
+        return max(opciones, key=alineacion)
+
+    # viajes -> trips con paradas, ordenados por salida
+    trips = []
+    for trip_id, filas in horarios.items():
+        filas = [f for f in sorted(filas, key=lambda f: int(f["stop_sequence"]))
+                 if f["stop_id"] in candidatas and f["departure_time"]]
+        paradas_viaje = []
+        for i, f in enumerate(filas):
+            opciones = candidatas[f["stop_id"]]
+            xy = opciones[0][4]
+            otra = candidatas[filas[i + 1]["stop_id"]][0][4] if i + 1 < len(filas) else None
+            previa = candidatas[filas[i - 1]["stop_id"]][0][4] if i > 0 else None
+            hacia = (otra[0] - xy[0], otra[1] - xy[1]) if otra else (xy[0] - previa[0], xy[1] - previa[1]) if previa else (0, 0)
+            id_parada, edge, inicio, _rumbo, _xy = elegir(opciones, hacia)
+            # dos paradas seguidas en el mismo edge hacia atrás obligarían a dar la vuelta
+            if paradas_viaje and paradas_viaje[-1][1] == edge and inicio <= paradas_viaje[-1][2]:
+                continue
+            paradas_viaje.append((id_parada, edge, inicio, _segundos(f["departure_time"])))
+        if len(paradas_viaje) < 2:
+            continue
+        salida = paradas_viaje[0][3] - 30
+        if not cfg.inicio_s <= salida <= cfg.fin_s:
+            continue
+        linea = rutas.get(viajes[trip_id]["route_id"], {}).get("route_short_name", "")
+        trips.append((salida, trip_id, linea, paradas_viaje))
+    trips.sort()
+    duarouter = shutil.which("duarouter")
+    if duarouter is None:
+        raise TransportePublicoError("No se encontró 'duarouter' en el PATH.")
+    trabajo = cfg.destino_dir / ".pt_paradas"
+    trabajo.mkdir(parents=True, exist_ok=True)
+    pendientes = {f"bus_{linea}_{trip_id}".replace(" ", "_"): (salida, linea or trip_id, paradas)
+                  for salida, trip_id, linea, paradas in trips}
+    rutados: list = []
+    try:
+        # la red tiene tramos sin conexión para buses entre algunas paradas: duarouter avisa qué
+        # edge obligatorio no alcanzó y en la ronda siguiente el viaje va sin esa parada
+        for ronda in range(4):
+            if not pendientes:
+                break
+            log = trabajo / f"duarouter_{ronda}.log"
+            salida_xml = trabajo / f"buses_{ronda}.rou.xml"
+            _escribir_trips_bus(pendientes, trabajo / f"pt_{ronda}.trips.xml")
+            resultado = ejecutar([
+                duarouter, "-n", str(cfg.net), "--route-files", str(trabajo / f"pt_{ronda}.trips.xml"),
+                "--additional-files", str(cfg.paradas), "-o", str(salida_xml),
+                # sin --ptline-routing duarouter toma los vehículos con `line` como horario y no los rutea
+                "--ignore-errors", "--routing-threads", "4", "--ptline-routing", "--log", str(log),
+            ], cwd=trabajo)
+            if resultado.returncode != 0 or not salida_xml.is_file():
+                raise TransportePublicoError(
+                    f"duarouter falló con los buses (código {resultado.returncode}): {resultado.stderr[-2000:]}"
+                )
+            for _, elem in ET.iterparse(salida_xml, events=("end",)):
+                if elem.tag == "vehicle":
+                    rutados.append(elem)
+                    pendientes.pop(elem.get("id"), None)
+            inalcanzables = {}
+            for linea_log in log.read_text(encoding="utf-8", errors="replace").splitlines():
+                m = re.match(r"Warning: Mandatory edge '([^']+)' not reachable by vehicle '([^']+)'", linea_log)
+                if m:
+                    inalcanzables[m.group(2)] = m.group(1)
+            for vid in list(pendientes):
+                edge = inalcanzables.get(vid)
+                salida, linea, paradas = pendientes[vid]
+                paradas = [pa for pa in paradas if pa[1] != edge] if edge else []
+                if len(paradas) < 2:
+                    del pendientes[vid]
+                else:
+                    pendientes[vid] = (paradas[0][3] - 30, linea, paradas)
+    finally:
+        if not DEPURAR:
+            shutil.rmtree(trabajo, ignore_errors=True)
+    rutados.sort(key=lambda v: float(v.get("depart", 0)))
+    raiz = ET.Element("routes")
+    _vtype_bus(raiz)
+    for v in rutados:
+        raiz.append(v)
+    arbol = ET.ElementTree(raiz)
+    ET.indent(arbol, space="  ")
+    with cfg.vehiculos.open("wb") as crudo, gzip.GzipFile(filename="", mode="wb", fileobj=crudo, mtime=0) as gz:
+        arbol.write(gz, encoding="UTF-8", xml_declaration=True)
+    stats.buses = len(rutados)
+    return TransportePublicoResult(cfg.paradas, cfg.vehiculos, cfg.vtypes)
+
+
+def _vtype_bus(raiz) -> None:
+    import xml.etree.ElementTree as ET
+
+    vtype = ET.SubElement(raiz, "vType", VTYPE_BUS_SITP)
+    for clave, valor in PARAMS_BUS_SITP.items():
+        ET.SubElement(vtype, "param", key=clave, value=valor)
+
+
+def _escribir_trips_bus(pendientes: dict, destino: Path) -> None:
+    import xml.etree.ElementTree as ET
+
+    raiz = ET.Element("routes")
+    _vtype_bus(raiz)
+    for vid, (salida, linea, paradas) in sorted(pendientes.items(), key=lambda kv: kv[1][0]):
+        trip = ET.SubElement(raiz, "trip", {
+            "id": vid, "type": BUS_SITP_ID, "depart": f"{salida:.0f}",
+            "from": paradas[0][1], "to": paradas[-1][1], "line": linea,
+        })
+        for id_parada, _edge, _pos, hora in paradas:
+            ET.SubElement(trip, "stop", {"busStop": id_parada, "duration": "10", "until": f"{hora:.0f}"})
+    arbol = ET.ElementTree(raiz)
+    ET.indent(arbol, space="  ")
+    arbol.write(str(destino), encoding="UTF-8", xml_declaration=True)
+
+
 def usar_vtype_del_proyecto(vehiculos: Path) -> None:
-    """gtfs2pt usa un vType "bus" genérico: los buses pasan al bus_pt del proyecto (vtypes.py),
-    que ya está en todas las demandas, cuenta como "bus" en la validación y tiene su color en
-    el visor."""
+    """gtfs2pt usa un vType "bus" genérico: los buses pasan al bus_sitp del proyecto (vtypes.py),
+    que cuenta como "bus" en la validación y tiene su color en el visor."""
     import xml.etree.ElementTree as ET
 
     arbol = ET.parse(vehiculos)
     raiz = arbol.getroot()
     for vtype in raiz.findall("vType"):
         raiz.remove(vtype)
+    vtype = ET.Element("vType", VTYPE_BUS_SITP)
+    for clave, valor in PARAMS_BUS_SITP.items():
+        ET.SubElement(vtype, "param", key=clave, value=valor)
+    raiz.insert(0, vtype)
     for elem in raiz.iter():
         if elem.tag in ("vehicle", "flow") and elem.get("type") in (None, "bus"):
-            elem.set("type", BUS_PT_ID)
+            elem.set("type", BUS_SITP_ID)
     arbol.write(str(vehiculos), encoding="UTF-8", xml_declaration=True)
 
 
@@ -245,7 +429,8 @@ def contar(path: Path, etiqueta: str) -> int:
     if not path.is_file():
         return 0
     n = 0
-    for _, elem in ET.iterparse(path, events=("end",)):
+    fuente = gzip.open(path) if path.suffix == ".gz" else path
+    for _, elem in ET.iterparse(fuente, events=("end",)):
         if elem.tag == etiqueta:
             n += 1
         elem.clear()
@@ -257,7 +442,7 @@ def archivos_transporte_publico(paths: ScenarioPaths | None = None) -> Transport
     paths = paths or ScenarioPaths.from_name(DEFAULT_SCENARIO)
     resultado = TransportePublicoResult(
         paradas=paths.root / "pt_paradas.add.xml",
-        vehiculos=paths.root / "pt_vehiculos.rou.xml",
+        vehiculos=paths.root / "pt_vehiculos.rou.xml.gz",
         vtypes=paths.root / "pt_vtypes.add.xml",
     )
     if not (resultado.paradas.is_file() and resultado.vehiculos.is_file()):
@@ -269,10 +454,13 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     parser.add_argument("gtfs", type=Path, help="GTFS de SIMUR (.zip)")
     parser.add_argument("--fecha", default=FECHA_HABIL, help="día hábil a importar (AAAAMMDD)")
+    parser.add_argument("--gtfs2pt", action="store_true",
+                        help="usar gtfs2pt de SUMO (map matching de los recorridos; tarda horas con esta red)")
     args = parser.parse_args()
     stats = TransportePublicoStats()
+    generar = generar_transporte_publico if args.gtfs2pt else generar_por_paradas
     try:
-        resultado = generar_transporte_publico(TransportePublicoConfig(gtfs=args.gtfs, fecha=args.fecha), stats)
+        resultado = generar(TransportePublicoConfig(gtfs=args.gtfs, fecha=args.fecha), stats)
     except (TransportePublicoError, SubredError) as exc:
         sys.exit(str(exc))
     print(f"{stats.viajes_en_zona} viajes de {len(stats.lineas)} líneas pasan por Usaquén; "

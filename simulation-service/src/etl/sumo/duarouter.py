@@ -20,8 +20,8 @@ class DuarouterConfig:
     ignore_errors: bool = True
     repair: bool = True
     ventana: tuple[int, int] = (HORA_INI, HORA_FIN)   # solo para el avance
-    # buses del GTFS y sus paradas: duarouter los necesita para rutear los <personTrip
-    # modes="public"> (y los copia, con sus paradas, a la salida)
+    # buses del GTFS y sus paradas: duarouter los usa como horario para rutear los
+    # <personTrip modes="public"> (no los copia a la salida: SUMO los carga aparte)
     rutas_extra: tuple[Path, ...] = ()
     adicionales_extra: tuple[Path, ...] = ()
 

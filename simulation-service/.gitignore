@@ -22,3 +22,4 @@ src/etl/sumo/scenarios/*/programa_*.xml
 src/etl/sumo/scenarios/*/gtfs_usaquen.zip
 src/etl/sumo/scenarios/*/.trafico_paso_*/
 src/etl/sumo/scenarios/*/.gtfs2pt/
+src/etl/sumo/scenarios/*/.pt_paradas/

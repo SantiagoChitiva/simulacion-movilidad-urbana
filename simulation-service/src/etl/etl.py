@@ -109,7 +109,7 @@ def run_etl(
                 taz_file=paths.taz,
                 output_file=paths.routes,
                 ventana=(hora_ini, hora_fin),
-                # los buses salen de duarouter junto con los viajes que los usan
+                # los buses y sus paradas: el horario con que se rutean los personTrip públicos
                 rutas_extra=(publico.vehiculos,) if publico else (),
                 adicionales_extra=(publico.paradas,) if publico else (),
             ),
@@ -152,7 +152,10 @@ def simulate(
         rutas_extra, adicionales = [], list(additional_files or [])
         publico = archivos_transporte_publico(paths) if demanda.transporte_publico else None
         if publico is not None:
-            adicionales.append(publico.paradas)   # los buses ya vienen en las rutas de duarouter
+            # duarouter usa los buses como horario para los personTrip, pero no los copia a su
+            # salida: SUMO los carga aparte, con sus paradas
+            adicionales.append(publico.paradas)
+            rutas_extra.append(publico.vehiculos)
         paso = archivo_trafico_paso(demanda.horas[0]) if demanda.trafico_paso else None
         if demanda.trafico_paso and paso is None:
             raise FileNotFoundError("No hay tráfico de paso para esta ventana. Ejecuta python -m etl.sumo.trafico_paso.")

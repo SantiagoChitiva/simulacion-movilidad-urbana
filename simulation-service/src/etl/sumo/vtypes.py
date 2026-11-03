@@ -4,6 +4,13 @@ from .enums.vehicle_type import VehicleType
 from .enums.transport_mode import TransportMode
 
 BUS_PT_ID = "bus_pt"  # vehículo del servicio, no es un modo de viaje
+# buses del SITP (GTFS, transporte_publico.py). Su vType va dentro del archivo de buses: la
+# demanda de la encuesta ya define bus_pt y SUMO no admite el mismo vType en dos archivos.
+BUS_SITP_ID = "bus_sitp"
+VTYPE_BUS_SITP = {"id": BUS_SITP_ID, "vClass": "bus", "length": "12", "maxSpeed": "13.9", "color": "0,0.4,0.8"}
+# los buses siguen su línea: sin el dispositivo de re-ruteo que la plantilla da a todos
+# (re-rutear un bus con paradas hacía caer a SUMO 1.27 con un acceso inválido a memoria)
+PARAMS_BUS_SITP = {"has.rerouting.device": "false"}
 
 @dataclass(frozen=True)
 class VTypeConfig:
