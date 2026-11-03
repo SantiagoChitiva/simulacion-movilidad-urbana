@@ -191,7 +191,8 @@ def test_precalculadas_listado_y_trips_comprimidos(con_precalculada):
     assert r.json()["type"] == "FeatureCollection"
 
     assert c.get("/precalculadas/mas_peatones/kepler-trips").status_code == 404
-    assert c.get("/precalculadas/no_existe/kepler-trips").status_code == 422
+    assert c.get("/precalculadas/no_existe/kepler-trips").status_code == 404
+    assert c.get("/precalculadas/Mal Formada/kepler-trips").status_code == 422
 
 
 def test_ficha_con_volumenes_de_una_precalculada(con_precalculada):

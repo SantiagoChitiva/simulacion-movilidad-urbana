@@ -10,7 +10,11 @@ precalculadas/<preset>/:
 - volumenes.json: volúmenes por edge para la ficha de intersecciones.
 - meta.json: parámetros, resumen y la huella de los insumos con que se generó.
 
-Uso: python -m etl.precalculadas [preset ...] [--semilla N]   (sin presets: los cuatro)
+Cada precalculada se identifica por una clave: el preset ("encuesta") o, para la ventana
+de la tarde, el preset con "-pm" ("encuesta-pm"). Todas incluyen los buses del GTFS y el
+tráfico de paso calibrado con los aforos si el escenario los tiene.
+
+Uso: python -m etl.precalculadas [preset ...] [--pm] [--semilla N]   (sin presets: los cuatro)
 """
 import argparse
 import gzip
@@ -25,9 +29,11 @@ from pathlib import Path
 from typing import Any
 
 from .etl import OnProgreso, resumen_corrida, run_pipeline
-from .sumo.configuration import DEFAULT_SCENARIO, ArchivosPrecalculada, ScenarioPaths
+from .sumo.configuration import DEFAULT_SCENARIO, VENTANAS, ArchivosPrecalculada, ScenarioPaths
 from .sumo.demanda import PRESETS, DemandaConfig, Preset, cargar_dia, cargar_ventana, conteos_preset
 from .sumo.intersecciones import volumenes_por_edge
+from .sumo.trafico_paso import archivo_trafico_paso
+from .sumo.transporte_publico import archivos_transporte_publico
 
 
 def _sin_aviso(_etapa: str, _avance: float | None) -> None:
@@ -72,30 +78,42 @@ def _comprimir(origen: Path, destino: Path) -> None:
     tmp.replace(destino)
 
 
+def clave(preset: Preset, ventana: str = "am") -> str:
+    """Identificador de una precalculada: "encuesta" (mañana) o "encuesta-pm" (tarde)."""
+    return preset.value if ventana == "am" else f"{preset.value}-{ventana}"
+
+
 def generar(
     preset: Preset,
     semilla: int | None = None,
     on_progreso: OnProgreso = _sin_aviso,
     ejecutar: Callable[..., Any] = run_pipeline,
+    ventana: str = "am",
 ) -> dict[str, Any]:
     """Simula un preset con sus conteos por defecto y guarda lo que necesita el visor."""
     escenario = ScenarioPaths.from_name(DEFAULT_SCENARIO)
-    conteos = conteos_preset(preset, cargar_ventana(escenario.tsv), cargar_dia(escenario.tsv))
-    run_id = f"precalculada-{preset.value}"
+    conteos = conteos_preset(preset, cargar_ventana(escenario.tsv, ventana), cargar_dia(escenario.tsv))
+    id_precalculada = clave(preset, ventana)
+    run_id = f"precalculada-{id_precalculada}"
     paths = ScenarioPaths.from_name(DEFAULT_SCENARIO, run_id)
     shutil.rmtree(paths.run_dir, ignore_errors=True)   # restos de un intento anterior
+    demanda = DemandaConfig(
+        preset, conteos, ventana=ventana,
+        trafico_paso=archivo_trafico_paso(VENTANAS[ventana][0]) is not None,
+        transporte_publico=archivos_transporte_publico(escenario) is not None,
+    )
 
     resultado = ejecutar(
         DEFAULT_SCENARIO,
         seed=semilla,
-        demanda=DemandaConfig(preset, conteos),
+        demanda=demanda,
         run_id=run_id,
         exportar_puntos=False,
         on_progreso=on_progreso,
         cancelar=None,
     )
 
-    archivos = ArchivosPrecalculada.from_preset(preset.value)
+    archivos = ArchivosPrecalculada.from_preset(id_precalculada)
     archivos.dir.mkdir(parents=True, exist_ok=True)
     _comprimir(paths.kepler_trips, archivos.trips_gz)
     vols = volumenes_por_edge(paths.vehroute) if paths.vehroute.is_file() else {}
@@ -104,7 +122,11 @@ def generar(
         shutil.copyfile(paths.validacion, archivos.validacion)
 
     meta = {
+        "clave": id_precalculada,
         "preset": preset.value,
+        "ventana": ventana,
+        "trafico_paso": demanda.trafico_paso,
+        "transporte_publico": demanda.transporte_publico,
         "conteos": {m.value: n for m, n in conteos.items()},
         "semilla": semilla,
         "generada": datetime.now().astimezone().isoformat(timespec="seconds"),
@@ -122,9 +144,13 @@ def generar(
 
 # ----------------------------------------------------------------- leer
 
-def cargar(preset: Preset) -> dict[str, Any] | None:
-    """meta.json de un preset, o None si no está precalculado."""
-    archivos = ArchivosPrecalculada.from_preset(preset.value)
+def _clave(id_precalculada: "Preset | str") -> str:
+    return id_precalculada.value if isinstance(id_precalculada, Preset) else id_precalculada
+
+
+def cargar(id_precalculada: "Preset | str") -> dict[str, Any] | None:
+    """meta.json de una precalculada, o None si no existe."""
+    archivos = ArchivosPrecalculada.from_preset(_clave(id_precalculada))
     if not (archivos.trips_gz.is_file() and archivos.meta.is_file()):
         return None
     try:
@@ -134,23 +160,28 @@ def cargar(preset: Preset) -> dict[str, Any] | None:
 
 
 def listar() -> list[dict[str, Any]]:
-    """Presets precalculados, con su nombre y si se generaron con otros insumos."""
+    """Precalculadas (mañana y tarde), con su nombre y si se generaron con otros insumos."""
     huella = huella_insumos()
     salida = []
     for preset, info in PRESETS.items():
-        meta = cargar(preset)
-        if meta is not None:
-            salida.append({**meta, "nombre": info.nombre, "desactualizada": meta.get("insumos") != huella})
+        for ventana in VENTANAS:
+            meta = cargar(clave(preset, ventana))
+            if meta is not None:
+                nombre = info.nombre if ventana == "am" else f"{info.nombre} (tarde)"
+                salida.append({
+                    "clave": clave(preset, ventana), "ventana": ventana, **meta,
+                    "nombre": nombre, "desactualizada": meta.get("insumos") != huella,
+                })
     return salida
 
 
-def leer_validacion(preset: Preset) -> dict[str, Any] | None:
-    archivo = ArchivosPrecalculada.from_preset(preset.value).validacion
+def leer_validacion(id_precalculada: "Preset | str") -> dict[str, Any] | None:
+    archivo = ArchivosPrecalculada.from_preset(_clave(id_precalculada)).validacion
     return json.loads(archivo.read_text(encoding="utf-8")) if archivo.is_file() else None
 
 
-def leer_volumenes(preset: Preset) -> dict[str, Counter] | None:
-    archivo = ArchivosPrecalculada.from_preset(preset.value).volumenes
+def leer_volumenes(id_precalculada: "Preset | str") -> dict[str, Counter] | None:
+    archivo = ArchivosPrecalculada.from_preset(_clave(id_precalculada)).volumenes
     if not archivo.is_file():
         return None
     return {e: Counter(t) for e, t in json.loads(archivo.read_text(encoding="utf-8")).items()}
@@ -175,12 +206,14 @@ def main(argv: list[str] | None = None) -> None:
     parser.add_argument("presets", nargs="*", choices=[p.value for p in Preset], metavar="preset",
                         help=f"presets a generar (por defecto todos): {', '.join(p.value for p in Preset)}")
     parser.add_argument("--semilla", type=int, default=None, help="semilla de SUMO (por defecto la del .sumocfg)")
+    parser.add_argument("--pm", action="store_true", help="ventana de la tarde (16:00-19:00) en vez de la mañana")
     args = parser.parse_args(argv)
 
+    ventana = "pm" if args.pm else "am"
     for valor in args.presets or [p.value for p in Preset]:
         preset = Preset(valor)
-        print(f"Generando '{valor}'...", flush=True)
-        meta = generar(preset, args.semilla, _imprimir_avance(valor))
+        print(f"Generando '{clave(preset, ventana)}'...", flush=True)
+        meta = generar(preset, args.semilla, _imprimir_avance(valor), ventana=ventana)
         mb = lambda n: f"{n / 1e6:.1f} MB"
         # solo ASCII: la consola de Windows suele estar en cp1252
         print(f"  listo: {meta['resultado'].get('trips_kepler', 0)} trips, "

@@ -91,7 +91,7 @@ function FasesEnPalabras({ fases, accesos, enlaces }) {
 
 // ─── Pestaña Ficha ────────────────────────────────────────────────────────────
 
-function TabFicha({ ficha, accesos, etiquetaCorrida }) {
+function TabFicha({ ficha, accesos, etiquetaCorrida, corrida }) {
   const giros = (edge) =>
     [...new Set(ficha.enlaces.filter((e) => e.acceso === edge).map((e) => GIROS[e.giro] ?? e.giro))].join(', ');
   const verdes = ficha.fases.filter((f) => /[Gg]/.test(f.estado) && !esCambio(f.estado)).length;
@@ -106,7 +106,10 @@ function TabFicha({ ficha, accesos, etiquetaCorrida }) {
 
       <section>
         <h3>Accesos y tráfico simulado</h3>
-        <p className="pd-nota">Vehículos que llegaron por cada acceso en {etiquetaCorrida} (07:00–10:00).</p>
+        <p className="pd-nota">
+          Vehículos que llegaron por cada acceso en {etiquetaCorrida} (
+          {(corrida?.opciones?.ventana ?? corrida?.ventana) === 'pm' ? '16:00–19:00' : '07:00–10:00'}).
+        </p>
         <table className="fi-tabla">
           <thead>
             <tr>
@@ -435,7 +438,7 @@ export default function FichaInterseccion({ id, corrida, etiquetaCorrida }) {
         ))}
       </div>
 
-      {subpestana === 'ficha' && <TabFicha ficha={ficha} accesos={accesos} etiquetaCorrida={etiquetaCorrida} />}
+      {subpestana === 'ficha' && <TabFicha ficha={ficha} accesos={accesos} etiquetaCorrida={etiquetaCorrida} corrida={corrida} />}
       {subpestana === 'configurar' && (
         <TabConfigurar id={id} ficha={ficha} accesos={accesos} corrida={corrida} onGuardado={() => setVersionGuardado((v) => v + 1)} />
       )}

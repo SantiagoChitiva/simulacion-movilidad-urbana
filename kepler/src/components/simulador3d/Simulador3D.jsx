@@ -7,6 +7,7 @@ import Escena3D from './escena';
 import HUD from './HUD';
 import Minimapa from './Minimapa';
 import ResumenComparacion from './ResumenComparacion';
+import { ElegirPrograma, PROGRAMA_DEFECTO } from '../PanelSemaforizacion';
 
 const TIPOS = [
   ['auto', 'Carro'], ['moto', 'Moto'], ['taxi', 'Taxi'], ['bici', 'Bicicleta'], ['bus_pt', 'Bus'], ['peaton', 'Peatón'],
@@ -38,7 +39,9 @@ const nombreCruce = (c) => (c.calles?.length ? c.calles.join(' × ') : `Cruce ${
  * Izquierda: el cruce como está hoy. Derecha: el mismo cruce con el semáforo propuesto.
  * Ambos lados corren la misma demanda en lockstep y siguen al mismo actor.
  */
-export default function Simulador3D({ cruce, candidatos = [], corrida, intensidades, onCambiarCruce, onCerrar }) {
+export default function Simulador3D({
+  cruce, candidatos = [], corrida, intensidades, programa = PROGRAMA_DEFECTO, onCambiarPrograma, onCambiarCruce, onCerrar,
+}) {
   const refA = useRef(null);
   const refB = useRef(null);
   const escenas = useRef({ a: null, b: null });
@@ -107,7 +110,9 @@ export default function Simulador3D({ cruce, candidatos = [], corrida, intensida
     setConectar(false);
     (async () => {
       try {
-        const comp = await crearComparacion3D(cruce.id, { lon: cruce.lon, lat: cruce.lat, corrida, intensidades, nodos: cruce.nodos });
+        const comp = await crearComparacion3D(cruce.id, {
+          lon: cruce.lon, lat: cruce.lat, corrida, intensidades, nodos: cruce.nodos, ...programa,
+        });
         cidRef.current = comp.id;
         let estado = comp;
         while (vivo && estado.estado === 'preparando') {
@@ -139,7 +144,7 @@ export default function Simulador3D({ cruce, candidatos = [], corrida, intensida
       if (cidRef.current) cerrarComparacion3D(cidRef.current).catch(() => {});
       cidRef.current = null;
     };
-  }, [cruce, corrida, intensidades]);
+  }, [cruce, corrida, intensidades, programa]);
 
   // 2. armar las dos escenas y el bucle de render
   useEffect(() => {
@@ -349,7 +354,9 @@ export default function Simulador3D({ cruce, candidatos = [], corrida, intensida
           )}
           <span>
             {info ? `Demanda ${info.fuente_demanda === 'sintetica' ? 'sintética' : info.fuente_demanda === 'real' ? 'real' : 'real + fondo sintético'}` : 'Preparando…'}
-            {info?.ciclo_s ? ` · semáforo propuesto: ${info.fases} fases, ciclo ${Math.round(info.ciclo_s)} s` : ''}
+            {info?.ciclo_s
+              ? ` · semáforo propuesto${info.programa === 'webster' ? ' (Webster)' : ''}: ${info.fases} fases, ciclo ${Math.round(info.ciclo_s)} s`
+              : ''}
             {frame ? ` · ${hora(frame.t)}` : ''}
           </span>
         </div>
@@ -460,6 +467,13 @@ export default function Simulador3D({ cruce, candidatos = [], corrida, intensida
             </button>
             {panelAbierto && (
               <>
+                {onCambiarPrograma && (
+                  <details className="sim3d-programa">
+                    <summary>Programa del semáforo propuesto</summary>
+                    <ElegirPrograma valor={programa} onCambio={onCambiarPrograma} />
+                    <p className="pd-nota">Al cambiarlo, la comparación se prepara de nuevo con el mismo tráfico.</p>
+                  </details>
+                )}
                 <h4>Lanzar un actor</h4>
                 <p className="pd-nota">Entra por el mismo acceso, a la misma hora, en los dos escenarios.</p>
                 <label>

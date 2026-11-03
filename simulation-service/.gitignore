@@ -16,3 +16,9 @@ precalculadas/**/*.geojson
 precalculadas/**/*.tmp
 # programas de semáforo que guarda el usuario desde la ficha (Configurar)
 src/etl/sumo/scenarios/*/programa_*.xml
+# buses y paradas del GTFS (python -m etl.sumo.transporte_publico): se versionan aunque sean *rou*.xml
+!src/etl/sumo/scenarios/*/pt_vehiculos.rou.xml
+# insumos intermedios del GTFS y del tráfico de paso (se regeneran)
+src/etl/sumo/scenarios/*/gtfs_usaquen.zip
+src/etl/sumo/scenarios/*/.trafico_paso_*/
+src/etl/sumo/scenarios/*/.gtfs2pt/

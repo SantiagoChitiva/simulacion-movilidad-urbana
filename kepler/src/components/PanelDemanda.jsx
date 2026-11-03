@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { obtenerPresets, obtenerEstilos } from '../api';
+import { obtenerEstilos, obtenerOpcionesDemanda, obtenerPresets } from '../api';
 
 const PASO = 50;
 const MAX_VIAJES = 100000; // mismo tope que configuration.MAX_VIAJES en la API
@@ -14,6 +14,8 @@ const GRUPOS = [
 ];
 
 const numero = (n) => n.toLocaleString('es-CO');
+const hora = (s) => `${String(Math.floor(s / 3600)).padStart(2, '0')}:00`;
+const VENTANAS = { am: 'Mañana', pm: 'Tarde' };
 const suma = (obj) => Object.values(obj).reduce((a, b) => a + b, 0);
 const mismosConteos = (a, b) => Object.keys({ ...a, ...b }).every((k) => (a[k] ?? 0) === (b[k] ?? 0));
 
@@ -67,31 +69,53 @@ export default function PanelDemanda({
   const [semilla, setSemilla] = useState('');
   const [estilos, setEstilos] = useState([]);
   const [estiloId, setEstiloId] = useState('normal');
+  const [opciones, setOpciones] = useState(null);   // /demanda/opciones
+  const [ventana, setVentana] = useState('am');
+  const [traficoPaso, setTraficoPaso] = useState(true);
+  const [transportePublico, setTransportePublico] = useState(true);
+  const [asignacion, setAsignacion] = useState(false);
 
   useEffect(() => {
-    obtenerPresets()
-      .then((p) => {
-        setPresets(p);
-        setConteos({ ...p.find((x) => x.id === 'encuesta').conteos });
-      })
-      .catch((e) => setErrorPresets(`No se pudo conectar con la API: ${e.message}`));
     obtenerEstilos()
       .then(setEstilos)
       .catch(() => {});
+    obtenerOpcionesDemanda()
+      .then(setOpciones)
+      .catch(() => {});
   }, []);
+
+  // los conteos de cada preset dependen de la ventana (la encuesta de la tarde es otra)
+  useEffect(() => {
+    obtenerPresets(ventana)
+      .then((p) => {
+        setPresets(p);
+        setConteos({ ...p.find((x) => x.id === presetId)?.conteos ?? p[0].conteos });
+      })
+      .catch((e) => setErrorPresets(`No se pudo conectar con la API: ${e.message}`));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ventana]);
+
+  const hayPaso = !!opciones?.trafico_paso?.[ventana];
+  const hayPublico = !!opciones?.transporte_publico;
+  const pasoPedido = hayPaso && traficoPaso;
+  const publicoPedido = hayPublico && transportePublico;
+  const [inicio, fin] = opciones ? [opciones.ventanas[ventana].inicio, opciones.ventanas[ventana].fin] : [7 * 3600, 10 * 3600];
 
   const preset = presets.find((p) => p.id === presetId);
   const total = suma(conteos);
   const modificado = preset && modos.some((m) => (conteos[m.id] ?? 0) !== (preset.conteos[m.id] ?? 0));
 
   // precalculada que corresponde exactamente a lo que está en el panel
-  const precalculada = precalculadas.find((p) => p.preset === presetId);
+  const precalculada = precalculadas.find((p) => p.preset === presetId && (p.ventana ?? 'am') === ventana);
   const semillaPedida = semilla === '' ? SEMILLA_SUMOCFG : Number(semilla);
   // la precalculada no tiene cierres ni otro estilo de conducción: con ellos hay que simular
   const lista =
     !!precalculada &&
     cierres === 0 &&
     estiloId === 'normal' &&
+    !asignacion &&
+    !!precalculada.trafico_paso === pasoPedido &&
+    (precalculada.transporte_publico ?? false) === publicoPedido &&
     mismosConteos(conteos, precalculada.conteos) &&
     semillaPedida === (precalculada.semilla ?? SEMILLA_SUMOCFG);
   const enMapa = lista && corridaCargada === precalculada.id;
@@ -111,7 +135,12 @@ export default function PanelDemanda({
   const verCorrida = (id) => {
     const c = [...precalculadas, ...historial].find((x) => x.id === id) ?? null;
     if (c) {
+      const o = c.opciones ?? c;
       setPresetId(c.preset);
+      if ((o.ventana ?? 'am') !== ventana) setVentana(o.ventana ?? 'am');
+      setTraficoPaso(!!o.trafico_paso);
+      setTransportePublico(o.transporte_publico ?? false);
+      setAsignacion(!!o.asignacion_iterativa);
       setConteos({ ...Object.fromEntries(modos.map((m) => [m.id, 0])), ...c.conteos });
       setSemilla(c.semilla ?? '');
     }
@@ -130,6 +159,10 @@ export default function PanelDemanda({
       conteos: Object.fromEntries(Object.entries(conteos).filter(([, v]) => v > 0)),
       semilla: semilla === '' ? null : Number(semilla),
       estilo: estiloId,
+      ventana,
+      trafico_paso: pasoPedido,
+      transporte_publico: publicoPedido,
+      asignacion_iterativa: asignacion,
     });
 
   const nota = modos.find((m) => m.nota)?.nota;
@@ -137,6 +170,33 @@ export default function PanelDemanda({
   return (
     <div className="pd-contenido">
       {(errorPresets || error) && <p className="pd-error">{errorPresets || error}</p>}
+
+      <section>
+        <h3>Horario</h3>
+        <div className="pd-presets">
+          {Object.entries(VENTANAS).map(([id, nombre]) => (
+            <button type="button" key={id} className={id === ventana ? 'activo' : ''} onClick={() => setVentana(id)}>
+              {nombre}
+              {opciones && ` (${hora(opciones.ventanas[id].inicio)}–${hora(opciones.ventanas[id].fin)})`}
+            </button>
+          ))}
+        </div>
+        <div className="pd-opciones">
+          <label title={hayPaso ? '' : 'No hay tráfico de paso generado para este horario'}>
+            <input type="checkbox" checked={pasoPedido} disabled={!hayPaso} onChange={(e) => setTraficoPaso(e.target.checked)} />
+            Tráfico que atraviesa Usaquén (calibrado con los aforos)
+          </label>
+          <label title={hayPublico ? '' : 'El escenario no tiene los buses del GTFS'}>
+            <input type="checkbox" checked={publicoPedido} disabled={!hayPublico} onChange={(e) => setTransportePublico(e.target.checked)} />
+            Buses del SITP (GTFS): los viajes en transporte público usan bus
+          </label>
+          <label>
+            <input type="checkbox" checked={asignacion} onChange={(e) => setAsignacion(e.target.checked)} disabled={publicoPedido} />
+            Asignación iterativa de rutas (más realista, tarda varias veces más)
+          </label>
+          {publicoPedido && <p className="pd-nota">La asignación iterativa todavía no admite los buses del GTFS.</p>}
+        </div>
+      </section>
 
       <section>
         <h3>Escenario</h3>
@@ -150,7 +210,7 @@ export default function PanelDemanda({
               title={p.descripcion}
             >
               {p.nombre}
-              {precalculadas.some((x) => x.preset === p.id) && (
+              {precalculadas.some((x) => x.preset === p.id && (x.ventana ?? 'am') === ventana) && (
                 <span className="pd-lista" title="Precalculada: se carga sin correr SUMO">
                   {' '}
                   · lista
@@ -191,10 +251,13 @@ export default function PanelDemanda({
       )}
 
       <section>
-        <h3>Viajes por actor vial (07:00–10:00)</h3>
+        <h3>Viajes por actor vial ({hora(inicio)}–{hora(fin)})</h3>
         <p className="pd-nota">
-          Un día hábil típico según la Encuesta de Movilidad 2023, de 7:00 a 10:00, con los viajes que empiezan y terminan
-          en Usaquén. No es el promedio de varios días ni incluye el tráfico que solo atraviesa la localidad.
+          Un día hábil típico según la Encuesta de Movilidad 2023, de {hora(inicio)} a {hora(fin)}, con los viajes que
+          empiezan y terminan en Usaquén.
+          {pasoPedido
+            ? ' A estos se suma el tráfico que atraviesa la localidad, estimado para reproducir los aforos.'
+            : ' Sin el tráfico que solo atraviesa la localidad, las avenidas quedan mucho más vacías que en la realidad.'}
         </p>
         {GRUPOS.map(([grupo, titulo]) => {
           const delGrupo = modos.filter((m) => m.grupo === grupo);

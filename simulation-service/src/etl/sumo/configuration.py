@@ -27,9 +27,14 @@ POIS_GEOJSON = SUMO_DIR.parents[3] / "data" / "processed" / "pois_usaquen.geojso
 # Aforos de la hora de máxima demanda (EODI 2023) ubicados en la red (python -m etl.sumo.aforos)
 AFOROS_JSON = SUMO_DIR.parents[3] / "data" / "processed" / "aforos_usaquen.json"
 
-# Ventana horaria de la simulación (segundos desde las 00:00)
-HORA_INI = 7 * 3600
-HORA_FIN = 10 * 3600
+# output-prefix de la plantilla .sumocfg: SUMO lo antepone a todas las salidas
+PREFIJO_SALIDAS = "usaquen_am."
+
+# Ventanas horarias simulables (segundos desde las 00:00): la punta de la mañana y la de la
+# tarde, que es la otra con aforos (16:00-19:00). HORA_INI/HORA_FIN son la de la mañana,
+# la ventana por defecto.
+VENTANAS: dict[str, tuple[int, int]] = {"am": (7 * 3600, 10 * 3600), "pm": (16 * 3600, 19 * 3600)}
+HORA_INI, HORA_FIN = VENTANAS["am"]
 
 # Tope de copias por viaje de la encuesta (factor de expansión)
 MAX_COPIAS = 50
@@ -115,6 +120,9 @@ class ArchivosPrecalculada:
 def escribir_sumocfg_corrida(
     paths: "ScenarioPaths",
     additional_files: list[Path] | None = None,
+    route_files: list[Path] | None = None,
+    ventana: tuple[int, int] | None = None,
+    max_vehiculos: int | None = None,
 ) -> Path:
     """Copia la plantilla .sumocfg al directorio de la corrida apuntando a sus insumos.
 
@@ -122,20 +130,25 @@ def escribir_sumocfg_corrida(
     relativas, así que SUMO las escribe junto al .sumocfg de la corrida.
 
     `additional_files` permite añadir archivos adicionales (vtypes de estilo, rerouters de
-    cierre vial) además del TAZ; se concatenan separados por comas.
+    cierre vial, paradas de bus) además del TAZ, y `route_files` demanda adicional (buses
+    del GTFS, tráfico de paso); se concatenan separados por comas. `ventana` cambia el
+    begin/end de la plantilla (la mañana) y `max_vehiculos` su tope de vehículos en la red.
     """
     tree = ET.parse(paths.sumocfg_template)
     extras: list[Path] = additional_files or []
     all_additionals = [paths.taz] + extras
     valores = {
-        "net-file": paths.net,
-        "route-files": paths.routes,
+        "net-file": str(paths.net.resolve()),
+        "route-files": ",".join(str(p.resolve()) for p in [paths.routes, *(route_files or [])]),
         "additional-files": ",".join(str(p.resolve()) for p in all_additionals),
     }
+    if ventana is not None:
+        valores["begin"], valores["end"] = str(ventana[0]), str(ventana[1])
+    if max_vehiculos is not None:
+        valores["max-num-vehicles"] = str(max_vehiculos)
     for elem in tree.getroot().iter():
         if elem.tag in valores:
-            elem.set("value", str(valores[elem.tag]) if elem.tag == "additional-files"
-                     else str(Path(valores[elem.tag]).resolve()))
+            elem.set("value", valores[elem.tag])
 
     paths.sumocfg.parent.mkdir(parents=True, exist_ok=True)
     tree.write(paths.sumocfg, encoding="UTF-8", xml_declaration=True)

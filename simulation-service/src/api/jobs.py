@@ -61,6 +61,17 @@ class Corrida:
     resultado: dict[str, Any] | None = None
     estilo: str = EstiloConductor.normal.value
     cierres: list[dict[str, Any]] = field(default_factory=list)
+    # ventana, tráfico de paso, transporte público y asignación iterativa (DemandaConfig)
+    opciones: dict[str, Any] = field(default_factory=dict)
+
+
+def opciones_demanda(demanda: DemandaConfig) -> dict[str, Any]:
+    return {
+        "ventana": getattr(demanda, "ventana", "am"),
+        "trafico_paso": getattr(demanda, "trafico_paso", False),
+        "transporte_publico": getattr(demanda, "transporte_publico", True),
+        "asignacion_iterativa": getattr(demanda, "asignacion_iterativa", False),
+    }
 
 
 def _ahora() -> str:
@@ -155,6 +166,7 @@ class GestorCorridas:
                 {"edge_id": c.edge_id, "hora_inicio_s": c.hora_inicio_s, "hora_fin_s": c.hora_fin_s}
                 for c in (cierres or [])
             ],
+            opciones=opciones_demanda(demanda),
         )
         with self._lock:
             self._corridas[run_id] = corrida

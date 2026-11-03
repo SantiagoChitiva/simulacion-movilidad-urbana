@@ -1,7 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { crearComparacion, obtenerComparacion, obtenerProgramas } from '../api';
+import { descargarCsv, imprimirReporte } from '../exportar';
 
 const numero = (n) => (n == null ? '—' : Math.round(n).toLocaleString('es-CO'));
+// "entre X y Y" cuando hubo varias semillas y no dieron lo mismo
+const conRango = (p, id, unidad) => {
+  const v = p.metricas?.[id];
+  const r = p.metricas?.rangos?.[id];
+  const u = v != null && unidad ? ` ${unidad}` : '';
+  if (!r || r[0] === r[1]) return `${numero(v)}${u}`;
+  return `${numero(v)}${u} (${numero(r[0])}–${numero(r[1])})`;
+};
 
 const METRICAS = [
   { id: 'demora_media_s', etiqueta: 'Tiempo perdido por vehículo', unidad: 's', menosEsMejor: true,
@@ -48,6 +57,7 @@ export default function TablaComparacion({ id, corrida }) {
   const [guardados, setGuardados] = useState([]);
   const [elegidos, setElegidos] = useState({ webster: true });
   const [semilla, setSemilla] = useState(42);
+  const [repeticiones, setRepeticiones] = useState(3);
   const [comparacion, setComparacion] = useState(null);
   const [error, setError] = useState(null);
   const sondeo = useRef(null);
@@ -70,7 +80,7 @@ export default function TablaComparacion({ id, corrida }) {
     setComparacion(null);
     const programas = ['actual', ...Object.keys(elegidos).filter((k) => elegidos[k])];
     try {
-      const { comparacion_id: cid } = await crearComparacion(id, { corrida, programas, semilla });
+      const { comparacion_id: cid } = await crearComparacion(id, { corrida, programas, semilla, repeticiones });
       const consultar = async () => {
         try {
           const c = await obtenerComparacion(cid);
@@ -97,13 +107,43 @@ export default function TablaComparacion({ id, corrida }) {
     return m.menosEsMejor ? Math.min(...valores) : Math.max(...valores);
   };
   const frase = veredicto(programas);
+  const reps = terminados[0]?.metricas?.repeticiones ?? 1;
+
+  const filasExportar = () => [
+    ['metrica', ...terminados.flatMap((p) => [p.etiqueta, `${p.etiqueta} min`, `${p.etiqueta} max`])],
+    ...METRICAS.map((m) => [m.etiqueta, ...terminados.flatMap((p) => {
+      const r = p.metricas.rangos?.[m.id] ?? [p.metricas[m.id], p.metricas[m.id]];
+      return [p.metricas[m.id], r[0], r[1]];
+    })]),
+    ['Ciclo (s)', ...terminados.flatMap((p) => [p.ciclo_s, p.ciclo_s, p.ciclo_s])],
+  ];
+  const exportarPdf = () => {
+    try {
+      imprimirReporte(`Comparación de programas del semáforo ${id}`, [
+        { parrafos: [frase ?? '', `Simulación de una hora punta alrededor del semáforo con los mismos viajes; ${reps} semilla(s) por programa (desde la ${semilla}). Entre paréntesis, el rango entre semillas.`] },
+        {
+          titulo: 'Resultados',
+          tabla: {
+            encabezado: ['', ...terminados.map((p) => p.etiqueta)],
+            filas: [
+              ...METRICAS.map((m) => [m.etiqueta, ...terminados.map((p) => conRango(p, m.id, m.unidad))]),
+              ['Ciclo', ...terminados.map((p) => `${numero(p.ciclo_s)} s`)],
+            ],
+          },
+        },
+        { titulo: 'Supuestos', parrafos: ['Zona de 300 m alrededor del semáforo con los viajes de la encuesta que pasan por ella (o tráfico de fondo si la corrida no tiene rutas). Los programas actuales de la red los generó netconvert a partir de OpenStreetMap: no son los planes de tiempos reales de la Secretaría de Movilidad.'] },
+      ]);
+    } catch (e) {
+      setError(e.message);
+    }
+  };
   const simulando = programas.find((p) => p.estado === 'simulando');
   const teleports = terminados.reduce((s, p) => s + (p.metricas.teleports ?? 0), 0);
 
   return (
     <section className="tc">
       <p className="pd-nota">
-        Simula una hora punta (7:00–8:00) alrededor del semáforo, con los mismos viajes, una vez por programa. Así se
+        Simula la primera hora de la corrida alrededor del semáforo, con los mismos viajes, para cada programa. Así se
         ve cuál deja pasar mejor a vehículos y peatones. Tarda uno o dos minutos por programa.
       </p>
 
@@ -153,7 +193,7 @@ export default function TablaComparacion({ id, corrida }) {
                     const v = p.metricas?.[m.id];
                     return (
                       <td key={p.nombre} className={v != null && v === mejor ? 'tc-mejor' : ''}>
-                        {p.metricas ? `${numero(v)}${v != null && m.unidad ? ` ${m.unidad}` : ''}` : '…'}
+                        {p.metricas ? conRango(p, m.id, m.unidad) : '…'}
                       </td>
                     );
                   })}
@@ -169,9 +209,17 @@ export default function TablaComparacion({ id, corrida }) {
       )}
 
       {comparacion?.estado === 'terminado' && (
+        <div className="pv-acciones">
+          <span />
+          <button type="button" onClick={() => descargarCsv(`comparacion-${id}`, filasExportar())}>CSV</button>
+          <button type="button" onClick={exportarPdf}>PDF</button>
+        </div>
+      )}
+      {comparacion?.estado === 'terminado' && (
         <p className="pd-nota">
-          En verde, el mejor valor de cada fila. Zona de 300 m alrededor del semáforo con los viajes de la encuesta que
-          pasan por ella (o tráfico de fondo si la corrida no tiene rutas) y semilla {semilla}.
+          En verde, el mejor valor de cada fila. Cada programa se simuló con {reps} semilla{reps > 1 ? 's' : ''}
+          {reps > 1 ? ': el número es el promedio y entre paréntesis el rango' : ''}. Zona de 300 m alrededor del
+          semáforo con los viajes de la encuesta que pasan por ella (o tráfico de fondo si la corrida no tiene rutas).
           {teleports > 0 && ` SUMO retiró ${teleports} vehículos atascados en total.`}
         </p>
       )}
@@ -182,7 +230,14 @@ export default function TablaComparacion({ id, corrida }) {
           Semilla aleatoria
           <input type="number" value={semilla} onChange={(e) => setSemilla(Number(e.target.value) || 0)} />
         </label>
-        <p className="pd-nota">Con la misma semilla, la misma comparación da exactamente los mismos números.</p>
+        <label className="tc-semilla">
+          Repeticiones (semillas)
+          <input type="number" min="1" max="5" value={repeticiones} onChange={(e) => setRepeticiones(Math.min(5, Math.max(1, Number(e.target.value) || 1)))} />
+        </label>
+        <p className="pd-nota">
+          Con la misma semilla, la misma comparación da exactamente los mismos números. Con varias, se ve cuánto cambia el
+          resultado por el azar del tráfico (cada repetición suma uno o dos minutos por programa).
+        </p>
       </details>
     </section>
   );

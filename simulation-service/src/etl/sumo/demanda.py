@@ -17,7 +17,7 @@ from enum import Enum
 from functools import lru_cache
 from pathlib import Path
 
-from .configuration import HORA_FIN, HORA_INI
+from .configuration import VENTANAS
 from .enums.transport_mode import TransportMode as M
 from .trips import TripGenerationConfig, TripGenerationStats, TripRecord, read_trips
 
@@ -202,9 +202,9 @@ def cargar_dia(tsv: Path) -> tuple[TripRecord, ...]:
 
 
 @lru_cache(maxsize=4)
-def cargar_ventana(tsv: Path) -> tuple[TripRecord, ...]:
-    """Viajes de la ventana simulada (07:00-10:00)."""
-    return _leer(tsv, HORA_INI, HORA_FIN)
+def cargar_ventana(tsv: Path, ventana: str = "am") -> tuple[TripRecord, ...]:
+    """Viajes de la ventana simulada (por defecto la de la mañana, 07:00-10:00)."""
+    return _leer(tsv, *VENTANAS[ventana])
 
 
 # ---------------------------------------------------------------- pública
@@ -213,6 +213,14 @@ def cargar_ventana(tsv: Path) -> tuple[TripRecord, ...]:
 class DemandaConfig:
     preset: Preset = Preset.ENCUESTA
     conteos: dict[M, int] = field(default_factory=dict)   # viajes a generar por modo
+    ventana: str = "am"                  # clave de VENTANAS: "am" (07-10) o "pm" (16-19)
+    trafico_paso: bool = False           # suma el tráfico de paso calibrado con aforos (trafico_paso.py)
+    transporte_publico: bool = True      # buses del GTFS y viajes en bus, si el escenario los tiene
+    asignacion_iterativa: bool = False   # rutas con duaIterate (equilibrio) en vez de una pasada
+
+    @property
+    def horas(self) -> tuple[int, int]:
+        return VENTANAS[self.ventana]
 
 
 def conteos_preset(

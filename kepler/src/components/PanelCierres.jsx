@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
-const HORA_INI = 7 * 3600;
-const HORA_FIN = 10 * 3600;
+// ventanas simulables (configuration.VENTANAS): el cierre tiene que caer en una de ellas
+const VENTANAS = [[7 * 3600, 10 * 3600], [16 * 3600, 19 * 3600]];
 
 function segundosAHora(s) {
   const h = Math.floor(s / 3600);
@@ -32,7 +32,9 @@ export default function PanelCierres({ cierres, onChange, via, cargandoVias, err
     const fn = horaASegundos(fin);
     let problema = null;
     if (fn <= ini) problema = 'La hora de fin debe ser posterior a la de inicio.';
-    else if (ini < HORA_INI || fn > HORA_FIN) problema = 'La simulación va de 07:00 a 10:00: usa horas dentro de ese rango.';
+    else if (!VENTANAS.some(([a, b]) => ini >= a && fn <= b)) {
+      problema = 'La simulación va de 07:00 a 10:00 (mañana) o de 16:00 a 19:00 (tarde): usa horas dentro de uno de esos rangos.';
+    }
     setError(problema);
     return problema ? null : [ini, fn];
   };
@@ -74,11 +76,11 @@ export default function PanelCierres({ cierres, onChange, via, cargandoVias, err
           <div className="ci-horas">
             <label>
               Desde
-              <input type="time" min="07:00" max="10:00" value={inicio} onChange={(e) => setInicio(e.target.value)} />
+              <input type="time" min="07:00" max="19:00" value={inicio} onChange={(e) => setInicio(e.target.value)} />
             </label>
             <label>
               Hasta
-              <input type="time" min="07:00" max="10:00" value={fin} onChange={(e) => setFin(e.target.value)} />
+              <input type="time" min="07:00" max="19:00" value={fin} onChange={(e) => setFin(e.target.value)} />
             </label>
           </div>
           <div className="ci-acciones">

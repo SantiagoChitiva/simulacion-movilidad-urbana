@@ -24,8 +24,38 @@ function Cifra({ titulo, valor }) {
 }
 
 /** Lo que se ve al elegir un cruce: por qué es candidato, cifras, el cruce en fotos y el botón al 3D. */
+// programa del semáforo propuesto en el simulador 3D
+export const PROGRAMA_DEFECTO = { programa: 'netconvert', ciclo_s: null };
+
+/** Cómo se programa el semáforo propuesto: el de netconvert (con ciclo opcional) o Webster. */
+export function ElegirPrograma({ valor, onCambio }) {
+  return (
+    <div className="ps-programa">
+      <label>
+        <input type="radio" checked={valor.programa === 'webster'} onChange={() => onCambio({ programa: 'webster', ciclo_s: null })} />
+        Tiempos óptimos (Webster) con el tráfico que llega a este cruce
+      </label>
+      <label>
+        <input type="radio" checked={valor.programa === 'netconvert'} onChange={() => onCambio({ ...valor, programa: 'netconvert' })} />
+        Programa automático de SUMO
+        {valor.programa === 'netconvert' && (
+          <span className="ps-ciclo">
+            , ciclo de
+            <input
+              type="range" min="40" max="150" step="5" value={valor.ciclo_s ?? 90}
+              onChange={(e) => onCambio({ programa: 'netconvert', ciclo_s: Number(e.target.value) })}
+            />
+            <b>{valor.ciclo_s ?? 90} s</b>
+          </span>
+        )}
+      </label>
+    </div>
+  );
+}
+
 function TarjetaCruce({ cruce, periodoSiniestros, onVolver, onAbrir }) {
   const [intensidades, setIntensidades] = useState(INTENSIDADES_DEFECTO);
+  const [programa, setPrograma] = useState(PROGRAMA_DEFECTO);
   const nivel = NIVELES[cruce.nivel] ?? { etiqueta: cruce.nivel, color: '#999' };
   const porque = [...(cruce.evidencias ?? []), ...(cruce.contexto ?? [])];
   const accesos = cruce.brazos || '—';
@@ -45,9 +75,17 @@ function TarjetaCruce({ cruce, periodoSiniestros, onVolver, onAbrir }) {
         <small>Medida sugerida para estudio</small>
         <b>{cruce.nivel === 'observacion' ? 'Seguimiento' : 'Semáforo vehicular'}</b>
         <span>{cruce.medida}</span>
-        <button type="button" className="ps-primario" onClick={() => onAbrir(cruce, intensidades)}>
+        <button type="button" className="ps-primario" onClick={() => onAbrir(cruce, intensidades, programa)}>
           ▶ Ver simulación: hoy y con semáforo
         </button>
+        <details className="ps-intensidades">
+          <summary>Programa del semáforo propuesto</summary>
+          <ElegirPrograma valor={programa} onCambio={setPrograma} />
+          <small>
+            El semáforo nuevo no existe todavía: su programa lo calcula SUMO a partir de la geometría del cruce (ciclo de 90 s
+            por defecto) o el método de Webster con los vehículos que llegan por cada acceso.
+          </small>
+        </details>
         <details className="ps-intensidades">
           <summary>Ajustar el tráfico de fondo</summary>
           {Object.entries(intensidades).map(([modo, valor]) => (

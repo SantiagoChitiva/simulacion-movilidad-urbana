@@ -19,6 +19,7 @@ Uso: python -m etl.sumo.aforos "<carpeta 2.PublicacionSIMUR>"
 (necesita geopandas y openpyxl, que solo se usan aquí: pip install -e ".[datos]").
 """
 import argparse
+import hashlib
 import json
 import math
 from collections import defaultdict
@@ -252,6 +253,15 @@ def preparar_aforos(cfg: AforosConfig, stats: AforosStats | None = None) -> Afor
     cfg.destino.parent.mkdir(parents=True, exist_ok=True)
     cfg.destino.write_text(json.dumps(datos, ensure_ascii=False, indent=1), encoding="utf-8")
     return AforosResult(cfg.destino, puntos)
+
+
+def grupo_estacion(estacion: str) -> str:
+    """'calibracion' o 'control', fijo por estación (hash del ID: no depende del orden).
+
+    Un tercio de las estaciones queda de control: no se usa para calibrar el tráfico de paso
+    (trafico_paso.py) y su GEH es la validación independiente.
+    """
+    return "control" if int(hashlib.sha1(estacion.encode()).hexdigest(), 16) % 3 == 0 else "calibracion"
 
 
 def cargar_aforos(path: Path = AFOROS_JSON) -> list[dict]:

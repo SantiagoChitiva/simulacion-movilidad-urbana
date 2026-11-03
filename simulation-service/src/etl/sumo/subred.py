@@ -96,7 +96,7 @@ def encontrar_herramienta(nombre: str) -> str:
     except ImportError:
         pass
     for base in bases:
-        for sub in ("tools/route", "tools"):
+        for sub in ("tools/route", "tools", "tools/import/gtfs"):
             candidato = base / sub / nombre
             if candidato.is_file():
                 return str(candidato)

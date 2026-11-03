@@ -81,6 +81,8 @@ class Comparacion:
     nodo_id: str
     run_dir: Path
     nodos: list[str] = field(default_factory=list)   # todos los nodos del cruce
+    # programa del semáforo propuesto ("netconvert" o "webster"), ciclo_s y hora de inicio
+    opciones: dict[str, Any] = field(default_factory=dict)
     estado: str = "preparando"          # preparando | lista | error
     etapa: str | None = None
     info: dict[str, Any] = field(default_factory=dict)
@@ -121,6 +123,7 @@ class GestorComparaciones:
         self, nodo_id: str, lon: float, lat: float,
         run_id_origen: str | None = None, intensidades: dict[str, float] | None = None,
         nodos: list[str] | None = None,
+        opciones: dict[str, Any] | None = None,
     ) -> Comparacion:
         with self._lock:
             self._limpiar_expiradas()
@@ -132,6 +135,7 @@ class GestorComparaciones:
             comp = Comparacion(
                 cid=cid, nodo_id=nodo_id, run_dir=self._runs_dir / cid,
                 nodos=list(dict.fromkeys([nodo_id, *(nodos or [])])),
+                opciones=dict(opciones or {}),
             )
             self._comparaciones[cid] = comp
 
@@ -196,6 +200,8 @@ def _preparar_zona(comp: Comparacion, nodo_id: str, lon: float, lat: float,
     info = run_escenario_semaforo(
         nodo_id, lon, lat, comp.cid, run_id_origen=run_id_origen,
         intensidades=intensidades, on_progreso=_progreso, nodos=comp.nodos,
+        ciclo_s=comp.opciones.get("ciclo_s"), programa=comp.opciones.get("programa", "netconvert"),
+        inicio=comp.opciones.get("inicio", HORA_INI),
     )
     comp.etapa = "armando_escena"
     comp.geometria = geometria_escena(comp.run_dir, nodo_id, _nombres_vias(), comp.nodos, info["tl_id"])
@@ -212,7 +218,7 @@ def _nombres_vias() -> dict[str, str]:
 # ─────────────────────────────────────────────────────────── un lado de la comparación
 
 def escribir_sumocfg_lado(destino: Path, net: Path, demanda: list[str], vtypes: str,
-                          adicionales: list[str] | None = None) -> Path:
+                          adicionales: list[str] | None = None, inicio: float = HORA_INI) -> Path:
     """Configuración de un lado. Los dos lados solo difieren en la red (y en el programa del
     semáforo propuesto, que va en `adicionales`)."""
     raiz = ET.Element("configuration")
@@ -222,8 +228,8 @@ def escribir_sumocfg_lado(destino: Path, net: Path, demanda: list[str], vtypes: 
     archivos = [vtypes, *(adicionales or [])]
     ET.SubElement(entrada, "additional-files", value=",".join(str(Path(a).resolve()) for a in archivos))
     tiempo = ET.SubElement(raiz, "time")
-    ET.SubElement(tiempo, "begin", value=str(HORA_INI))
-    ET.SubElement(tiempo, "end", value=str(HORA_INI + DURACION_S + CALENTAMIENTO_S))
+    ET.SubElement(tiempo, "begin", value=str(inicio))
+    ET.SubElement(tiempo, "end", value=str(inicio + DURACION_S + CALENTAMIENTO_S))
     ET.SubElement(tiempo, "step-length", value=str(PASO_S))
     proc = ET.SubElement(raiz, "processing")
     ET.SubElement(proc, "ignore-route-errors", value="true")
@@ -814,9 +820,11 @@ def correr_comparacion(comp: Comparacion, cola: asyncio.Queue, bucle: asyncio.Ab
     info = comp.info
     nodo = info["nodo"]
     vtypes = vtypes_deterministas(Path(info["vtypes"]), comp.run_dir / "vtypes_3d.add.xml")
-    cfg_a = escribir_sumocfg_lado(comp.run_dir / "lado_a.sumocfg", Path(info["zona_net"]), info["demanda"], vtypes)
+    inicio = info.get("inicio", HORA_INI)
+    cfg_a = escribir_sumocfg_lado(comp.run_dir / "lado_a.sumocfg", Path(info["zona_net"]), info["demanda"], vtypes,
+                                  inicio=inicio)
     cfg_b = escribir_sumocfg_lado(comp.run_dir / "lado_b.sumocfg", Path(info["zona_tls_net"]), info["demanda"], vtypes,
-                                  info.get("programa_adicional"))
+                                  info.get("programa_adicional"), inicio=inicio)
 
     lados: list[Lado] = []
     try:
@@ -833,7 +841,7 @@ def correr_comparacion(comp: Comparacion, cola: asyncio.Queue, bucle: asyncio.Ab
             t = min(t + 20, fin_calentamiento)
             for lado in lados:
                 lado.avanzar(t)
-            publicar({"tipo": "estado", "mensaje": f"Calentando la simulación ({int(100 * (t - HORA_INI) / CALENTAMIENTO_S)} %)…"})
+            publicar({"tipo": "estado", "mensaje": f"Calentando la simulación ({int(100 * (t - inicio) / CALENTAMIENTO_S)} %)…"})
 
         for lado in lados:
             lado.en_vivo = True
@@ -842,7 +850,7 @@ def correr_comparacion(comp: Comparacion, cola: asyncio.Queue, bucle: asyncio.Ab
         pendiente_control = False
         n_ego = 0
         proximo_riesgo = t
-        fin = HORA_INI + CALENTAMIENTO_S + DURACION_S
+        fin = inicio + CALENTAMIENTO_S + DURACION_S
         while comp.activa and t < fin:
             # comandos del visor
             while True:

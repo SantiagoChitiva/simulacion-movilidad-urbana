@@ -24,6 +24,7 @@ from collections import defaultdict
 from dataclasses import dataclass, field
 from pathlib import Path
 
+from .aforos import grupo_estacion
 from .configuration import AFOROS_JSON, HORA_INI
 from .vtypes import BUS_PT_ID
 
@@ -108,6 +109,22 @@ def _hora_pico(serie: dict[float, float]) -> tuple[float | None, float]:
     return mejor
 
 
+def _indicadores(filas: list[dict]) -> dict:
+    """Puntos, cuántos cumplen GEH < 5, porcentaje, GEH mediano y razón de volúmenes."""
+    cumplen = sum(1 for f in filas if f["cumple"])
+    porcentaje = round(100 * cumplen / len(filas), 1) if filas else 0.0
+    real_total = sum(f["real"] for f in filas)
+    return {
+        "puntos": len(filas),
+        "cumplen": cumplen,
+        "porcentaje": porcentaje,
+        "cumple_criterio": bool(filas) and porcentaje >= CRITERIO_PORCENTAJE,
+        "geh_mediano": round(sorted(f["geh"] for f in filas)[len(filas) // 2], 2) if filas else None,
+        # cuánto del volumen aforado alcanza la simulación en esos puntos
+        "razon_volumen": round(sum(f["simulado"] for f in filas) / real_total, 3) if real_total else None,
+    }
+
+
 @dataclass(frozen=True)
 class ValidacionConfig:
     conteos: Path                      # salida de los edgeData
@@ -167,27 +184,21 @@ def validar(cfg: ValidacionConfig, stats: ValidacionStats | None = None) -> Vali
             "modos": modos, "hora_pico_simulada": inicio,
             "simulado": round(simulado, 1), "real": round(real, 1), "geh": round(valor, 2),
             "cumple": valor < UMBRAL_GEH,
+            "grupo": grupo_estacion(punto["id"]),
             "simulado_por_modo": {m: round(v, 1) for m, v in sim_modos.items()},
             "real_por_modo": {m: real_modos.get(m, 0.0) for m in modos},
         })
     stats.puntos = len(filas)
 
-    cumplen = sum(1 for f in filas if f["cumple"])
-    porcentaje = round(100 * cumplen / len(filas), 1) if filas else 0.0
-    simulado_total = sum(f["simulado"] for f in filas)
-    real_total = sum(f["real"] for f in filas)
     resumen = {
         "periodo": cfg.periodo,
         "etiqueta": cfg.etiqueta,
-        "puntos": len(filas),
-        "cumplen": cumplen,
-        "porcentaje": porcentaje,
+        **_indicadores(filas),
         "criterio_porcentaje": CRITERIO_PORCENTAJE,
         "umbral_geh": UMBRAL_GEH,
-        "cumple_criterio": bool(filas) and porcentaje >= CRITERIO_PORCENTAJE,
-        "geh_mediano": round(sorted(f["geh"] for f in filas)[len(filas) // 2], 2) if filas else None,
-        # cuánto del volumen aforado alcanza la simulación en esos puntos
-        "razon_volumen": round(simulado_total / real_total, 3) if real_total else None,
+        # con tráfico de paso, las estaciones de calibración se usaron para estimarlo: la
+        # validación independiente es la de las de control
+        "por_grupo": {g: _indicadores([f for f in filas if f["grupo"] == g]) for g in ("calibracion", "control")},
         "modos_simulados": list(cfg.modos_simulados),
         "estaciones_no_simuladas": sorted(set(stats.estaciones_no_simuladas)),
         "filas": filas,

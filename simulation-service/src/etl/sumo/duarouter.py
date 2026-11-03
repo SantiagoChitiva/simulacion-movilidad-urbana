@@ -4,6 +4,7 @@ import threading
 from dataclasses import dataclass
 from pathlib import Path
 
+from .configuration import HORA_FIN, HORA_INI
 from .proceso import OnAvance, avance_ventana, ejecutar, ultimo_depart
 
 class DuarouterError(RuntimeError):
@@ -18,6 +19,11 @@ class DuarouterConfig:
     threads: int = 4
     ignore_errors: bool = True
     repair: bool = True
+    ventana: tuple[int, int] = (HORA_INI, HORA_FIN)   # solo para el avance
+    # buses del GTFS y sus paradas: duarouter los necesita para rutear los <personTrip
+    # modes="public"> (y los copia, con sus paradas, a la salida)
+    rutas_extra: tuple[Path, ...] = ()
+    adicionales_extra: tuple[Path, ...] = ()
 
     def required_inputs(self) -> list[Path]:
         return [self.net_file, self.trips_file, self.taz_file]
@@ -25,8 +31,8 @@ class DuarouterConfig:
     def to_args(self) -> list[str]:
         args = [
             "-n", str(self.net_file),
-            "--route-files", str(self.trips_file),
-            "--additional-files", str(self.taz_file),
+            "--route-files", ",".join(str(p) for p in (self.trips_file, *self.rutas_extra)),
+            "--additional-files", ",".join(str(p) for p in (self.taz_file, *self.adicionales_extra)),
             "-o", str(self.output_file),
             "--routing-threads", str(self.threads),
         ]
@@ -67,7 +73,7 @@ def run_duarouter(
     def sondear() -> float | None:
         # duarouter escribe las rutas en orden de salida: el último depart marca el avance
         t = ultimo_depart(config.output_file)
-        return None if t is None else avance_ventana(t)
+        return None if t is None else avance_ventana(t, *config.ventana)
 
     result = ejecutar(
         [executable, *config.to_args()],

@@ -1,4 +1,5 @@
 import React from 'react';
+import { descargarCsv, imprimirReporte } from '../../exportar';
 
 const num = (n, unidad = '') => (n == null ? '—' : `${Math.round(n).toLocaleString('es-CO')}${unidad}`);
 const tiempo = (s) => {
@@ -61,9 +62,33 @@ function Tabla({ filas, a, b }) {
  * Resultado de la comparación: el viaje del actor seguido en los dos escenarios (si ya
  * terminó) y el balance del cruce en toda la sesión, con su frase de veredicto.
  */
+const filasTexto = (filas, a, b) => filas.map(([etiqueta, campo, formato]) => [etiqueta, formato(a?.[campo]), formato(b?.[campo])]);
+const filasCrudas = (seccion, filas, a, b) => filas.map(([etiqueta, campo]) => [seccion, etiqueta, a?.[campo] ?? '', b?.[campo] ?? '']);
+
 export default function ResumenComparacion({ resumen, balance, info, nombreCruce, onOtro, onCerrar }) {
   const minutos = balance?.a?.minutos ?? 0;
   const fondo = info?.viajes_sinteticos ? Object.values(info.viajes_sinteticos).reduce((s, n) => s + n, 0) : 0;
+  const programa = info?.programa === 'webster'
+    ? `Webster con los volúmenes de la zona: ciclo de ${num(info?.ciclo_s)} s en ${info?.fases} fases`
+    : `el de netconvert: ciclo de ${num(info?.ciclo_s)} s en ${info?.fases ?? '—'} fases`;
+  const supuestos = `El cruce (carriles, sentidos y giros) es el de la red real. El tráfico mezcla los viajes de la encuesta que pasan por aquí${fondo ? ` con ${num(fondo)} viajes de fondo supuestos` : ''}: no es un aforo. Programa del semáforo propuesto: ${programa}. Si de verdad conviene un semáforo lo decide un estudio de tránsito con conteos en sitio.`;
+
+  const exportarCsv = () => descargarCsv(`comparacion-3d-${nombreCruce}`, [
+    ['seccion', 'indicador', 'sin_semaforo', 'con_semaforo'],
+    ...(resumen ? filasCrudas('viaje', FILAS_VIAJE, resumen.a, resumen.b) : []),
+    ...(balance?.a && balance?.b ? filasCrudas('cruce', FILAS_BALANCE, balance.a, balance.b) : []),
+  ]);
+  const exportarPdf = () => imprimirReporte(`¿Sirve un semáforo en ${nombreCruce}?`, [
+    ...(resumen ? [{
+      titulo: 'El viaje seguido', parrafos: [resumen.comparacion.veredicto],
+      tabla: { encabezado: ['', 'Hoy, sin semáforo', 'Con semáforo'], filas: filasTexto(FILAS_VIAJE, resumen.a, resumen.b) },
+    }] : []),
+    ...(balance?.a && balance?.b ? [{
+      titulo: `Lo que pasó en el cruce (${num(minutos)} min simulados)`,
+      tabla: { encabezado: ['', 'Hoy, sin semáforo', 'Con semáforo'], filas: filasTexto(FILAS_BALANCE, balance.a, balance.b) },
+    }] : []),
+    { titulo: 'Supuestos', parrafos: [supuestos] },
+  ]);
   return (
     <div className="rc-fondo" role="dialog" aria-label="Resumen de la comparación">
       <div className="rc">
@@ -93,12 +118,11 @@ export default function ResumenComparacion({ resumen, balance, info, nombreCruce
         )}
 
         <p className="rc-nota">
-          El cruce (carriles, sentidos y giros) es el de la red real. El tráfico mezcla los viajes de la encuesta que pasan por
-          aquí{fondo ? ` con ${num(fondo)} viajes de fondo supuestos` : ''}: no es un aforo. Un solo viaje depende mucho del
-          momento en que se lanza; lanza varios y mira el balance del cruce. Si de verdad conviene un semáforo lo decide un
-          estudio de tránsito con conteos en sitio.
+          {supuestos} Un solo viaje depende mucho del momento en que se lanza; lanza varios y mira el balance del cruce.
         </p>
         <div className="rc-acciones">
+          <button type="button" onClick={exportarCsv}>CSV</button>
+          <button type="button" onClick={exportarPdf}>PDF</button>
           <button type="button" className="sim3d-primario" onClick={onOtro}>Lanzar otro viaje</button>
           <button type="button" onClick={onCerrar}>Volver a la simulación</button>
         </div>

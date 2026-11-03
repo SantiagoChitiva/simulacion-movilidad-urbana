@@ -26,6 +26,9 @@ class TripGenerationConfig:
     hora_fin: int = HORA_FIN
     max_copias: int = MAX_COPIAS
     demanda: "DemandaConfig | None" = None   # None = demanda de la encuesta tal cual
+    # con buses del GTFS en el escenario, el transporte público es un <personTrip
+    # modes="public"> (caminar, esperar, subir, caminar); sin ellos, una caminata
+    transporte_publico_real: bool = False
 
 
 @dataclass
@@ -156,16 +159,28 @@ def _add_person_walk(root: ET.Element, person_id: str, trip: TripRecord) -> None
     )
 
 
-def _add_trip(root: ET.Element, trip_id: str, trip: TripRecord) -> None:
+def _add_person_trip_publico(root: ET.Element, person_id: str, trip: TripRecord) -> None:
+    person = ET.SubElement(root, "person", {"id": person_id, "depart": f"{trip.depart:.2f}"})
+    ET.SubElement(
+        person,
+        "personTrip",
+        {"fromTaz": trip.origin_taz, "toTaz": trip.destination_taz, "modes": "public"},
+    )
+
+
+def _add_trip(root: ET.Element, trip_id: str, trip: TripRecord, transporte_publico_real: bool = False) -> None:
     if trip.mode.is_vehicle:
         _add_vehicle_trip(root, trip_id, trip)
+    elif trip.mode == TransportMode.TRANSPORTE_PUBLICO and transporte_publico_real:
+        # duarouter arma caminata a la parada, espera, viaje en un bus del GTFS y caminata
+        _add_person_trip_publico(root, trip_id, trip)
     else:
-        # PEATON y TRANSPORTE_PUBLICO: ambos se modelan como <person><walk>.
-        # Limitación: el transporte público aún no usa <ride> ni paradas.
+        # PEATON (y TRANSPORTE_PUBLICO si el escenario no tiene buses): <person><walk>
         _add_person_walk(root, trip_id, trip)
 
 
-def _build_xml(trips: Iterable[TripRecord], stats: TripGenerationStats) -> ET.ElementTree:
+def _build_xml(trips: Iterable[TripRecord], stats: TripGenerationStats,
+               transporte_publico_real: bool = False) -> ET.ElementTree:
     root = _create_root()
     _add_vtypes(root)
 
@@ -181,7 +196,7 @@ def _build_xml(trips: Iterable[TripRecord], stats: TripGenerationStats) -> ET.El
                 stats.personas_generadas += 1
                 number = stats.personas_generadas
 
-            _add_trip(root, f"{trip.mode.value}_{number}", trip)
+            _add_trip(root, f"{trip.mode.value}_{number}", trip, transporte_publico_real)
 
     tree = ET.ElementTree(root)
     ET.indent(tree, space="    ")
@@ -207,7 +222,7 @@ def generate_trips(config: TripGenerationConfig) -> TripGenerationResult:
     # ("Route file should be sorted by departure time, ignoring ..."). Por eso se
     # ordena aquí: sorted es estable, así que empates conservan el orden del TSV.
     trips = sorted(registros, key=lambda t: t.depart)
-    tree = _build_xml(trips, stats)
+    tree = _build_xml(trips, stats, config.transporte_publico_real)
 
     config.output_path.parent.mkdir(parents=True, exist_ok=True)
     tree.write(config.output_path, encoding="UTF-8", xml_declaration=True)

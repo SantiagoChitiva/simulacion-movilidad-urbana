@@ -137,6 +137,26 @@ def leer_metricas(tripinfo: Path, e2: Path, statistics: Path) -> dict[str, float
     }
 
 
+def agregar_semillas(corridas: list[dict[str, float | int | None]]) -> dict:
+    """Métricas de varias semillas: la media de cada una y su rango (mínimo, máximo).
+
+    Una sola semilla da un número que puede cambiar bastante con otra; con varias se
+    reporta "entre X y Y", como hace Semáforos de Barranquilla.
+    """
+    claves = corridas[0].keys() if corridas else []
+    medias: dict[str, float | int | None] = {}
+    rangos: dict[str, list] = {}
+    for k in claves:
+        valores = [c[k] for c in corridas if c.get(k) is not None]
+        if not valores:
+            medias[k] = None
+            continue
+        media = sum(valores) / len(valores)
+        medias[k] = round(media, 1) if isinstance(media, float) and not media.is_integer() else round(media)
+        rangos[k] = [min(valores), max(valores)]
+    return {**medias, "rangos": rangos, "repeticiones": len(corridas)}
+
+
 def correr_programa(
     cfg: ComparacionProgramaConfig,
     stats: ComparacionProgramaStats | None = None,

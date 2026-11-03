@@ -19,30 +19,39 @@ async function pedir(path, opciones) {
 }
 
 // La corrida que se consulta: una precalculada, una de la API o (sin corrida) la por defecto
+// clave de una precalculada: el preset, con "-pm" si es de la tarde
+export const clavePrecalculada = (corrida) => corrida.clave ?? corrida.preset;
+
 const conCorrida = (path, corrida) => {
-  if (corrida?.precalculada) return `${path}?precalculada=${encodeURIComponent(corrida.preset)}`;
+  if (corrida?.precalculada) return `${path}?precalculada=${encodeURIComponent(clavePrecalculada(corrida))}`;
   if (corrida?.id) return `${path}?run_id=${encodeURIComponent(corrida.id)}`;
   return path;
 };
 
 export const obtenerModos = () => pedir('/demanda/modos');
-export const obtenerPresets = () => pedir('/demanda/presets');
+export const obtenerPresets = (ventana = 'am') => pedir(`/demanda/presets?ventana=${ventana}`);
+// ventanas simulables y qué insumos opcionales hay (buses del GTFS, tráfico de paso por ventana)
+export const obtenerOpcionesDemanda = () => pedir('/demanda/opciones');
 export const listarSimulaciones = () => pedir('/simulaciones');
 
 // Las precalculadas se manejan como corridas terminadas para que el visor las trate igual
 export const listarPrecalculadas = () =>
   pedir('/precalculadas').then((lista) =>
-    lista.map((p) => ({ ...p, id: `precalculada-${p.preset}`, precalculada: true, estado: 'terminado', creada: p.generada }))
+    lista.map((p) => ({ ...p, id: `precalculada-${p.clave ?? p.preset}`, precalculada: true, estado: 'terminado', creada: p.generada }))
   );
 export const obtenerSimulacion = (id) => pedir(`/simulaciones/${encodeURIComponent(id)}`);
 export const cancelarSimulacion = (id) =>
   pedir(`/simulaciones/${encodeURIComponent(id)}/cancelar`, { method: 'POST' });
 
-export const crearSimulacion = ({ preset, conteos, semilla, estilo, cierres }) =>
+export const crearSimulacion = ({
+  preset, conteos, semilla, estilo, cierres, ventana, trafico_paso, transporte_publico, asignacion_iterativa,
+}) =>
   pedir('/simulaciones', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ preset, conteos, semilla, estilo, cierres }),
+    body: JSON.stringify({
+      preset, conteos, semilla, estilo, cierres, ventana, trafico_paso, transporte_publico, asignacion_iterativa,
+    }),
   });
 
 export const obtenerIntersecciones = (corrida) => pedir(conCorrida('/intersecciones', corrida));
@@ -71,7 +80,7 @@ export const guardarPrograma = (tlId, progId, datos) =>
 // La corrida en el cuerpo de un POST: sus volúmenes (Webster) y sus viajes (comparaciones)
 const corridaEnCuerpo = (corrida) => ({
   run_id: corrida?.precalculada ? null : corrida?.id ?? null,
-  precalculada: corrida?.precalculada ? corrida.preset : null,
+  precalculada: corrida?.precalculada ? clavePrecalculada(corrida) : null,
 });
 
 export const calcularWebster = (tlId, corrida) =>
@@ -82,21 +91,23 @@ export const calcularWebster = (tlId, corrida) =>
   });
 
 // Fase D: comparaciones de programas ("actual", "webster" o un programa guardado)
-export const crearComparacion = (tlId, { corrida, programas, semilla }) =>
+export const crearComparacion = (tlId, { corrida, programas, semilla, repeticiones = 3 }) =>
   pedir(`/intersecciones/${encodeURIComponent(tlId)}/comparaciones`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ ...corridaEnCuerpo(corrida), programas, semilla }),
+    body: JSON.stringify({ ...corridaEnCuerpo(corrida), programas, semilla, repeticiones }),
   });
 export const obtenerComparacion = (compId) => pedir(`/comparaciones/${encodeURIComponent(compId)}`);
 
 // Simulador 3D comparativo: cruce sin semáforo (actual) vs. con semáforo propuesto
 // `nodos`: todos los nodos de SUMO del cruce (doble calzada), según la priorización
-export const crearComparacion3D = (nodoId, { lon, lat, corrida, intensidades, nodos }) =>
+// `programa`: "netconvert" (con `ciclo_s` opcional) o "webster" para el semáforo propuesto.
+// Las precalculadas viajan con su id (precalculada-<clave>) para que la API sepa su horario.
+export const crearComparacion3D = (nodoId, { lon, lat, corrida, intensidades, nodos, programa, ciclo_s }) =>
   pedir(`/cruces/${encodeURIComponent(nodoId)}/comparacion3d`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ lon, lat, run_id: corrida?.precalculada ? null : corrida?.id ?? null, intensidades, nodos }),
+    body: JSON.stringify({ lon, lat, run_id: corrida?.id ?? null, intensidades, nodos, programa, ciclo_s }),
   });
 export const obtenerComparacion3D = (cid) => pedir(`/comparacion3d/${encodeURIComponent(cid)}`);
 export const obtenerGeometriaComparacion3D = (cid) => pedir(`/comparacion3d/${encodeURIComponent(cid)}/geometria`);
@@ -112,12 +123,13 @@ export const ETAPA_COMPARACION = {
   recortando_demanda: 'Recortando los viajes reales que pasan por la zona',
   generando_fondo: 'Generando el tráfico de fondo',
   instalando_semaforo: 'Instalando el semáforo propuesto (netconvert)',
+  calculando_webster: 'Midiendo los volúmenes de cada acceso y calculando los tiempos de Webster',
   armando_escena: 'Armando la escena 3D (vías, edificios, accesos)',
 };
 
 // GEH contra los aforos de la hora de máxima demanda (precalculada o corrida de la API)
 export const obtenerValidacion = (corrida) => {
-  if (corrida?.precalculada) return pedir(`/precalculadas/${encodeURIComponent(corrida.preset)}/validacion`);
+  if (corrida?.precalculada) return pedir(`/precalculadas/${encodeURIComponent(clavePrecalculada(corrida))}/validacion`);
   if (corrida?.id) return pedir(`/simulaciones/${encodeURIComponent(corrida.id)}/validacion`);
   return Promise.reject(new Error('La corrida por defecto no tiene validación; carga una precalculada o lanza una simulación.'));
 };
@@ -134,7 +146,7 @@ export const obtenerEstilos = () => pedir('/demanda/estilos');
 // Trips para kepler: de una precalculada, de una corrida de la API, o de la corrida por
 // defecto (python -m etl.etl)
 export const urlTrips = (corrida) => {
-  if (corrida?.precalculada) return `${BASE}/precalculadas/${encodeURIComponent(corrida.preset)}/kepler-trips`;
+  if (corrida?.precalculada) return `${BASE}/precalculadas/${encodeURIComponent(clavePrecalculada(corrida))}/kepler-trips`;
   if (corrida?.id) return `${BASE}/simulaciones/${encodeURIComponent(corrida.id)}/kepler-trips`;
   return `${BASE}/kepler-trips`;
 };

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- generated on 2026-11-03 13:01:02.795972 by Eclipse SUMO gtfs2pt.py v1_27_1+0000-7717f2379d9
+<configuration>
+    <gtfs value="C:\Users\USUARIO\Downloads\simulacion-movilidad-urbana\simulation-service\src\etl\sumo\scenarios\default\gtfs_usaquen.zip"/>
+    <date value="20260506"/>
+    <modes value="bus"/>
+    <vtype-output value="C:\Users\USUARIO\Downloads\simulacion-movilidad-urbana\simulation-service\src\etl\sumo\scenarios\default\pt_vtypes.add.xml"/>
+    <begin value="21600.0"/>
+    <end value="72000.0"/>
+    <bbox value="-74.058552,4.663887,-73.996799,4.85183"/>
+    <network value="C:\Users\USUARIO\Downloads\simulacion-movilidad-urbana\simulation-service\src\etl\sumo\scenarios\default\usaquen_3d.net.xml"/>
+    <route-output value="C:\Users\USUARIO\Downloads\simulacion-movilidad-urbana\simulation-service\src\etl\sumo\scenarios\default\pt_vehiculos.rou.xml"/>
+    <additional-output value="C:\Users\USUARIO\Downloads\simulacion-movilidad-urbana\simulation-service\src\etl\sumo\scenarios\default\pt_paradas.add.xml"/>
+    <sort value="True"/>
+    <repair value="True"/>
+</configuration>
+-->
+
+<additional xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/additional_file.xsd">
+    <vType id="bus" vClass="bus"/>
+</additional>

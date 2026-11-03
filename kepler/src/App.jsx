@@ -333,7 +333,7 @@ function Visor() {
   const [versionMapa, setVersionMapa] = useState(0);
   const [cruceCandidato, setCruceCandidato] = useState(null);   // cruce sin semáforo elegido
   const [candidatos, setCandidatos] = useState([]);
-  const [simulador, setSimulador] = useState(null);   // { cruce, corrida, intensidades }
+  const [simulador, setSimulador] = useState(null);   // { cruce, corrida, intensidades, programa }
   const [notasPriorizacion, setNotasPriorizacion] = useState([]);
   const [umbralesPriorizacion, setUmbralesPriorizacion] = useState({});
   const [tema, setTema] = useState(temaGuardado);
@@ -699,6 +699,8 @@ function Visor() {
               candidatos={candidatosSimulador}
               corrida={simulador.corrida}
               intensidades={simulador.intensidades}
+              programa={simulador.programa}
+              onCambiarPrograma={(programa) => setSimulador((s) => ({ ...s, programa }))}
               onCambiarCruce={(c) => c && setSimulador((s) => ({ ...s, cruce: c }))}
               onCerrar={() => setSimulador(null)}
             />
@@ -799,7 +801,7 @@ function Visor() {
                 onMostrarPriorizacion={() => setPriorizacionVisible(true)}
                 onAlternarSemaforos={() => setSemaforosVisibles((v) => !v)}
                 onElegir={elegirCruce}
-                onAbrir={(cruce, intensidades) => setSimulador({ cruce, corrida: corridaMapa, intensidades })}
+                onAbrir={(cruce, intensidades, programa) => setSimulador({ cruce, corrida: corridaMapa, intensidades, programa })}
               />
             )}
           </aside>
