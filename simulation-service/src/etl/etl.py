@@ -29,6 +29,7 @@ from .sumo.semaforo_nuevo import (
 )
 from .sumo.subred import (
     SubredConfig, SubredDemandaConfig, SubredStats, caminatas_por_origen_destino, recortar_demanda, recortar_red,
+    sin_paradas_de_bus,
 )
 from .sumo.trafico_paso import archivo_trafico_paso
 from .sumo.transporte_publico import archivos_transporte_publico
@@ -430,6 +431,7 @@ def _preparar_zona(
                 vehroute_xml=origen.vehroute if origen.vehroute.is_file() else None,
             ), cancelar=cancelar)
             rutas_reales = zona_rou
+            sin_paradas_de_bus(zona_rou)
             if peatonal:
                 caminatas_por_origen_destino(zona_rou)
         except (RuntimeError, FileNotFoundError):

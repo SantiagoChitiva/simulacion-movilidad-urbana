@@ -953,7 +953,7 @@ datos, su riesgo y sus decisiones.
   criterio: [Una corrida con transporte público muestra buses deteniéndose en paradas y personas que los abordan.],
   prioridad: [Media],
   modulo: [Por definir],
-  estado: [Pendiente (por desarrollar).],
+  estado: [Implementado con el GTFS de SIMUR (`etl/sumo/transporte_publico.py`): paradas y buses del SITP sin TransMilenio troncal, y viajes en transporte público como `personTrip modes="public"`.],
   version: "2.0",
   fecha: []
 )

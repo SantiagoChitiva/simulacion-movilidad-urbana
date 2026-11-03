@@ -41,19 +41,19 @@ La simulación cubre la ventana **07:00–10:00** sobre la red de Usaquén **con
 | Informal / Otro | vehículo `informal` / `otro` | vClass `passenger` |
 | Bicicleta | vehículo `bici` | vClass `bicycle`, usa los carriles que la red permite a bicicletas |
 | A pie (< 15 min y > 15 min) | persona `peaton` | `<person><walk>` con el modelo peatonal *striping* |
-| Transporte público | persona `transporte_publico` | **`<person><walk>`: hoy se simula como caminata** (ver abajo) |
+| Transporte público | persona `transporte_publico` | `<personTrip modes="public">`: camina a una parada, toma un bus del SITP (GTFS) y camina a su destino (ver abajo) |
 
 Con la demanda de la encuesta, SUMO carga 10.324 vehículos (bicis incluidas) e inserta 9.557. Las 14.123 personas se insertan todas.
 
-### Limitación: el transporte público se simula como caminata
+### Transporte público: buses del SITP desde el GTFS
 
-Los viajes en transporte público van de su origen a su destino **caminando**: no hay buses, paraderos ni rutas del SITP/TransMilenio en la red. El vType `bus_pt` está definido, pero ningún vehículo lo usa. Por eso, los tiempos y trayectos de ese modo **no representan un viaje en bus**. Solo dicen que esa persona se desplazó entre esas zonas.
+Los buses salen del GTFS de SIMUR (`GTFS-2026-04-29.zip`, catálogo de Mobility Database), que se descarga a `data/raw/gtfs/` y se convierte una vez con `python -m etl.sumo.transporte_publico data/raw/gtfs/GTFS-2026-04-29.zip`:
 
-No se puede arreglar con lo que hay en el repositorio: el OSM local (`data/processed/usaquen.osm.xml`, exportado con OSMnx) no trae relaciones de rutas y tiene apenas 5 paraderos. El plan para corregirlo:
+1. Se reduce a los viajes de un día hábil con al menos dos paradas en Usaquén, sin TransMilenio troncal ni TransMiCable (van por carriles exclusivos y los aforos de transporte público tampoco los cuentan).
+2. Cada parada se ubica en el carril con buses más cercano, y duarouter rutea cada viaje pasando por sus paradas. `gtfs2pt.py` de SUMO hace lo mismo con map matching, pero con esta red tardó más de tres horas sin terminar (queda como opción, `--gtfs2pt`).
+3. Quedan versionados `pt_paradas.add.xml` (696 paradas) y `pt_vehiculos.rou.xml.gz` (7.382 buses de 9.234 viajes del día; los demás cruzan tramos sin conexión para buses en la red).
 
-1. Obtener el GTFS de TransMilenio/SITP.
-2. Importarlo con `gtfs2pt.py` de SUMO. Así se generan los paraderos (`busStop`) sobre la red y los buses con sus horarios.
-3. Cambiar los viajes `transporte_publico` a `<personTrip modes="public">` para que SUMO combine caminata y bus.
+Los viajes `transporte_publico` de la encuesta pasan a `<personTrip modes="public">`. En la corrida de la mañana, 3.967 de 4.556 se hacen en bus, con unos 10 minutos de espera media en la parada. Sigue siendo una aproximación: los buses arrancan en el borde de Usaquén y no hay TransMilenio troncal.
 
 ### Otros límites conocidos
 

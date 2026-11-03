@@ -229,3 +229,30 @@ def caminatas_por_origen_destino(rou: Path) -> int:
         n += 1
     arbol.write(str(rou), encoding="UTF-8", xml_declaration=True)
     return n
+
+
+def sin_paradas_de_bus(rou: Path) -> tuple[int, int]:
+    """Quita de una demanda recortada lo que depende de las paradas del SITP.
+
+    La zona no carga pt_paradas.add.xml (casi ninguna parada cae dentro), así que un bus con
+    <stop busStop> o una persona con un tramo <ride> haría fallar a SUMO. Los buses siguen
+    pasando por la zona, sin detenerse; las personas que van en bus se quitan.
+    Devuelve (paradas quitadas, personas quitadas).
+    """
+    import xml.etree.ElementTree as ET
+
+    arbol = ET.parse(rou)
+    raiz = arbol.getroot()
+    paradas = personas = 0
+    for elem in list(raiz):
+        if elem.tag == "person" and elem.find("ride") is not None:
+            raiz.remove(elem)
+            personas += 1
+        elif elem.tag == "vehicle":
+            for stop in elem.findall("stop"):
+                if stop.get("busStop"):
+                    elem.remove(stop)
+                    paradas += 1
+    if paradas or personas:
+        arbol.write(str(rou), encoding="UTF-8", xml_declaration=True)
+    return paradas, personas

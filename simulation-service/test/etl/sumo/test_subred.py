@@ -19,3 +19,17 @@ def test_caminatas_por_origen_destino(tmp_path):
     assert caminatas_por_origen_destino(rou) == 1
     texto = rou.read_text(encoding="utf-8")
     assert 'from="a"' in texto and 'to="c"' in texto and 'edges="d"' in texto
+
+
+def test_sin_paradas_de_bus(tmp_path):
+    from etl.sumo.subred import sin_paradas_de_bus
+
+    rou = tmp_path / "zona.rou.xml"
+    rou.write_text(
+        '<routes><vehicle id="b" type="bus_sitp" depart="0"><route edges="a b"/><stop busStop="pt_1" duration="10"/></vehicle>'
+        '<person id="p" depart="0"><walk edges="a"/><ride busStop="pt_1" lines="T1"/></person>'
+        '<person id="q" depart="0"><walk edges="a b"/></person></routes>', encoding="utf-8",
+    )
+    assert sin_paradas_de_bus(rou) == (1, 1)
+    texto = rou.read_text(encoding="utf-8")
+    assert "busStop" not in texto and 'id="q"' in texto and 'id="b"' in texto
