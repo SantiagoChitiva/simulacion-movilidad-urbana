@@ -100,3 +100,87 @@ def test_destino_giro():
         _destino_giro(accesos, ["a", "b"], "r")
     with pytest.raises(ValueError, match="ya no va"):
         _destino_giro(accesos, ["z"], "s")
+
+
+def test_ruta_inyeccion_por_tipo_y_peaton():
+    accesos = [{"edge": "e", "giros": [
+        {"direccion": "s", "salida": "x", "edges": ["a", "b", "c", "e", "x", "y", "z", "w"], "tipos": ["auto"]},
+        {"direccion": "r", "salida": "q", "edges": ["a", "e", "q"], "tipos": ["auto", "bici"]},
+    ]}]
+    # la bici no puede recorrer el recto: se le da el giro que sí puede
+    assert _ruta_inyeccion(accesos, "e", "s", "bici") == ["a", "e", "q"]
+    with pytest.raises(ValueError, match="no puede entrar"):
+        _ruta_inyeccion(accesos, "e", "s", "bus_pt")
+    # el peatón solo camina dos tramos antes y después del cruce
+    assert _ruta_inyeccion(accesos, "e", "s", "peaton") == ["b", "c", "e", "x", "y", "z"]
+
+
+def test_sumocfg_lado_simetrico(tmp_path):
+    import xml.etree.ElementTree as ET
+
+    from api.comparacion3d import escribir_sumocfg_lado
+
+    cfg = escribir_sumocfg_lado(tmp_path / "lado_b.sumocfg", tmp_path / "z.net.xml", [str(tmp_path / "d.rou.xml")],
+                                str(tmp_path / "vt.xml"), [str(tmp_path / "programa.xml")])
+    raiz = ET.parse(cfg).getroot()
+    valor = lambda ruta: raiz.find(ruta).get("value")   # noqa: E731
+    assert valor("random_number/thread-rngs") == "1"
+    assert valor("processing/pedestrian.striping.dawdling") == "0"
+    assert valor("processing/ignore-junction-blocker")
+    assert valor("input/additional-files").endswith("programa.xml")
+    assert valor("report/log").endswith("lado_b.log")
+
+
+def test_vtypes_deterministas(tmp_path):
+    from api.comparacion3d import vtypes_deterministas
+    from etl.sumo.demanda_zona import escribir_vtypes
+
+    salida = vtypes_deterministas(escribir_vtypes(tmp_path / "vt.xml"), tmp_path / "vt3d.xml")
+    texto = salida.read_text(encoding="utf-8")
+    assert texto.count('sigma="0"') == texto.count("<vType")
+
+
+class _Vehiculos:
+    def __init__(self, ids):
+        self.ids = set(ids)
+        self.llamadas = []
+
+    def getIDList(self):
+        return list(self.ids)
+
+    def unsubscribe(self, vid):
+        self.llamadas.append(("unsubscribe", vid))
+
+    def remove(self, vid):
+        self.llamadas.append(("remove", vid))
+        self.ids.discard(vid)
+
+
+class _LadoFalso:
+    def __init__(self, en_entrada, en_red):
+        self._en_entrada = set(en_entrada)
+        self.con = type("Con", (), {})()
+        self.con.vehicle = _Vehiculos(en_red)
+
+    def ids_entrada(self, _edge, _metros):
+        return set(self._en_entrada)
+
+    def retirar(self, ids):
+        from api.comparacion3d import Lado
+
+        self._traci_error = RuntimeError
+        return Lado.retirar(self, ids)
+
+
+def test_despejar_entrada_quita_los_mismos_en_ambos_lados():
+    from api.comparacion3d import despejar_entrada
+
+    a = _LadoFalso({"v1"}, {"v1", "v2", "v3"})
+    b = _LadoFalso({"v2"}, {"v1", "v2", "v3"})
+    assert despejar_entrada([a, b], "e") == 4
+    assert a.con.vehicle.ids == b.con.vehicle.ids == {"v3"}
+    # se cancela la suscripción antes de retirar (si no, TraCI imprime "vehicle is not known")
+    for lado in (a, b):
+        llamadas = lado.con.vehicle.llamadas
+        for vid in ("v1", "v2"):
+            assert llamadas.index(("unsubscribe", vid)) < llamadas.index(("remove", vid))

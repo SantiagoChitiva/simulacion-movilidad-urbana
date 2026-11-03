@@ -595,26 +595,33 @@ export default class Escena3D {
     const senderos = [];
     const ciclo = [];
     const porEdge = new Map();
+    const servicio = [];
     for (const c of g.calzadas) {
       const puntos = this._forma(c.forma);
-      const geo = cinta(puntos, c.ancho, 0.02);
-      if (geo) vias.push(geo);
+      // vías de servicio que no admiten autos (solo peatones, bicis, reparto): más claras
+      const geo = cinta(puntos, c.restringida ? Math.min(c.ancho, 2.8) : c.ancho, 0.02);
+      if (geo) (c.restringida ? servicio : vias).push(geo);
+      if (c.restringida) continue;
       if (!porEdge.has(c.edge)) porEdge.set(c.edge, []);
       porEdge.get(c.edge).push({ ...c, puntos });
     }
     for (const carriles of porEdge.values()) {
       carriles.sort((p, q) => p.indice - q.indice);
       const total = largo(carriles[0].puntos);
+      const primero = carriles[0];
+      const ultimo = carriles[carriles.length - 1];
       for (const c of carriles) {
-        const n = c.n_carriles;
-        // borde derecho (carril 0): continua blanca y andén
-        if (c.indice === 0) {
+        // borde derecho (primer carril de vehículos): continua blanca y, si SUMO no trae el
+        // andén de la vía (red sin --sidewalks.guess), uno ilustrativo
+        if (c === primero) {
           const borde = cinta(c.puntos, 0.13, 0.03, -c.ancho / 2 + 0.22);
           if (borde) blancas.push(borde);
-          const anden = cintaElevada(c.puntos, 2.6, 0.16, -c.ancho / 2 - 1.3);
-          if (anden) andenes.push(anden);
+          if (!c.con_anden) {
+            const anden = cintaElevada(c.puntos, 2.6, 0.16, -c.ancho / 2 - 1.3);
+            if (anden) andenes.push(anden);
+          }
         }
-        if (c.indice === n - 1 || c.indice === carriles[carriles.length - 1].indice) {
+        if (c === ultimo) {
           if (c.opuesto) {
             // cada sentido pinta su línea: juntas quedan como doble amarilla continua
             const am = cinta(c.puntos, 0.12, 0.03, c.ancho / 2 - 0.1);
@@ -622,6 +629,8 @@ export default class Escena3D {
           } else {
             const borde = cinta(c.puntos, 0.13, 0.03, c.ancho / 2 - 0.22);
             if (borde) blancas.push(borde);
+            // el andén izquierdo de una vía de un solo sentido: --sidewalks.guess solo pone
+            // el derecho, así que este sigue siendo ilustrativo
             const anden = cintaElevada(c.puntos, 2.6, 0.16, c.ancho / 2 + 1.3);
             if (anden) andenes.push(anden);
           }
@@ -636,8 +645,21 @@ export default class Escena3D {
       }
     }
     for (const c of g.senderos) {
-      const geo = cintaElevada(this._forma(c.forma), Math.max(c.ancho, 1.8), 0.08, 0, 0.4);
-      if (geo) senderos.push(geo);
+      // andén de SUMO (carril peatonal de la vía): por ahí caminan los peatones
+      const geo = c.anden
+        ? cintaElevada(this._forma(c.forma), Math.max(c.ancho, 1.5), 0.16)
+        : cintaElevada(this._forma(c.forma), Math.max(c.ancho, 1.8), 0.08, 0, 0.4);
+      if (geo) (c.anden ? andenes : senderos).push(geo);
+    }
+    // cebras de SUMO: franjas de 0,5 m cada 1 m a lo largo del cruce peatonal
+    for (const cebra of g.cebras ?? []) {
+      const puntos = this._forma(cebra.forma);
+      const total = largo(puntos);
+      for (let s = 0.3; s < total - 0.3; s += 1.0) {
+        const tramo = recortar(puntos, s, Math.min(s + 0.5, total));
+        const geo = tramo.length > 1 ? cinta(tramo, cebra.ancho * 0.9, 0.045) : null;
+        if (geo) blancas.push(geo);
+      }
     }
     for (const c of g.ciclorrutas) {
       const geo = cinta(this._forma(c.forma), Math.max(c.ancho, 1.6), 0.04);
@@ -685,6 +707,7 @@ export default class Escena3D {
       return malla;
     };
     agregar(vias, matAsfalto);
+    agregar(servicio, matSendero);
     agregar(cruces, matCruce);
     agregar(andenes, matAnden);
     agregar(senderos, matSendero);
@@ -757,9 +780,9 @@ export default class Escena3D {
       const [nx, ny] = derecha(b.rumbo);
       const afuera = b.entra ? -1 : 1;   // hacia fuera del cruce, a lo largo del carril
       const [px, py, pz] = b.punto;
-      // cebra: franjas de 0,5 m cada 1 m, a lo ancho del carril, entre 0,6 y 3,6 m de la boca
+      // cebra ilustrativa: solo si la red no trae las de SUMO (zonas sin --crossings.guess)
       const centro = 2.1;
-      for (let o = -b.ancho / 2 + 0.45; o <= b.ancho / 2 - 0.3; o += 1.0) {
+      for (let o = -b.ancho / 2 + 0.45; o <= b.ancho / 2 - 0.3 && !this.geometria.cebras?.length; o += 1.0) {
         blancas.push(franja(px + afuera * dx * centro + nx * o, py + afuera * dy * centro + ny * o, pz, b.rumbo, 3.0, 0.5));
       }
       // línea de pare: en el lado con semáforo en todos los accesos; sin él, en la vía que cede

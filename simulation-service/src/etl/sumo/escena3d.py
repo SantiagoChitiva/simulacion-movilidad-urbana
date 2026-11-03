@@ -39,6 +39,7 @@ from typing import Any
 from .configuration import EDIFICIOS_GEOJSON, EDIFICIOS_OSM_GEOJSON
 from .intersecciones import _via_osm
 from .semaforo_nuevo import tipo_nodo
+from .vtypes import VTYPES
 
 LARGO_ANTES_M = 220      # tramo que recorre el actor antes de llegar al cruce
 LARGO_DESPUES_M = 160    # y después de cruzarlo
@@ -51,6 +52,9 @@ PASO_TERRENO_M = 10
 MARGEN_TERRENO_M = 120
 GIRO_RECTO_GRADOS = 35
 GIRO_EN_U_GRADOS = 145
+# las rutas de inyección se arman para autos; cada giro dice además qué tipos la pueden recorrer
+VCLASE_RUTAS = "passenger"
+VCLASE_POR_TIPO = {vt.id: vt.v_class.value for vt in VTYPES.values()}
 _TIPOS_PEATONALES = {"footway", "pedestrian", "path", "steps", "track", "bridleway"}
 
 
@@ -353,7 +357,7 @@ def altura_terreno(t: dict, x: float, y: float) -> float:
 
 def _leer_red(net: Path, tl_id: str | None, nombres: dict[str, str]) -> dict[str, Any]:
     location = None
-    calzadas, ciclorrutas, senderos, cruces = [], [], [], []
+    calzadas, ciclorrutas, senderos, cruces, cebras = [], [], [], [], []
     conexiones_tl = []
     edges: dict[str, dict] = {}
     for _, elem in ET.iterparse(net, events=("end",)):
@@ -363,7 +367,15 @@ def _leer_red(net: Path, tl_id: str | None, nombres: dict[str, str]) -> dict[str
             continue
         if tag == "edge":
             funcion = elem.get("function")
-            if funcion in ("internal", "crossing", "walkingarea"):
+            if funcion == "crossing":
+                # cebra de SUMO (la zona del 3D se genera con --crossings.guess)
+                for lane in elem.findall("lane"):
+                    forma = _puntos(lane.get("shape", ""))
+                    if len(forma) >= 2:
+                        cebras.append({"id": lane.get("id"), "ancho": float(lane.get("width", 4.0)), "forma": forma})
+                elem.clear()
+                continue
+            if funcion in ("internal", "walkingarea"):
                 elem.clear()
                 continue
             eid = elem.get("id")
@@ -375,6 +387,9 @@ def _leer_red(net: Path, tl_id: str | None, nombres: dict[str, str]) -> dict[str
                 "prioridad": int(elem.get("priority", 0)), "carriles": len(carriles),
             }
             peatonal = tipo in _TIPOS_PEATONALES
+            # andén: carril solo peatonal dentro de una vía de vehículos (--sidewalks.guess)
+            andenes = [l for l in carriles if not peatonal and l.get("allow") == "pedestrian"]
+            vehiculares = [l for l in carriles if l not in andenes]
             for lane in carriles:
                 forma = _puntos(lane.get("shape", ""))
                 if len(forma) < 2:
@@ -382,14 +397,19 @@ def _leer_red(net: Path, tl_id: str | None, nombres: dict[str, str]) -> dict[str
                 allow = lane.get("allow", "")
                 item = {
                     "id": lane.get("id"), "edge": eid, "indice": int(lane.get("index", 0)),
-                    "n_carriles": len(carriles), "ancho": float(lane.get("width", 3.2)), "forma": forma,
+                    "n_carriles": len(vehiculares), "ancho": float(lane.get("width", 3.2)), "forma": forma,
                 }
-                if peatonal or allow == "pedestrian":
+                if lane in andenes:
+                    senderos.append({**item, "anden": True})
+                elif peatonal or allow == "pedestrian":
                     senderos.append(item)
                 elif allow == "bicycle" or tipo == "cycleway":
                     ciclorrutas.append(item)
                 else:
                     item["solo_bus"] = allow in ("bus", "psv", "bus psv")
+                    # vía de servicio que no admite autos (p. ej. "pedestrian delivery bicycle")
+                    item["restringida"] = bool(allow) and not item["solo_bus"] and "passenger" not in allow.split()
+                    item["con_anden"] = bool(andenes)
                     calzadas.append(item)
             elem.clear()
         elif tag == "junction":
@@ -415,19 +435,40 @@ def _leer_red(net: Path, tl_id: str | None, nombres: dict[str, str]) -> dict[str
         c["opuesto"] = (e["hasta"], e["desde"]) in pares
     return {
         "location": location, "calzadas": calzadas, "ciclorrutas": ciclorrutas, "senderos": senderos,
-        "cruces": cruces, "conexiones_tl": conexiones_tl, "edges": edges,
+        "cruces": cruces, "cebras": cebras, "conexiones_tl": conexiones_tl, "edges": edges,
     }
 
 
-def _encadenar(edge, hacia_atras: bool, largo: float) -> list:
-    """Edges que siguen (o preceden) a `edge` por la conexión más recta, hasta `largo` metros."""
+def _conexion_permitida(conexiones, vclase: str) -> bool:
+    """Alguna conexión entre dos edges es transitable por `vclase` (carril de salida y de
+    llegada lo permiten) y no es un giro en U."""
+    return any(
+        c.getDirection() != "t" and c.getFromLane().allows(vclase) and c.getToLane().allows(vclase)
+        for c in conexiones
+    )
+
+
+def _encadenar(edge, hacia_atras: bool, largo: float, vclase: str = "passenger") -> list:
+    """Edges que siguen (o preceden) a `edge` por la conexión más recta transitable por
+    `vclase`, hasta `largo` metros.
+
+    La cadena se corta en el primer nodo con semáforo: si la ruta del actor lanzado pasa
+    por otro semáforo antes del cruce estudiado, el actor se queda esperando ese rojo y
+    parece detenido sin razón (y la espera no tiene que ver con el cruce que se compara).
+    """
     cadena, acumulado, actual = [], 0.0, edge
     vistos = {edge.getID()}
     while acumulado < largo:
+        # nodo entre `actual` y el siguiente edge de la cadena
+        union = actual.getFromNode() if hacia_atras else actual.getToNode()
+        if union.getType().startswith("traffic_light"):
+            break
         vecinos = actual.getIncoming() if hacia_atras else actual.getOutgoing()
         candidatos = []
         for vecino, conexiones in vecinos.items():
-            if vecino.getID() in vistos or vecino.getFunction() == "internal":
+            if vecino.getID() in vistos or vecino.getFunction() == "internal" or not vecino.allows(vclase):
+                continue
+            if not _conexion_permitida(conexiones, vclase):
                 continue
             dirs = {c.getDirection() for c in conexiones}
             candidatos.append((0 if "s" in dirs else 1, -vecino.getLaneNumber(), vecino))
@@ -438,6 +479,16 @@ def _encadenar(edge, hacia_atras: bool, largo: float) -> list:
         cadena.append(actual)
         acumulado += actual.getLength()
     return list(reversed(cadena)) if hacia_atras else cadena
+
+
+def ruta_transitable(net, edges: list[str], vclase: str) -> bool:
+    """Todos los edges permiten `vclase` y cada par seguido tiene una conexión para ella."""
+    objetos = [net.getEdge(e) for e in edges]
+    if not all(e.allows(vclase) for e in objetos):
+        return False
+    return all(
+        _conexion_permitida(a.getOutgoing().get(b, []), vclase) for a, b in zip(objetos, objetos[1:])
+    )
 
 
 def _rumbo_final(edge) -> float:
@@ -451,7 +502,14 @@ def _rumbo_inicial(edge) -> float:
 
 
 def rutas_por_acceso(net_path: Path, nodos: list[str] | str, nombres: dict[str, str]) -> list[dict]:
-    """Por cada edge que llega al cruce (grupo de nodos): las rutas que lo atraviesan, una por giro."""
+    """Por cada edge que llega al cruce (grupo de nodos): las rutas que lo atraviesan, una por giro.
+
+    Las rutas se arman con las conexiones carril a carril que puede usar un auto (las vías de
+    servicio que solo admiten peatones o bicis no cuentan) y cada giro dice qué tipos de
+    actor pueden recorrerla completa (`tipos`) y si sirve para un peatón (`peatones`).
+    Sin esa validación el actor lanzado quedaba detenido en un edge que no podía usar hasta
+    que SUMO lo teletransportaba.
+    """
     import sumolib
 
     net = sumolib.net.readNet(str(net_path), withInternal=False)
@@ -467,13 +525,17 @@ def rutas_por_acceso(net_path: Path, nodos: list[str] | str, nombres: dict[str, 
         for entrada in net.getNode(nid).getIncoming():
             if entrada.getFunction() == "internal" or entrada.getFromNode().getID() in conjunto:
                 continue
+            if not entrada.allows(VCLASE_RUTAS):
+                continue
             # recorrer el cruce (puede tener edges entre sus nodos) hasta salir de él
             salidas: dict[str, tuple] = {}
             pendientes = [(entrada, [])]
             while pendientes:
                 actual, camino = pendientes.pop()
-                for siguiente in actual.getOutgoing():
+                for siguiente, conexiones in actual.getOutgoing().items():
                     if siguiente.getFunction() == "internal" or siguiente in camino or len(camino) > 4:
+                        continue
+                    if not siguiente.allows(VCLASE_RUTAS) or not _conexion_permitida(conexiones, VCLASE_RUTAS):
                         continue
                     if siguiente.getToNode().getID() in conjunto:
                         pendientes.append((siguiente, camino + [siguiente]))
@@ -486,13 +548,13 @@ def rutas_por_acceso(net_path: Path, nodos: list[str] | str, nombres: dict[str, 
                     continue
                 antes = _encadenar(entrada, True, LARGO_ANTES_M)
                 despues = _encadenar(salida, False, LARGO_DESPUES_M)
-                edges = [e.getID() for e in antes] + [entrada.getID()] + [e.getID() for e in camino] \
-                    + [salida.getID()] + [e.getID() for e in despues]
+                edges = [e.getID() for e in antes] + [entrada.getID()] + [e.getID() for e in camino]                     + [salida.getID()] + [e.getID() for e in despues]
                 giros[direccion] = {
                     "direccion": direccion,
                     "salida": salida.getID(),
                     "salida_nombre": salida.getName() or nombres.get(_via_osm(salida.getID())),
                     "edges": edges,
+                    "tipos": [tipo for tipo, vclase in VCLASE_POR_TIPO.items() if ruta_transitable(net, edges, vclase)],
                     "peatones": all(e.allows("pedestrian") for e in [entrada, salida]),
                 }
             if giros:
@@ -500,7 +562,7 @@ def rutas_por_acceso(net_path: Path, nodos: list[str] | str, nombres: dict[str, 
                 accesos.append({
                     "edge": entrada.getID(),
                     "nombre": entrada.getName() or nombres.get(_via_osm(entrada.getID())),
-                    "carriles": entrada.getLaneNumber(),
+                    "carriles": sum(1 for l in entrada.getLanes() if l.allows(VCLASE_RUTAS)),
                     "prioridad": entrada.getPriority(),
                     "giros": [giros[d] for d in ("s", "l", "r") if d in giros],
                 })
@@ -513,6 +575,10 @@ def rutas_por_acceso(net_path: Path, nodos: list[str] | str, nombres: dict[str, 
 def _bocas(calzadas: list[dict], edges: dict[str, dict], conjunto: set[str]) -> list[dict]:
     """Final de cada carril que entra al cruce e inicio de cada carril que sale (pare y cebras)."""
     bocas = []
+    # índice entre los carriles de vehículos (con andenes, el carril 0 de SUMO es el andén)
+    primero: dict[str, int] = {}
+    for c in calzadas:
+        primero[c["edge"]] = min(primero.get(c["edge"], c["indice"]), c["indice"])
     for c in calzadas:
         e = edges[c["edge"]]
         entra = e["hasta"] in conjunto and e["desde"] not in conjunto
@@ -522,7 +588,7 @@ def _bocas(calzadas: list[dict], edges: dict[str, dict], conjunto: set[str]) -> 
         f = c["forma"]
         p, q = (f[-1], f[-2]) if entra else (f[0], f[1])
         bocas.append({
-            "edge": c["edge"], "indice": c["indice"], "entra": entra, "punto": p,
+            "edge": c["edge"], "indice": c["indice"] - primero[c["edge"]], "entra": entra, "punto": p,
             # rumbo de marcha en la boca
             "rumbo": round(_rumbo(q, p) if entra else _rumbo(p, q), 1),
             "ancho": c["ancho"],
@@ -531,8 +597,7 @@ def _bocas(calzadas: list[dict], edges: dict[str, dict], conjunto: set[str]) -> 
 
 
 def _postes_semaforo(conexiones_tl: list[dict], calzadas: list[dict], accesos: list[dict]) -> list[dict]:
-    """Un poste por acceso externo: en el borde derecho de su carril 0, en la línea de pare."""
-    por_carril = {c["id"]: c for c in calzadas}
+    """Un poste por acceso externo: en el borde derecho de su primer carril de vehículos, en la línea de pare."""
     externos = {a["edge"] for a in accesos}
     por_acceso: dict[str, dict] = {}
     for con in conexiones_tl:
@@ -542,10 +607,11 @@ def _postes_semaforo(conexiones_tl: list[dict], calzadas: list[dict], accesos: l
         poste["enlaces"][con["direccion"] or "s"].append(con["enlace"])
     postes = []
     for edge, poste in por_acceso.items():
-        derecho = por_carril.get(f"{edge}_0")
+        carriles = sorted((c for c in calzadas if c["edge"] == edge), key=lambda c: c["indice"])
+        # el carril de más a la derecha (el 0 es el andén cuando la zona tiene andenes)
+        derecho = carriles[0] if carriles else None
         if derecho is None:
             continue
-        carriles = [c for c in calzadas if c["edge"] == edge]
         f = derecho["forma"]
         postes.append({
             "edge": edge,
@@ -620,6 +686,7 @@ def geometria_escena(
         "ciclorrutas": red["ciclorrutas"],
         "senderos": red["senderos"],
         "cruces": red["cruces"],
+        "cebras": red["cebras"],
         "bocas": _bocas(red["calzadas"], red["edges"], conjunto),
         "postes_semaforo": _postes_semaforo(red["conexiones_tl"], red["calzadas"], accesos),
         "terreno": malla,

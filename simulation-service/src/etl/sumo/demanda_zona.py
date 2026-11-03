@@ -30,6 +30,9 @@ _MODOS_FONDO: dict[str, tuple[str, str]] = {
     "bici": ("bici", "bicycle"),
     "bus": (BUS_PT_ID, "bus"),
 }
+# desfase de semilla por modo: con la misma semilla randomTrips sortea los mismos
+# orígenes y destinos para todos los modos (moto_1 y taxi_1 hacían el mismo viaje)
+_DESFASE_SEMILLA = {"auto": 0, "moto": 1, "taxi": 2, "bici": 3, "bus": 4, "peaton": 5}
 
 
 @dataclass(frozen=True)
@@ -54,7 +57,7 @@ class DemandaZonaConfig:
             "-b", str(self.inicio),
             "-e", str(self.inicio + self.duracion_s),
             "-p", f"{periodo:.3f}",
-            "--seed", str(self.semilla),
+            "--seed", str(self.semilla + _DESFASE_SEMILLA.get(modo, 0)),
             "--prefix", f"fondo_{modo}_",
             "--validate",
         ]

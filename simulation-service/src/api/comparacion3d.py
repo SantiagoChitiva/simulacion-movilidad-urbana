@@ -63,6 +63,8 @@ REINTENTO_INSERCION_S = 1.0     # s simulados entre despejes si el actor aún no
 MAX_REINTENTOS = 8
 MEMORIA_CONFLICTO_S = 10        # un par en conflicto se vuelve a contar solo pasados estos segundos
 ESPERA_OTRO_LADO_S = 90         # s que se espera al otro escenario cuando el viaje ya terminó en uno
+TELEPORTE_S = 60                # s detenido antes de que SUMO teletransporte un vehículo atascado
+BLOQUEO_CRUCE_S = 15            # s tras los que se ignora a un vehículo que bloquea el cruce
 
 # motivos de cambio de carril de SUMO (getLaneChangeStatePretty) que se muestran en el HUD
 _MOTIVOS_CAMBIO = {
@@ -209,29 +211,61 @@ def _nombres_vias() -> dict[str, str]:
 
 # ─────────────────────────────────────────────────────────── un lado de la comparación
 
-def escribir_sumocfg_lado(destino: Path, net: Path, demanda: list[str], vtypes: str) -> Path:
+def escribir_sumocfg_lado(destino: Path, net: Path, demanda: list[str], vtypes: str,
+                          adicionales: list[str] | None = None) -> Path:
+    """Configuración de un lado. Los dos lados solo difieren en la red (y en el programa del
+    semáforo propuesto, que va en `adicionales`)."""
     raiz = ET.Element("configuration")
     entrada = ET.SubElement(raiz, "input")
     ET.SubElement(entrada, "net-file", value=str(Path(net).resolve()))
     ET.SubElement(entrada, "route-files", value=",".join(str(Path(d).resolve()) for d in demanda))
-    ET.SubElement(entrada, "additional-files", value=str(Path(vtypes).resolve()))
+    archivos = [vtypes, *(adicionales or [])]
+    ET.SubElement(entrada, "additional-files", value=",".join(str(Path(a).resolve()) for a in archivos))
     tiempo = ET.SubElement(raiz, "time")
     ET.SubElement(tiempo, "begin", value=str(HORA_INI))
     ET.SubElement(tiempo, "end", value=str(HORA_INI + DURACION_S + CALENTAMIENTO_S))
     ET.SubElement(tiempo, "step-length", value=str(PASO_S))
     proc = ET.SubElement(raiz, "processing")
     ET.SubElement(proc, "ignore-route-errors", value="true")
-    ET.SubElement(proc, "time-to-teleport", value="120")
+    ET.SubElement(proc, "time-to-teleport", value=str(TELEPORTE_S))
+    # el cruce son varios nodos a pocos metros: un vehículo detenido dentro de uno bloquea a
+    # los que vienen por el otro y sin esto se esperaban hasta el teletransporte
+    ET.SubElement(proc, "ignore-junction-blocker", value=str(BLOQUEO_CRUCE_S))
+    ET.SubElement(proc, "pedestrian.striping.jamtime", value="120")
+    ET.SubElement(proc, "pedestrian.striping.dawdling", value="0")   # ver vtypes_deterministas
     ET.SubElement(proc, "collision.action", value="warn")
     ET.SubElement(proc, "collision.check-junctions", value="true")
     ET.SubElement(proc, "default.action-step-length", value="0.4")
     alea = ET.SubElement(raiz, "random_number")
     ET.SubElement(alea, "seed", value="42")
+    # SUMO reparte sus generadores aleatorios por carril (lane % thread-rngs) y la red con
+    # semáforo numera distinto los carriles internos del cruce. Con uno solo, el sorteo no
+    # depende de esa numeración (el resto de la simetría está en vtypes_deterministas).
+    ET.SubElement(alea, "thread-rngs", value="1")
     reporte = ET.SubElement(raiz, "report")
     ET.SubElement(reporte, "no-step-log", value="true")
-    ET.SubElement(reporte, "no-warnings", value="true")
+    ET.SubElement(reporte, "log", value=str(Path(destino).with_suffix(".log").resolve()))
     arbol = ET.ElementTree(raiz)
     ET.indent(arbol, space="  ")
+    arbol.write(str(destino), encoding="UTF-8", xml_declaration=True)
+    return destino
+
+
+def vtypes_deterministas(origen: Path, destino: Path) -> Path:
+    """Copia de los vTypes sin imperfección del conductor (sigma=0).
+
+    Con sigma > 0 SUMO sortea en cada paso cuánto frena de más cada conductor. Cuando un
+    vehículo está detenido por el semáforo en B y andando en A, los dos lados consumen
+    números aleatorios distintos y desde ahí todo el tráfico se desfasa, también lejos del
+    cruce: en A el ego tenía motos delante y en B autos. Sin ese sorteo por paso, A y B
+    solo difieren por lo que cambia el semáforo (medido: 10 de 227 vehículos distintos a
+    los 240 s, contra 143 con sigma=0,5). La variedad entre conductores sigue estando en
+    speedFactor, que se sortea una vez al cargar cada vehículo, en el mismo orden en los
+    dos lados.
+    """
+    arbol = ET.parse(origen)
+    for vtype in arbol.getroot().iter("vType"):
+        vtype.set("sigma", "0")
     arbol.write(str(destino), encoding="UTF-8", xml_declaration=True)
     return destino
 
@@ -274,7 +308,8 @@ class Lado:
         self.max_riesgo = 0.0
         self.conflictos = 0
         self.espera_cruce: dict[str, float] = {}
-        self.v_objetivo = 0.0
+        self.v_objetivo: float | None = None   # velocidad pedida en manual (None: aún no se toma el control)
+        self._v_peaton: dict[str, float] = {}   # velocidad propia del peatón antes del modo manual
         self.balance = nuevo_balance()
         self._carril_previo: dict[str, tuple[int, str | None, float]] = {}
 
@@ -578,8 +613,11 @@ class Lado:
         }
 
     # -- modo manual
-    def tomar_control(self, ego: str, manual: bool) -> None:
-        """Pasa el actor al usuario (velocidad fija a la actual) o se lo devuelve a SUMO."""
+    def tomar_control(self, ego: str, manual: bool) -> bool:
+        """Pasa el actor al usuario (velocidad fija a la actual) o se lo devuelve a SUMO.
+
+        Devuelve False si el actor todavía no está en la red de este lado: el control se
+        toma cuando aparezca."""
         clase = self.existe(ego)
         try:
             if clase == "vehiculo":
@@ -587,17 +625,29 @@ class Lado:
                     self.v_objetivo = self.con.vehicle.getSpeed(ego)
                     self.con.vehicle.setSpeed(ego, self.v_objetivo)
                 else:
+                    self.v_objetivo = None
                     self.con.vehicle.setSpeed(ego, -1)
             elif clase == "persona":
-                self.con.person.setSpeed(ego, VEL_PEATON[0])
+                if manual:
+                    self._v_peaton.setdefault(ego, self.con.person.getSpeed(ego) or VEL_PEATON[0])
+                    self.con.person.setSpeed(ego, VEL_PEATON[0])
+                else:
+                    self.con.person.setSpeed(ego, self._v_peaton.pop(ego, VEL_PEATON[0]))
+            else:
+                if not manual:
+                    self.v_objetivo = None
+                return not manual
         except self._traci_error:
-            pass
+            return False
+        return True
 
     def controlar(self, ego: str, acelerar: int, dt: float) -> None:
         """Ajusta la velocidad pedida; SUMO la limita por seguridad (líder, rojo, prioridad)."""
         clase = self.existe(ego)
         try:
             if clase == "vehiculo":
+                if self.v_objetivo is None:
+                    return   # el control se toma cuando el vehículo aparece en la red
                 veh = self.con.vehicle
                 actual = veh.getSpeed(ego)
                 tope = veh.getAllowedSpeed(ego) * 1.15
@@ -646,21 +696,31 @@ class Lado:
                     return desde, list(etapas)
         raise RuntimeError("No hay ruta peatonal por ese acceso; prueba otro acceso o giro.")
 
-    def despejar_entrada(self, edge: str, metros: float = DESPEJE_M) -> int:
-        """Retira el tráfico de fondo de los primeros `metros` de la vía por la que entra el actor.
+    def ids_entrada(self, edge: str, metros: float = DESPEJE_M) -> set[str]:
+        """Vehículos de fondo en los primeros `metros` de la vía por la que entra el actor."""
+        try:
+            return {
+                vid for vid in self.con.edge.getLastStepVehicleIDs(edge)
+                if not vid.startswith("ego_") and self.con.vehicle.getLanePosition(vid) < metros
+            }
+        except self._traci_error:
+            return set()
 
-        Sin esto, cuando la cola del cruce llega hasta el borde de la zona el actor queda
-        esperando para entrar, y como las colas no son iguales con y sin semáforo, entra en
-        un lado y en el otro no. Se hace igual en los dos lados.
+    def retirar(self, ids: set[str]) -> int:
+        """Saca de la red los vehículos dados que estén en este lado.
+
+        Primero se cancela la suscripción: si no, TraCI imprime "vehicle is not known" por
+        cada variable suscrita de cada vehículo retirado (y SUMO 1.27 se cae cuando ese
+        texto acumulado pasa de 255 bytes).
         """
         n = 0
-        try:
-            for vid in self.con.edge.getLastStepVehicleIDs(edge):
-                if not vid.startswith("ego_") and self.con.vehicle.getLanePosition(vid) < metros:
-                    self.con.vehicle.remove(vid)
-                    n += 1
-        except self._traci_error:
-            pass
+        for vid in ids & set(self.con.vehicle.getIDList()):
+            try:
+                self.con.vehicle.unsubscribe(vid)
+                self.con.vehicle.remove(vid)
+                n += 1
+            except self._traci_error:
+                pass
         return n
 
     def pendiente(self, ego: str) -> bool:
@@ -672,7 +732,9 @@ class Lado:
         self.con.vehicle.add(ego_id, ruta_id, typeID=tipo, depart="now", departLane="best", departPos="base",
                              departSpeed="max")
         params = PARAMS_ESTILO[estilo]
-        self.con.vehicle.setImperfection(ego_id, float(params["sigma"]))
+        # sin imperfección (ver vtypes_deterministas): el estilo se nota en speedFactor, tau
+        # y las ganas de cambiar de carril
+        self.con.vehicle.setImperfection(ego_id, 0.0)
         self.con.vehicle.setSpeedFactor(ego_id, float(params["speedFactor"]))
         self.con.vehicle.setTau(ego_id, float(params["tau"]))
         self.con.vehicle.setParameter(ego_id, "laneChangeModel.lcSpeedGain", params["lcSpeedGain"])
@@ -687,9 +749,25 @@ class Lado:
     def quitar(self, ego_id: str) -> None:
         for dominio in (self.con.vehicle, self.con.person):
             try:
-                dominio.remove(ego_id)
+                if ego_id in dominio.getIDList():
+                    dominio.unsubscribe(ego_id)
+                    dominio.remove(ego_id)
             except self._traci_error:
                 pass
+
+
+def despejar_entrada(lados: list[Lado], edge: str, metros: float = DESPEJE_M) -> int:
+    """Retira el tráfico de fondo de los primeros `metros` de la vía por la que entra el actor.
+
+    Sin esto, cuando la cola del cruce llega hasta el borde de la zona el actor queda
+    esperando para entrar, y como las colas no son iguales con y sin semáforo, entra en un
+    lado y en el otro no. Se retiran los mismos vehículos en los dos lados (la unión de los
+    que hay en cada uno) para no crear una diferencia nueva entre ellos.
+    """
+    ids: set[str] = set()
+    for lado in lados:
+        ids |= lado.ids_entrada(edge, metros)
+    return sum(lado.retirar(ids) for lado in lados)
 
 
 def inyectar_en_lados(lados: list[Lado], ego_id: str, tipo: str, edges: list[str], estilo: EstiloConductor) -> None:
@@ -709,8 +787,7 @@ def inyectar_en_lados(lados: list[Lado], ego_id: str, tipo: str, edges: list[str
         ruta_id = f"r_{ego_id}"
         for lado in lados:
             lado.con.route.add(ruta_id, edges)   # falla aquí si a un lado le falta un edge
-        for lado in lados:
-            lado.despejar_entrada(edges[0])
+        despejar_entrada(lados, edges[0])
         for lado in lados:
             lado.agregar_vehiculo(ego_id, ruta_id, tipo, estilo)
             agregados.append(lado)
@@ -736,8 +813,10 @@ def correr_comparacion(comp: Comparacion, cola: asyncio.Queue, bucle: asyncio.Ab
 
     info = comp.info
     nodo = info["nodo"]
-    cfg_a = escribir_sumocfg_lado(comp.run_dir / "lado_a.sumocfg", Path(info["zona_net"]), info["demanda"], info["vtypes"])
-    cfg_b = escribir_sumocfg_lado(comp.run_dir / "lado_b.sumocfg", Path(info["zona_tls_net"]), info["demanda"], info["vtypes"])
+    vtypes = vtypes_deterministas(Path(info["vtypes"]), comp.run_dir / "vtypes_3d.add.xml")
+    cfg_a = escribir_sumocfg_lado(comp.run_dir / "lado_a.sumocfg", Path(info["zona_net"]), info["demanda"], vtypes)
+    cfg_b = escribir_sumocfg_lado(comp.run_dir / "lado_b.sumocfg", Path(info["zona_tls_net"]), info["demanda"], vtypes,
+                                  info.get("programa_adicional"))
 
     lados: list[Lado] = []
     try:
@@ -774,8 +853,9 @@ def correr_comparacion(comp: Comparacion, cola: asyncio.Queue, bucle: asyncio.Ab
                 if "manual" in cmd:
                     comp.manual, comp.acelerar = bool(cmd["manual"]), 0
                     if ego:
-                        for lado in lados:
-                            lado.tomar_control(ego, comp.manual)
+                        tomados = [lado.tomar_control(ego, comp.manual) for lado in lados]
+                        # si el actor aún no entró en algún lado, se toma cuando aparezca
+                        pendiente_control = comp.manual and not all(tomados)
                 elif "control" in cmd:
                     comp.acelerar = max(-1, min(1, int((cmd["control"] or {}).get("acelerar", 0))))
                 elif "giro" in cmd:
@@ -793,9 +873,10 @@ def correr_comparacion(comp: Comparacion, cola: asyncio.Queue, bucle: asyncio.Ab
                             lado.tomar_control(ego, False)
                     ego = cmd["seguir"] or None
                     viaje = _ViajeEgo(ego)
+                    pendiente_control = False
                     if ego and comp.manual:
-                        for lado in lados:
-                            lado.tomar_control(ego, True)
+                        tomados = [lado.tomar_control(ego, True) for lado in lados]
+                        pendiente_control = not all(tomados)
                     for lado in lados:
                         lado.historial.clear()
                         lado.riesgo = None
@@ -808,7 +889,7 @@ def correr_comparacion(comp: Comparacion, cola: asyncio.Queue, bucle: asyncio.Ab
                         tipo = datos.get("tipo", "auto")
                         if tipo not in TIPOS_VEHICULO and tipo != "peaton":
                             raise ValueError(f"Tipo de actor desconocido: {tipo}")
-                        edges = _ruta_inyeccion(info["geometria_accesos"], datos.get("acceso"), datos.get("giro"))
+                        edges = _ruta_inyeccion(info["geometria_accesos"], datos.get("acceso"), datos.get("giro"), tipo)
                         inyectar_en_lados(lados, nuevo, tipo, edges, estilo)
                         ego = nuevo
                         viaje = _ViajeEgo(nuevo, entrada=edges[0] if tipo != "peaton" else None, t=t)
@@ -832,7 +913,7 @@ def correr_comparacion(comp: Comparacion, cola: asyncio.Queue, bucle: asyncio.Ab
                 lado.avanzar(t)
             if ego and comp.manual:
                 for lado in lados:
-                    if pendiente_control and lado.existe(ego):
+                    if pendiente_control and lado.existe(ego) and lado.v_objetivo is None:
                         lado.tomar_control(ego, True)
                     lado.controlar(ego, comp.acelerar, pasos * PASO_S)
                 pendiente_control = pendiente_control and not all(lado.existe(ego) for lado in lados)
@@ -897,8 +978,7 @@ class _ViajeEgo:
             return
         self.reintentos += 1
         self.ultimo_intento = t
-        for lado in lados:
-            lado.despejar_entrada(self.entrada, DESPEJE_M + 20 * self.reintentos)
+        despejar_entrada(lados, self.entrada, DESPEJE_M + 20 * self.reintentos)
 
     def actualizar(self, telemetrias: dict[str, dict | None], t: float, dt: float) -> dict | None:
         """Acumula un frame; devuelve el mensaje de resumen cuando el viaje terminó en los dos lados."""
@@ -919,14 +999,27 @@ class _ViajeEgo:
                 "comparacion": comparar_viajes(resumenes.get("a"), resumenes.get("b"))}
 
 
-def _ruta_inyeccion(accesos: list[dict], acceso: str | None, giro: str | None) -> list[str]:
-    """Edges de la ruta del actor inyectado según el acceso y el giro elegidos."""
+def _ruta_inyeccion(accesos: list[dict], acceso: str | None, giro: str | None, tipo: str | None = None) -> list[str]:
+    """Edges de la ruta del actor inyectado según el acceso y el giro elegidos.
+
+    Con `tipo` (un vehículo) solo sirven los giros que ese tipo puede recorrer completos
+    (`tipos` de cada giro, ver escena3d.rutas_por_acceso)."""
     candidatos = [a for a in accesos if acceso is None or a["edge"] == acceso]
     if not candidatos:
         raise ValueError(f"El acceso '{acceso}' no llega al cruce.")
     giros = candidatos[0]["giros"]
+    if tipo is not None and tipo != "peaton":
+        giros = [g for g in giros if tipo in g.get("tipos", [tipo])]
+        if not giros:
+            raise ValueError(f"Por este acceso no puede entrar un vehículo de tipo '{tipo}'.")
     elegido = next((g for g in giros if g["direccion"] == giro), None) or giros[0]
-    return elegido["edges"]
+    edges = elegido["edges"]
+    if tipo == "peaton" and candidatos[0]["edge"] in edges and elegido.get("salida") in edges:
+        # la ruta del auto recorre cientos de metros: a pie serían varios minutos antes de
+        # llegar al cruce. El peatón camina solo dos tramos antes y después.
+        i, j = edges.index(candidatos[0]["edge"]), edges.index(elegido["salida"])
+        edges = edges[max(0, i - 2): j + 3]
+    return edges
 
 
 def _destino_giro(accesos: list[dict], ruta: list[str], giro: str) -> str:

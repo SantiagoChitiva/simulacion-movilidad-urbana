@@ -19,7 +19,9 @@ from .sumo.simulation import SimulationConfig, SimulationResult, leer_estadistic
 from .sumo.demanda_zona import DemandaZonaConfig, DemandaZonaResult, DemandaZonaStats, generar_demanda_zona
 from .sumo.programas_tls import ProgramaTLS
 from .sumo.semaforo_nuevo import SemaforoNuevoConfig, agregar_semaforo
-from .sumo.subred import SubredConfig, SubredDemandaConfig, SubredStats, recortar_demanda, recortar_red
+from .sumo.subred import (
+    SubredConfig, SubredDemandaConfig, SubredStats, caminatas_por_origen_destino, recortar_demanda, recortar_red,
+)
 from .sumo.trips import TripGenerationConfig, TripGenerationResult, generate_trips
 
 __all__ = [
@@ -285,15 +287,20 @@ class _Zona:
 def _preparar_zona(
     lon: float, lat: float, radio_m: float, destino_dir: Path, run_id_origen: str | None,
     intensidades: dict[str, float] | None, on_progreso: OnProgreso, cancelar: threading.Event | None,
+    peatonal: bool = False,
 ) -> _Zona:
-    """Red recortada y demanda de una zona: viajes reales que pasan por ella más fondo sintético."""
+    """Red recortada y demanda de una zona: viajes reales que pasan por ella más fondo sintético.
+
+    Con `peatonal` la zona lleva andenes y cebras, y las caminatas reales se rutean de nuevo
+    sobre ellos (`caminatas_por_origen_destino`).
+    """
     paths_net = ScenarioPaths.from_name(DEFAULT_SCENARIO)
     zona_net = destino_dir / "zona.net.xml"
     zona_rou = destino_dir / "zona.rou.xml"
 
     on_progreso("recortando_red", None)
     resultado_red = recortar_red(
-        SubredConfig(paths_net.net, (lon, lat), radio_m, zona_net), cancelar=cancelar,
+        SubredConfig(paths_net.net, (lon, lat), radio_m, zona_net, peatonal=peatonal), cancelar=cancelar,
     )
 
     on_progreso("recortando_demanda", None)
@@ -306,6 +313,8 @@ def _preparar_zona(
                 vehroute_xml=origen.vehroute if origen.vehroute.is_file() else None,
             ), cancelar=cancelar)
             rutas_reales = zona_rou
+            if peatonal:
+                caminatas_por_origen_destino(zona_rou)
         except (RuntimeError, FileNotFoundError):
             rutas_reales = None   # sin viajes reales: la zona queda solo con fondo sintético
 
@@ -384,7 +393,8 @@ def run_escenario_semaforo(
     """
     destino_dir = RUNS_DIR / run_id_destino
     destino_dir.mkdir(parents=True, exist_ok=True)
-    zona = _preparar_zona(nodo_lon, nodo_lat, radio_m, destino_dir, run_id_origen, intensidades, on_progreso, cancelar)
+    zona = _preparar_zona(nodo_lon, nodo_lat, radio_m, destino_dir, run_id_origen, intensidades, on_progreso, cancelar,
+                          peatonal=True)
     zona_net, resultado_red, demanda = zona.net, zona.red, zona.demanda
     stats_demanda, origen, rutas_reales = zona.stats, zona.origen, zona.rutas_reales
 

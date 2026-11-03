@@ -482,7 +482,11 @@ export default function Simulador3D({ cruce, candidatos = [], corrida, intensida
                   Y sigue
                   <select value={giro} onChange={(e) => setGiro(e.target.value)}>
                     {accesoSel?.giros.map((g) => (
-                      <option key={g.direccion} value={g.direccion} disabled={tipo === 'peaton' && !g.peatones}>
+                      <option
+                        key={g.direccion}
+                        value={g.direccion}
+                        disabled={tipo === 'peaton' ? !g.peatones : !(g.tipos ?? [tipo]).includes(tipo)}
+                      >
                         {GIRO[g.direccion] ?? g.direccion}{g.salida_nombre ? ` → ${g.salida_nombre}` : ''}
                       </option>
                     ))}
