@@ -243,6 +243,9 @@ def bloqueado(tmp_path, monkeypatch):
     api.app.dependency_overrides[api.obtener_gestor] = lambda: gestor
     yield TestClient(api.app), gestor, pipeline
     pipeline.liberar.set()
+    # el hilo debe terminar antes de que se deshaga el monkeypatch de RUNS_DIR; si no,
+    # escribe su estado.json en el runs/ real (aparecían corridas "Interrumpidas" en el visor)
+    gestor._pool.shutdown(wait=True)
     api.app.dependency_overrides.clear()
 
 
