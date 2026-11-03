@@ -100,6 +100,8 @@ def generar(
     _comprimir(paths.kepler_trips, archivos.trips_gz)
     vols = volumenes_por_edge(paths.vehroute) if paths.vehroute.is_file() else {}
     archivos.volumenes.write_text(json.dumps(vols, sort_keys=True), encoding="utf-8")
+    if paths.validacion.is_file():
+        shutil.copyfile(paths.validacion, archivos.validacion)
 
     meta = {
         "preset": preset.value,
@@ -140,6 +142,11 @@ def listar() -> list[dict[str, Any]]:
         if meta is not None:
             salida.append({**meta, "nombre": info.nombre, "desactualizada": meta.get("insumos") != huella})
     return salida
+
+
+def leer_validacion(preset: Preset) -> dict[str, Any] | None:
+    archivo = ArchivosPrecalculada.from_preset(preset.value).validacion
+    return json.loads(archivo.read_text(encoding="utf-8")) if archivo.is_file() else None
 
 
 def leer_volumenes(preset: Preset) -> dict[str, Counter] | None:

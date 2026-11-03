@@ -228,6 +228,16 @@ def kepler_trips_precalculada(preset: Preset) -> FileResponse:
     )
 
 
+@app.get("/precalculadas/{preset}/validacion")
+def validacion_precalculada(preset: Preset) -> dict:
+    """GEH de un preset precalculado contra los aforos de la hora de máxima demanda."""
+    _precalculada(preset)
+    validacion = precalculadas.leer_validacion(preset)
+    if validacion is None:
+        raise HTTPException(status_code=404, detail="Este preset se simuló antes de tener los aforos; vuelve a generarlo.")
+    return validacion
+
+
 # ---------------------------------------------------------- intersecciones
 
 @lru_cache(maxsize=1)
@@ -730,6 +740,18 @@ async def ws_comparacion_3d(websocket: WebSocket, cid: str) -> None:
 
 
 # ---------------------------------------------------------------- trips de corrida
+
+@app.get("/simulaciones/{run_id}/validacion")
+def validacion_simulacion(run_id: str, gestor: Gestor) -> dict:
+    """GEH de una corrida contra los aforos de la hora de máxima demanda (validacion.py)."""
+    corrida = _corrida(gestor, run_id)
+    if corrida.estado != "terminado":
+        raise HTTPException(status_code=409, detail=f"La simulación está en estado '{corrida.estado}'")
+    paths = gestor.paths(run_id)
+    if not paths.validacion.is_file():
+        raise HTTPException(status_code=404, detail="La corrida no tiene validación (no había aforos al simular).")
+    return json.loads(paths.validacion.read_text(encoding="utf-8"))
+
 
 @app.get("/simulaciones/{run_id}/kepler-trips")
 def kepler_trips_simulacion(run_id: str, gestor: Gestor) -> FileResponse:

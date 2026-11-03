@@ -5,9 +5,10 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
+from .sumo.aforos import cargar_aforos
 from .sumo.cierres import CierreVial, escribir_rerouter
 from .sumo.comparacion_programas import ComparacionProgramaConfig, ComparacionProgramaStats, correr_programa
-from .sumo.configuration import DEFAULT_SCENARIO, RUNS_DIR, ScenarioPaths, escribir_sumocfg_corrida
+from .sumo.configuration import DEFAULT_SCENARIO, HORA_FIN, HORA_INI, RUNS_DIR, ScenarioPaths, escribir_sumocfg_corrida
 from .sumo.demanda import DemandaConfig
 from .sumo.duarouter import DuarouterConfig, DuarouterResult, run_duarouter
 from .sumo.enums.vehicle_type import VehicleType
@@ -23,6 +24,7 @@ from .sumo.subred import (
     SubredConfig, SubredDemandaConfig, SubredStats, caminatas_por_origen_destino, recortar_demanda, recortar_red,
 )
 from .sumo.trips import TripGenerationConfig, TripGenerationResult, generate_trips
+from .sumo.validacion import ValidacionConfig, escribir_conteos, periodo_de, validar
 
 __all__ = [
     "Cancelado", "run_pipeline", "run_etl", "simulate", "export_geojson", "export_kepler_trips",
@@ -50,6 +52,7 @@ class PipelineResult:
     simulation: SimulationResult
     geojson: FcdConversionResult | None   # None si no se exportan los puntos
     kepler: KeplerTripsResult
+    validacion: dict | None = None        # resumen del GEH (validacion.py), si hay aforos
 
 
 def run_etl(
@@ -185,6 +188,14 @@ def run_pipeline(
             escribir_rerouter(cierres, cierres_xml)
             additional_files.append(cierres_xml)
 
+        # Conteos en los puntos de aforo, para validar con el GEH al terminar
+        puntos_aforo = cargar_aforos()
+        if puntos_aforo:
+            paths_run = ScenarioPaths.from_name(scenario_name, run_id)
+            additional_files.append(escribir_conteos(
+                puntos_aforo, paths_run.conteos_add, paths_run.conteos.resolve(), HORA_INI, HORA_FIN,
+            ))
+
     etl = run_etl(scenario_name, demanda, run_id, on_progreso, cancelar)
     revisar_cancelacion(cancelar)
     simulation = simulate(
@@ -194,17 +205,34 @@ def run_pipeline(
     revisar_cancelacion(cancelar)
     geojson = export_geojson(scenario_name, sample_every, run_id) if exportar_puntos else None
     kepler = export_kepler_trips(scenario_name, run_id=run_id, on_progreso=on_progreso, cancelar=cancelar)
-    return PipelineResult(etl, simulation, geojson, kepler)
+    validacion = validar_corrida(scenario_name, run_id)
+    return PipelineResult(etl, simulation, geojson, kepler, validacion)
+
+
+def validar_corrida(scenario_name: str = DEFAULT_SCENARIO, run_id: str | None = None) -> dict | None:
+    """GEH contra los aforos si la corrida escribió los conteos (None si no hay aforos)."""
+    paths = ScenarioPaths.from_name(scenario_name, run_id)
+    if not paths.conteos.is_file():
+        return None
+    resultado = validar(ValidacionConfig(
+        conteos=paths.conteos, destino=paths.validacion, destino_csv=paths.validacion_csv,
+        periodo=periodo_de(HORA_INI),
+    ))
+    return resultado.resumen
 
 
 def resumen_corrida(resultado: PipelineResult, paths: ScenarioPaths) -> dict[str, Any]:
     """Lo que se muestra de una corrida terminada: viajes, trips y estadísticas de SUMO."""
-    return {
+    resumen = {
         "viajes_generados": resultado.etl.trips.stats.viajes_generados,
         "viajes_por_modo": dict(resultado.etl.trips.stats.por_modo),
         "trips_kepler": resultado.kepler.stats.trips_escritos,
         **leer_estadisticas(paths.statistics),
     }
+    validacion = getattr(resultado, "validacion", None)
+    if validacion is not None:
+        resumen["validacion"] = {k: v for k, v in validacion.items() if k != "filas"}
+    return resumen
 
 
 def run_recorte(

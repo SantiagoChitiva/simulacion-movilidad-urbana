@@ -24,6 +24,9 @@ EDIFICIOS_OSM_GEOJSON = SUMO_DIR.parents[3] / "data" / "processed" / "edificios_
 SINIESTROS_GEOJSON = SUMO_DIR.parents[3] / "data" / "processed" / "siniestros_usaquen.geojson"
 POIS_GEOJSON = SUMO_DIR.parents[3] / "data" / "processed" / "pois_usaquen.geojson"
 
+# Aforos de la hora de máxima demanda (EODI 2023) ubicados en la red (python -m etl.sumo.aforos)
+AFOROS_JSON = SUMO_DIR.parents[3] / "data" / "processed" / "aforos_usaquen.json"
+
 # Ventana horaria de la simulación (segundos desde las 00:00)
 HORA_INI = 7 * 3600
 HORA_FIN = 10 * 3600
@@ -59,6 +62,10 @@ class ScenarioPaths:
     statistics: Path
     vehroute: Path       # rutas recorridas: base de los volúmenes por acceso
     sumo_log: Path
+    conteos_add: Path    # edgeData en los puntos de aforo (additional de la corrida)
+    conteos: Path        # vehículos que entran a cada edge aforado, cada 15 min
+    validacion: Path     # GEH por punto de aforo (resumen y filas)
+    validacion_csv: Path
 
     @classmethod
     def from_name(cls, name: str = DEFAULT_SCENARIO, run_id: str | None = None) -> "ScenarioPaths":
@@ -81,7 +88,11 @@ class ScenarioPaths:
             kepler_trips=output / "usaquen_am.kepler.geojson",
             statistics=output / "usaquen_am.statistics.xml",
             vehroute=output / "usaquen_am.vehroute.xml",
-            sumo_log=output / "usaquen_am.sumo.log"
+            sumo_log=output / "usaquen_am.sumo.log",
+            conteos_add=run_dir / "conteos.add.xml",
+            conteos=output / "usaquen_am.conteos.xml",
+            validacion=output / "validacion.json",
+            validacion_csv=output / "validacion.csv",
         )
 
 
@@ -92,11 +103,13 @@ class ArchivosPrecalculada:
     trips_gz: Path      # GeoJSON de kepler comprimido; la API lo sirve sin descomprimir
     volumenes: Path     # volúmenes por edge (reemplaza al vehroute, que pesa ~22 MB)
     meta: Path          # parámetros, resumen y huella de los insumos
+    validacion: Path    # GEH contra los aforos (validacion.py)
 
     @classmethod
     def from_preset(cls, preset: str) -> "ArchivosPrecalculada":
         d = PRECALCULADAS_DIR / preset
-        return cls(dir=d, trips_gz=d / "trips.geojson.gz", volumenes=d / "volumenes.json", meta=d / "meta.json")
+        return cls(dir=d, trips_gz=d / "trips.geojson.gz", volumenes=d / "volumenes.json", meta=d / "meta.json",
+                   validacion=d / "validacion.json")
 
 
 def escribir_sumocfg_corrida(

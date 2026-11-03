@@ -717,3 +717,8 @@ html, body, #root {
 .rc-nota { margin: 14px 0 0; padding: 10px 12px; border-radius: 10px; background: #f7f8fa; color: #4b5563; font-size: 12px; line-height: 1.5; }
 .rc-acciones { display: flex; gap: 8px; justify-content: flex-end; margin-top: 12px; }
 .sim3d .rc-acciones button:not(.sim3d-primario) { background: #f3f4f6; color: #111827; border-color: #e5e7eb; }
+
+/* pestaña Validar */
+.pv-acciones { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 4px 0; }
+.pv-acciones label { display: flex; align-items: center; gap: 6px; margin-right: auto; }
+.pv-falla { color: var(--pd-error); font-weight: 600; }

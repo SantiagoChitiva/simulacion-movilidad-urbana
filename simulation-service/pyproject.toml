@@ -16,6 +16,8 @@ dependencies = [
 
 [project.optional-dependencies]
 test = ["pytest==9.1.1"]
+# solo para preparar los aforos una vez (python -m etl.sumo.aforos): leen el Excel y los shapefiles de SIMUR
+datos = ["geopandas", "openpyxl"]
 dev = ["simulation-service[test]"]
 
 [tool.setuptools.packages.find]
