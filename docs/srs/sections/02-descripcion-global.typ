@@ -38,34 +38,34 @@ herramientas que el pipeline invoca como procesos externos.
     table.header([*Sistema externo*], [*Tipo de interfaz*], [*Descripción de la interacción*]),
     [OpenStreetMap],
     [Descarga de datos (HTTPS)],
-    [El pipeline descarga el dump OSM de Bogotá o consulta la API Overpass para extraer la red vial del polígono de Usaquén. Esta es la única comunicación
-    de red del sistema; ocurre una única vez durante la fase de ingestión (F1).],
+    [La red vial del polígono de Usaquén se descargó una vez en los notebooks de la Fase 2 y se versiona en `data/processed/`. El pipeline no se
+    conecta a OpenStreetMap al correr. `python -m etl.sumo.evidencia` consulta Overpass (con un espejo) para los colegios, centros de salud y huellas de
+    edificios, y los guarda también en `data/processed/`.],
 
     [osmium-tool],
     [Proceso externo (CLI)],
-    [Invocado por el pipeline para recortar el dump OSM al polígono de Usaquén y exportar el resultado en formato `.osm.pbf`. Se llama mediante subproceso
-    de Python.],
+    [Previsto para recortar el dump OSM de Bogotá al polígono de Usaquén. El código actual no lo invoca: el recorte se hizo en los notebooks.],
 
     [netconvert (SUMO)],
     [Proceso externo (CLI)],
-    [Herramienta oficial de SUMO invocada para convertir la red OSM al formato `.net.xml`. El pipeline construye el comando con los parámetros definidos
-    en el archivo de configuración y captura su salida estándar para el log.],
+    [Herramienta oficial de SUMO. La red de Usaquén se generó con ella en los notebooks. La API la invoca además para recortar zonas alrededor de un
+    cruce (`subred.py`) y para instalar el semáforo propuesto (`semaforo_nuevo.py`).],
 
     [duarouter (SUMO)],
     [Proceso externo (CLI)],
-    [Herramienta oficial de SUMO invocada para asignar rutas a los viajes definidos en la matriz O/D, produciendo el archivo `.rou.xml`. Su ejecución es
-    iniciada y monitoreada por el pipeline.],
+    [Herramienta oficial de SUMO invocada para asignar rutas a los viajes TAZ a TAZ (`.trips.xml`), produciendo el archivo `.rou.xml`. El pipeline
+    la inicia y mide su avance por el último `depart` escrito.],
 
     [SUMO],
     [Proceso externo (CLI)],
-    [Motor de simulación que consume los artefactos producidos por el pipeline (`.net.xml`, `.taz.xml`, `.rou.xml`, `.vtype.xml`) para ejecutar la
-    simulación. El pipeline no controla SUMO en tiempo real; la ejecución de SUMO y la recolección de resultados de aforo es un paso posterior al
-    pipeline.],
+    [Motor de simulación que consume los artefactos del pipeline (`.net.xml`, `.taz.xml` y un `.rou.xml` que ya incluye los vTypes). El pipeline lo
+    ejecuta y lo controla por TraCI (ver más abajo). La recolección de resultados de aforo para el GEH está pendiente (RF-014).],
 
     [Encuesta de Movilidad \ de Bogotá 2023],
-    [Archivo XLSX (lectura)],
-    [Fuente primaria de datos de demanda. El pipeline lee el archivo XLSX directamente desde disco. No hay comunicación en red con la Secretaría Distrital
-    de Movilidad; el archivo se obtiene previamente del portal de datos abiertos de Bogotá.],
+    [Archivo XLSX (lectura en notebooks) y TSV (lectura en el pipeline)],
+    [Fuente primaria de datos de demanda. Los notebooks de la Fase 2 limpian el XLSX y producen `viajes_usaquen_internos.tsv`, que es lo que lee el
+    pipeline. No hay comunicación en red con la Secretaría Distrital de Movilidad; el archivo se obtiene previamente del portal de datos abiertos de
+    Bogotá.],
 
     [Base de datos de aforos HMD],
     [Archivo tabular (lectura)],
@@ -84,7 +84,13 @@ herramientas que el pipeline invoca como procesos externos.
 
     [Microsoft Building Footprints],
     [Archivo GeoJSON (lectura)],
-    [Huellas de edificios de Usaquén (`data/processed/edificios_ms.geojson`) que se extruyen en la escena 3D.],
+    [Huellas de edificios de Usaquén (`data/processed/edificios_ms.geojson`) que se extruyen en la escena 3D, junto con las de OpenStreetMap
+    (`edificios_osm.geojson`).],
+
+    [Secretaría Distrital de Movilidad (ArcGIS FeatureServer)],
+    [Descarga de datos (HTTPS)],
+    [Histórico de siniestros georreferenciados, filtrado a Usaquén y versionado en `data/processed/siniestros_usaquen.geojson`. Es evidencia de la
+    priorización de cruces (RF-032, RF-045).],
 
     [Mapbox / OpenStreetMap tiles],
     [HTTPS (navegador)],
@@ -146,35 +152,36 @@ No se requieren tarjetas gráficas dedicadas, aceleradores GPU, dispositivos de 
     [python.org],
     [Lenguaje de implementación del pipeline ETL completo. Requerido por la API TraCI de SUMO para el control de simulaciones.],
 
-    [SUMO],
-    [1.19+],
-    [sumo.dlr.de],
-    [Provee las herramientas netconvert, duarouter y el motor de simulación. Licencia EPL 2.0 (código abierto).],
+    [SUMO (`eclipse-sumo`)],
+    [1.27.1],
+    [pypi.org],
+    [Provee las herramientas netconvert, duarouter, `cutRoutes.py`, `randomTrips.py` y el motor de simulación. Licencia EPL 2.0 (código abierto).],
 
     [pandas],
-    [2.0+],
+    [2.2.3+],
     [pypi.org],
-    [Procesamiento de los datos tabulares de la encuesta de movilidad: lectura XLSX, limpieza, filtrado y construcción de matrices O/D.],
+    [Procesamiento de los datos tabulares de la encuesta de movilidad en los notebooks: lectura XLSX, limpieza y filtrado. No lo usa `simulation-service`.],
 
     [geopandas],
-    [0.14+],
+    [0.14.4+],
     [pypi.org],
     [Procesamiento de datos geoespaciales: manejo de polígonos UPZ, asignación de nodos de red a zonas TAZ, validación de cobertura geográfica.],
 
     [osmium-tool],
     [1.16+],
     [osmcode.org],
-    [Extracción del polígono de Usaquén desde el dump OSM de Bogotá mediante recorte geográfico. Invocado como proceso externo desde Python.],
+    [Opcional, previsto para recortar el dump OSM de Bogotá. El código actual no lo invoca.],
 
     [pytest],
-    [7.0+],
+    [9.1.1],
     [pypi.org],
-    [Ejecución de pruebas unitarias y de integración del pipeline. Integrado con GitHub Actions para CI automático en cada commit.],
+    [Ejecución de las pruebas de `simulation-service/test/` (121 pruebas). El CI solo ejecuta las pruebas de la raíz, que son un marcador de posición.],
 
     [GitHub Actions],
     [--],
     [github.com],
-    [Integración continua: ejecuta pylint, pytest y verifica portabilidad en Ubuntu y Windows en cada commit a la rama principal.],
+    [Integración continua: en cada push o pull request a `main` o `develop` ejecuta pytest sobre `tests/` y `pylint src/ --exit-zero` en Ubuntu. No
+    corre en Windows ni ejecuta las pruebas de `simulation-service/`.],
 
     [Git],
     [2.40+],
@@ -191,10 +198,12 @@ No se requieren tarjetas gráficas dedicadas, aceleradores GPU, dispositivos de 
     [--],
     [Sistemas operativos soportados. El pipeline debe ejecutarse sin modificaciones en los tres entornos (ver RNF-PORT-001).],
 
-    [FastAPI], [0.100+], [pypi.org], [Backend del módulo web. Expone los resultados de SUMO mediante una API REST consumida por el frontend. Integrado con
+    [FastAPI], [0.136.3], [pypi.org], [Backend del módulo web. Expone los resultados de SUMO mediante una API REST consumida por el frontend. Integrado con
     el pipeline ETL existente.],
 
     [TraCI / sumolib], [1.27.1], [pypi.org], [Control en vivo de SUMO y lectura de la red desde Python.],
+
+    [pyproj], [3.8.0], [pypi.org], [Conversión entre las coordenadas de la red de SUMO (UTM) y lon/lat.],
 
     [React + Vite], [18.3 / 6], [npmjs.com], [Frontend del módulo web (visor `kepler/`).],
 
@@ -238,14 +247,14 @@ El almacenamiento secundario requerido se detalla en la @tabHardwareDesc. No hay
 
 El pipeline opera en un único modo, sin distinción de roles de administrador y usuario final:
 
-*Ejecución completa:* el usuario lanza el pipeline con los parámetros de configuración deseados y el sistema ejecuta las fases F1 a F5 en secuencia,
-produciendo todos los artefactos de salida. El tiempo estimado de ejecución completa es de hasta 4 horas en la máquina de referencia (ver RD-001).
+*Ejecución completa:* el desarrollador lanza `python -m etl.etl`, o el usuario una corrida desde el visor, y el sistema genera los viajes, calcula las rutas,
+simula y exporta los resultados. Las fases de preparación de datos (F1 y parte de F2 y F3) se ejecutan antes en los notebooks. El tiempo estimado de ejecución completa es de hasta 4 horas en la máquina de referencia (ver RD-001).
 
-*Ejecución parcial (reanudación):* si una ejecución previa fue interrumpida, el usuario puede reanudar desde la última fase completada usando el flag
-#sym.hyph#sym.hyph#text(fill:olive)[resume]. El sistema carga el checkpoint guardado y continúa sin reprocesar las fases anteriores (ver RF-016).
+*Ejecución parcial (reanudación):* prevista, aún no implementada. Se planeó reanudar desde la última fase completada con un flag
+#sym.hyph#sym.hyph#text(fill:olive)[resume] y un checkpoint por fase (ver RF-016, pendiente).
 
-*Ejecución de escenario hipotético:* el usuario modifica el archivo `config.yaml` (por ejemplo, ajustando el factor de escala de demanda o el período
-horario) y relanza el pipeline para generar un conjunto de artefactos distinto sin modificar el código fuente (ver RF-013).
+*Ejecución de escenario hipotético:* el usuario cambia en el panel Demanda el preset, los conteos por modo, la semilla, el estilo de conducción o los
+cierres viales, y lanza una corrida nueva sin tocar el código (ver RF-013 y RF-021 a RF-024). No existe un `config.yaml`.
 
 *Uso interactivo (v2.0):* el usuario abre el visor, carga una simulación (precalculada o propia), lanza nuevas corridas desde el panel, explora
 intersecciones y abre comparaciones 3D. La API ejecuta una corrida a la vez y como máximo dos comparaciones 3D simultáneas.
@@ -258,16 +267,22 @@ El respaldo de datos está delegado al sistema de control de versiones Git y a l
 El pipeline no requiere adaptaciones de infraestructura de red ni de hardware en el sitio de uso. Para adaptar el sistema a una localidad distinta de
 Usaquén (uso futuro), el usuario debe:
 
-- Actualizar el polígono geográfico de recorte en el archivo `config.yaml`.
+- Repetir la preparación de datos de los notebooks (encuesta, red, TAZ) para la nueva localidad y dejar los resultados en `scenarios/<nombre>/`.
 - Proveer los archivos de aforos HMD para la nueva localidad.
 - Verificar que las UPZ de la nueva localidad estén disponibles en la fuente de datos geoespaciales oficial.
 
-No se requieren cambios en el código fuente para la adaptación geográfica, lo cual es un objetivo de diseño explícito del sistema.
+La adaptación geográfica es un objetivo de diseño. Hoy la ventana horaria (`HORA_INI`, `HORA_FIN`) y los nombres de los archivos del escenario están
+en `configuration.py`, y la API solo expone el escenario `default`.
 
 == Funciones del Producto
 
-El pipeline está organizado en cinco funcionalidades principales (F1–F5) que corresponden a las fases del proceso ETL. A continuación se describe cada una
-en lenguaje de usuario. Los casos de uso asociados se documentan en detalle en el documento SDD.
+El pipeline está organizado en cinco funcionalidades principales (F1–F5) que corresponden a las fases del proceso ETL, más cuatro del módulo web (F6–F9).
+A continuación se describe cada una en lenguaje de usuario. Los casos de uso asociados se documentan en detalle en el documento SDD.
+
+*Nota de implementación (v2.2):* F1, la matriz O/D de F2 y la construcción de la red y las TAZ de F3 se resolvieron en los notebooks de la Fase 2, y sus
+resultados se versionan en `data/processed/`. El código de `simulation-service` empieza en el TSV de viajes: genera viajes TAZ a TAZ (no archivos `.od`),
+los rutea con duarouter y simula. Por eso los artefactos `.parquet`, `.od`, `.vtype.xml` y `validacion_geh.csv` de la @tabFunciones son los previstos
+originalmente; los reales son `.trips.xml`, `.rou.xml` (con los vTypes dentro) y los GeoJSON de salida.
 
 *F1 -- Ingestión y Validación de Datos:* el sistema recibe la Encuesta de Movilidad 2023 en formato XLSX/CSV y los archivos de aforos HMD, valida que
 contienen las columnas mínimas requeridas, elimina registros duplicados por doble conteo y descarta registros con campos obligatorios vacíos, registrando
@@ -325,7 +340,7 @@ ciudad.
 
 == Características del Usuario
 
-Se identifican dos clases de usuarios que interactuarán con el pipeline en la versión 1.0:
+Se identifican tres clases de usuarios que interactúan con el sistema:
 
 #figure(
   table(
@@ -342,7 +357,7 @@ Se identifican dos clases de usuarios que interactuarán con el pipeline en la v
     [Usuario estándar],
     [Ejecuta el pipeline con distintas configuraciones para generar escenarios de movilidad y analizar los resultados de simulación.],
     [Ocasional (por campaña de análisis, no diaria)],
-    [Conocimiento de Python a nivel de usuario (puede editar `config.yaml` y ejecutar comandos en terminal). No requiere conocimiento profundo del código
+    [Conocimiento de Python a nivel de usuario (puede ejecutar comandos en terminal y usar el visor). No requiere conocimiento profundo del código
     fuente. Familiaridad con conceptos de movilidad urbana y matrices O/D.],
 
     [Desarrollador del equipo],
@@ -365,21 +380,21 @@ Se identifican dos clases de usuarios que interactuarán con el pipeline en la v
 
 === Restricciones Generales
 
-- El alcance geográfico del sistema está limitado a la localidad de Usaquén de Bogotá para la versión 1.0. El diseño debe facilitar la extensión a otras
-  localidades sin modificar el código fuente (solo `config.yaml`).
-- El pipeline es un proceso monousuario, secuencial y de línea de comandos. No soporta ejecuciones concurrentes sobre los mismos datos de entrada.
-- El idioma de los mensajes de log, comentarios del código y documentación es el español. Las variables y funciones del código siguen nomenclatura en
-  inglés (PEP 8).
-- El sistema no implementa tolerancia a fallos de hardware (corte de energía, fallo de disco). La recuperación ante estos eventos se limita al mecanismo
-  de checkpoint (RF-016).
+- El alcance geográfico del sistema está limitado a la localidad de Usaquén de Bogotá. El diseño debe facilitar la extensión a otras localidades, que hoy
+  exige preparar los insumos del escenario (ver Requerimientos de Adaptación del Sitio).
+- El pipeline es un proceso monousuario y secuencial: la API ejecuta una corrida a la vez y como máximo dos comparaciones 3D simultáneas.
+- El idioma de los mensajes, los comentarios, los identificadores del código (por ejemplo `filas_invalidas`, `viajes_generados`) y la documentación es el
+  español. El estilo del código sigue PEP 8.
+- El sistema no implementa tolerancia a fallos de hardware (corte de energía, fallo de disco). Una corrida que falla deja su error en `estado.json`; el
+  mecanismo de checkpoint (RF-016) está pendiente.
 
 === Restricciones de Software
 
-- *Lenguaje de programación:* Python 3.11 exclusivamente en el pipeline principal.
+- *Lenguaje de programación:* Python 3.11 o superior en el pipeline y la API; JavaScript (React) en el visor.
 - *Licencias:* todas las bibliotecas deben ser de código abierto o uso académico gratuito. No se permiten licencias comerciales (restricción del SPMP).
 - *Herramientas SUMO:* la generación de la red y las rutas debe realizarse con netconvert y duarouter. No se reimplementan estas funcionalidades en
   Python.
-- *Sin base de datos relacional:* el almacenamiento intermedio es por archivos en disco (Parquet, CSV, XML). No se usa PostgreSQL, SQLite ni ningún motor
+- *Sin base de datos relacional:* el almacenamiento es por archivos en disco (TSV, XML, JSON, GeoJSON). No se usa PostgreSQL, SQLite ni ningún motor
   de BD.
 - *Interfaz web:* el frontend es una aplicación React; requiere un navegador con WebGL 2 para el simulador 3D.
 
@@ -457,8 +472,8 @@ Las siguientes suposiciones pueden afectar los requerimientos si resultan ser in
   confiables.
 - La red vial de OpenStreetMap para Usaquén tiene atributos suficientes (tipo de vía, velocidades, conectividad) para generar una red simulable en SUMO.
   Si la cobertura fuera deficiente, sería necesario enriquecerla manualmente con QGIS.
-- SUMO 1.19 soporta todos los modos de transporte a modelar (automóvil, bus SITP, motocicleta, bicicleta) con los parámetros por defecto. Cambios en la
-  API de SUMO en versiones posteriores podrían requerir ajustes en el pipeline.
+- SUMO 1.27.1 soporta los modos de transporte a modelar con los parámetros por defecto. El transporte público se emite hoy como caminata (RF-043). Cambios
+  en la API de TraCI en versiones posteriores podrían requerir ajustes; por eso `eclipse-sumo` y `traci` están fijados en 1.27.1.
 - Los cuatro integrantes del equipo están disponibles durante las 16 semanas del proyecto con una dedicación aproximada de 10 horas semanales por persona.
 - La máquina de cómputo disponible cumple los requisitos mínimos definidos en la @tabHardwareDesc. Si no los cumple, el requerimiento RD-001 (pipeline en
   $<=$ 4 horas) no puede garantizarse.
@@ -503,7 +518,7 @@ y mantenimiento:
 
     [Por definir], [RF-014, RF-016, RF-041, RF-043], [Validación GEH, reanudación por fase, reporte de la comparación 3D y transporte público real.],
 
-    [Pipeline completo], [RD-001, RD-002, RNF-PORT-001, RNF-PORT-002], [Requerimientos que aplican al sistema como un todo.],
+    [Pipeline completo], [RD-001, RD-002, RNF-MAN-001, RNF-MAN-002, RNF-PORT-001, RNF-PORT-002], [Requerimientos que aplican al sistema como un todo.],
   ),
   caption: [Distribución de requerimientos por módulo (v2.0).]
 ) <tabDistribucion>

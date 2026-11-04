@@ -1,0 +1,1528 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Simulation Service",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "summary": "Root",
+        "operationId": "root_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Root Health Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/simulation-output": {
+      "get": {
+        "summary": "Simulation Output",
+        "operationId": "simulation_output_simulation_output_get",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 3,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Simulation Output Simulation Output Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/kepler-trips": {
+      "get": {
+        "summary": "Kepler Trips",
+        "description": "GeoJSON completo de trips para la capa Trip de kepler.gl (se envía en streaming).",
+        "operationId": "kepler_trips_kepler_trips_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/demanda/modos": {
+      "get": {
+        "summary": "Demanda Modos",
+        "description": "Actores viales que se pueden parametrizar, en el orden en que se muestran.",
+        "operationId": "demanda_modos_demanda_modos_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "type": "array",
+                  "title": "Response Demanda Modos Demanda Modos Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/demanda/presets": {
+      "get": {
+        "summary": "Demanda Presets",
+        "description": "Presets de demanda derivados de la Encuesta, con sus conteos por modo.",
+        "operationId": "demanda_presets_demanda_presets_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "type": "array",
+                  "title": "Response Demanda Presets Demanda Presets Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/demanda/estilos": {
+      "get": {
+        "summary": "Demanda Estilos",
+        "description": "Estilos de conducción disponibles para los vehículos motorizados.",
+        "operationId": "demanda_estilos_demanda_estilos_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "type": "array",
+                  "title": "Response Demanda Estilos Demanda Estilos Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/simulaciones": {
+      "get": {
+        "summary": "Listar Simulaciones",
+        "operationId": "listar_simulaciones_simulaciones_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "type": "array",
+                  "title": "Response Listar Simulaciones Simulaciones Get"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Crear Simulacion",
+        "description": "Encola una simulación con la demanda pedida; devuelve su id para consultar el estado.",
+        "operationId": "crear_simulacion_simulaciones_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolicitudSimulacion"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": true,
+                  "type": "object",
+                  "title": "Response Crear Simulacion Simulaciones Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/simulaciones/{run_id}/cancelar": {
+      "post": {
+        "summary": "Cancelar Simulacion",
+        "description": "Cancela una simulación en cola o en curso; borra sus archivos salvo el estado.",
+        "operationId": "cancelar_simulacion_simulaciones__run_id__cancelar_post",
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Run Id"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Cancelar Simulacion Simulaciones  Run Id  Cancelar Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/simulaciones/{run_id}": {
+      "get": {
+        "summary": "Obtener Simulacion",
+        "operationId": "obtener_simulacion_simulaciones__run_id__get",
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Run Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Obtener Simulacion Simulaciones  Run Id  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/precalculadas": {
+      "get": {
+        "summary": "Listar Precalculadas",
+        "description": "Presets ya simulados que el visor puede cargar sin correr SUMO.",
+        "operationId": "listar_precalculadas_precalculadas_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "type": "array",
+                  "title": "Response Listar Precalculadas Precalculadas Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/precalculadas/{preset}/kepler-trips": {
+      "get": {
+        "summary": "Kepler Trips Precalculada",
+        "description": "Trips de un preset precalculado. Se envían comprimidos: el navegador los descomprime.",
+        "operationId": "kepler_trips_precalculada_precalculadas__preset__kepler_trips_get",
+        "parameters": [
+          {
+            "name": "preset",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/Preset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/intersecciones": {
+      "get": {
+        "summary": "Listar Intersecciones",
+        "description": "Intersecciones semaforizadas como GeoJSON de puntos, con el volumen de la corrida.",
+        "operationId": "listar_intersecciones_intersecciones_get",
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Run Id"
+            }
+          },
+          {
+            "name": "precalculada",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/Preset"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Precalculada"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Listar Intersecciones Intersecciones Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/intersecciones/priorizacion": {
+      "get": {
+        "summary": "Listar Priorizacion",
+        "description": "Cruces sin semáforo candidatos a uno nuevo, por niveles (reglas + evidencia).",
+        "operationId": "listar_priorizacion_intersecciones_priorizacion_get",
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Run Id"
+            }
+          },
+          {
+            "name": "precalculada",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/Preset"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Precalculada"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Listar Priorizacion Intersecciones Priorizacion Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/intersecciones/{tl_id}": {
+      "get": {
+        "summary": "Obtener Interseccion",
+        "description": "Ficha de una intersección: accesos, programa del semáforo y volúmenes simulados.",
+        "operationId": "obtener_interseccion_intersecciones__tl_id__get",
+        "parameters": [
+          {
+            "name": "tl_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Tl Id"
+            }
+          },
+          {
+            "name": "run_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Run Id"
+            }
+          },
+          {
+            "name": "precalculada",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/Preset"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Precalculada"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Obtener Interseccion Intersecciones  Tl Id  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/intersecciones/{tl_id}/escenarios": {
+      "post": {
+        "summary": "Crear Escenario Zona",
+        "description": "Recorta la red y la demanda alrededor de la intersección (Fase B).\n\nEncola una 'corrida de recorte' que solo ejecuta netconvert + cutRoutes.\nDevuelve el run_id del nuevo escenario de zona.",
+        "operationId": "crear_escenario_zona_intersecciones__tl_id__escenarios_post",
+        "parameters": [
+          {
+            "name": "tl_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Tl Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolicitudEscenario"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Crear Escenario Zona Intersecciones  Tl Id  Escenarios Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/escenarios/{run_id}": {
+      "get": {
+        "summary": "Obtener Escenario",
+        "description": "Estado de una corrida de recorte de zona (Fase B).",
+        "operationId": "obtener_escenario_escenarios__run_id__get",
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Run Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Obtener Escenario Escenarios  Run Id  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/intersecciones/{tl_id}/programas": {
+      "get": {
+        "summary": "Listar Programas",
+        "description": "Lista los programas (tlLogic) de un semáforo.",
+        "operationId": "listar_programas_intersecciones__tl_id__programas_get",
+        "parameters": [
+          {
+            "name": "tl_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Tl Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "additionalProperties": true
+                  },
+                  "title": "Response Listar Programas Intersecciones  Tl Id  Programas Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/intersecciones/{tl_id}/programas/{program_id}": {
+      "get": {
+        "summary": "Obtener Programa",
+        "description": "Devuelve el ProgramaTLS completo de un semáforo.",
+        "operationId": "obtener_programa_intersecciones__tl_id__programas__program_id__get",
+        "parameters": [
+          {
+            "name": "tl_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Tl Id"
+            }
+          },
+          {
+            "name": "program_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Program Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Obtener Programa Intersecciones  Tl Id  Programas  Program Id  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Guardar Programa",
+        "description": "Valida y guarda un programa editado como additional.xml en scenarios/default/.",
+        "operationId": "guardar_programa_intersecciones__tl_id__programas__program_id__put",
+        "parameters": [
+          {
+            "name": "tl_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Tl Id"
+            }
+          },
+          {
+            "name": "program_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Program Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolicitudProgramaTLS"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Guardar Programa Intersecciones  Tl Id  Programas  Program Id  Put"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/intersecciones/{tl_id}/programas/webster": {
+      "post": {
+        "summary": "Calcular Webster",
+        "description": "Calcula el programa óptimo de Webster con los volúmenes de una corrida.",
+        "operationId": "calcular_webster_intersecciones__tl_id__programas_webster_post",
+        "parameters": [
+          {
+            "name": "tl_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Tl Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolicitudWebster"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Calcular Webster Intersecciones  Tl Id  Programas Webster Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/intersecciones/{tl_id}/comparaciones": {
+      "post": {
+        "summary": "Crear Comparacion",
+        "description": "Encola N corridas de zona (una por programa) para comparar métricas (Fase D).",
+        "operationId": "crear_comparacion_intersecciones__tl_id__comparaciones_post",
+        "parameters": [
+          {
+            "name": "tl_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Tl Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolicitudComparacion"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Crear Comparacion Intersecciones  Tl Id  Comparaciones Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/comparaciones/{comparacion_id}": {
+      "get": {
+        "summary": "Obtener Comparacion",
+        "description": "Estado y métricas de una comparación de configuraciones (Fase D).",
+        "operationId": "obtener_comparacion_comparaciones__comparacion_id__get",
+        "parameters": [
+          {
+            "name": "comparacion_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Comparacion Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Obtener Comparacion Comparaciones  Comparacion Id  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/cruces/{nodo_id}/comparacion3d": {
+      "post": {
+        "summary": "Crear Comparacion 3D",
+        "description": "Prepara la comparación 3D de un cruce sin semáforo: el actual vs. con semáforo propuesto.\n\nRecorta la zona, arma la demanda y genera la variante con semáforo en segundo plano;\nel estado se consulta en GET /comparacion3d/{id}.",
+        "operationId": "crear_comparacion_3d_cruces__nodo_id__comparacion3d_post",
+        "parameters": [
+          {
+            "name": "nodo_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Nodo Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SolicitudComparacion3D"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Crear Comparacion 3D Cruces  Nodo Id  Comparacion3D Post"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/comparacion3d": {
+      "get": {
+        "summary": "Listar Comparaciones 3D",
+        "operationId": "listar_comparaciones_3d_comparacion3d_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "additionalProperties": true,
+                    "type": "object"
+                  },
+                  "type": "array",
+                  "title": "Response Listar Comparaciones 3D Comparacion3D Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/comparacion3d/{cid}": {
+      "get": {
+        "summary": "Obtener Comparacion 3D",
+        "operationId": "obtener_comparacion_3d_comparacion3d__cid__get",
+        "parameters": [
+          {
+            "name": "cid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Cid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Obtener Comparacion 3D Comparacion3D  Cid  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Cerrar Comparacion 3D",
+        "operationId": "cerrar_comparacion_3d_comparacion3d__cid__delete",
+        "parameters": [
+          {
+            "name": "cid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Cid"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Successful Response"
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/comparacion3d/{cid}/geometria": {
+      "get": {
+        "summary": "Obtener Geometria 3D",
+        "description": "Carriles, cruces, luces del semáforo propuesto, edificios, vías y accesos de la zona.",
+        "operationId": "obtener_geometria_3d_comparacion3d__cid__geometria_get",
+        "parameters": [
+          {
+            "name": "cid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Cid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Obtener Geometria 3D Comparacion3D  Cid  Geometria Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/simulaciones/{run_id}/kepler-trips": {
+      "get": {
+        "summary": "Kepler Trips Simulacion",
+        "operationId": "kepler_trips_simulacion_simulaciones__run_id__kepler_trips_get",
+        "parameters": [
+          {
+            "name": "run_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Run Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "EstiloConductor": {
+        "type": "string",
+        "enum": [
+          "agresivo",
+          "normal",
+          "cauteloso"
+        ],
+        "title": "EstiloConductor"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "Preset": {
+        "type": "string",
+        "enum": [
+          "encuesta",
+          "mas_vehiculos",
+          "mas_peatones",
+          "dia_sin_carro"
+        ],
+        "title": "Preset"
+      },
+      "SolicitudCierre": {
+        "properties": {
+          "edge_id": {
+            "type": "string",
+            "title": "Edge Id"
+          },
+          "hora_inicio": {
+            "type": "number",
+            "minimum": 0.0,
+            "title": "Hora Inicio"
+          },
+          "hora_fin": {
+            "type": "number",
+            "minimum": 0.0,
+            "title": "Hora Fin"
+          },
+          "modos_afectados": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Modos Afectados"
+          }
+        },
+        "type": "object",
+        "required": [
+          "edge_id",
+          "hora_inicio",
+          "hora_fin"
+        ],
+        "title": "SolicitudCierre"
+      },
+      "SolicitudComparacion": {
+        "properties": {
+          "escenario_run_id": {
+            "type": "string",
+            "title": "Escenario Run Id"
+          },
+          "programas": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Programas"
+          },
+          "semilla": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Semilla"
+          }
+        },
+        "type": "object",
+        "required": [
+          "escenario_run_id",
+          "programas"
+        ],
+        "title": "SolicitudComparacion"
+      },
+      "SolicitudComparacion3D": {
+        "properties": {
+          "lon": {
+            "type": "number",
+            "title": "Lon"
+          },
+          "lat": {
+            "type": "number",
+            "title": "Lat"
+          },
+          "run_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Run Id"
+          },
+          "intensidades": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "type": "number"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Intensidades"
+          },
+          "nodos": {
+            "anyOf": [
+              {
+                "items": {
+                  "type": "string"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Nodos"
+          }
+        },
+        "type": "object",
+        "required": [
+          "lon",
+          "lat"
+        ],
+        "title": "SolicitudComparacion3D"
+      },
+      "SolicitudEscenario": {
+        "properties": {
+          "run_id": {
+            "type": "string",
+            "title": "Run Id"
+          },
+          "radio_m": {
+            "type": "integer",
+            "maximum": 2000.0,
+            "minimum": 50.0,
+            "title": "Radio M",
+            "default": 300
+          }
+        },
+        "type": "object",
+        "required": [
+          "run_id"
+        ],
+        "title": "SolicitudEscenario"
+      },
+      "SolicitudProgramaTLS": {
+        "properties": {
+          "tipo": {
+            "type": "string",
+            "title": "Tipo",
+            "default": "static"
+          },
+          "offset": {
+            "type": "number",
+            "title": "Offset",
+            "default": 0.0
+          },
+          "fases": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Fases"
+          }
+        },
+        "type": "object",
+        "required": [
+          "fases"
+        ],
+        "title": "SolicitudProgramaTLS"
+      },
+      "SolicitudSimulacion": {
+        "properties": {
+          "preset": {
+            "$ref": "#/components/schemas/Preset",
+            "default": "encuesta"
+          },
+          "conteos": {
+            "additionalProperties": {
+              "type": "integer",
+              "maximum": 100000.0,
+              "minimum": 0.0
+            },
+            "propertyNames": {
+              "$ref": "#/components/schemas/TransportMode"
+            },
+            "type": "object",
+            "title": "Conteos"
+          },
+          "semilla": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Semilla"
+          },
+          "estilo": {
+            "$ref": "#/components/schemas/EstiloConductor",
+            "default": "normal"
+          },
+          "cierres": {
+            "items": {
+              "$ref": "#/components/schemas/SolicitudCierre"
+            },
+            "type": "array",
+            "title": "Cierres"
+          }
+        },
+        "type": "object",
+        "required": [
+          "conteos"
+        ],
+        "title": "SolicitudSimulacion"
+      },
+      "SolicitudWebster": {
+        "properties": {
+          "run_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Run Id"
+          },
+          "num_fases": {
+            "type": "integer",
+            "maximum": 8.0,
+            "minimum": 1.0,
+            "title": "Num Fases",
+            "default": 2
+          }
+        },
+        "type": "object",
+        "title": "SolicitudWebster"
+      },
+      "TransportMode": {
+        "type": "string",
+        "enum": [
+          "auto",
+          "bici",
+          "peaton",
+          "transporte_publico",
+          "moto",
+          "taxi",
+          "escolar",
+          "especial",
+          "informal",
+          "otro"
+        ],
+        "title": "TransportMode"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}

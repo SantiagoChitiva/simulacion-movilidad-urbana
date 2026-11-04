@@ -140,11 +140,11 @@ No se requieren dispositivos especiales, aceleradores GPU ni interfaces de red d
     columns: (auto, auto, auto),
     table.header([*Software*], [*Versión mínima*], [*Rol en el sistema*]),
     [Python], [3.11], [Lenguaje del pipeline ETL, la API y el control de SUMO],
-    [SUMO (`eclipse-sumo`)], [1.27], [Motor de simulación; netconvert, duarouter y las herramientas `cutRoutes.py` y `randomTrips.py`],
+    [SUMO (`eclipse-sumo`)], [1.27.1], [Motor de simulación; netconvert, duarouter y las herramientas `cutRoutes.py` y `randomTrips.py`],
     [TraCI / sumolib], [1.27.1], [Control de SUMO en vivo (avance de corridas, simulador 3D) y lectura de la red],
-    [FastAPI + Uvicorn], [0.110+], [API REST y WebSocket del sistema],
-    [pyproj], [3.6+], [Conversión entre coordenadas de la red y lon/lat],
-    [pandas / geopandas], [2.0 / 0.14], [Exploración y preparación de datos (notebooks)],
+    [FastAPI + Uvicorn], [0.136.3], [API REST y WebSocket del sistema],
+    [pyproj], [3.8.0], [Conversión entre coordenadas de la red y lon/lat],
+    [pandas / geopandas], [2.2.3 / 0.14.4], [Exploración y preparación de datos (notebooks)],
     [Node.js + Vite], [20+ / 6], [Servidor de desarrollo y empaquetado del visor web],
     [React], [18.3], [Interfaz del visor web],
     [kepler.gl], [3.1], [Mapa con la animación de viajes y las capas de semáforos y priorización],
@@ -153,8 +153,8 @@ No se requieren dispositivos especiales, aceleradores GPU ni interfaces de red d
     [Typst], [0.12+], [Compilación de los documentos SRS, SPMP y VFP],
     [Ubuntu / macOS / Windows], [22.04 / 13 / 10], [Sistemas operativos soportados],
     [Git], [2.40], [Control de versiones del código fuente],
-    [pytest], [7.0], [Ejecución de pruebas unitarias e integración],
-    [GitHub Actions], [--], [Integración continua (CI) en cada commit],
+    [pytest], [9.1.1], [Ejecución de pruebas unitarias e integración (`simulation-service/test/`)],
+    [GitHub Actions], [--], [Integración continua (CI) en cada push o pull request a `main` y `develop`. Hoy solo corre las pruebas de la raíz],
   ),
   caption: [Interfaces de software del sistema.]
 ) <tabSoftware>
@@ -170,7 +170,7 @@ El sistema usa las siguientes comunicaciones, todas en la máquina local salvo l
     [Visor #sym.arrow API], [HTTP REST, JSON (`localhost:8000`, vía proxy `/api` de Vite)], [Demanda, corridas, intersecciones, programas,
     comparaciones, priorización y preparación del simulador 3D. Los trips precalculados se sirven en gzip con `Content-Encoding: gzip`.],
     [Visor #sym.arrow API], [WebSocket (`/comparacion3d/{id}`)], [Frames del simulador 3D (≈5 por segundo) y comandos del usuario (pausa, velocidad,
-    período de riesgo, seguir o inyectar actor).],
+    período de riesgo, seguir o inyectar actor, modo manual, aceleración y giro).],
     [API #sym.arrow SUMO], [TraCI sobre TCP en un puerto libre de `localhost`], [Avance de las corridas y control en vivo de los dos SUMO del simulador 3D.],
     [Visor #sym.arrow mapas base], [HTTPS 443], [Teselas de Mapbox (mapa principal, requiere `VITE_MAPBOX_TOKEN`) y de OpenStreetMap (minimapa).],
   ),
@@ -198,7 +198,9 @@ redactan con la forma \"El sistema debe #sym.dots\", y se organizan en cinco fun
   mensaje 'Columna requerida ausente: destino_UPZ'.],
   prioridad: [Alta],
   modulo: [`notebooks/F2.x` + `simulation-service/src/etl/sumo/trips.py`],
-  estado: [Parcial. La limpieza y el cruce de la encuesta se hacen en los notebooks de la Fase 2 (`notebooks/F2.x`); el pipeline lee el TSV resultante (`viajes_usaquen_internos.tsv`) y valida sus columnas.],
+  estado: [Parcial. La limpieza y el cruce de la encuesta se hacen en los notebooks de la Fase 2 (`notebooks/F2.x`); el pipeline lee el TSV resultante
+  (`viajes_usaquen_internos.tsv`, con las columnas `zat_ori`, `zat_des`, `hora_ini_seg`, `modo_principal_agrupado`, `duracion_min` y `fexp_vj`), no el XLSX.
+  No comprueba las columnas al abrir el archivo: si falta una, falla con un `KeyError` y no con el mensaje del criterio.],
   fecha: [],
 )
 
@@ -215,7 +217,8 @@ redactan con la forma \"El sistema debe #sym.dots\", y se organizan en cinco fun
   el log debe indicar 'Red OSM encontrada en caché, omitiendo descarga'.],
   prioridad: [Alta],
   modulo: [`notebooks/F2.x`, `data/processed/usaquen.osm.xml`],
-  estado: [Parcial. La red se descargó y procesó una vez en los notebooks y se versiona en `data/processed/`; no se descarga en cada ejecución.],
+  estado: [Parcial. La red se descargó y procesó una vez en los notebooks y se versiona en `data/processed/` (`usaquen.osm.xml`); no se descarga en cada
+  ejecución ni se usa osmium-tool.],
   fecha: [],
 )
 
@@ -247,7 +250,9 @@ redactan con la forma \"El sistema debe #sym.dots\", y se organizan en cinco fun
   log debe indicar exactamente ese 5% como tasa de descarte.],
   prioridad: [Alta],
   modulo: [`simulation-service/src/etl/sumo/trips.py`],
-  estado: [Implementado. Las filas inválidas se descartan y se cuentan en `TripGenerationStats.filas_invalidas`.],
+  estado: [Parcial. Se descartan y cuentan las filas con hora de salida no numérica (`TripGenerationStats.filas_invalidas`), con modo desconocido
+  (`modos_desconocidos`) o fuera de la ventana 7–10 h (`fuera_de_ventana`). Una zona de origen o destino vacía no se rechaza; duarouter la ignora con
+  `--ignore-errors`. El log no incluye `ID_hogar`: el TSV no lo trae.],
   fecha: [],
 )
 
@@ -263,7 +268,8 @@ redactan con la forma \"El sistema debe #sym.dots\", y se organizan en cinco fun
   #sym.plus.minus 0.01%.],
   prioridad: [Alta],
   modulo: [`simulation-service/src/etl/sumo/trips.py`, `configuration.py`],
-  estado: [Implementado. Cada viaje se replica `round(fexp_vj)` veces, con tope `MAX_COPIAS`.],
+  estado: [Implementado con una diferencia. Cada viaje se replica `round(fexp_vj)` veces, con un mínimo de 1 y un tope `MAX_COPIAS` (50), así que la suma
+  expandida no coincide exactamente con la suma de `fexp_vj` y no se cumple la tolerancia de #sym.plus.minus 0,01 %.],
   fecha: [],
 )
 
@@ -307,7 +313,7 @@ redactan con la forma \"El sistema debe #sym.dots\", y se organizan en cinco fun
   tipo: [Funcional],
   cu: [CU-02],
   descripcion: [El sistema debe exportar cada matriz O/D al formato de archivo .od requerido por SUMO (TAZ-based OD matrix), con la estructura de
-  encabezado, declaración de zonas TAZ y valores de viajes que especifica la documentación oficial de SUMO (versión 1.19+).],
+  encabezado, declaración de zonas TAZ y valores de viajes que especifica la documentación oficial de SUMO.],
   razon: [duarouter solo acepta archivos .od con la estructura exacta documentada por SUMO. Un formato incorrecto impide la generación de rutas.],
   criterio: [Cada archivo .od generado debe ser procesado exitosamente por duarouter sin errores de formato. Se verificará ejecutando duarouter con el
   archivo generado sobre la red .net.xml de Usaquén.],
@@ -357,13 +363,15 @@ redactan con la forma \"El sistema debe #sym.dots\", y se organizan en cinco fun
   cu: [CU-04],
   descripcion: [El sistema debe generar el archivo de tipos de vehículo (.vtype.xml) con los parámetros de comportamiento estándar de SUMO para cada modo
   de transporte modelado: automóvil particular, bus SITP, motocicleta y bicicleta. Los valores de velocidad máxima, aceleración, deceleración y longitud
-  del vehículo deben tomarse de los valores por defecto documentados en SUMO 1.19.],
+  del vehículo deben tomarse de los valores por defecto documentados en SUMO.],
   razon: [SUMO requiere que cada vehículo esté asociado a un tipo con parámetros físicos válidos. Sin este archivo la simulación no puede iniciarse.],
   criterio: [El archivo .vtype.xml debe contener al menos cuatro entradas (una por modo). SUMO debe cargar el archivo sin errores ni advertencias de tipo
   desconocido.],
   prioridad: [Alta],
   modulo: [`simulation-service/src/etl/sumo/vtypes.py`],
-  estado: [Implementado. Diez vTypes (auto, bici, moto, taxi, escolar, especial, informal, otro y bus_pt).],
+  estado: [Implementado con otro formato. `VTYPES` define nueve vTypes (auto, bici, moto, taxi, escolar, especial, informal, otro y `bus_pt`) y
+  `trips.py` los escribe dentro del `.trips.xml`, que duarouter copia al `.rou.xml`; no hay un `.vtype.xml` aparte. Peatón y transporte público no tienen
+  vType porque se emiten como `<person><walk>`; `bus_pt` es un vType para un servicio futuro, no un modo de viaje.],
   fecha: [],
 )
 
@@ -378,7 +386,8 @@ redactan con la forma \"El sistema debe #sym.dots\", y se organizan en cinco fun
   matriz .od.],
   prioridad: [Alta],
   modulo: [`simulation-service/src/etl/sumo/duarouter.py`],
-  estado: [Implementado (`--ignore-errors --repair`, viajes ordenados por `depart`).],
+  estado: [Implementado (`--ignore-errors --repair`, viajes ordenados por `depart`). No hay asignación dinámica (DUE): duarouter ruta una vez y SUMO
+  reasigna rutas durante la simulación con el dispositivo de rerouting.],
   fecha: [],
 )
 
@@ -397,7 +406,9 @@ redactan con la forma \"El sistema debe #sym.dots\", y se organizan en cinco fun
   cuyo total de viajes expandidos difiera exactamente en un 20%.],
   prioridad: [Alta],
   modulo: [`simulation-service/src/etl/sumo/demanda.py`, `api/api.py`],
-  estado: [Implementado y ampliado: la variación paramétrica se hace desde la API/visor con presets de demanda, conteos por modo, semilla, estilo de conducción y cierres viales (ver RF-021 a RF-025).],
+  estado: [Implementado y ampliado: la variación paramétrica se hace desde la API/visor con presets de demanda, conteos por modo, semilla, estilo de
+  conducción y cierres viales (ver RF-021 a RF-025), no con un archivo YAML (no existe). El período horario no es parametrizable: la ventana es fija, de 7 a
+  10 h (`HORA_INI`, `HORA_FIN`).],
   fecha: [],
 )
 
@@ -516,7 +527,8 @@ redactan con la forma \"El sistema debe #sym.dots\", y se organizan en cinco fun
   404 ante IDs inexistentes.],
   prioridad: [Alta],
   modulo: [`simulation-service/src/api/api.py`],
-  estado: [Implementado con los endpoints actuales: `GET /simulaciones`, `GET /simulaciones/{id}`, `GET /simulaciones/{id}/kepler-trips`, `GET /intersecciones[/{id}]`; 404 si no existe.],
+  estado: [Implementado con los endpoints actuales: `GET /simulaciones`, `GET /simulaciones/{id}`, `GET /simulaciones/{id}/kepler-trips`,
+  `GET /precalculadas`, `GET /intersecciones[/{id}]`; 404 si no existe. No existen `/simulaciones/{id}/metricas` ni `/geh`.],
   fecha: [],
 )
 
@@ -534,7 +546,9 @@ redactan con la forma \"El sistema debe #sym.dots\", y se organizan en cinco fun
   sistema debe mostrar un indicador de progreso durante la ejecución y un mensaje de éxito o error al finalizar.],
   prioridad: [Alta],
   modulo: [`kepler/src/components/PanelDemanda.jsx`, `api/jobs.py`],
-  estado: [Implementado (pestaña Demanda: preset, conteos por modo, escala, semilla, estilo y cierres).],
+  estado: [Parcial. La pestaña Demanda permite elegir preset, conteos por modo, escala, semilla y estilo, y la pestaña Cierres agrega los cierres. No hay
+  selector de período horario (la ventana es fija) ni de modos activos: un modo se desactiva con conteo 0. La escala multiplica los conteos en el panel
+  y no viaja al backend como un factor. El avance y el error final se muestran en la tarjeta de actividad.],
   fecha: [],
 )
 
@@ -551,7 +565,8 @@ redactan con la forma \"El sistema debe #sym.dots\", y se organizan en cinco fun
   Verificable mediante prueba manual.],
   prioridad: [Media],
   modulo: [`kepler/src/components/PanelDemanda.jsx`, `api/api.py`],
-  estado: [Implementado (validación en el panel y en el modelo Pydantic de la API).],
+  estado: [Parcial. El panel solo acepta una escala mayor a cero y la API (`SolicitudSimulacion`) exige que el total de viajes esté entre 1 y
+  `MAX_VIAJES`; no hay período horario que validar.],
   fecha: [],
 )
 
@@ -757,12 +772,13 @@ datos, su riesgo y sus decisiones.
   cu: [CU-12],
   descripcion: [Dado un cruce sin semáforo, el sistema debe preparar en segundo plano un escenario comparativo con:
   - el recorte de la zona (350 m) como escenario actual (`zona.net.xml`);
-  - una variante idéntica con un semáforo de tiempos fijos instalado por netconvert (`--tls.set`) en ese nodo (`zona_tls.net.xml`);
+  - una variante idéntica con un semáforo de tiempos fijos instalado por netconvert (`zona_tls.net.xml`). Un parche de nodos
+    (`semaforo_propuesto.nod.xml`) marca todos los nodos del cruce como `traffic_light` con el mismo `tl`, así que un solo programa controla el cruce;
   - una demanda común a ambos lados: los viajes reales de una corrida que pasan por la zona más un tráfico de fondo por modo generado con
     `randomTrips.py`, con intensidades (veh/h y peatones/h) ajustables por el usuario.],
   razon: [Recortada a unos cientos de metros, la demanda real de la encuesta es muy escasa para mostrar el efecto de un semáforo. El tráfico de fondo la
   completa sin perder los viajes reales.],
-  criterio: [`POST /cruces/{nodo}/comparacion3d` responde 202. En menos de 60 s, `GET /comparacion3d/{id}` pasa a estado `lista`, con
+  criterio: [`POST /cruces/{nodo}/comparacion3d` responde 202 (429 si ya hay dos comparaciones abiertas). En menos de 60 s, `GET /comparacion3d/{id}` pasa a estado `lista`, con
   `fuente_demanda` (`real`, `sintetica` o `real+sintetica`) y el número de fases y el ciclo del semáforo propuesto. Si el nodo ya tiene semáforo, el
   estado es `error` con un mensaje que lo indica.],
   prioridad: [Alta],
@@ -837,7 +853,7 @@ datos, su riesgo y sus decisiones.
   id: [RF-037],
   tipo: [Funcional],
   cu: [CU-12],
-  descripcion: [El sistema debe calcular cada cierto tiempo, configurable entre 1 y 10 s simulados, un índice de riesgo de 0 a 100 para el actor
+  descripcion: [El sistema debe calcular cada cierto tiempo, configurable entre 1 y 10 s simulados (el visor ofrece 1, 2, 5 y 10 s), un índice de riesgo de 0 a 100 para el actor
   seguido, con nivel bajo, medio o alto y la causa dominante. El índice toma el peor de tres indicadores sustitutos de seguridad:
   - TTC con el vehículo de adelante (crítico < 1,5 s);
   - DRAC (crítico > 3,35 m/s²);
@@ -929,8 +945,9 @@ datos, su riesgo y sus decisiones.
   razon: [El programa por defecto de netconvert no es óptimo; la comparación es más justa con un programa ajustado a la demanda.],
   criterio: [El ciclo elegido se refleja en `GET /comparacion3d/{id}` y en la fase mostrada en el HUD del lado con semáforo.],
   prioridad: [Media],
-  modulo: [`semaforo_nuevo.py` (`ciclo_s` ya soportado por la API interna), `programas_tls.py`],
-  estado: [Parcial: el backend acepta `ciclo_s`; falta exponerlo en el visor.],
+  modulo: [`semaforo_nuevo.py` (`ciclo_s`), `etl/etl.py` (`run_escenario_semaforo`), `programas_tls.py`],
+  estado: [Pendiente en la práctica. `run_escenario_semaforo` y `agregar_semaforo` aceptan `ciclo_s`, pero `POST /cruces/{nodo}/comparacion3d` no lo
+  recibe ni el visor lo ofrece: el programa lo calcula netconvert. Hay que exponerlo en la API y en el visor.],
   version: "2.0",
   fecha: []
 )
@@ -1060,8 +1077,8 @@ que esto puede cambiar ya que, puede haber una tecnología que disminuya el tiem
 - *Lenguaje de programación:* Python 3.11. De momento se tiene pensado utilizar Python como lenguaje de programación principal, no obstante lenguajes como
   C/C++ son utilizados en gran parte para el desarrollo de SUMO, no se descarta el uso de estos dos también para temas de integración o módulos
   adicionales.
-- *Estilo de código:* el código fuente debe cumplir con la guía de estilo PEP 8. El cumplimiento se verifica automáticamente mediante pylint en cada
-  ejecución de CI.
+- *Estilo de código:* el código fuente debe cumplir con la guía de estilo PEP 8. El CI ejecuta `pylint src/ --exit-zero` en la raíz del repositorio, donde
+  no existe `src/`, y con `--exit-zero` no bloquea nada: hoy el cumplimiento no se verifica automáticamente (ver RNF-MAN-002).
 - *Herramientas del ecosistema SUMO:* la generación de la red (.net.xml) y de las rutas (.rou.xml) debe realizarse con netconvert y duarouter
   respectivamente. No es ideal reimplementar estas funcionalidades.
 - *Software de código abierto:* todas las herramientas y bibliotecas usadas deben ser preferiblemente de código abierto o de uso académico gratuito.
@@ -1096,7 +1113,8 @@ Document).
   exactamente 10% de registros descartados en F1.],
   prioridad: [Alta],
   modulo: [`simulation-service/src/etl/sumo/trips.py`],
-  estado: [Implementado (filas inválidas descartadas y contadas).],
+  estado: [Parcial. Los valores no numéricos de `hora_ini_seg` y los modos desconocidos se descartan y se cuentan sin excepción; un `zat_ori` o
+  `zat_des` vacío no se detecta (ver RF-004). El log no reporta el porcentaje de descarte.],
   fecha: [],
 )
 
@@ -1168,22 +1186,40 @@ Document).
   fecha: [],
 )
 
+#reqTable(
+  id: [RNF-MAN-002],
+  tipo: [No Funcional -- Mantenibilidad],
+  cu: [--],
+  descripcion: [El código del pipeline y de la API debe cumplir PEP 8 y obtener al menos 8,0/10 en pylint, verificado en el CI de cada push o pull
+  request. Un puntaje inferior debe hacer fallar el build.],
+  razon: [El sistema lo mantienen cuatro integrantes; un estilo uniforme reduce el costo de revisar y modificar el código.],
+  criterio: [El step de pylint del workflow de GitHub Actions analiza `simulation-service/src` y reporta un puntaje mayor o igual a 8,0/10. Con un puntaje
+  menor el workflow termina en error.],
+  prioridad: [Media],
+  modulo: [`.github/workflows/tests.yml`],
+  estado: [Parcial. El CI ejecuta `pylint src/ --exit-zero` sobre una carpeta `src/` que no existe en la raíz, así que no analiza el código y nunca
+  falla.],
+  version: "2.2",
+  fecha: []
+)
+
 === Portabilidad
 
 #reqTable(
   id: [RNF-PORT-001],
   tipo: [No Funcional -- Portabilidad],
   cu: [--],
-  descripcion: [El pipeline debe ejecutarse sin modificaciones en los sistemas operativos Ubuntu 22.04, macOS 13+ y Windows 10+, usando Python 3.11 y SUMO
-  1.19 instalados en el sistema. La instalación de dependencias debe realizarse únicamente con #text(fill: olive)[pip install -r] #text(fill:
-  gray)[requirements.txt].],
+  descripcion: [El pipeline debe ejecutarse sin modificaciones en los sistemas operativos Ubuntu 22.04, macOS 13+ y Windows 10+, usando Python 3.11 o superior y SUMO
+  1.27.1. La instalación de las dependencias de `simulation-service` debe realizarse únicamente con #text(fill: olive)[pip install -e] #text(fill:
+  gray)[".[dev]"], que instala `eclipse-sumo` desde pip.],
   razon: [Los cuatro integrantes del equipo trabajan en sistemas operativos distintos. El pipeline debe funcionar en todos ellos sin configuraciones
   especiales.],
   criterio: [El pipeline de CI de GitHub Actions debe incluir jobs para Ubuntu y Windows. Ambos jobs deben completarse exitosamente en cada commit a la
   rama principal.],
   prioridad: [Alta],
   modulo: [Pipeline completo],
-  estado: [Parcial: probado en Windows 11; el CI solo corre las pruebas de la raíz.],
+  estado: [Parcial: probado en Windows 11; el workflow de CI corre solo en `ubuntu-latest` y solo ejecuta las pruebas de la raíz (un marcador de
+  posición), no las de `simulation-service/`.],
   fecha: [],
 )
 
@@ -1199,7 +1235,9 @@ Document).
   reportada por el CI como advertencia.],
   prioridad: [Media],
   modulo: [Configuración del entorno],
-  estado: [Parcial: `simulation-service/pyproject.toml` fija `traci==1.27.1`; el resto usa rangos.],
+  estado: [Parcial. `simulation-service/pyproject.toml` fija con `==` todas sus dependencias (`fastapi[standard]==0.136.3`, `eclipse-sumo==1.27.1`,
+  `traci==1.27.1`, `pyproj==3.8.0`, y `pytest==9.1.1` en los extras de prueba). El `requirements.txt` de la raíz, usado por los notebooks y el CI, usa
+  rangos `>=`. Las dependencias transitivas no se fijan y el CI no avisa de los rangos.],
   fecha: [],
 )
 
@@ -1265,23 +1303,27 @@ El almacenamiento de los datos a manejar tiene el siguiente formatos:
   table(
     columns: (auto, auto, 1fr),
     table.header([*Fase*], [*Formato*], [*Descripción*]),
-    [F1 -- Ingestión], [Parquet], [Datos limpios de la encuesta con factor de expansión aplicado. Permite lectura parcial y compresión eficiente para
-    #{sym.tilde.basic}500K registros.],
-    [F2 -- Matrices O/D], [.od], [Formato nativo de SUMO para matrices TAZ. Texto plano estructurado según documentación oficial de SUMO 1.19.],
+    [F1 -- Ingestión], [TSV (Parquet previsto)], [Hoy el pipeline lee `viajes_usaquen_internos.tsv`, que salió de los notebooks con el factor de
+    expansión `fexp_vj`. El Parquet de la encuesta limpia no se genera.],
+    [F2 -- Viajes], [`.trips.xml` (`.od` previsto)], [Viajes TAZ a TAZ con su vType, ordenados por `depart`. El `.od` por modo y período no se
+    genera.],
     [F3 -- Red vial], [.net.xml], [Formato XML nativo de SUMO generado por netconvert. Contiene nodos, aristas, velocidades y prioridades.],
     [F3 -- Zonas TAZ], [.taz.xml], [Formato XML nativo de SUMO. Lista de zonas con sus nodos de red asociados.],
-    [F4 -- Tipos vehículo], [.vtype.xml],[Formato XML nativo de SUMO. Parámetros físicos y de comportamiento por modo de transporte.],
+    [F4 -- Tipos vehículo], [`vType` dentro del `.rou.xml`],[Parámetros físicos y de comportamiento por modo de transporte. Con un estilo de conducción
+    distinto de `normal` se agrega `vtypes_estilo.xml` a la corrida.],
     [F4 -- Rutas], [.rou.xml], [Formato XML nativo de SUMO generado por duarouter. Contiene viajes y rutas asignadas.],
-    [F5 -- Validación], [CSV], [Tabla de resultados GEH por punto de aforo. Columnas: punto_aforo, volumen_simulado, volumen_real, GEH.],
-    [Transversal], [JSON], [Archivos de checkpoint por fase. Contienen el estado de ejecución para permitir reanudación parcial.],
+    [F5 -- Validación], [CSV (pendiente)], [Tabla de resultados GEH por punto de aforo. Columnas: punto_aforo, volumen_simulado, volumen_real, GEH.
+    No se genera todavía (RF-014).],
+    [Transversal], [JSON (pendiente)], [Archivos de checkpoint por fase para la reanudación parcial (RF-016). No se generan; `estado.json` solo guarda el
+    estado de cada corrida.],
     [Corridas (v2.0)], [`runs/<id>/`], [Trips, rutas, salidas de SUMO, `estado.json` y trips de kepler de cada corrida lanzada desde la API. No se
     versiona.],
     [Precalculadas (v2.0)], [`.geojson.gz` + JSON], [`precalculadas/<preset>/`: trips comprimidos, volúmenes por edge y metadatos con el hash de los
     insumos. Se versiona.],
     [Zonas y comparaciones 3D (v2.0)], [`.net.xml`, `.rou.xml`, `.trips.xml`], [`runs/zona-*` y `runs/sem-*`: red recortada, variante con el semáforo
     propuesto, demanda real recortada y tráfico de fondo. Se borran al cerrar la comparación.],
-    [Cachés (v2.0)], [JSON], [`cache/semaforos.json` (catálogo de intersecciones) y `volumenes.json` por corrida; se invalidan por fecha y tamaño del
-    archivo de origen.],
+    [Cachés (v2.0)], [JSON], [`cache/semaforos.json` (catálogo de intersecciones), `cache/priorizacion.json` (análisis de priorización, con
+    `VERSION_ANALISIS`) y `volumenes.json` por corrida; se invalidan por fecha y tamaño del archivo de origen.],
   ),
   caption: [Tipos de datos almacenados por el pipeline.]
 ) <tabDatos>

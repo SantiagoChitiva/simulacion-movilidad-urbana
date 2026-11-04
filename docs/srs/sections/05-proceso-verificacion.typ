@@ -99,8 +99,8 @@ prueba está asociado a uno o más requerimientos y especifica el método de ver
     columns: (auto, auto, auto, 1fr, 1fr),
     table.header([*ID Caso*], [*Req.*], [*Método*], [*Entrada de prueba*], [*Criterio de éxito*]),
 
-    [CP-001], [RF-001], [T], [Archivo XLSX con columnas obligatorias completas; segundo archivo XLSX sin la columna `destino_UPZ`.], [Primer caso:
-    pipeline continúa sin error. Segundo caso: pipeline termina con código de error ≠ 0 y el log contiene "Columna requerida ausente: destino_UPZ".],
+    [CP-001], [RF-001], [T], [TSV con las columnas obligatorias completas; segundo TSV sin la columna `zat_des`.], [Primer caso: el pipeline continúa
+    sin error. Segundo caso: el pipeline termina con error y el mensaje nombra la columna ausente (hoy sale un `KeyError`; pendiente el mensaje del RF-001).],
 
     [CP-002], [RF-002], [T], [Ejecución sin archivo OSM local; segunda ejecución con el archivo ya presente.], [Primera ejecución: archivo
     `usaquen.osm.pbf` generado en el directorio de datos. Segunda ejecución: log indica "Red OSM encontrada en caché, omitiendo descarga".],
@@ -114,14 +114,14 @@ prueba está asociado a uno o más requerimientos y especifica el método de ver
     [CP-005], [RF-005], [T], [Dataset de prueba con factores de expansión conocidos cuya suma es exactamente
     12 500.0.], [Suma de viajes expandidos en el output: entre 12 498.75 y 12 501.25 (±0.01%).],
 
-    [CP-006], [RF-006], [T], [Dataset con viajes de todos los modos (auto, bus, moto, bicicleta).], [Sistema genera un archivo `.od` por cada modo con al
-    menos un viaje. Número de archivos `.od` = número de modos con viajes en el dataset.],
+    [CP-006], [RF-006], [T], [`test_trips.py`: TSV con viajes de todos los modos.], [`.trips.xml` con un vType por cada modo con viajes y los conteos
+    por modo de `TripGenerationStats.por_modo` (el formato `.od` por modo se reemplazó).],
 
     [CP-007], [RF-007], [T, I], [Dataset con viajes distribuidos en los tres períodos horarios (AM, PM, nocturno).], [Sistema genera al menos 3 × N
     archivos `.od` (N = número de modos). Los archivos AM contienen solo viajes con hora de inicio entre 6:00 y 8:59.],
 
-    [CP-008], [RF-008], [T, I], [Archivo `.od` generado por el pipeline para el período AM, modo automóvil.], [duarouter procesa el archivo sin errores de
-    formato sobre la red `.net.xml` de Usaquén y genera un `.rou.xml` válido.],
+    [CP-008], [RF-008], [T, I], [`.trips.xml` generado por el pipeline para la ventana 7–10 h.], [duarouter procesa el archivo sobre la red `.net.xml` de
+    Usaquén y genera un `.rou.xml` válido y ordenado por `depart` (el formato `.od` se reemplazó).],
 
     [CP-009], [RF-009], [T, I], [Red OSM de Usaquén recortada disponible en disco.], [Archivo `.net.xml` generado por netconvert sin errores. SUMO carga
     la red sin mensajes de tipo ERROR en su log.],
@@ -129,14 +129,14 @@ prueba está asociado a uno o más requerimientos y especifica el método de ver
     [CP-010], [RF-010], [T, I], [Shapefile de UPZ de Usaquén y red `.net.xml` generada.], [Archivo `.taz.xml` con una entrada por cada UPZ de Usaquén.
     Cada zona contiene al menos un nodo de la red. SUMO valida el archivo sin errores de zona vacía.],
 
-    [CP-011], [RF-011], [T, I], [Ejecución de la fase F4 del pipeline con la red y matrices disponibles.], [Archivo `.vtype.xml` con al menos 4 entradas
-    (auto, bus, moto, bicicleta). SUMO carga el archivo sin advertencias de tipo desconocido.],
+    [CP-011], [RF-011], [T, I], [`test_vtypes.py` y el `.rou.xml` de una corrida.], [Nueve vTypes (ocho modos más `bus_pt`) dentro del `.rou.xml`. SUMO
+    los carga sin advertencias de tipo desconocido.],
 
     [CP-012], [RF-012], [T], [Archivos `.od`, `.net.xml` y `.taz.xml` generados por las fases anteriores.], [duarouter completa sin errores y genera
     `.rou.xml` con al menos un viaje por cada par O/D con valor > 0 en la matriz.],
 
-    [CP-013], [RF-013], [T, D], [Dos archivos `config.yaml` idénticos excepto en el campo `factor_escala_demanda`: 1.0 y 1.2 respectivamente.], [Los dos
-    conjuntos de artefactos generados difieren en el total de viajes exactamente en un 20%. Sin modificaciones al código fuente entre ejecuciones.],
+    [CP-013], [RF-013], [T, D], [Dos corridas con los conteos de `encuesta` y con esos conteos multiplicados por 1,2 (escala del panel).], [Los dos
+    conjuntos de artefactos difieren en el total de viajes en un 20 % (con el redondeo por modo). Sin modificaciones al código entre ejecuciones.],
 
     [CP-014], [RF-014], [T, I], [Resultados de simulación SUMO y base de datos de aforos HMD de Usaquén.], [Archivo `validacion_geh.csv` con una fila por
     punto de aforo disponible, columnas `punto_aforo`, `volumen_simulado`, `volumen_real`, `GEH`. Log indica el porcentaje de puntos con GEH < 5.],
@@ -151,14 +151,15 @@ prueba está asociado a uno o más requerimientos y especifica el método de ver
     [CP-017b], [RF-017], [D], [Simulación con resultados disponibles; abrir el módulo web en el navegador y seleccionar la simulación.], [Las métricas de
     la simulación se renderizan en menos de 3 segundos. Todos los campos (volumen, tiempo, GEH) muestran valores distintos de cero.],
 
-    [CP-018b], [RF-018], [T], [Petición GET a /simulaciones/{id}/metricas con un ID válido y con un ID inexistente.], [ID válido: respuesta HTTP 200 con
-    JSON. ID inexistente: respuesta HTTP 404.],
+    [CP-018b], [RF-018], [T], [`test_api.py`: petición GET a `/simulaciones/{id}` con un ID válido y con un ID inexistente.], [ID válido: respuesta HTTP 200
+    con JSON. ID inexistente: respuesta HTTP 404.],
 
-    [CP-019b], [RF-019], [D], [Abrir el formulario de parametrización, seleccionar período PM y factor 1.2, confirmar.], [El pipeline se ejecuta con los
-    parámetros seleccionados. El módulo web muestra indicador de progreso y mensaje de éxito al finalizar.],
+    [CP-019b], [RF-019], [D], [Abrir la pestaña Demanda, elegir el preset `mas_vehiculos`, cambiar un conteo y la semilla, y ejecutar.], [La corrida se
+    ejecuta con los parámetros elegidos. La tarjeta de actividad muestra el avance por etapa y el resultado al finalizar. (El período PM no existe: la
+    ventana es fija.)],
 
-    [CP-020b], [RF-020], [D], [Ingresar factor de escala igual a 0 en el formulario y pulsar Confirmar.], [El formulario muestra mensaje de error visible.
-    No se envía ninguna petición al backend.],
+    [CP-020b], [RF-020], [T, D], [Poner la escala en 0 en el panel; enviar a la API conteos que suman 0 o más de 100 000.], [El botón Aplicar queda
+    deshabilitado y no se envía nada. La API responde 422 con el mensaje del total válido.],
 
     [CP-029], [RF-021, RF-022], [T], [`test_demanda.py`: preset `encuesta` con conteos por defecto; presets alternos; conteos por modo.], [La demanda de
     `encuesta` reproduce la expansión simple; los presets conservan el total; los conteos se cumplen por modo.],
@@ -178,9 +179,9 @@ prueba está asociado a uno o más requerimientos y especifica el método de ver
     [CP-034], [RF-030], [T, D], [Guardar un programa con una fase de largo incorrecto; calcular Webster con volúmenes de la ficha.], [El primero se
     rechaza indicando la fase; el ciclo de Webster es ≥ 30 s.],
 
-    [CP-035], [RF-033], [T], [`test_semaforo_nuevo.py`: nodo sin semáforo, nodo con semáforo y nodo inexistente; `test_demanda_zona.py`: argumentos de
-    `randomTrips.py` por modo.], [Se instala el semáforo solo en el nodo válido; los otros fallan con mensaje claro; el período de cada modo es
-    3600 / intensidad.],
+    [CP-035], [RF-033], [T], [`test_semaforo_nuevo.py`: cruce sin semáforo, cruce con semáforo y nodo inexistente; `test_demanda_zona.py`: argumentos de
+    `randomTrips.py` por modo.], [Se instala el semáforo, con un solo `tl` para los nodos del cruce, solo si el cruce es válido; los otros fallan con
+    mensaje claro; el período de cada modo es 3600 / intensidad.],
 
     [CP-036], [RF-033, RF-034], [T], [`test_comparacion3d.py` (gestor con preparación falsa) y `test_escena3d.py` (edificios y geometría).], [Estados
     `preparando` #sym.arrow `lista`/`error`; límite de 2 comparaciones (429); geometría con edificios recortados al bbox.],
@@ -234,13 +235,13 @@ prueba está asociado a uno o más requerimientos y especifica el método de ver
     completo (descripción, parámetros, retorno, ejemplo).],
 
     [CP-024], [RNF-MAN-002], [A], [Verificar los logs del workflow de GitHub Actions en la rama principal tras un commit de código.], [El step de pylint
-    reporta score ≥ 8.0/10. El build está marcado como exitoso.],
+    analiza `simulation-service/src`, reporta score ≥ 8.0/10 y falla el build si es menor. Hoy no se cumple (`--exit-zero`, carpeta inexistente).],
 
     [CP-025], [RNF-PORT-001], [A], [Revisar los logs de los jobs de CI en GitHub Actions para Ubuntu 22.04 y Windows 10.], [Ambos jobs completan
     exitosamente. Ningún step falla por incompatibilidad de sistema operativo.],
 
-    [CP-026], [RNF-PORT-002], [I], [Inspeccionar el archivo `requirements.txt` del repositorio.], [Todas las entradas siguen el formato
-    `biblioteca==X.Y.Z`. No existen rangos del tipo `>=` ni `~=`.],
+    [CP-026], [RNF-PORT-002], [I], [Inspeccionar `simulation-service/pyproject.toml` y el `requirements.txt` de la raíz.], [Todas las entradas siguen el
+    formato `biblioteca==X.Y.Z`. No existen rangos del tipo `>=` ni `~=`. Hoy `pyproject.toml` cumple y el `requirements.txt` de la raíz no.],
 
     [CP-027], [RNF-REP-001], [T, A], [Ejecutar el pipeline dos veces consecutivas con los mismos archivos de entrada y el mismo `config.yaml`. Calcular el
     hash SHA-256 de cada archivo de salida en ambas ejecuciones.], [El hash SHA-256 de cada archivo de salida es idéntico entre las dos ejecuciones. El
@@ -266,12 +267,15 @@ prueba está asociado a uno o más requerimientos y especifica el método de ver
 
 El sistema se considerará verificado y listo para la entrega al director del proyecto cuando se cumplan simultáneamente los siguientes criterios:
 
-+ Todos los casos de prueba de requerimientos funcionales (CP-001 a CP-016 y CP-029 a CP-039) aplicables a la versión entregada han sido ejecutados
-  y su resultado es *Pasa*. La suite automatizada de `simulation-service/test/` (99 pruebas en v2.0) pasa completa.
++ Todos los casos de prueba de requerimientos funcionales (CP-001 a CP-016, CP-017b a CP-020b, CP-029 a CP-039, CP-043 y CP-044) aplicables a la versión
+  entregada han sido ejecutados y su resultado es *Pasa*. La suite automatizada de `simulation-service/test/` (121 pruebas en v2.2, todas aprobadas el
+  2026-10-28) pasa completa. El CI no la ejecuta todavía.
 + Los casos de prueba de desempeño (CP-017 y CP-018) han sido ejecutados en la máquina de referencia definida en @tabHardwareDesc y su resultado es *Pasa*.
 + Al menos el 85% de los puntos de aforo HMD de Usaquén obtienen un GEH < 5 en la simulación de validación (criterio del requerimiento RF-014).
 + Los jobs de CI en GitHub Actions para Ubuntu y Windows están en estado *verde* (todos los steps exitosos) en el último commit de la rama principal.
-+ El script `scripts/verify_reproducibility.py` reporta 0 diferencias entre dos ejecuciones consecutivas del pipeline con los mismos datos de entrada.
+  Hoy existe solo el job de Ubuntu.
++ El script `scripts/verify_reproducibility.py` (aún no existe en el repositorio) reporta 0 diferencias entre dos ejecuciones consecutivas del pipeline
+  con los mismos datos de entrada. Mientras tanto, `test_precalculadas.py` verifica la reproducibilidad de las precalculadas.
 + No existen issues abiertos en GitHub con la etiqueta `blocker` o `bug-critico`.
 
 == Proceso de Registro de Defectos
@@ -290,7 +294,7 @@ Durante la fase de verificación, los defectos encontrados se registrarán y ges
     prioridad Alta), `bug-menor` (afecta un requerimiento de prioridad Media). Los blockers y críticos deben corregirse antes de la entrega.],
 
     [3. Asignación], [Responsable de Documentación], [El issue se asigna al integrante del equipo responsable del módulo afectado según la distribución de
-    requerimientos de la Sección 2.8.],
+    requerimientos de la Sección 2.7.],
 
     [4. Corrección], [Desarrollador asignado], [Se implementa la corrección en una rama separada y se abre un pull request referenciando el issue. El PR
     debe incluir o actualizar el caso de prueba que detectó el defecto.],

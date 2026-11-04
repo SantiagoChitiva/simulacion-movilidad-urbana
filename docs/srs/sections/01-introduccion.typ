@@ -23,7 +23,7 @@ La audiencia de este documento incluye:
 - *Investigadores y analistas de movilidad:* potenciales usuarios del sistema en futuras
   iteraciones del producto.
 
-El alcance del documento cubre la versión 2.0 del sistema, que corresponde al estado de la rama de desarrollo actual más los requerimientos aún por
+El alcance del documento cubre la versión 2.x del sistema (revisión 2.2), que corresponde al estado de la rama de desarrollo actual más los requerimientos aún por
 desarrollar (marcados como *Pendiente* en la Sección 3). El caso de validación está delimitado a la localidad de Usaquén en Bogotá, Colombia.
 
 == Alcance
@@ -36,11 +36,13 @@ movilidad urbana disponibles para Bogotá en archivos de entrada válidos para e
 *Funcionalidades principales que incluirá el sistema:*
 
 - Ingesta y limpieza de la Encuesta de Movilidad de Bogotá 2023 y de los aforos vehiculares en Hora de Máxima Demanda (HMD).
-- Descarga y procesamiento de la red vial de Usaquén desde OpenStreetMap mediante osmium y netconvert, generando el archivo `.net.xml` requerido por SUMO.
+- Descarga y procesamiento de la red vial de Usaquén desde OpenStreetMap (en los notebooks de la Fase 2) y conversión con netconvert al archivo `.net.xml`
+  que requiere SUMO.
 - Construcción de zonas de análisis de tráfico (TAZ) a partir de las Unidades de Planeamiento Zonal (UPZ) de Usaquén, generando el archivo `.taz.xml`.
 - Producción de archivos de rutas (`.rou.xml`) y tipos de vehículo (`.vtype.xml`) compatibles con duarouter y SUMO.
 - Variación paramétrica de las configuraciones de entrada para la generación de escenarios hipotéticos de movilidad.
-- Validación estadística de los resultados mediante el estadístico GEH y RMSE, contrastando los volúmenes simulados con los aforos reales.
+- Validación estadística de los resultados mediante el estadístico GEH y RMSE, contrastando los volúmenes simulados con los aforos reales (pendiente,
+  ver RF-014).
 - Módulo web que permite visualizar de forma interactiva los resultados producidos por SUMO (métricas de congestión, tiempos de viaje, flujos vehiculares
   por segmento) y parametrizar nuevas simulaciones desde una interfaz gráfica, sin necesidad de editar archivos XML ni interactuar con la línea de
   comandos.
@@ -71,7 +73,6 @@ accesibles.
 - Despliegue en sistemas de producción institucionales.
 - Calibración del modelo para localidades distintas a Usaquén.
 - Programas semafóricos reales de la Secretaría Distrital de Movilidad: los programas provienen de netconvert/OpenStreetMap.
-- Datos de siniestralidad en la priorización de cruces (criterio reservado).
 
 == Definiciones, Acrónimos y Abreviaciones
 
@@ -205,8 +206,8 @@ requerimientos, describiendo las técnicas empleadas y los artefactos producidos
 La *Sección 5 -- Proceso de Verificación* describe el plan de validación del sistema, especificando los criterios de aceptación, las métricas de calidad
 (GEH, RMSE) y los casos de prueba asociados a los requerimientos.
 
-La *Sección 6 -- Anexos* incluye material complementario como diagramas de flujo del pipeline, ejemplos de los formatos de entrada y salida, y trazabilidad
-entre requerimientos y casos de prueba.
+La *Sección 6 -- Anexos* incluye material complementario: la descripción de la Encuesta de Movilidad de Bogotá 2023 y la posición de Bogotá en el
+TomTom Traffic Index 2025. La trazabilidad entre requerimientos y casos de prueba está en la Sección 5.
 
 ]
 

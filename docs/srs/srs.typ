@@ -110,6 +110,13 @@
     [Priorización con la lógica de Semáforos de Barranquilla y evidencia externa (RF-032 reescrito, RF-045). Simulador 3D: escena y HUD como la
     referencia, edificios OSM + Microsoft, un poste por acceso, sin cámara libre (RF-034, RF-035) y modo manual (RF-044). Casos CP-043 y CP-044.],
     [Equipo EFSS],
+    [2.2], [2026-10-28], [1.1, 1.2, 1.6, 2.1, 2.2, 2.3, 2.4, 2.6, 2.7, 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 4.4, 5.3, 5.4],
+    [Verificación del documento contra el código y el diseño actuales. Se corrigen: interfaces de software con las versiones realmente fijadas (SUMO
+    1.27.1, FastAPI 0.136.3, pyproj 3.8.0, pytest 9.1.1); el semáforo propuesto, que se instala con un parche de nodos y no con `--tls.set` (RF-033);
+    el conteo de vTypes (RF-011); la validación de columnas del TSV (RF-001, RF-004, RNF-CON-001); el formulario de demanda, que no tiene período
+    horario (RF-019, RF-020); el alcance de `ciclo_s` (RF-042); el estado de RNF-PORT-002 y del CI. Se agrega RNF-MAN-002, que CP-024 ya citaba, y se
+    corrige el conteo de pruebas automáticas (121).],
+    [Equipo EFSS],
   ),
   caption: [Historial de cambios.]
 )
