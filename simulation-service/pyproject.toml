@@ -16,7 +16,8 @@ dependencies = [
 
 [project.optional-dependencies]
 test = ["pytest==9.1.1"]
-dev = ["simulation-service[test]"]
+validation = ["matplotlib>=3.9"]
+dev = ["simulation-service[test,validation]"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
