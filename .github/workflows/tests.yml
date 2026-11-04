@@ -46,7 +46,8 @@ jobs:
       - name: Configurar Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          # pyproj 3.8 ya no publica versión para Python 3.11
+          python-version: '3.12'
           cache: pip
           cache-dependency-path: simulation-service/pyproject.toml
 
