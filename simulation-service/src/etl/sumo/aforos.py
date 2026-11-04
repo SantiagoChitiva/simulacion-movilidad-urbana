@@ -116,11 +116,33 @@ def _rumbo_cercano(forma: list, x: float, y: float) -> tuple[float, float]:
     return mejor
 
 
-def ubicar_sentido(net, x: float, y: float, sentido: str, clase: str, radio_m: float, tolerancia: float):
+def pasa_al_lado(forma: list, x: float, y: float) -> bool:
+    """El punto se proyecta en el interior de la polilínea (no más allá de sus extremos).
+
+    Distingue una calzada paralela (pasa junto al aforo) del tramo siguiente de la misma
+    calzada (empieza o termina cerca, pero el aforo queda antes o después de él).
+    """
+    mejor = (math.inf, False)
+    for i, (p, q) in enumerate(zip(forma, forma[1:])):
+        dx, dy = q[0] - p[0], q[1] - p[1]
+        largo2 = dx * dx + dy * dy
+        t = 0.0 if largo2 == 0 else ((x - p[0]) * dx + (y - p[1]) * dy) / largo2
+        tc = max(0.0, min(1.0, t))
+        d = math.hypot(p[0] + tc * dx - x, p[1] + tc * dy - y)
+        if d < mejor[0]:
+            extremo = (i == 0 and t <= 0) or (i == len(forma) - 2 and t >= 1)
+            mejor = (d, not extremo)
+    return mejor[1]
+
+
+def ubicar_sentido(net, x: float, y: float, sentido: str, clase: str, radio_m: float, tolerancia: float,
+                   nombre_de=None):
     """Edge que mejor representa el sentido aforado en (x, y), o None.
 
     Entre los edges cercanos con rumbo compatible y que admiten `clase`, gana el de mayor
-    prioridad (jerarquía vial) y, a igual prioridad, el más cercano.
+    prioridad (jerarquía vial) y, a igual prioridad, el más cercano. Devuelve también las
+    calzadas paralelas de la misma vía y sentido (`nombre_de(edge)` igual): un aforo en una
+    avenida con calzadas laterales, como la Autopista Norte, cuenta todas.
     """
     if sentido not in RUMBO_SENTIDO:
         return None
@@ -136,7 +158,14 @@ def ubicar_sentido(net, x: float, y: float, sentido: str, clase: str, radio_m: f
     if not candidatos:
         return None
     _, distancia, _, edge = min(candidatos)
-    return edge, distancia
+    paralelos = []
+    if nombre_de is not None and nombre_de(edge):
+        paralelos = sorted({e.getID() for _, _, _, e in candidatos
+                            if e is not edge and nombre_de(e) == nombre_de(edge)
+                            and e.getFromNode() not in (edge.getFromNode(), edge.getToNode())
+                            and e.getToNode() not in (edge.getFromNode(), edge.getToNode())
+                            and pasa_al_lado(e.getShape(), x, y)})
+    return edge, distancia, paralelos
 
 
 def leer_volumenes(excel: Path) -> dict[str, dict]:
@@ -219,12 +248,13 @@ def preparar_aforos(cfg: AforosConfig, stats: AforosStats | None = None) -> Afor
         sentidos = {s for por_periodo in estacion["volumenes"].values() for s in por_periodo}
         ubicados = 0
         for sentido in sorted(sentidos):
-            encontrado = ubicar_sentido(net, x, y, sentido, clase, cfg.radio_m, cfg.tolerancia_grados)
+            encontrado = ubicar_sentido(net, x, y, sentido, clase, cfg.radio_m, cfg.tolerancia_grados,
+                                        nombre_de=lambda e: e.getName() or nombres.get(_via_osm(e.getID())))
             if encontrado is None:
                 if sentido in RUMBO_SENTIDO:
                     stats.sin_via.append(f"{eid} {sentido}")
                 continue
-            edge, distancia = encontrado
+            edge, distancia, paralelos = encontrado
             ubicados += 1
             puntos.append({
                 "id": eid,
@@ -233,6 +263,8 @@ def preparar_aforos(cfg: AforosConfig, stats: AforosStats | None = None) -> Afor
                 "lon": round(ubicacion["lon"], 6), "lat": round(ubicacion["lat"], 6),
                 "sentido": sentido,
                 "edge": edge.getID(),
+                # calzadas paralelas de la misma vía y sentido: el aforo las cuenta todas
+                "edges": [edge.getID(), *paralelos],
                 "via": edge.getName() or nombres.get(_via_osm(edge.getID())),
                 "distancia_m": round(distancia, 1),
                 "volumenes": {

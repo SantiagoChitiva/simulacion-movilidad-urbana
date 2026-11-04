@@ -13,6 +13,9 @@
    "lat": 4.749379,
    "sentido": "N-S",
    "edge": "-1078633690#17",
+   "edges": [
+    "-1078633690#17"
+   ],
    "via": null,
    "distancia_m": 15.7,
    "volumenes": {
@@ -32,6 +35,9 @@
    "lat": 4.749379,
    "sentido": "S-N",
    "edge": "1078633690#17",
+   "edges": [
+    "1078633690#17"
+   ],
    "via": null,
    "distancia_m": 16.5,
    "volumenes": {
@@ -51,6 +57,9 @@
    "lat": 4.747007,
    "sentido": "E-W",
    "edge": "914692682#1",
+   "edges": [
+    "914692682#1"
+   ],
    "via": "Avenida Calle 170",
    "distancia_m": 38.1,
    "volumenes": {
@@ -70,6 +79,9 @@
    "lat": 4.747007,
    "sentido": "W-E",
    "edge": "1327209644#0",
+   "edges": [
+    "1327209644#0"
+   ],
    "via": "Avenida Calle 170",
    "distancia_m": 28.8,
    "volumenes": {
@@ -89,6 +101,9 @@
    "lat": 4.696338,
    "sentido": "E-W",
    "edge": "1289641380#0",
+   "edges": [
+    "1289641380#0"
+   ],
    "via": "Avenida Calle 116",
    "distancia_m": 18.4,
    "volumenes": {
@@ -108,6 +123,9 @@
    "lat": 4.696338,
    "sentido": "W-E",
    "edge": "908623444#1",
+   "edges": [
+    "908623444#1"
+   ],
    "via": "Avenida Calle 116",
    "distancia_m": 20.4,
    "volumenes": {
@@ -127,6 +145,9 @@
    "lat": 4.760315,
    "sentido": "E-W",
    "edge": "600399346#6",
+   "edges": [
+    "600399346#6"
+   ],
    "via": "Avenida Calle 183",
    "distancia_m": 6.4,
    "volumenes": {
@@ -146,6 +167,9 @@
    "lat": 4.760315,
    "sentido": "W-E",
    "edge": "1047040250#0",
+   "edges": [
+    "1047040250#0"
+   ],
    "via": "Avenida Calle 183",
    "distancia_m": 8.1,
    "volumenes": {
@@ -165,6 +189,9 @@
    "lat": 4.718899,
    "sentido": "E-W",
    "edge": "24445846",
+   "edges": [
+    "24445846"
+   ],
    "via": null,
    "distancia_m": 11.3,
    "volumenes": {
@@ -184,6 +211,9 @@
    "lat": 4.718899,
    "sentido": "W-E",
    "edge": "181376559",
+   "edges": [
+    "181376559"
+   ],
    "via": null,
    "distancia_m": 0.3,
    "volumenes": {
@@ -203,6 +233,9 @@
    "lat": 4.705579,
    "sentido": "N-S",
    "edge": "89132109",
+   "edges": [
+    "89132109"
+   ],
    "via": "Avenida Carrera 19",
    "distancia_m": 27.3,
    "volumenes": {
@@ -222,6 +255,9 @@
    "lat": 4.705579,
    "sentido": "S-N",
    "edge": "89438964",
+   "edges": [
+    "89438964"
+   ],
    "via": "Avenida Carrera 19",
    "distancia_m": 7.5,
    "volumenes": {
@@ -241,6 +277,9 @@
    "lat": 4.724103,
    "sentido": "N-S",
    "edge": "89086578#2",
+   "edges": [
+    "89086578#2"
+   ],
    "via": "Avenida Carrera 19",
    "distancia_m": 5.8,
    "volumenes": {
@@ -260,6 +299,9 @@
    "lat": 4.724103,
    "sentido": "S-N",
    "edge": "89111097#1",
+   "edges": [
+    "89111097#1"
+   ],
    "via": "Avenida Carrera 19",
    "distancia_m": 11.8,
    "volumenes": {
@@ -279,6 +321,9 @@
    "lat": 4.703431,
    "sentido": "N-S",
    "edge": "1289380406",
+   "edges": [
+    "1289380406"
+   ],
    "via": "Avenida Carrera 9",
    "distancia_m": 9.0,
    "volumenes": {
@@ -298,6 +343,9 @@
    "lat": 4.703431,
    "sentido": "S-N",
    "edge": "89131803",
+   "edges": [
+    "89131803"
+   ],
    "via": "Avenida Carrera 9",
    "distancia_m": 14.1,
    "volumenes": {
@@ -317,6 +365,9 @@
    "lat": 4.71288,
    "sentido": "N-S",
    "edge": "1289355710#0",
+   "edges": [
+    "1289355710#0"
+   ],
    "via": "Avenida Carrera 9",
    "distancia_m": 16.2,
    "volumenes": {
@@ -336,6 +387,9 @@
    "lat": 4.71288,
    "sentido": "S-N",
    "edge": "1289355712#0",
+   "edges": [
+    "1289355712#0"
+   ],
    "via": "Avenida Carrera 9",
    "distancia_m": 40.7,
    "volumenes": {
@@ -355,6 +409,9 @@
    "lat": 4.775341,
    "sentido": "S-N",
    "edge": "601794960#1",
+   "edges": [
+    "601794960#1"
+   ],
    "via": "Avenida Carrera 45",
    "distancia_m": 10.2,
    "volumenes": {
@@ -374,6 +431,9 @@
    "lat": 4.713094,
    "sentido": "E-W",
    "edge": "89131807#1",
+   "edges": [
+    "89131807#1"
+   ],
    "via": "Avenida Calle 134",
    "distancia_m": 8.5,
    "volumenes": {
@@ -393,6 +453,9 @@
    "lat": 4.713094,
    "sentido": "W-E",
    "edge": "1155265828",
+   "edges": [
+    "1155265828"
+   ],
    "via": "Avenida Calle 134",
    "distancia_m": 10.6,
    "volumenes": {
@@ -412,6 +475,9 @@
    "lat": 4.696483,
    "sentido": "E-W",
    "edge": "89438686#1",
+   "edges": [
+    "89438686#1"
+   ],
    "via": "Avenida Calle 116",
    "distancia_m": 12.8,
    "volumenes": {
@@ -431,6 +497,9 @@
    "lat": 4.696483,
    "sentido": "W-E",
    "edge": "89442368#3",
+   "edges": [
+    "89442368#3"
+   ],
    "via": "Avenida Calle 116",
    "distancia_m": 15.5,
    "volumenes": {
@@ -450,6 +519,9 @@
    "lat": 4.709806,
    "sentido": "N-S",
    "edge": "932279441#3",
+   "edges": [
+    "932279441#3"
+   ],
    "via": "Avenida Carrera 19",
    "distancia_m": 38.7,
    "volumenes": {
@@ -469,6 +541,9 @@
    "lat": 4.709806,
    "sentido": "S-N",
    "edge": "89132048#5",
+   "edges": [
+    "89132048#5"
+   ],
    "via": "Avenida Carrera 19",
    "distancia_m": 10.5,
    "volumenes": {
@@ -488,6 +563,9 @@
    "lat": 4.760242,
    "sentido": "E-W",
    "edge": "600399346#1",
+   "edges": [
+    "600399346#1"
+   ],
    "via": "Avenida Calle 183",
    "distancia_m": 4.5,
    "volumenes": {
@@ -507,6 +585,9 @@
    "lat": 4.760242,
    "sentido": "W-E",
    "edge": "1047040250#5",
+   "edges": [
+    "1047040250#5"
+   ],
    "via": "Avenida Calle 183",
    "distancia_m": 5.5,
    "volumenes": {
@@ -526,6 +607,9 @@
    "lat": 4.718901,
    "sentido": "E-W",
    "edge": "24445846",
+   "edges": [
+    "24445846"
+   ],
    "via": null,
    "distancia_m": 11.3,
    "volumenes": {
@@ -545,6 +629,9 @@
    "lat": 4.718901,
    "sentido": "W-E",
    "edge": "181376559",
+   "edges": [
+    "181376559"
+   ],
    "via": null,
    "distancia_m": 0.3,
    "volumenes": {
@@ -564,6 +651,9 @@
    "lat": 4.725622,
    "sentido": "N-S",
    "edge": "1067312448",
+   "edges": [
+    "1067312448"
+   ],
    "via": "Avenida Carrera 9",
    "distancia_m": 11.0,
    "volumenes": {
@@ -583,6 +673,9 @@
    "lat": 4.725622,
    "sentido": "S-N",
    "edge": "1067312449#1",
+   "edges": [
+    "1067312449#1"
+   ],
    "via": "Avenida Carrera 9",
    "distancia_m": 16.5,
    "volumenes": {
@@ -602,6 +695,9 @@
    "lat": 4.747662,
    "sentido": "E-W",
    "edge": "914692686#5",
+   "edges": [
+    "914692686#5"
+   ],
    "via": "Avenida Calle 170",
    "distancia_m": 7.4,
    "volumenes": {
@@ -621,6 +717,9 @@
    "lat": 4.747662,
    "sentido": "W-E",
    "edge": "914693382#1",
+   "edges": [
+    "914693382#1"
+   ],
    "via": "Avenida Calle 170",
    "distancia_m": 33.1,
    "volumenes": {
@@ -640,6 +739,9 @@
    "lat": 4.724097,
    "sentido": "N-S",
    "edge": "89086578#2",
+   "edges": [
+    "89086578#2"
+   ],
    "via": "Avenida Carrera 19",
    "distancia_m": 15.6,
    "volumenes": {
@@ -659,6 +761,9 @@
    "lat": 4.724097,
    "sentido": "S-N",
    "edge": "89111097#1",
+   "edges": [
+    "89111097#1"
+   ],
    "via": "Avenida Carrera 19",
    "distancia_m": 2.6,
    "volumenes": {
@@ -678,6 +783,9 @@
    "lat": 4.767272,
    "sentido": "N-S",
    "edge": "102645118#2",
+   "edges": [
+    "102645118#2"
+   ],
    "via": "Calle 190A",
    "distancia_m": 18.7,
    "volumenes": {
@@ -697,6 +805,9 @@
    "lat": 4.767272,
    "sentido": "S-N",
    "edge": "-526225113#0",
+   "edges": [
+    "-526225113#0"
+   ],
    "via": "Carrera 5B",
    "distancia_m": 17.2,
    "volumenes": {
@@ -716,6 +827,9 @@
    "lat": 4.766555,
    "sentido": "N-S",
    "edge": "-88854171#1",
+   "edges": [
+    "-88854171#1"
+   ],
    "via": "Carrera 5",
    "distancia_m": 44.4,
    "volumenes": {
@@ -745,6 +859,9 @@
    "lat": 4.766555,
    "sentido": "S-N",
    "edge": "88854171#1",
+   "edges": [
+    "88854171#1"
+   ],
    "via": "Carrera 5",
    "distancia_m": 44.4,
    "volumenes": {
@@ -774,6 +891,9 @@
    "lat": 4.760315,
    "sentido": "E-W",
    "edge": "600399346#6",
+   "edges": [
+    "600399346#6"
+   ],
    "via": "Avenida Calle 183",
    "distancia_m": 6.4,
    "volumenes": {
@@ -803,6 +923,9 @@
    "lat": 4.760315,
    "sentido": "W-E",
    "edge": "1047040250#0",
+   "edges": [
+    "1047040250#0"
+   ],
    "via": "Avenida Calle 183",
    "distancia_m": 8.1,
    "volumenes": {
@@ -832,6 +955,9 @@
    "lat": 4.747007,
    "sentido": "E-W",
    "edge": "914692682#1",
+   "edges": [
+    "914692682#1"
+   ],
    "via": "Avenida Calle 170",
    "distancia_m": 38.1,
    "volumenes": {
@@ -861,6 +987,9 @@
    "lat": 4.747007,
    "sentido": "W-E",
    "edge": "1327209644#0",
+   "edges": [
+    "1327209644#0"
+   ],
    "via": "Avenida Calle 170",
    "distancia_m": 28.8,
    "volumenes": {
@@ -890,6 +1019,9 @@
    "lat": 4.71288,
    "sentido": "E-W",
    "edge": "89131807#1",
+   "edges": [
+    "89131807#1"
+   ],
    "via": "Avenida Calle 134",
    "distancia_m": 12.7,
    "volumenes": {
@@ -919,6 +1051,9 @@
    "lat": 4.71288,
    "sentido": "W-E",
    "edge": "89132240#0",
+   "edges": [
+    "89132240#0"
+   ],
    "via": "Avenida Calle 134",
    "distancia_m": 18.1,
    "volumenes": {
@@ -948,6 +1083,9 @@
    "lat": 4.703431,
    "sentido": "N-S",
    "edge": "1289380406",
+   "edges": [
+    "1289380406"
+   ],
    "via": "Avenida Carrera 9",
    "distancia_m": 9.0,
    "volumenes": {
@@ -977,6 +1115,9 @@
    "lat": 4.703431,
    "sentido": "S-N",
    "edge": "89131803",
+   "edges": [
+    "89131803"
+   ],
    "via": "Avenida Carrera 9",
    "distancia_m": 14.1,
    "volumenes": {
@@ -1006,6 +1147,11 @@
    "lat": 4.699514,
    "sentido": "S-N",
    "edge": "948520236",
+   "edges": [
+    "948520236",
+    "1199617217",
+    "89438889#0-AddedOffRampEdge"
+   ],
    "via": "Avenida Carrera 45",
    "distancia_m": 18.5,
    "volumenes": {
@@ -1035,6 +1181,9 @@
    "lat": 4.724103,
    "sentido": "N-S",
    "edge": "89086578#2",
+   "edges": [
+    "89086578#2"
+   ],
    "via": "Avenida Carrera 19",
    "distancia_m": 5.8,
    "volumenes": {
@@ -1064,6 +1213,9 @@
    "lat": 4.724103,
    "sentido": "S-N",
    "edge": "89111097#1",
+   "edges": [
+    "89111097#1"
+   ],
    "via": "Avenida Carrera 19",
    "distancia_m": 11.8,
    "volumenes": {
@@ -1093,6 +1245,9 @@
    "lat": 4.725351,
    "sentido": "N-S",
    "edge": "353082119",
+   "edges": [
+    "353082119"
+   ],
    "via": "Avenida Carrera 9",
    "distancia_m": 24.4,
    "volumenes": {
@@ -1122,6 +1277,9 @@
    "lat": 4.725351,
    "sentido": "S-N",
    "edge": "1067312450#0",
+   "edges": [
+    "1067312450#0"
+   ],
    "via": "Avenida Carrera 9",
    "distancia_m": 16.8,
    "volumenes": {

@@ -69,7 +69,7 @@ def periodo_de(inicio_s: float) -> str:
 def escribir_conteos(puntos: list[dict], destino: Path, salida: Path,
                      inicio: float = HORA_INI, fin: float | None = None) -> Path:
     """Additional con un edgeData por modo en los edges aforados."""
-    edges = " ".join(sorted({p["edge"] for p in puntos}))
+    edges = " ".join(sorted({e for p in puntos for e in edges_punto(p)}))
     raiz = ET.Element("additional")
     for modo, vtypes in VTYPES_MODO.items():
         atributos = {
@@ -84,6 +84,20 @@ def escribir_conteos(puntos: list[dict], destino: Path, salida: Path,
     destino.parent.mkdir(parents=True, exist_ok=True)
     arbol.write(str(destino), encoding="UTF-8", xml_declaration=True)
     return destino
+
+
+def edges_punto(punto: dict) -> list[str]:
+    """Edges que cuenta un punto: el principal y sus calzadas paralelas (aforos.ubicar_sentido)."""
+    return punto.get("edges") or [punto["edge"]]
+
+
+def _serie(por_edge: dict, punto: dict) -> dict[float, float]:
+    """Vehículos por intervalo sumando las calzadas del punto."""
+    serie: dict[float, float] = defaultdict(float)
+    for edge in edges_punto(punto):
+        for t0, n in por_edge.get(edge, {}).items():
+            serie[t0] += n
+    return serie
 
 
 def leer_conteos(path: Path) -> dict[str, dict[str, dict[float, float]]]:
@@ -172,11 +186,11 @@ def validar(cfg: ValidacionConfig, stats: ValidacionStats | None = None) -> Vali
         # serie del total de los modos comparables; la hora pico se toma sobre el total
         serie: dict[float, float] = defaultdict(float)
         for modo in modos:
-            for t0, n in conteos.get(modo, {}).get(punto["edge"], {}).items():
+            for t0, n in _serie(conteos.get(modo, {}), punto).items():
                 serie[t0] += n
         inicio, simulado = _hora_pico(serie)
         sim_modos = {
-            m: sum(conteos.get(m, {}).get(punto["edge"], {}).get(inicio + k * PERIODO_BIN_S, 0.0)
+            m: sum(_serie(conteos.get(m, {}), punto).get(inicio + k * PERIODO_BIN_S, 0.0)
                    for k in range(BINS_HORA)) if inicio is not None else 0.0
             for m in modos
         }

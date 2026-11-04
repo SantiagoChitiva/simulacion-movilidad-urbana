@@ -48,3 +48,12 @@ def test_ubicar_sentido_por_rumbo(red):
     assert ubicar_sentido(red, x, y, "W-E", "passenger", 60, 40)[0].getID() in ("WC", "CE")
     assert ubicar_sentido(red, x, y, "E-W", "passenger", 60, 40) is None   # no hay vía hacia el oeste
     assert ubicar_sentido(red, x, y, "INGRESO", "passenger", 60, 40) is None
+
+
+def test_pasa_al_lado_distingue_calzada_paralela_de_tramo_siguiente():
+    from etl.sumo.aforos import pasa_al_lado
+    paralela = [(0, 10), (100, 10)]          # pasa junto al punto (50, 0)
+    siguiente = [(60, 0), (160, 0)]          # empieza después del punto
+    anterior = [(-100, 0), (40, 0)]          # termina antes
+    assert pasa_al_lado(paralela, 50, 0)
+    assert not pasa_al_lado(siguiente, 50, 0) and not pasa_al_lado(anterior, 50, 0)
