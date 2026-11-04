@@ -103,11 +103,20 @@ def test_asignacion_args(tmp_path):
     args = cfg.to_args("duaIterate.py")
     assert args[args.index("-l") + 1] == "4" and args[args.index("-b") + 1] == "57600"
     assert "--mesosim" in args
-    # las TAZ llegan a duarouter solo con -D; duaIterate ya le pasa --ignore-errors y --no-warnings
-    # y repetirlos hace fallar al router ("A value for the option ... was already set")
-    assert args[args.index("-D") + 1].endswith("taz.xml") and "-+" not in args
+    # las TAZ llegan al router como additional (con -D o -+ falla); duaIterate ya le pasa
+    # --ignore-errors y --no-warnings y repetirlos hace fallar al router ("... was already set")
+    assert args[args.index("duarouter--additional-files") + 1].endswith("taz.xml")
+    assert "-D" not in args and "-+" not in args
     assert "duarouter--ignore-errors" not in args and "duarouter--no-warnings" not in args
     assert "--continue-on-unbuild" in args
     # las opciones sumo--/duarouter-- van al final
     assert all(not a.startswith("-") or a.startswith(("sumo--", "duarouter--")) for a in args[args.index("--mesosim") + 1:]
                if a.startswith("-"))
+
+
+def test_rutas_ultima_iteracion_toma_el_gz_y_no_las_alternativas(tmp_path):
+    from etl.sumo.asignacion import rutas_ultima_iteracion
+    (tmp_path / "002").mkdir()
+    for nombre in ("viajes_002.rou.xml.gz", "viajes_002.rou.alt.xml.gz"):
+        (tmp_path / "002" / nombre).write_bytes(b"")
+    assert rutas_ultima_iteracion(tmp_path, tmp_path / "viajes.trips.xml", 3).name == "viajes_002.rou.xml.gz"

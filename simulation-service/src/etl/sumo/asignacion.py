@@ -11,6 +11,7 @@ Las iteraciones se simulan con el modelo mesoscópico (colas por edge), que es m
 rápido; la corrida final usa el microscópico con las rutas de la última iteración. Aun así
 multiplica el tiempo de ruteo, así que es una opción (DemandaConfig.asignacion_iterativa).
 """
+import gzip
 import shutil
 import sys
 import threading
@@ -48,8 +49,6 @@ class AsignacionConfig:
             sys.executable, script,
             "-n", str(self.net_file.resolve()),
             "-t", str(self.trips_file.resolve()),
-            # las TAZ van a duarouter con -D (--districts); -+ solo llega a SUMO
-            "-D", str(self.taz_file.resolve()),
             "-b", str(self.ventana[0]),
             "-e", str(self.ventana[1]),
             "-l", str(self.iteraciones),
@@ -61,14 +60,18 @@ class AsignacionConfig:
             args.append("--mesosim")
         # las opciones sumo--* van al final (así las lee duaIterate). duaIterate ya le pasa
         # --ignore-errors a duarouter: repetirlo hace fallar al router ("already set")
+        # Las TAZ van como additional del router, no con -D: -D activa --with-taz y desde la
+        # segunda iteración cada vehículo arrastra una ruta alternativa vacía con la que
+        # duarouter se cae en la tercera ("Attribute 'edges' ... is empty"). -+ solo llega a SUMO.
         return args + ["sumo--ignore-route-errors", "true",
-                       "duarouter--repair", "true", "duarouter--routing-threads", "4"]
+                       "duarouter--repair", "true", "duarouter--routing-threads", "4",
+                       "duarouter--additional-files", str(self.taz_file.resolve())]
 
 
 def rutas_ultima_iteracion(trabajo: Path, trips: Path, iteraciones: int) -> Path | None:
-    """Rutas (no las alternativas) que dejó la última iteración de duaIterate."""
+    """Rutas (no las alternativas) que dejó la última iteración de duaIterate (las escribe en .gz)."""
     ultima = trabajo / f"{iteraciones - 1:03d}"
-    candidatos = sorted(p for p in ultima.glob(f"{trips.stem.removesuffix('.trips')}*.rou.xml") if ".alt." not in p.name)
+    candidatos = sorted(p for p in ultima.glob(f"{trips.stem.removesuffix('.trips')}*.rou.xml*") if ".alt." not in p.name)
     return candidatos[-1] if candidatos else None
 
 
@@ -90,7 +93,11 @@ def run_asignacion(
     rutas = rutas_ultima_iteracion(config.trabajo, config.trips_file, config.iteraciones)
     if salida.returncode != 0 or rutas is None:
         raise AsignacionError(f"duaIterate.py falló (código {salida.returncode}):\n{salida.stderr[-2000:]}")
-    shutil.copyfile(rutas, config.output_file)
+    if rutas.suffix == ".gz":
+        with gzip.open(rutas, "rb") as origen, open(config.output_file, "wb") as destino:
+            shutil.copyfileobj(origen, destino)
+    else:
+        shutil.copyfile(rutas, config.output_file)
     # las iteraciones intermedias (rutas, alternativas, dumps) pesan cientos de MB
     shutil.rmtree(config.trabajo, ignore_errors=True)
     return DuarouterResult(output_file=config.output_file, stdout=salida.stdout[-4000:], stderr=salida.stderr[-4000:])
