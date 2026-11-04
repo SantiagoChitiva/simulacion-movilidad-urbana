@@ -8,9 +8,9 @@ programados que pasan por Usaquén, y los viajes en transporte público pasan a 
 le sirva y camina hasta su destino (SUMO elige la combinación con el router intermodal).
 
 1. `filtrar_gtfs` reduce el GTFS de toda Bogotá (~550 MB descomprimido) a los viajes de un
-   día hábil que tienen al menos dos paradas dentro de la caja de Usaquén, sin TransMilenio
-   troncal ni TransMiCable (van por carriles exclusivos que la red no modela como tales y
-   los aforos de transporte público tampoco los cuentan).
+   día hábil que tienen al menos dos paradas dentro de la caja de Usaquén, sin TransMiCable.
+   La troncal de TransMilenio (agencia 1) usa los carriles exclusivos de la Autopista Norte
+   y su vType es bus_tm (articulado); los aforos de transporte público no la cuentan.
 2. `generar_por_paradas` (por defecto) ubica cada parada en el carril con buses más cercano
    y deja que duarouter rutee cada viaje pasando por sus paradas. Escribe, versionados en
    scenarios/default/: pt_paradas.add.xml (paradas) y pt_vehiculos.rou.xml (un bus por
@@ -37,11 +37,11 @@ from pathlib import Path
 from .configuration import DEFAULT_SCENARIO, ScenarioPaths
 from .proceso import ejecutar
 from .subred import SubredError, encontrar_herramienta
-from .vtypes import BUS_SITP_ID, PARAMS_BUS_SITP, VTYPE_BUS_SITP
+from .vtypes import AGENCIA_TRONCAL, BUS_SITP_ID, BUS_TM_ID, PARAMS_BUS_SITP, VTYPE_BUS_SITP, VTYPE_BUS_TM
 
 # agency_id del GTFS de SIMUR: 1 Transmilenio-Troncal, 2 Alimentadores, 3 Zonal-Urbano,
 # 4 Zonal-Complementario, 5 Zonal-Especial, 6 Transmilenio-Dual, 7 TransMiCable
-AGENCIAS_SIMULADAS = ("2", "3", "4", "5", "6")
+AGENCIAS_SIMULADAS = ("1", "2", "3", "4", "5", "6")
 # caja (oeste, sur, este, norte) de la red de Usaquén (origBoundary de usaquen_3d.net.xml)
 BBOX_USAQUEN = (-74.058552, 4.663887, -73.996799, 4.851830)
 DEPURAR = False
@@ -117,6 +117,7 @@ class TransportePublicoStats:
     paradas_en_zona: int = 0
     lineas: set[str] = field(default_factory=set)
     buses: int = 0
+    troncales: int = 0
     paradas: int = 0
 
 
@@ -281,14 +282,22 @@ def generar_por_paradas(
             })
             forma = edge.getShape()
             rumbo_edge = (forma[-1][0] - forma[0][0], forma[-1][1] - forma[0][1])
-            candidatas.setdefault(stop_id, []).append((id_parada, edge.getID(), inicio, rumbo_edge, (x, y)))
+            solo_bus = not edge.allows("passenger")   # carril exclusivo (troncal)
+            candidatas.setdefault(stop_id, []).append((id_parada, edge.getID(), inicio, rumbo_edge, (x, y), solo_bus))
     arbol = ET.ElementTree(raiz_paradas)
     ET.indent(arbol, space="  ")
     arbol.write(str(cfg.paradas), encoding="UTF-8", xml_declaration=True)
     stats.paradas = len(candidatas)
 
-    def elegir(opciones: list[tuple], hacia: tuple[float, float]) -> tuple:
-        """La candidata cuyo edge apunta más hacia `hacia` (dirección del viaje)."""
+    def elegir(opciones: list[tuple], hacia: tuple[float, float], troncal: bool = False) -> tuple:
+        """La candidata cuyo edge apunta más hacia `hacia` (dirección del viaje).
+
+        La troncal para en las estaciones del separador: si la parada tiene un carril
+        exclusivo cerca, solo compiten esos (las calzadas mixtas quedan a la misma distancia).
+        """
+        exclusivas = [o for o in opciones if o[5]]
+        if troncal and exclusivas:
+            opciones = exclusivas
         def alineacion(o):
             (dx, dy), norma = o[3], math.hypot(*o[3]) or 1.0
             return (dx * hacia[0] + dy * hacia[1]) / (norma * (math.hypot(*hacia) or 1.0))
@@ -297,6 +306,8 @@ def generar_por_paradas(
     # viajes -> trips con paradas, ordenados por salida
     trips = []
     for trip_id, filas in horarios.items():
+        ruta = rutas.get(viajes[trip_id]["route_id"], {})
+        troncal = ruta.get("agency_id") == AGENCIA_TRONCAL
         filas = [f for f in sorted(filas, key=lambda f: int(f["stop_sequence"]))
                  if f["stop_id"] in candidatas and f["departure_time"]]
         paradas_viaje = []
@@ -306,7 +317,7 @@ def generar_por_paradas(
             otra = candidatas[filas[i + 1]["stop_id"]][0][4] if i + 1 < len(filas) else None
             previa = candidatas[filas[i - 1]["stop_id"]][0][4] if i > 0 else None
             hacia = (otra[0] - xy[0], otra[1] - xy[1]) if otra else (xy[0] - previa[0], xy[1] - previa[1]) if previa else (0, 0)
-            id_parada, edge, inicio, _rumbo, _xy = elegir(opciones, hacia)
+            id_parada, edge, inicio, _rumbo, _xy, _solo = elegir(opciones, hacia, troncal)
             # dos paradas seguidas en el mismo edge hacia atrás obligarían a dar la vuelta
             if paradas_viaje and paradas_viaje[-1][1] == edge and inicio <= paradas_viaje[-1][2]:
                 continue
@@ -316,16 +327,18 @@ def generar_por_paradas(
         salida = paradas_viaje[0][3] - 30
         if not cfg.inicio_s <= salida <= cfg.fin_s:
             continue
-        linea = rutas.get(viajes[trip_id]["route_id"], {}).get("route_short_name", "")
-        trips.append((salida, trip_id, linea, paradas_viaje))
+        linea = ruta.get("route_short_name", "")
+        tipo = BUS_TM_ID if troncal else BUS_SITP_ID
+        trips.append((salida, trip_id, linea, paradas_viaje, tipo))
     trips.sort()
     duarouter = shutil.which("duarouter")
     if duarouter is None:
         raise TransportePublicoError("No se encontró 'duarouter' en el PATH.")
     trabajo = cfg.destino_dir / ".pt_paradas"
     trabajo.mkdir(parents=True, exist_ok=True)
-    pendientes = {f"bus_{linea}_{trip_id}".replace(" ", "_"): (salida, linea or trip_id, paradas)
-                  for salida, trip_id, linea, paradas in trips}
+    pendientes = {f"{'tm' if tipo == BUS_TM_ID else 'bus'}_{linea}_{trip_id}".replace(" ", "_"):
+                  (salida, linea or trip_id, paradas, tipo)
+                  for salida, trip_id, linea, paradas, tipo in trips}
     rutados: list = []
     try:
         # la red tiene tramos sin conexión para buses entre algunas paradas: duarouter avisa qué
@@ -357,12 +370,12 @@ def generar_por_paradas(
                     inalcanzables[m.group(2)] = m.group(1)
             for vid in list(pendientes):
                 edge = inalcanzables.get(vid)
-                salida, linea, paradas = pendientes[vid]
+                salida, linea, paradas, tipo = pendientes[vid]
                 paradas = [pa for pa in paradas if pa[1] != edge] if edge else []
                 if len(paradas) < 2:
                     del pendientes[vid]
                 else:
-                    pendientes[vid] = (paradas[0][3] - 30, linea, paradas)
+                    pendientes[vid] = (paradas[0][3] - 30, linea, paradas, tipo)
     finally:
         if not DEPURAR:
             shutil.rmtree(trabajo, ignore_errors=True)
@@ -376,15 +389,17 @@ def generar_por_paradas(
     with cfg.vehiculos.open("wb") as crudo, gzip.GzipFile(filename="", mode="wb", fileobj=crudo, mtime=0) as gz:
         arbol.write(gz, encoding="UTF-8", xml_declaration=True)
     stats.buses = len(rutados)
+    stats.troncales = sum(v.get("type") == BUS_TM_ID for v in rutados)
     return TransportePublicoResult(cfg.paradas, cfg.vehiculos, cfg.vtypes)
 
 
 def _vtype_bus(raiz) -> None:
     import xml.etree.ElementTree as ET
 
-    vtype = ET.SubElement(raiz, "vType", VTYPE_BUS_SITP)
-    for clave, valor in PARAMS_BUS_SITP.items():
-        ET.SubElement(vtype, "param", key=clave, value=valor)
+    for atributos in (VTYPE_BUS_SITP, VTYPE_BUS_TM):
+        vtype = ET.SubElement(raiz, "vType", atributos)
+        for clave, valor in PARAMS_BUS_SITP.items():
+            ET.SubElement(vtype, "param", key=clave, value=valor)
 
 
 def _escribir_trips_bus(pendientes: dict, destino: Path) -> None:
@@ -392,9 +407,9 @@ def _escribir_trips_bus(pendientes: dict, destino: Path) -> None:
 
     raiz = ET.Element("routes")
     _vtype_bus(raiz)
-    for vid, (salida, linea, paradas) in sorted(pendientes.items(), key=lambda kv: kv[1][0]):
+    for vid, (salida, linea, paradas, tipo) in sorted(pendientes.items(), key=lambda kv: kv[1][0]):
         trip = ET.SubElement(raiz, "trip", {
-            "id": vid, "type": BUS_SITP_ID, "depart": f"{salida:.0f}",
+            "id": vid, "type": tipo, "depart": f"{salida:.0f}",
             "from": paradas[0][1], "to": paradas[-1][1], "line": linea,
         })
         for id_parada, _edge, _pos, hora in paradas:
@@ -464,7 +479,7 @@ def main() -> None:
     except (TransportePublicoError, SubredError) as exc:
         sys.exit(str(exc))
     print(f"{stats.viajes_en_zona} viajes de {len(stats.lineas)} líneas pasan por Usaquén; "
-          f"{stats.buses} buses y {stats.paradas} paradas en la red -> {resultado.vehiculos.parent}")
+          f"{stats.buses} buses ({stats.troncales} de TransMilenio troncal) y {stats.paradas} paradas en la red -> {resultado.vehiculos.parent}")
 
 
 if __name__ == "__main__":

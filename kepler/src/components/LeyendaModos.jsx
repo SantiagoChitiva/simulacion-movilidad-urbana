@@ -16,7 +16,7 @@ export default function LeyendaModos({
       {porTrips.map((m) => (
         <span key={m.id} className="leyenda-item" title={`${numero(m.trips)} trips en el mapa`}>
           <span className="leyenda-punto" style={{ background: m.color }} />
-          {etiquetas[m.id] ?? (m.id === 'bus_sitp' ? 'Bus SITP' : m.id)}
+          {etiquetas[m.id] ?? ({ bus_sitp: 'Bus SITP', bus_tm: 'TransMilenio' }[m.id] ?? m.id)}
         </span>
       ))}
       <span className="leyenda-separador" />

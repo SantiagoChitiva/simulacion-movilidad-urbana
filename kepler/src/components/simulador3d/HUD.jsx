@@ -11,7 +11,7 @@ const COLOR_ESTADO = (e) => {
   return '#9aa4ad';
 };
 const ETIQUETA_TIPO = {
-  auto: 'Carro', taxi: 'Taxi', moto: 'Moto', bici: 'Bicicleta', bus_pt: 'Bus', escolar: 'Bus escolar',
+  auto: 'Carro', taxi: 'Taxi', moto: 'Moto', bici: 'Bicicleta', bus_pt: 'Bus', bus_sitp: 'Bus SITP', bus_tm: 'TransMilenio', escolar: 'Bus escolar',
   especial: 'Vehículo especial', informal: 'Transporte informal', otro: 'Otro vehículo', peaton: 'Peatón',
 };
 

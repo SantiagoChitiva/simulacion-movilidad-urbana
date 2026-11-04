@@ -4,6 +4,7 @@ export const MODE_COLORS = {
   bici: '#2ecc71',
   bus_pt: '#1f5fbf',
   bus_sitp: '#1f5fbf',   // buses del SITP (GTFS)
+  bus_tm: '#9e0b1f',     // TransMilenio troncal (GTFS, carriles exclusivos)
   escolar: '#ff9ecf',
   especial: '#b57bff',
   informal: '#c0793a',

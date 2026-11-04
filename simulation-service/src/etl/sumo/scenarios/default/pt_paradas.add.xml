@@ -2283,6 +2283,200 @@
   <busStop id="pt_59221_1" lane="1289734069#0_0" startPos="8.2" endPos="28.2" name="Villa Magdala" friendlyPos="true" />
   <busStop id="pt_59221_2" lane="993161388#2_0" startPos="90.8" endPos="110.8" name="Villa Magdala" friendlyPos="true" />
   <busStop id="pt_59221_3" lane="993161388#3_0" startPos="0.0" endPos="20.0" name="Villa Magdala" friendlyPos="true" />
+  <busStop id="pt_61141_0" lane="1033331044_0" startPos="156.6" endPos="176.6" name="Alcalá C - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61141_1" lane="405331159_0" startPos="4408.1" endPos="4428.1" name="Alcalá C - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61141_2" lane="1056673405_0" startPos="921.2" endPos="941.2" name="Alcalá C - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61141_3" lane="32742823_0" startPos="0.0" endPos="20.0" name="Alcalá C - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61143_0" lane="1033331044_0" startPos="227.9" endPos="247.9" name="Alcalá B - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61143_1" lane="405331159_0" startPos="4336.8" endPos="4356.8" name="Alcalá B - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61143_2" lane="1056673405_0" startPos="849.8" endPos="869.8" name="Alcalá B - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61145_0" lane="1033331044_0" startPos="304.6" endPos="324.6" name="Alcalá A - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61145_1" lane="405331159_0" startPos="4260.2" endPos="4280.2" name="Alcalá A - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61145_2" lane="1056673405_0" startPos="774.0" endPos="794.0" name="Alcalá A - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61145_3" lane="1164549107_0" startPos="67.9" endPos="87.9" name="Alcalá A - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61147_0" lane="405331159_0" startPos="4297.3" endPos="4317.3" name="Alcalá A - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61147_1" lane="1056673405_0" startPos="810.7" endPos="830.7" name="Alcalá A - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61147_2" lane="1033331044_0" startPos="267.6" endPos="287.6" name="Alcalá A - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61147_3" lane="1164549107_0" startPos="67.9" endPos="87.9" name="Alcalá A - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61149_0" lane="405331159_0" startPos="4371.9" endPos="4391.9" name="Alcalá B - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61149_1" lane="1033331044_0" startPos="193.0" endPos="213.0" name="Alcalá B - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61149_2" lane="1056673405_0" startPos="884.9" endPos="904.9" name="Alcalá B - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61149_3" lane="1326283097#0_0" startPos="0.0" endPos="15.0" name="Alcalá B - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61151_0" lane="405331159_0" startPos="4443.9" endPos="4463.9" name="Alcalá C - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61151_1" lane="1033331044_0" startPos="120.9" endPos="140.9" name="Alcalá C - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61151_2" lane="1056673405_0" startPos="957.1" endPos="977.1" name="Alcalá C - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61151_3" lane="32742823_0" startPos="25.2" endPos="45.2" name="Alcalá C - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61152_0" lane="1422333187_0" startPos="404.0" endPos="424.0" name="Calle 187 A - 3" friendlyPos="true" />
+  <busStop id="pt_61152_1" lane="911102409_0" startPos="74.4" endPos="94.4" name="Calle 187 A - 3" friendlyPos="true" />
+  <busStop id="pt_61152_2" lane="1056691029#0_0" startPos="14.4" endPos="34.4" name="Calle 187 A - 3" friendlyPos="true" />
+  <busStop id="pt_61153_0" lane="1422333187_0" startPos="423.1" endPos="443.1" name="Calle 187 A - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61153_1" lane="911102409_0" startPos="93.4" endPos="113.4" name="Calle 187 A - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61153_2" lane="1056691029#0_0" startPos="33.5" endPos="53.5" name="Calle 187 A - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61169_0" lane="1033331044_0" startPos="4331.0" endPos="4351.0" name="Calle 100 C - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61169_1" lane="405331159_0" startPos="234.0" endPos="254.0" name="Calle 100 C - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61171_0" lane="1033331044_0" startPos="4407.0" endPos="4427.0" name="Calle 100 B - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61171_1" lane="405331159_0" startPos="158.0" endPos="178.0" name="Calle 100 B - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61173_0" lane="1033331044_0" startPos="4479.9" endPos="4499.9" name="Calle 100 A - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61173_1" lane="405331159_0" startPos="85.9" endPos="105.9" name="Calle 100 A - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61175_0" lane="405331159_0" startPos="122.7" endPos="142.7" name="Calle 100 A - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61175_1" lane="1033331044_0" startPos="4443.0" endPos="4463.0" name="Calle 100 A - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61177_0" lane="405331159_0" startPos="195.3" endPos="215.3" name="Calle 100 B - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61177_1" lane="1033331044_0" startPos="4369.6" endPos="4389.6" name="Calle 100 B - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61178_0" lane="405331159_0" startPos="252.1" endPos="272.1" name="Calle 100 C - 3" friendlyPos="true" />
+  <busStop id="pt_61178_1" lane="1033331044_0" startPos="4312.9" endPos="4332.9" name="Calle 100 C - 3" friendlyPos="true" />
+  <busStop id="pt_61179_0" lane="405331159_0" startPos="270.3" endPos="290.3" name="Calle 100 C - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61179_1" lane="1033331044_0" startPos="4294.7" endPos="4314.7" name="Calle 100 C - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61181_0" lane="1033331044_0" startPos="3227.3" endPos="3247.3" name="Calle 106 B - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61181_1" lane="405331159_0" startPos="1337.7" endPos="1357.7" name="Calle 106 B - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61181_2" lane="1056673410#0_0" startPos="124.6" endPos="144.6" name="Calle 106 B - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61181_3" lane="938877853#0_0" startPos="38.2" endPos="58.2" name="Calle 106 B - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61183_0" lane="1033331044_0" startPos="3285.2" endPos="3305.2" name="Calle 106 A - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61183_1" lane="405331159_0" startPos="1279.8" endPos="1299.8" name="Calle 106 A - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61183_2" lane="1056673410#0_0" startPos="66.8" endPos="86.8" name="Calle 106 A - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61183_3" lane="1326283089_0" startPos="0.0" endPos="8.1" name="Calle 106 A - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61185_0" lane="405331159_0" startPos="1060.0" endPos="1080.0" name="Calle 106 A - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61185_1" lane="1033331044_0" startPos="3505.0" endPos="3525.0" name="Calle 106 A - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61185_2" lane="600867644#1_0" startPos="327.8" endPos="347.8" name="Calle 106 A - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61185_3" lane="32742873_0" startPos="65.7" endPos="85.7" name="Calle 106 A - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61187_0" lane="405331159_0" startPos="1118.0" endPos="1138.0" name="Calle 106 B - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61187_1" lane="1033331044_0" startPos="3446.8" endPos="3466.8" name="Calle 106 B - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61187_2" lane="1056673409_0" startPos="26.0" endPos="46.0" name="Calle 106 B - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61187_3" lane="600867644#1_0" startPos="328.3" endPos="348.3" name="Calle 106 B - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61189_0" lane="1033331044_0" startPos="2059.8" endPos="2079.8" name="Calle 127 B - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61189_1" lane="405331159_0" startPos="2504.9" endPos="2524.9" name="Calle 127 B - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61189_2" lane="1056673408_0" startPos="394.9" endPos="414.9" name="Calle 127 B - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61189_3" lane="32742924_0" startPos="117.3" endPos="137.3" name="Calle 127 B - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61191_0" lane="1033331044_0" startPos="2115.4" endPos="2135.4" name="Calle 127 A - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61191_1" lane="405331159_0" startPos="2449.4" endPos="2469.4" name="Calle 127 A - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61191_2" lane="1056673408_0" startPos="346.1" endPos="366.1" name="Calle 127 A - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61191_3" lane="32742924_0" startPos="69.8" endPos="89.8" name="Calle 127 A - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61193_0" lane="405331159_0" startPos="2484.6" endPos="2504.6" name="Calle 127 A - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61193_1" lane="1033331044_0" startPos="2080.2" endPos="2100.2" name="Calle 127 A - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61193_2" lane="1056673408_0" startPos="381.3" endPos="401.3" name="Calle 127 A - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61193_3" lane="32742924_0" startPos="102.8" endPos="122.8" name="Calle 127 A - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61195_0" lane="405331159_0" startPos="2541.8" endPos="2561.8" name="Calle 127 B - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61195_1" lane="1033331044_0" startPos="2023.0" endPos="2043.0" name="Calle 127 B - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61195_2" lane="1056673407_0" startPos="21.4" endPos="41.4" name="Calle 127 B - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61195_3" lane="948520237_0" startPos="0.0" endPos="20.0" name="Calle 127 B - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61197_0" lane="1525638618#1_0" startPos="499.6" endPos="519.6" name="Calle 142 B - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61197_1" lane="1056673404_0" startPos="464.0" endPos="484.0" name="Calle 142 B - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61197_2" lane="32742813_0" startPos="0.0" endPos="20.0" name="Calle 142 B - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61197_3" lane="913480725_0" startPos="0.0" endPos="20.0" name="Calle 142 B - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61199_0" lane="1525638618#1_0" startPos="443.1" endPos="463.1" name="Calle 142 A - 2" friendlyPos="true" />
+  <busStop id="pt_61199_1" lane="1056673404_0" startPos="407.5" endPos="427.5" name="Calle 142 A - 2" friendlyPos="true" />
+  <busStop id="pt_61199_2" lane="1157049287_0" startPos="14.0" endPos="34.0" name="Calle 142 A - 2" friendlyPos="true" />
+  <busStop id="pt_61201_0" lane="1525638618#1_0" startPos="254.6" endPos="274.6" name="Calle 142 A - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61201_1" lane="1056673404_0" startPos="219.1" endPos="239.1" name="Calle 142 A - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61201_2" lane="1288873479_0" startPos="76.5" endPos="96.5" name="Calle 142 A - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61203_0" lane="1525638618#1_0" startPos="311.5" endPos="331.5" name="Calle 142 B - 4" friendlyPos="true" />
+  <busStop id="pt_61203_1" lane="1056673404_0" startPos="276.1" endPos="296.1" name="Calle 142 B - 4" friendlyPos="true" />
+  <busStop id="pt_61203_2" lane="1288873481#0_0" startPos="0.0" endPos="20.0" name="Calle 142 B - 4" friendlyPos="true" />
+  <busStop id="pt_61204_0" lane="1525638618#1_0" startPos="879.9" endPos="899.9" name="Calle 146 C - 1" friendlyPos="true" />
+  <busStop id="pt_61204_1" lane="913480725_0" startPos="323.4" endPos="343.4" name="Calle 146 C - 1" friendlyPos="true" />
+  <busStop id="pt_61204_2" lane="913480723#3_0" startPos="26.7" endPos="46.7" name="Calle 146 C - 1" friendlyPos="true" />
+  <busStop id="pt_61205_0" lane="1525638618#1_0" startPos="822.0" endPos="842.0" name="Calle 146 B - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61205_1" lane="913480725_0" startPos="265.5" endPos="285.5" name="Calle 146 B - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61205_2" lane="913480723#2_0" startPos="0.0" endPos="16.2" name="Calle 146 B - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61206_0" lane="1525638618#1_0" startPos="841.4" endPos="861.4" name="Calle 146 B - 3 ó 6" friendlyPos="true" />
+  <busStop id="pt_61206_1" lane="913480725_0" startPos="284.9" endPos="304.9" name="Calle 146 B - 3 ó 6" friendlyPos="true" />
+  <busStop id="pt_61206_2" lane="913480723#3_0" startPos="0.0" endPos="20.0" name="Calle 146 B - 3 ó 6" friendlyPos="true" />
+  <busStop id="pt_61206_3" lane="913480723#2_0" startPos="0.0" endPos="16.2" name="Calle 146 B - 3 ó 6" friendlyPos="true" />
+  <busStop id="pt_61207_0" lane="1525638618#1_0" startPos="899.1" endPos="919.1" name="Calle 146 C - 4" friendlyPos="true" />
+  <busStop id="pt_61207_1" lane="913480725_0" startPos="342.6" endPos="362.6" name="Calle 146 C - 4" friendlyPos="true" />
+  <busStop id="pt_61207_2" lane="913480723#3_0" startPos="46.0" endPos="66.0" name="Calle 146 C - 4" friendlyPos="true" />
+  <busStop id="pt_61208_0" lane="1525638618#4_0" startPos="488.5" endPos="508.5" name="Calle 161 B - 1 ó 5" friendlyPos="true" />
+  <busStop id="pt_61208_1" lane="809284676#0_0" startPos="186.5" endPos="206.5" name="Calle 161 B - 1 ó 5" friendlyPos="true" />
+  <busStop id="pt_61208_2" lane="1550723372_0" startPos="1001.9" endPos="1021.9" name="Calle 161 B - 1 ó 5" friendlyPos="true" />
+  <busStop id="pt_61208_3" lane="809284676#0-AddedOffRampEdge_0" startPos="0.0" endPos="20.0" name="Calle 161 B - 1 ó 5" friendlyPos="true" />
+  <busStop id="pt_61209_0" lane="1525638618#4_0" startPos="432.3" endPos="452.3" name="Calle 161 A - 2" friendlyPos="true" />
+  <busStop id="pt_61209_1" lane="809284676#0_0" startPos="130.3" endPos="150.3" name="Calle 161 A - 2" friendlyPos="true" />
+  <busStop id="pt_61210_0" lane="1525638618#4_0" startPos="187.7" endPos="207.7" name="Calle 161 A - 3 ó 6" friendlyPos="true" />
+  <busStop id="pt_61210_1" lane="913480727_0" startPos="553.8" endPos="573.8" name="Calle 161 A - 3 ó 6" friendlyPos="true" />
+  <busStop id="pt_61210_2" lane="1056691030_0" startPos="0.0" endPos="20.0" name="Calle 161 A - 3 ó 6" friendlyPos="true" />
+  <busStop id="pt_61210_3" lane="32743148_0" startPos="62.7" endPos="82.7" name="Calle 161 A - 3 ó 6" friendlyPos="true" />
+  <busStop id="pt_61211_0" lane="1525638618#4_0" startPos="247.7" endPos="267.7" name="Calle 161 B - 4" friendlyPos="true" />
+  <busStop id="pt_61211_1" lane="1056691030_0" startPos="37.3" endPos="57.3" name="Calle 161 B - 4" friendlyPos="true" />
+  <busStop id="pt_61211_2" lane="910965726#3_0" startPos="67.4" endPos="87.4" name="Calle 161 B - 4" friendlyPos="true" />
+  <busStop id="pt_61223_0" lane="1525638618#1_0" startPos="1443.9" endPos="1463.9" name="Mazurén C - 1" friendlyPos="true" />
+  <busStop id="pt_61223_1" lane="913480727_0" startPos="83.7" endPos="103.7" name="Mazurén C - 1" friendlyPos="true" />
+  <busStop id="pt_61223_2" lane="32743089_0" startPos="64.6" endPos="84.6" name="Mazurén C - 1" friendlyPos="true" />
+  <busStop id="pt_61223_3" lane="913488138_0" startPos="0.0" endPos="20.0" name="Mazurén C - 1" friendlyPos="true" />
+  <busStop id="pt_61224_0" lane="1525638618#1_0" startPos="1387.0" endPos="1407.0" name="Mazurén B - 2" friendlyPos="true" />
+  <busStop id="pt_61224_1" lane="913480727_0" startPos="26.6" endPos="46.6" name="Mazurén B - 2" friendlyPos="true" />
+  <busStop id="pt_61224_2" lane="32743089_0" startPos="24.8" endPos="44.8" name="Mazurén B - 2" friendlyPos="true" />
+  <busStop id="pt_61225_0" lane="1525638618#1_0" startPos="1183.6" endPos="1203.6" name="Mazurén A - 3 ó 6" friendlyPos="true" />
+  <busStop id="pt_61225_1" lane="913488139_0" startPos="11.9" endPos="31.9" name="Mazurén A - 3 ó 6" friendlyPos="true" />
+  <busStop id="pt_61225_2" lane="32743069_0" startPos="96.4" endPos="116.4" name="Mazurén A - 3 ó 6" friendlyPos="true" />
+  <busStop id="pt_61225_3" lane="913480725_0" startPos="592.3" endPos="612.3" name="Mazurén A - 3 ó 6" friendlyPos="true" />
+  <busStop id="pt_61226_0" lane="1525638618#1_0" startPos="1241.5" endPos="1261.5" name="Mazurén B - 4" friendlyPos="true" />
+  <busStop id="pt_61226_1" lane="1326265794_0" startPos="2.7" endPos="22.7" name="Mazurén B - 4" friendlyPos="true" />
+  <busStop id="pt_61226_2" lane="1326265794-AddedOffRampEdge_0" startPos="0.0" endPos="20.0" name="Mazurén B - 4" friendlyPos="true" />
+  <busStop id="pt_61226_3" lane="913488139_0" startPos="32.1" endPos="52.1" name="Mazurén B - 4" friendlyPos="true" />
+  <busStop id="pt_61228_0" lane="1033331044_0" startPos="2791.5" endPos="2811.5" name="Pepe Sierra B - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61228_1" lane="405331159_0" startPos="1773.5" endPos="1793.5" name="Pepe Sierra B - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61228_2" lane="948520236_0" startPos="0.0" endPos="20.0" name="Pepe Sierra B - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61228_3" lane="1056673410#1_0" startPos="34.6" endPos="54.6" name="Pepe Sierra B - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61230_0" lane="1033331044_0" startPos="2848.3" endPos="2868.3" name="Pepe Sierra A - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61230_1" lane="405331159_0" startPos="1716.6" endPos="1736.6" name="Pepe Sierra A - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61230_2" lane="1056673410#0-AddedOffRampEdge_0" startPos="74.4" endPos="94.4" name="Pepe Sierra A - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61230_3" lane="1056673410#1_0" startPos="0.0" endPos="20.0" name="Pepe Sierra A - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61232_0" lane="405331159_0" startPos="1755.6" endPos="1775.6" name="Pepe Sierra A - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61232_1" lane="948520236_0" startPos="0.0" endPos="20.0" name="Pepe Sierra A - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61232_2" lane="1056673410#1_0" startPos="17.0" endPos="37.0" name="Pepe Sierra A - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61232_3" lane="89438889#0_0" startPos="0.0" endPos="20.0" name="Pepe Sierra A - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61234_0" lane="405331159_0" startPos="1811.1" endPos="1831.1" name="Pepe Sierra B - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61234_1" lane="1033331044_0" startPos="2753.7" endPos="2773.7" name="Pepe Sierra B - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61234_2" lane="948520236_0" startPos="0.6" endPos="20.6" name="Pepe Sierra B - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61234_3" lane="89438889#0_0" startPos="6.1" endPos="26.1" name="Pepe Sierra B - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61235_0" lane="1033331046_0" startPos="72.0" endPos="92.0" name="Portal Norte T1" friendlyPos="true" />
+  <busStop id="pt_61235_1" lane="1033331040_0" startPos="73.3" endPos="93.3" name="Portal Norte T1" friendlyPos="true" />
+  <busStop id="pt_61235_2" lane="90071638_0" startPos="216.6" endPos="236.6" name="Portal Norte T1" friendlyPos="true" />
+  <busStop id="pt_61235_3" lane="1168580595#1_0" startPos="61.8" endPos="81.8" name="Portal Norte T1" friendlyPos="true" />
+  <busStop id="pt_61238_0" lane="90071638_0" startPos="105.1" endPos="125.1" name="Portal Norte T4" friendlyPos="true" />
+  <busStop id="pt_61238_1" lane="1033331040_0" startPos="184.5" endPos="204.5" name="Portal Norte T4" friendlyPos="true" />
+  <busStop id="pt_61242_0" lane="1033331044_0" startPos="920.2" endPos="940.2" name="Prado C - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61242_1" lane="405331159_0" startPos="3644.7" endPos="3664.7" name="Prado C - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61242_2" lane="1056673405_0" startPos="157.3" endPos="177.3" name="Prado C - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_61243_0" lane="1033331044_0" startPos="957.5" endPos="977.5" name="Prado B - 1" friendlyPos="true" />
+  <busStop id="pt_61243_1" lane="405331159_0" startPos="3607.4" endPos="3627.4" name="Prado B - 1" friendlyPos="true" />
+  <busStop id="pt_61243_2" lane="1056673405_0" startPos="119.8" endPos="139.8" name="Prado B - 1" friendlyPos="true" />
+  <busStop id="pt_61244_0" lane="1033331044_0" startPos="1009.1" endPos="1029.1" name="Prado A - 2" friendlyPos="true" />
+  <busStop id="pt_61244_1" lane="405331159_0" startPos="3555.7" endPos="3575.7" name="Prado A - 2" friendlyPos="true" />
+  <busStop id="pt_61244_2" lane="1056673405_0" startPos="68.1" endPos="88.1" name="Prado A - 2" friendlyPos="true" />
+  <busStop id="pt_61244_3" lane="32777375_0" startPos="38.6" endPos="58.6" name="Prado A - 2" friendlyPos="true" />
+  <busStop id="pt_61245_0" lane="405331159_0" startPos="3575.6" endPos="3595.6" name="Prado A - 3" friendlyPos="true" />
+  <busStop id="pt_61245_1" lane="1033331044_0" startPos="989.2" endPos="1009.2" name="Prado A - 3" friendlyPos="true" />
+  <busStop id="pt_61245_2" lane="1056673405_0" startPos="88.1" endPos="108.1" name="Prado A - 3" friendlyPos="true" />
+  <busStop id="pt_61245_3" lane="932279433-AddedOnRampEdge_0" startPos="0.0" endPos="20.0" name="Prado A - 3" friendlyPos="true" />
+  <busStop id="pt_61246_0" lane="405331159_0" startPos="3625.6" endPos="3645.6" name="Prado B - 4" friendlyPos="true" />
+  <busStop id="pt_61246_1" lane="1056673405_0" startPos="138.1" endPos="158.1" name="Prado B - 4" friendlyPos="true" />
+  <busStop id="pt_61246_2" lane="1033331044_0" startPos="939.2" endPos="959.2" name="Prado B - 4" friendlyPos="true" />
+  <busStop id="pt_61246_3" lane="932279433-AddedOnRampEdge_0" startPos="49.8" endPos="69.8" name="Prado B - 4" friendlyPos="true" />
+  <busStop id="pt_61248_0" lane="405331159_0" startPos="3681.3" endPos="3701.3" name="Prado C - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61248_1" lane="1056673405_0" startPos="194.0" endPos="214.0" name="Prado C - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61248_2" lane="1033331044_0" startPos="883.5" endPos="903.5" name="Prado C - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61248_3" lane="932279424#0_0" startPos="0.0" endPos="20.0" name="Prado C - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61249_0" lane="1550723372_0" startPos="492.5" endPos="512.5" name="Toberín E - 1" friendlyPos="true" />
+  <busStop id="pt_61249_1" lane="1525638618#4_0" startPos="1030.7" endPos="1050.7" name="Toberín E - 1" friendlyPos="true" />
+  <busStop id="pt_61249_2" lane="809284676#1_0" startPos="411.6" endPos="431.6" name="Toberín E - 1" friendlyPos="true" />
+  <busStop id="pt_61250_0" lane="1550723372_0" startPos="551.9" endPos="571.9" name="Toberín D - 2" friendlyPos="true" />
+  <busStop id="pt_61250_1" lane="1525638618#4_0" startPos="971.3" endPos="991.3" name="Toberín D - 2" friendlyPos="true" />
+  <busStop id="pt_61250_2" lane="809284676#1_0" startPos="352.1" endPos="372.1" name="Toberín D - 2" friendlyPos="true" />
+  <busStop id="pt_61251_0" lane="1525638618#4_0" startPos="751.5" endPos="771.5" name="Toberín B - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61251_1" lane="809284676#1_0" startPos="131.5" endPos="151.5" name="Toberín B - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61251_2" lane="1550723372_0" startPos="771.7" endPos="791.7" name="Toberín B - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61251_3" lane="913056615#0-AddedOnRampEdge_0" startPos="4.0" endPos="24.0" name="Toberín B - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61252_0" lane="1525638618#4_0" startPos="843.5" endPos="863.5" name="Toberín C - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61252_1" lane="1550723372_0" startPos="679.7" endPos="699.7" name="Toberín C - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61252_2" lane="809284676#1_0" startPos="224.2" endPos="244.2" name="Toberín C - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61252_3" lane="913056615#0_0" startPos="0.0" endPos="9.4" name="Toberín C - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61261_0" lane="1422333187_0" startPos="1027.4" endPos="1047.4" name="Terminal A - 3" friendlyPos="true" />
+  <busStop id="pt_61261_1" lane="1013187998#2_0" startPos="0.0" endPos="20.0" name="Terminal A - 3" friendlyPos="true" />
+  <busStop id="pt_61261_2" lane="1013187998#1_0" startPos="33.8" endPos="53.8" name="Terminal A - 3" friendlyPos="true" />
+  <busStop id="pt_61262_0" lane="1422333187_0" startPos="1045.6" endPos="1065.6" name="Terminal A - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61262_1" lane="1013187998#2_0" startPos="15.3" endPos="35.3" name="Terminal A - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_61263_0" lane="467167463_0" startPos="154.8" endPos="174.8" name="Terminal A - 1" friendlyPos="true" />
+  <busStop id="pt_61264_0" lane="467167463_0" startPos="154.8" endPos="174.8" name="Terminal A - 2 ó 5" friendlyPos="true" />
   <busStop id="pt_71505_0" lane="1326230581#1_0" startPos="43.1" endPos="63.1" name="K7  -  CL114" friendlyPos="true" />
   <busStop id="pt_71505_1" lane="1326230582_0" startPos="0.0" endPos="18.9" name="K7  -  CL114" friendlyPos="true" />
   <busStop id="pt_71505_2" lane="88958068#0_0" startPos="15.4" endPos="35.4" name="K7  -  CL114" friendlyPos="true" />
@@ -2351,6 +2545,22 @@
   <busStop id="pt_71701_0" lane="960901043#1_0" startPos="71.7" endPos="91.7" name="K7  -  CL110" friendlyPos="true" />
   <busStop id="pt_71706_0" lane="962329813#1_0" startPos="53.9" endPos="73.9" name="K7  - CL106" friendlyPos="true" />
   <busStop id="pt_71706_1" lane="1364874480_0" startPos="551.6" endPos="571.6" name="K7  - CL106" friendlyPos="true" />
+  <busStop id="pt_72906_0" lane="1525638618#1_0" startPos="772.4" endPos="792.4" name="Calle 146 A - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_72906_1" lane="913480725_0" startPos="215.8" endPos="235.8" name="Calle 146 A - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_72906_2" lane="913480723#1_0" startPos="0.0" endPos="20.0" name="Calle 146 A - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_72906_3" lane="913480723#0_0" startPos="1.1" endPos="21.1" name="Calle 146 A - 4 ó 6" friendlyPos="true" />
+  <busStop id="pt_72907_0" lane="1525638618#1_0" startPos="704.0" endPos="724.0" name="Calle 146 A - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_72907_1" lane="913480725_0" startPos="146.9" endPos="166.9" name="Calle 146 A - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_72908_0" lane="1525638618#1_0" startPos="1047.7" endPos="1067.7" name="Mazurén A - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_72908_1" lane="913480725_0" startPos="491.5" endPos="511.5" name="Mazurén A - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_72908_2" lane="32743069_0" startPos="3.3" endPos="23.3" name="Mazurén A - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_72936_0" lane="1550723372_0" startPos="817.4" endPos="837.4" name="Toberín B - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_72936_1" lane="1525638618#4_0" startPos="705.7" endPos="725.7" name="Toberín B - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_72936_2" lane="809284676#1_0" startPos="85.7" endPos="105.7" name="Toberín B - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_72937_0" lane="1550723372_0" startPos="908.9" endPos="928.9" name="Toberín A - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_72937_1" lane="1525638618#4_0" startPos="614.5" endPos="634.5" name="Toberín A - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_72937_2" lane="809284676#1_0" startPos="0.0" endPos="20.0" name="Toberín A - 2 ó 5" friendlyPos="true" />
+  <busStop id="pt_72937_3" lane="809284676#0-AddedOffRampEdge_0" startPos="74.4" endPos="94.4" name="Toberín A - 2 ó 5" friendlyPos="true" />
   <busStop id="pt_73048_0" lane="1050703348_0" startPos="18.9" endPos="38.9" name="K7 Cl100 N/S" friendlyPos="true" />
   <busStop id="pt_73048_1" lane="1364874480_0" startPos="0.0" endPos="20.0" name="K7 Cl100 N/S" friendlyPos="true" />
   <busStop id="pt_73082_0" lane="1199617215_0" startPos="63.5" endPos="83.5" name="K7 - CL116 N/S A" friendlyPos="true" />
@@ -2359,6 +2569,18 @@
   <busStop id="pt_73083_0" lane="1021135293#1_0" startPos="0.0" endPos="20.0" name="K7 - CL118 N/S A" friendlyPos="true" />
   <busStop id="pt_73083_1" lane="1021135293#0_0" startPos="56.8" endPos="76.8" name="K7 - CL118 N/S A" friendlyPos="true" />
   <busStop id="pt_73083_2" lane="88958168_0" startPos="34.9" endPos="54.9" name="K7 - CL118 N/S A" friendlyPos="true" />
+  <busStop id="pt_73218_0" lane="90071638_0" startPos="253.7" endPos="273.7" name="Portal Norte T5A" friendlyPos="true" />
+  <busStop id="pt_73218_1" lane="1033331040_0" startPos="36.5" endPos="56.5" name="Portal Norte T5A" friendlyPos="true" />
+  <busStop id="pt_73219_0" lane="90071638_0" startPos="221.0" endPos="241.0" name="Portal Norte T5B" friendlyPos="true" />
+  <busStop id="pt_73219_1" lane="1033331040_0" startPos="69.1" endPos="89.1" name="Portal Norte T5B" friendlyPos="true" />
+  <busStop id="pt_73221_0" lane="1033331046_0" startPos="209.5" endPos="229.5" name="Portal Norte T2A" friendlyPos="true" />
+  <busStop id="pt_73221_1" lane="1033331040_0" startPos="211.4" endPos="231.4" name="Portal Norte T2A" friendlyPos="true" />
+  <busStop id="pt_73221_2" lane="90071638_0" startPos="78.5" endPos="98.5" name="Portal Norte T2A" friendlyPos="true" />
+  <busStop id="pt_73221_3" lane="1168580595#1_0" startPos="200.6" endPos="220.6" name="Portal Norte T2A" friendlyPos="true" />
+  <busStop id="pt_73222_0" lane="1033331046_0" startPos="186.3" endPos="206.3" name="Portal Norte T2B" friendlyPos="true" />
+  <busStop id="pt_73222_1" lane="1033331040_0" startPos="188.2" endPos="208.2" name="Portal Norte T2B" friendlyPos="true" />
+  <busStop id="pt_73222_2" lane="90071638_0" startPos="101.8" endPos="121.8" name="Portal Norte T2B" friendlyPos="true" />
+  <busStop id="pt_73222_3" lane="1168580595#1_0" startPos="177.5" endPos="197.5" name="Portal Norte T2B" friendlyPos="true" />
   <busStop id="pt_73723_0" lane="90071638_0" startPos="188.5" endPos="208.5" name="2-5" friendlyPos="true" />
   <busStop id="pt_73723_1" lane="1033331040_0" startPos="101.5" endPos="121.5" name="2-5" friendlyPos="true" />
   <busStop id="pt_73723_2" lane="1033331046_0" startPos="100.2" endPos="120.2" name="2-5" friendlyPos="true" />
@@ -2386,6 +2608,13 @@
   <busStop id="pt_73730_1" lane="90071638_0" startPos="74.5" endPos="94.5" name="Portal Norte 2-2" friendlyPos="true" />
   <busStop id="pt_73730_2" lane="1033331046_0" startPos="213.5" endPos="233.5" name="Portal Norte 2-2" friendlyPos="true" />
   <busStop id="pt_73730_3" lane="1168580595#1_0" startPos="204.5" endPos="224.5" name="Portal Norte 2-2" friendlyPos="true" />
+  <busStop id="pt_74096_0" lane="1550723372_0" startPos="738.7" endPos="758.7" name="Toberín C - 2 ó 5-nw" friendlyPos="true" />
+  <busStop id="pt_74096_1" lane="1525638618#4_0" startPos="784.5" endPos="804.5" name="Toberín C - 2 ó 5-nw" friendlyPos="true" />
+  <busStop id="pt_74096_2" lane="809284676#1_0" startPos="164.8" endPos="184.8" name="Toberín C - 2 ó 5-nw" friendlyPos="true" />
+  <busStop id="pt_74098_0" lane="1525638618#4_0" startPos="662.9" endPos="682.9" name="Toberín A - 4 ó 6-nw" friendlyPos="true" />
+  <busStop id="pt_74098_1" lane="1550723372_0" startPos="860.3" endPos="880.3" name="Toberín A - 4 ó 6-nw" friendlyPos="true" />
+  <busStop id="pt_74098_2" lane="809284676#1_0" startPos="42.6" endPos="62.6" name="Toberín A - 4 ó 6-nw" friendlyPos="true" />
+  <busStop id="pt_74098_3" lane="32743179_0" startPos="38.0" endPos="58.0" name="Toberín A - 4 ó 6-nw" friendlyPos="true" />
   <busStop id="pt_74149_0" lane="375277070#6_0" startPos="33.3" endPos="53.3" name="Br. Santa Barbara Central" friendlyPos="true" />
   <busStop id="pt_74149_1" lane="-375277070#6_0" startPos="26.0" endPos="46.0" name="Br. Santa Barbara Central" friendlyPos="true" />
   <busStop id="pt_74150_0" lane="-1290062093#0_0" startPos="32.4" endPos="52.4" name="KR 13" friendlyPos="true" />

@@ -28,7 +28,7 @@ const COLORES_ROPA = [0x2f4f7f, 0x8b2f2f, 0x3d6b3d, 0x222222, 0x7a5c2e, 0x5c3d7a
 const DIMENSIONES = {
   auto: [4.5, 1.8, 1.45], taxi: [4.3, 1.72, 1.5], especial: [4.9, 1.95, 1.8], informal: [4.6, 1.8, 1.55],
   otro: [4.5, 1.8, 1.5], moto: [2.1, 0.8, 1.2], bici: [1.8, 0.6, 1.1], bus_pt: [12, 2.55, 3.1],
-  escolar: [9, 2.4, 2.9], peaton: [0.5, 0.5, 1.72],
+  bus_sitp: [12, 2.55, 3.1], bus_tm: [18, 2.6, 3.2], escolar: [9, 2.4, 2.9], peaton: [0.5, 0.5, 1.72],
 };
 
 const LUZ = {
@@ -391,7 +391,7 @@ function geometriasVehiculo(tipo) {
   let detalles;
   let stop;
   let faros;
-  if (tipo === 'bus_pt' || tipo === 'escolar') {
+  if (tipo === 'bus_pt' || tipo === 'bus_sitp' || tipo === 'bus_tm' || tipo === 'escolar') {
     cuerpo = mergeGeometries([caja(a, h - 0.45, l, 0, 0.45 + (h - 0.45) / 2, l / 2)]);
     detalles = mergeGeometries([
       pintar(caja(a + 0.02, 1.0, l - 1.6, 0, 1.95, l / 2 + 0.4), 0x1c2733),      // ventanas laterales
@@ -450,6 +450,8 @@ function modeloVehiculo(tipo, id) {
   let color = COLORES_AUTO[hash(id) % COLORES_AUTO.length];
   if (tipo === 'taxi') color = 0xffcc00;
   if (tipo === 'bus_pt') color = hash(id) % 3 === 0 ? 0x2f8f3a : 0xc0262d;   // SITP verde / TransMilenio rojo
+  if (tipo === 'bus_sitp') color = 0x1f5fbf;   // SITP zonal azul
+  if (tipo === 'bus_tm') color = 0xc0262d;     // TransMilenio troncal rojo
   if (tipo === 'escolar') color = 0xf5c400;
   if (tipo === 'bici') color = 0x2e7d32;
   if (tipo === 'moto') color = 0x1d1f24;

@@ -397,7 +397,8 @@ class Lado:
                 continue   # insertado por TraCI pero aún esperando entrar a la red
             x, y, z = d[tc.VAR_POSITION3D]
             v = d[tc.VAR_SPEED]
-            vehiculos.append([vid, d[tc.VAR_TYPE].split("@")[0], round(x, 2), round(y, 2), round(z, 2),
+            # TraCI clona el vType como auto@ego_1; el complemento de la encuesta usa auto_enc
+            vehiculos.append([vid, d[tc.VAR_TYPE].split("@")[0].removesuffix("_enc"), round(x, 2), round(y, 2), round(z, 2),
                               round(d[tc.VAR_ANGLE], 1), round(v, 2), d[tc.VAR_ROAD_ID]])
             if (x - nx) ** 2 + (y - ny) ** 2 < RADIO_CRUCE_M ** 2:
                 cerca += 1

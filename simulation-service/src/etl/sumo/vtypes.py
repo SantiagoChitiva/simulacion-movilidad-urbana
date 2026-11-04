@@ -11,6 +11,10 @@ VTYPE_BUS_SITP = {"id": BUS_SITP_ID, "vClass": "bus", "length": "12", "maxSpeed"
 # los buses siguen su línea: sin el dispositivo de re-ruteo que la plantilla da a todos
 # (re-rutear un bus con paradas hacía caer a SUMO 1.27 con un acceso inválido a memoria)
 PARAMS_BUS_SITP = {"has.rerouting.device": "false"}
+# TransMilenio troncal (agencia 1 del GTFS): articulado de 18 m por los carriles exclusivos
+BUS_TM_ID = "bus_tm"
+VTYPE_BUS_TM = {"id": BUS_TM_ID, "vClass": "bus", "length": "18", "maxSpeed": "16.7", "color": "0.8,0,0"}
+AGENCIA_TRONCAL = "1"
 
 @dataclass(frozen=True)
 class VTypeConfig:
