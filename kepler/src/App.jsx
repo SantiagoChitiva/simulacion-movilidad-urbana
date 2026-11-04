@@ -500,6 +500,11 @@ function Visor() {
 
   // ─── priorización ───────────────────────────────────────────────────────────
 
+  // al abrir "Semaforizar" la lista se carga sola (antes mostraba 0 cruces hasta pulsar el botón)
+  useEffect(() => {
+    if (pestana === 'semaforizar') setPriorizacionVisible(true);
+  }, [pestana]);
+
   useEffect(() => {
     if (!priorizacionVisible) {
       filasPriorizacion.current = [];

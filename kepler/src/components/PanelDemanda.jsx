@@ -190,7 +190,7 @@ export default function PanelDemanda({
         <div className="pd-opciones">
           <label title={hayCompleta ? '' : 'No hay complemento de la encuesta para este horario'}>
             <input type="checkbox" checked={completaPedida} disabled={!hayCompleta} onChange={(e) => setEncuestaCompleta(e.target.checked)} />
-            Encuesta completa: vehículos que entran o salen de Usaquén y la expansión sin tope (unas diez veces más
+            Encuesta completa: vehículos que entran o salen de Usaquén y la expansión sin tope (unas quince veces más
             vehículos; para validar con los aforos)
           </label>
           <label title={hayPaso ? '' : 'No hay tráfico de paso generado para este horario'}>
