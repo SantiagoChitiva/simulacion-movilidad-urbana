@@ -17,8 +17,9 @@ Este módulo arma, con el módulo de viajes procesado de la encuesta (carpeta EO
    puerta es la hora de la encuesta más la parte del viaje recorrida fuera de la red
    (proporcional a la distancia);
 2. las copias que el tope MAX_COPIAS les quita a los viajes internos en vehículo.
-Las copias de una fila se reparten en ±15 min alrededor de su hora (la encuesta redondea la
-hora a la media hora y cientos de vehículos en el mismo segundo bloquean la inserción).
+Las copias de una fila se reparten según el redondeo de su hora (trips.salidas_dispersas:
+±30 min si es la hora en punto, ±15 min si es la media hora): la encuesta agrupa las
+respuestas ahí y cientos de vehículos en el mismo segundo bloquean la inserción.
 
 No incluye a los peatones ni a los pasajeros del transporte público que entran o salen (no
 suman vehículos en los aforos) ni el tráfico que atraviesa Usaquén sin parar, que la
@@ -49,7 +50,7 @@ from .configuration import DEFAULT_SCENARIO, MAX_COPIAS, VENTANAS, ScenarioPaths
 from .demanda import mayor_resto
 from .duarouter import DuarouterConfig, run_duarouter
 from .enums.survey_mode import SurveyMode
-from .trips import TripGenerationConfig, TripGenerationStats, _add_vtypes, read_trips
+from .trips import TripGenerationConfig, TripGenerationStats, _add_vtypes, read_trips, salidas_dispersas
 from .vtypes import VTYPES
 
 RUTA_VIAJES = Path("EODH") / "05_Base datos procesada" / "CSV" / "d. Modulo viajes.csv"
@@ -57,7 +58,6 @@ RUTA_ZAT = Path("EODH") / "03_Zonificacion" / "b. Shapefile ZAT.zip"
 TIPOS_PUERTA = {"highway.trunk", "highway.primary", "highway.secondary", "highway.tertiary"}
 SUFIJO_VTYPE = "_enc"            # vTypes propios del complemento (ver arriba)
 LOCALIDAD = "usaqu"                # localidad_ori/des normalizada empieza así
-DISPERSION_S = 15 * 60             # las copias de una fila se reparten en ±15 min
 PUERTAS_POR_ZAT = 4                # el extremo externo se reparte entre las 4 puertas más cercanas
 
 
@@ -179,16 +179,14 @@ def centroides_zat(zip_zat: Path, net) -> dict[str, tuple[float, float]]:
         }
 
 
-def _dispersar(t: float, copias: int) -> list[float]:
-    """`copias` salidas repartidas de forma pareja en t ± DISPERSION_S."""
-    if copias == 1:
-        return [t]
-    return [t - DISPERSION_S + 2 * DISPERSION_S * (i + 0.5) / copias for i in range(copias)]
-
-
 def viajes_complemento(externos: list[dict], internos, centroides: dict, lista_puertas: list[Puerta],
-                       tazs: set[str], stats: EncuestaCompletaStats) -> list[dict]:
-    """Lista de viajes {id, tipo, depart, fromTaz, toTaz} del complemento, sin ordenar."""
+                       tazs: set[str], stats: EncuestaCompletaStats,
+                       ventana: tuple[float, float] = (0.0, 86400.0)) -> list[dict]:
+    """Lista de viajes {id, tipo, depart, fromTaz, toTaz} del complemento, sin ordenar.
+
+    Las salidas se dispersan según el redondeo de la hora de la encuesta y se reflejan para
+    quedar en `ventana`.
+    """
     entran = [p for p in lista_puertas if p.sentido == "entra"]
     salen = [p for p in lista_puertas if p.sentido == "sale"]
     viajes = []
@@ -206,15 +204,17 @@ def viajes_complemento(externos: list[dict], internos, centroides: dict, lista_p
         for (puerta, _), n in zip(reparto, copias):
             if n == 0:
                 continue
-            t = fila["hora_s"]
+            demora = 0.0
             if not fila["sale_de_usaquen"]:
                 # entra a la red después de recorrer el tramo de fuera
                 fuera = math.hypot(puerta.x - ex, puerta.y - ey)
                 dentro = math.hypot(puerta.x - ix, puerta.y - iy)
-                t += fila["duracion_s"] * fuera / max(fuera + dentro, 1.0)
+                demora = fila["duracion_s"] * fuera / max(fuera + dentro, 1.0)
             taz_puerta = f"puerta_{puerta.sentido}_{puerta.edge}"
             tipo = "sale" if fila["sale_de_usaquen"] else "entra"
-            for salida in _dispersar(t, n):
+            # el redondeo es el de la hora reportada; la demora de fuera se suma después
+            for salida in salidas_dispersas(fila["hora_s"], n, ventana[0], ventana[1] - demora):
+                salida += demora
                 viajes.append({"tipo": fila["modo"], "depart": salida,
                                "fromTaz": interna if fila["sale_de_usaquen"] else taz_puerta,
                                "toTaz": taz_puerta if fila["sale_de_usaquen"] else interna})
@@ -225,7 +225,7 @@ def viajes_complemento(externos: list[dict], internos, centroides: dict, lista_p
         faltan = max(1, round(t.fexp)) - min(max(1, round(t.fexp)), MAX_COPIAS)
         if faltan <= 0 or not t.mode.is_vehicle:
             continue
-        for salida in _dispersar(t.depart, faltan):
+        for salida in salidas_dispersas(t.depart, faltan, *ventana):
             viajes.append({"tipo": t.mode.value, "depart": salida,
                            "fromTaz": t.origin_taz, "toTaz": t.destination_taz})
             stats.por_tipo["tope"] += 1
@@ -299,7 +299,7 @@ def generar_complemento(cfg: EncuestaCompletaConfig, stats: EncuestaCompletaStat
         internos = list(read_trips(TripGenerationConfig(escenario.tsv, Path(), hora_ini=ini, hora_fin=fin), st))
         # media hora antes: los que salen a las 6:45 siguen en la red a las 7:00
         externos_ventana = [f for f in externos if ini - 1800 <= f["hora_s"] < fin]
-        viajes = viajes_complemento(externos_ventana, internos, centroides, lista, tazs, stats)
+        viajes = viajes_complemento(externos_ventana, internos, centroides, lista, tazs, stats, (ini - 1800, fin))
         viajes = [v for v in viajes if ini - 1800 <= v["depart"] < fin]
         trips = escribir_viajes(viajes, trabajo / f"complemento_{ventana}.trips.xml", f"enc_{ventana}_")
         rutas = trabajo / f"complemento_{ventana}.rou.xml"

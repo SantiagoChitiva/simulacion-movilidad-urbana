@@ -1,6 +1,7 @@
 from etl.sumo.encuesta_completa import (
-    DISPERSION_S, EncuestaCompletaStats, Puerta, _dispersar, _es_usaquen, reparto_puertas, viajes_complemento,
+    EncuestaCompletaStats, Puerta, _es_usaquen, reparto_puertas, viajes_complemento,
 )
+from etl.sumo.trips import radio_redondeo, salidas_dispersas
 from etl.sumo.enums.transport_mode import TransportMode
 from etl.sumo.trips import TripRecord
 
@@ -9,11 +10,17 @@ def test_es_usaquen_tolera_tildes_y_espacios():
     assert _es_usaquen(" Usaquen ") and _es_usaquen("USAQUÉN") and not _es_usaquen("Teusaquillo")
 
 
-def test_dispersar_reparte_parejo_alrededor_de_la_hora():
-    salidas = _dispersar(1000.0, 4)
-    assert len(salidas) == 4 and min(salidas) > 1000 - DISPERSION_S and max(salidas) < 1000 + DISPERSION_S
-    assert abs(sum(salidas) / 4 - 1000) < 1e-6
-    assert _dispersar(5.0, 1) == [5.0]
+def test_radio_segun_el_redondeo_de_la_hora():
+    assert radio_redondeo(25200) == 1800 and radio_redondeo(27000) == 900 and radio_redondeo(25440) == 300
+
+
+def test_salidas_dispersas_parejas_y_dentro_de_la_ventana():
+    salidas = salidas_dispersas(28800.0, 4, 25200, 36000)        # 8:00 en punto: 7:30-8:30
+    assert len(salidas) == 4 and min(salidas) > 27000 and max(salidas) < 30600
+    assert abs(sum(salidas) / 4 - 28800) < 1e-6
+    borde = salidas_dispersas(25200.0, 10, 25200, 36000)         # 7:00 al abrir la ventana
+    assert min(borde) >= 25200 and max(borde) < 27000 and len(borde) == 10
+    assert salidas_dispersas(5.0, 1, 0, 10) == [5.0]
 
 
 def test_reparto_puertas_pondera_por_carriles_y_distancia():
