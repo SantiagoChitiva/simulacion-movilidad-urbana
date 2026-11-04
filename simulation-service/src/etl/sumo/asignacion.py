@@ -48,16 +48,20 @@ class AsignacionConfig:
             sys.executable, script,
             "-n", str(self.net_file.resolve()),
             "-t", str(self.trips_file.resolve()),
-            "-+", str(self.taz_file.resolve()),
+            # las TAZ van a duarouter con -D (--districts); -+ solo llega a SUMO
+            "-D", str(self.taz_file.resolve()),
             "-b", str(self.ventana[0]),
             "-e", str(self.ventana[1]),
             "-l", str(self.iteraciones),
             "--disable-summary", "--disable-tripinfos", "--clean-alt",
+            # equivale a duarouter --ignore-errors: sin esto, un viaje sin ruta corta la iteración
+            "--continue-on-unbuild",
         ]
         if self.mesosim:
             args.append("--mesosim")
-        # las opciones sumo--* van al final (así las lee duaIterate)
-        return args + ["sumo--ignore-route-errors", "true", "duarouter--ignore-errors", "true",
+        # las opciones sumo--* van al final (así las lee duaIterate). duaIterate ya le pasa
+        # --ignore-errors a duarouter: repetirlo hace fallar al router ("already set")
+        return args + ["sumo--ignore-route-errors", "true",
                        "duarouter--repair", "true", "duarouter--routing-threads", "4"]
 
 

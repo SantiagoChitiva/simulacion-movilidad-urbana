@@ -33,3 +33,8 @@ def test_sin_paradas_de_bus(tmp_path):
     assert sin_paradas_de_bus(rou) == (1, 1)
     texto = rou.read_text(encoding="utf-8")
     assert "busStop" not in texto and 'id="q"' in texto and 'id="b"' in texto
+
+
+def test_encuentra_duaiterate_en_tools_assign():
+    from etl.sumo.subred import encontrar_herramienta
+    assert encontrar_herramienta("duaIterate.py").replace("\\", "/").endswith("tools/assign/duaIterate.py")

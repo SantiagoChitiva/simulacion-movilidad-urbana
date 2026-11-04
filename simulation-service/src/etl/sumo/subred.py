@@ -96,7 +96,8 @@ def encontrar_herramienta(nombre: str) -> str:
     except ImportError:
         pass
     for base in bases:
-        for sub in ("tools/route", "tools", "tools/import/gtfs"):
+        # duaIterate.py está en tools/assign
+        for sub in ("tools/route", "tools", "tools/import/gtfs", "tools/assign"):
             candidato = base / sub / nombre
             if candidato.is_file():
                 return str(candidato)
