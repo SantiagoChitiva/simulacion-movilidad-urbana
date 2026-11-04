@@ -64,7 +64,7 @@ export default function HUD({ conSemaforo, lado, egoId, manual, subtitulo }) {
         {m && (
           <>
             <span title="Espera más larga de un vehículo en la vía que cede (la secundaria)">espera lateral {mmss(m.espera_lateral_s)}</span>
-            <span title="Colisiones detectadas por SUMO">{m.colisiones} choque{m.colisiones === 1 ? '' : 's'}</span>
+            <span title={`Choques a 5 km/h o más (cada par una vez). Aparte, ${m.contactos ?? 0} roce${m.contactos === 1 ? '' : 's'} a menos de 5 km/h: casi siempre peatones que, tras esperar en una cebra bloqueada, el modelo de SUMO deja pasar a través de un carro detenido. No son choques reales.`}>{m.colisiones} choque{m.colisiones === 1 ? '' : 's'}</span>
             <span title="Pares de vehículos que llegan al punto de cruce con menos de 1,5 s de diferencia (PET)">{m.conflictos} conflicto{m.conflictos === 1 ? '' : 's'}</span>
           </>
         )}

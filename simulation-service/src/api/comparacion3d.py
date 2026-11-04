@@ -43,7 +43,8 @@ from etl.sumo.escena3d import geometria_escena
 from etl.sumo.estilos import PARAMS_ESTILO, EstiloConductor
 from etl.sumo.telemetria import (
     clasificar_accion, drac, indice_riesgo, opcion_enlace, pet_cruce, riesgo_peaton, ttc,
-    acumular_viaje, actualizar_balance, comparar_viajes, nuevo_balance, resumen_balance, resumen_viaje,
+    acumular_viaje, actualizar_balance, clasificar_colision, comparar_viajes, nuevo_balance, resumen_balance,
+    resumen_viaje,
 )
 
 logger = logging.getLogger(__name__)
@@ -306,8 +307,10 @@ class Lado:
         self._vars_veh = [tc.VAR_POSITION3D, tc.VAR_ANGLE, tc.VAR_SPEED, tc.VAR_TYPE, tc.VAR_WAITING_TIME, tc.VAR_ROAD_ID,
                           tc.VAR_ACCELERATION]
         self._vars_per = [tc.VAR_POSITION3D, tc.VAR_ANGLE, tc.VAR_SPEED, tc.VAR_WAITING_TIME, tc.VAR_ROAD_ID]
-        self.colisiones = 0
+        self.colisiones = 0                  # choques únicos (>= 5 km/h, ver clasificar_colision)
         self.colisiones_en_vivo = 0          # sin las del calentamiento (para el balance)
+        self.contactos = 0                   # roces a baja velocidad (artefactos del modelo)
+        self._pares_colision: set[tuple[str, str]] = set()
         self.en_vivo = False
         self._pares_conflicto: dict[tuple[str, str], float] = {}
         self.historial: list[dict] = []
@@ -338,10 +341,24 @@ class Lado:
             for pid in personas:
                 if pid in vivas:
                     self.con.person.subscribe(pid, self._vars_per)
-        choques = self.con.simulation.getCollidingVehiclesNumber()
-        self.colisiones += choques
-        if self.en_vivo:
-            self.colisiones_en_vivo += choques
+        colisiones = self.con.simulation.getCollisions()
+        if colisiones:
+            self.contar_colisiones(colisiones, set(self.con.person.getIDList()))
+
+    def contar_colisiones(self, colisiones, personas: set[str]) -> None:
+        """Cada pareja cuenta una vez: SUMO repite la colisión en cada paso que dura."""
+        for col in colisiones:
+            par = tuple(sorted((col.collider, col.victim)))
+            if par in self._pares_colision:
+                continue
+            self._pares_colision.add(par)
+            peaton = col.victim in personas or col.type in ("crossing", "walkingarea")
+            if clasificar_colision(col.colliderSpeed, col.victimSpeed, peaton) == "contacto":
+                self.contactos += 1
+                continue
+            self.colisiones += 1
+            if self.en_vivo:
+                self.colisiones_en_vivo += 1
 
     def tiempo(self) -> float:
         return self.con.simulation.getTime()
@@ -405,7 +422,7 @@ class Lado:
             "velocidad_media_cruce_kmh": round(3.6 * suma_v / cerca, 1) if cerca else None,
             "espera_media_cruce_s": round(sum(esperas) / len(esperas), 1) if esperas else 0.0,
             "espera_lateral_s": round(espera_lateral, 1),
-            "colisiones": self.colisiones, "conflictos": self.conflictos,
+            "colisiones": self.colisiones, "contactos": self.contactos, "conflictos": self.conflictos,
             "riesgo_max": round(self.max_riesgo),
         }
         if dt > 0:

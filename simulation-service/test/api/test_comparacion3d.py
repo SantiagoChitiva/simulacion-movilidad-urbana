@@ -184,3 +184,17 @@ def test_despejar_entrada_quita_los_mismos_en_ambos_lados():
         llamadas = lado.con.vehicle.llamadas
         for vid in ("v1", "v2"):
             assert llamadas.index(("unsubscribe", vid)) < llamadas.index(("remove", vid))
+
+
+def test_lado_cuenta_cada_colision_una_vez():
+    from types import SimpleNamespace as N
+    from api.comparacion3d import Lado
+    lado = Lado.__new__(Lado)
+    lado.colisiones = lado.colisiones_en_vivo = lado.contactos = 0
+    lado._pares_colision = set()
+    lado.en_vivo = True
+    quieto = N(collider="auto_1", victim="peaton_1", colliderSpeed=0.0, victimSpeed=1.0, type="crossing", victimType="p")
+    choque = N(collider="auto_2", victim="auto_3", colliderSpeed=9.0, victimSpeed=0.0, type="collision", victimType="auto")
+    for _ in range(5):   # SUMO repite la colisión en cada paso que dura
+        lado.contar_colisiones([quieto, choque], {"peaton_1"})
+    assert (lado.colisiones, lado.colisiones_en_vivo, lado.contactos) == (1, 1, 1)

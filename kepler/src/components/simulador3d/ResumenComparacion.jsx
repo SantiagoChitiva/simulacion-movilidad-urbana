@@ -23,7 +23,7 @@ const FILAS_BALANCE = [
   ['Frenadas en seco cerca del cruce, por hora', 'frenadas_hora', (v) => num(v), true],
   ['…de ellas en la vía principal', 'frenadas_principal_hora', (v) => num(v), true],
   ['Casi choques por hora (llegan al mismo punto con menos de 1,5 s)', 'conflictos_hora', (v) => num(v), true],
-  ['Choques', 'colisiones', (v) => num(v), true],
+  ['Choques del modelo (5 km/h o más; SUMO no está libre de colisiones)', 'colisiones', (v) => num(v), true],
   ['Cola más larga en la vía que cede', 'cola_max_lateral', (v) => num(v, ' veh'), true],
   ['Cola más larga en la vía principal', 'cola_max_principal', (v) => num(v, ' veh'), true],
   ['Espera media en la vía que cede', 'espera_lateral_s', tiempo, true],

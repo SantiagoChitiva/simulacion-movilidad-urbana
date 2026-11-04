@@ -135,3 +135,11 @@ def test_balance_por_hora():
     assert r["conflictos_hora"] == 6
     assert r["cola_max_lateral"] == 2 and r["cola_max_principal"] == 0
     assert r["espera_lateral_s"] == 25.0   # (40 + 10) / 2: la mayor espera de cada vehículo
+
+
+def test_clasificar_colision_separa_roces_de_choques():
+    from etl.sumo.telemetria import clasificar_colision
+    assert clasificar_colision(0.0, 1.2, victima_peaton=True) == "contacto"     # carro quieto en la cebra
+    assert clasificar_colision(6.0, 1.2, victima_peaton=True) == "choque"
+    assert clasificar_colision(5.0, 4.5, victima_peaton=False) == "contacto"   # roce en la cola
+    assert clasificar_colision(8.0, 0.0, victima_peaton=False) == "choque"     # alcance

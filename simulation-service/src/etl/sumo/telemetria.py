@@ -307,3 +307,18 @@ def resumen_balance(balance: dict, conflictos: int, colisiones: int) -> dict:
         "espera_principal_s": espera["principal"],
         "espera_lateral_s": espera["lateral"],
     }
+
+
+V_CHOQUE = 1.4   # m/s (5 km/h) de velocidad relativa: por debajo es un roce, no un choque
+
+
+def clasificar_colision(v_colisionador: float, v_victima: float, victima_peaton: bool) -> str:
+    """"choque" o "contacto" según la velocidad del impacto.
+
+    SUMO no está libre de colisiones: un peatón que lleva más de 10 s detenido en una
+    cebra bloqueada por un carro quieto la cruza "atravesándolo" (jamtime del modelo de
+    franjas), y un vehículo se reporta en colisión aunque esté parado. Esos casos son
+    contactos a menos de 5 km/h, no choques: se cuentan aparte para no inflar la cifra.
+    """
+    relativa = abs(v_colisionador) if victima_peaton else abs(v_colisionador - v_victima)
+    return "choque" if relativa >= V_CHOQUE else "contacto"
