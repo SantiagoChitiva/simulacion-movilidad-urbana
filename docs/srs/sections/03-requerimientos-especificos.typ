@@ -604,7 +604,7 @@ redactan con la forma \"El sistema debe #sym.dots\", y se organizan en cinco fun
   porcentaje de puntos con GEH $<$ 5.],
   prioridad: [Alta],
   modulo: [Módulo de Validación (etl/validation.py)],
-  estado: [Implementado en `etl/sumo/aforos.py` y `etl/sumo/validacion.py`: los aforos HMD de la EODI se ubican en la red por los shapefiles de estaciones y cada corrida escribe `validacion.csv` y `validacion.json`, con el porcentaje de puntos con GEH < 5 por grupo de calibración y de control.],
+  estado: [Implementado en `etl/sumo/aforos.py` y `etl/sumo/validacion.py`: los aforos HMD de la EODI se ubican en la red por los shapefiles de estaciones y cada corrida escribe `validacion.csv` y `validacion.json`, con el porcentaje de puntos con GEH < 5 por grupo de calibración y de control. La demanda puede ampliarse con la encuesta completa (`encuesta_completa.py`: vehículos que entran y salen de Usaquén y expansión sin tope) y el tráfico de paso. Medido en la mañana: 2 de 33 puntos cumplen (22 % del volumen aforado con la encuesta completa); la red no alcanza a mover esa demanda, así que el criterio del 85 % queda pendiente de calibrar su capacidad.],
   fecha: [],
 )
 
@@ -728,7 +728,8 @@ redactan con la forma \"El sistema debe #sym.dots\", y se organizan en cinco fun
     fusionan; un cruce necesita dos calles distintas que se corten a más de 35°;
   - *reglas duras:* vía colectora o de mayor jerarquía sin autopistas ni troncales (la Autopista Norte con TransMilenio es de acceso controlado);
     vía secundaria al menos local residencial; a nivel (sin rampas ni glorietas a menos de 40 m); conflicto real (desde la secundaria se cruza de
-    frente o se gira a la izquierda); sin semáforo a menos de 80 m;
+    frente o se gira a la izquierda); sin semáforo a menos de 80 m, contando los de la red y los reales de la Secretaría de Movilidad (capa de
+    intersecciones semafóricas, `evidencia.py semaforos`); un semáforo real a menos de 40 m descarta el cruce aunque OpenStreetMap no lo tenga;
   - *evidencia calibrada con los cruces que ya tienen semáforo:* siniestros a menos de 30 m ≥ p75 de los semaforizados (mínimo 3), o ≥ mediana con
     un colegio o centro de salud a menos de 200 m; tramo de la vía principal sin semáforo ≥ 600 m; volumen simulado que entra al cruce ≥ p75 de
     los semaforizados;
@@ -739,8 +740,8 @@ redactan con la forma \"El sistema debe #sym.dots\", y se organizan en cinco fun
   razon: [Ayuda a decidir dónde vale la pena estudiar un semáforo nuevo antes de simularlo (ver F9). La versión anterior puntuaba cada nodo de SUMO
   por separado (unos 700 candidatos, incluidos nodos a mitad de cuadra y cruces de la Autopista Norte).],
   criterio: [`test_priorizacion.py`: una doble calzada es un solo cruce; un nodo a mitad de cuadra, una troncal, un cruce con solo giro a la derecha o
-  con semáforo a 70 m quedan fuera; los niveles responden a la evidencia y al NMS. Con la red de Usaquén y la corrida `encuesta` resultan 5
-  prioritarios, 56 recomendados y 146 en observación.],
+  con semáforo a 70 m (de la red o de la SDM) quedan fuera; los niveles responden a la evidencia y al NMS. Con la red de Usaquén, los 199 semáforos
+  de la SDM y la precalculada `encuesta` resultan 4 prioritarios, 58 recomendados y 144 en observación.],
   prioridad: [Media],
   modulo: [`simulation-service/src/etl/sumo/priorizacion.py`, `evidencia.py`],
   estado: [Implementado.],
@@ -899,12 +900,13 @@ datos, su riesgo y sus decisiones.
   - vehículos a menos de 60 m del cruce y cuántos están detenidos;
   - espera media;
   - conflictos (pares de vehículos con PET < 1,5 s);
-  - colisiones detectadas por SUMO;
+  - choques detectados por SUMO, cada pareja una vez y solo a 5 km/h o más de velocidad relativa (los roces más lentos, casi siempre peatones que
+    el modelo deja pasar a través de un carro detenido en la cebra, se cuentan aparte);
   - vehículos y peatones en la zona.],
   razon: [Resume, lado a lado, el efecto del semáforo propuesto sobre la fluidez y la seguridad.],
   criterio: [Las métricas de ambos lados se calculan con la misma definición y radio; sin actores en el cruce, los contadores instantáneos son 0.],
   prioridad: [Alta],
-  modulo: [`simulation-service/src/api/comparacion3d.py` (`Lado.actores`, `Lado.contar_conflictos`)],
+  modulo: [`simulation-service/src/api/comparacion3d.py` (`Lado.actores`, `Lado.contar_conflictos`, `Lado.contar_colisiones`), `telemetria.py` (`clasificar_colision`)],
   estado: [Implementado.],
   version: "2.0",
   fecha: []

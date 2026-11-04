@@ -15,7 +15,8 @@ Felipe Garrido consolidó lo encontrado en un informe de brechas. Tres hallazgos
 
 - *Los aforos no tenían coordenadas.* Las 336 estaciones HMD traían solo un texto libre con la dirección. Se escribió un geocodificador que interpreta
   direcciones como "AC 80 X KR 116A" y calcula la intersección de las dos vías en OpenStreetMap, pero los aforos no llegaron a alimentar la
-  simulación. La validación GEH, que dependía de ellos, quedó pendiente.
+  simulación. La validación GEH, que dependía de ellos, quedó pendiente hasta el sprint 10, cuando se usaron los shapefiles de estaciones de la
+  publicación de SIMUR, que comparten el identificador con la base de aforos.
 - *La cobertura de la encuesta no era pareja.* Una de las nueve UTAM de Usaquén, Paseo de los Libertadores, tenía apenas el 44 % de la cobertura
   muestral esperada, y coincidía con la zona de borde hacia los cerros donde la red era más pobre.
 - *La red de OpenStreetMap tenía pocos atributos.* Solo el 23 % de las vías tenía velocidad máxima, el 28 % número de carriles y el 42 % nombre.
@@ -46,6 +47,9 @@ con su aprobación registrada en el SPMP.
     entraban). El reporte exportable, el programa editable del semáforo propuesto y el transporte público con GTFS quedaron pendientes.],
     [9], [Usabilidad para perfiles no técnicos: tarjeta de cruces, cierres con un clic, ficha en palabras, comparación de programas con SUMO real,
     entrada simultánea del actor, resumen del viaje y tema claro.],
+    [10], [Cierre de pendientes: validación GEH con 33 puntos de aforo, buses del SITP desde el GTFS, ventana de la tarde, asignación iterativa,
+    tráfico de paso y encuesta completa (viajes que entran y salen de Usaquén), rangos con varias semillas, reporte CSV/PDF, programa editable del
+    semáforo propuesto, semáforos reales de la SDM y correcciones del 3D (lados simétricos, andenes y cebras reales, conteo de choques).],
   ),
   caption: [Entregas por sprint.],
 ) <tabSprints>

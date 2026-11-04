@@ -20,7 +20,7 @@ cierre del proyecto.
     [F5 Escenarios], [Presets de cambio modal que conservan el total de viajes, conteos por modo, semilla, estilos de conducción, cierres viales y
     simulaciones precalculadas.], [Implementado],
     [F6 Módulo web], [Ver los viajes animados por modo, lanzar corridas desde el navegador con avance real y poder cancelarlas.], [Implementado],
-    [F7 Validación], [Comparar volúmenes simulados con aforos (GEH) y registrar la ejecución.], [Pendiente (GEH)],
+    [F7 Validación], [Comparar volúmenes simulados con aforos (GEH) y registrar la ejecución.], [Implementado; la red aún no cumple el criterio],
     [F8 Intersecciones], [Ficha de cada semáforo, edición de su programa, tiempos de Webster, comparación de programas con métricas reales y
     priorización de cruces sin semáforo.], [Implementado],
     [F9 Simulador 3D], [Mismo cruce sin y con semáforo propuesto, en paralelo y con la misma demanda; seguir a un actor, medir su riesgo, manejarlo a

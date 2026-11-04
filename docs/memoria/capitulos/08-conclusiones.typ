@@ -4,7 +4,7 @@
 
 *A corto plazo*, el impacto recae en quien analiza movilidad. Un escenario que antes exigía días de preparación ahora se lanza desde el navegador y
 se ve en unos minutos, o en segundos si es uno de los cuatro presets. La pestaña de priorización reduce la pregunta de dónde estudiar un semáforo de
-miles de nodos a una lista de 61 cruces con su porqué. El simulador 3D convierte esa pregunta en algo que un directivo puede ver y discutir.
+miles de nodos a una lista de 62 cruces con su porqué. El simulador 3D convierte esa pregunta en algo que un directivo puede ver y discutir.
 
 *A mediano plazo*, el sistema puede servir como banco de pruebas antes de intervenir la calle. Sirve para probar un cierre por obras, un día sin
 carro, un cambio de programa en un semáforo o un semáforo nuevo. El aporte no es reemplazar el estudio de tránsito, que sigue necesitando aforos
@@ -36,10 +36,11 @@ La @tabObjetivos revisa cada objetivo específico.
     table.header([*Objetivo*], [*Estado*], [*Por qué*]),
     [1. Analizar las fuentes de datos], [Cumplido], [Se evaluaron la encuesta, los aforos HMD y OpenStreetMap, con un informe de brechas. La encuesta resultó la única
     fuente utilizable para la demanda; los aforos no tenían coordenadas.],
-    [2. Automatizar la transformación a SUMO], [Cumplido], [El pipeline genera viajes, rutas, configuración y trayectorias sin pasos manuales, con 139
+    [2. Automatizar la transformación a SUMO], [Cumplido], [El pipeline genera viajes, rutas, configuración y trayectorias sin pasos manuales, con 177
     pruebas automatizadas.],
-    [3. Validar en una localidad], [Parcial], [Usaquén se simuló completa y los presets reproducen la encuesta. Falta la comparación con aforos (GEH)
-    que la metodología fijaba como criterio de terminado.],
+    [3. Validar en una localidad], [Parcial], [Usaquén se simuló completa, los presets reproducen la encuesta y cada corrida se compara con 33
+    puntos de aforo (GEH). El criterio (85 % de los puntos con GEH < 5) no se cumple: con la encuesta completa la demanda ya es del orden de los
+    aforos, pero la red no alcanza a moverla. Falta calibrar su capacidad.],
     [4. Módulo web de visualización y parametrización], [Cumplido], [El visor anima los viajes, lanza y cancela corridas, carga precalculadas y aplica
     cierres y estilos sin tocar archivos.],
     [5. Intersecciones y simulador 3D], [Cumplido], [Ficha, programas, Webster y comparación con SUMO real; priorización con evidencia; comparación
@@ -49,8 +50,9 @@ La @tabObjetivos revisa cada objetivo específico.
 ) <tabObjetivos>
 
 El objetivo general se cumplió en lo que respecta a la automatización y a la interfaz: el trabajo manual entre la encuesta y SUMO desapareció y un
-usuario sin formación técnica puede generar y comparar escenarios. Queda abierta la validación del modelo contra la calle. Hasta que exista, los
-resultados sirven para comparar alternativas entre sí, no para afirmar cifras absolutas.
+usuario sin formación técnica puede generar y comparar escenarios. La validación contra la calle ya existe como medición: cada corrida reporta su GEH frente a los
+aforos, con un grupo de estaciones de control que no se usa para calibrar. Lo que todavía no existe es un modelo que la pase. Hasta que la red esté
+calibrada, los resultados sirven para comparar alternativas entre sí, no para afirmar cifras absolutas.
 
 === Qué le falta para un uso institucional
 
@@ -67,16 +69,18 @@ La @tabInstitucional contrasta esos pilares con el estado del sistema.
   table(
     columns: (24%, 1fr, 1fr),
     table.header([*Pilar*], [*Qué tiene el sistema*], [*Qué falta*]),
-    [Calibración y validación], [Demanda desde la encuesta oficial; semilla fija y precalculadas con huella de insumos (reproducibilidad).], [GEH
-    contra aforos georreferenciados @dmrb; asignación iterativa de rutas (equilibrio de Wardrop @wardrop); viajes de paso por la localidad.],
+    [Calibración y validación], [Demanda desde la encuesta oficial, completa con los viajes que entran y salen; GEH contra 33 puntos de aforo con
+    estaciones de control @dmrb; tráfico de paso calibrado; asignación iterativa opcional (equilibrio de Wardrop @wardrop); semilla fija y
+    precalculadas con huella de insumos.], [Una red calibrada que pase el criterio GEH: capacidad de avenidas y cruces, planes reales de los
+    semáforos.],
     [Indicadores], [Tiempo perdido, colas, detenciones y espera peatonal por programa; TTC, DRAC, PET, frenadas y casi choques en 3D; CO₂ por
-    viaje.], [Emisiones y tiempos de viaje agregados para toda la red; varias semillas para reportar rangos en lugar de un solo valor.],
+    viaje; rangos con varias semillas en la comparación de programas.], [Emisiones y tiempos de viaje agregados para toda la red.],
     [Escenarios], [Presets de cambio modal, cierres viales, estilos de conducción, programas de semáforo y semáforo nuevo.], [Infraestructura nueva
-    (carriles exclusivos, ciclorrutas), restricciones como pico y placa y ventana de la tarde.],
-    [Datos e integración], [OpenStreetMap, GeoJSON, siniestros de la SDM, huellas de edificios.], [GTFS del SITP y TransMilenio para el transporte
-    público real; programas reales de los semáforos de la ciudad.],
-    [Comunicación], [Visor en español, tema claro, tarjeta de cruce, resumen en palabras y advertencias sobre lo que el modelo no mide.], [Reporte
-    exportable (PDF o CSV) de cada comparación; análisis costo-beneficio en horas-hombre y combustible.],
+    (carriles exclusivos, ciclorrutas) y restricciones como pico y placa.],
+    [Datos e integración], [OpenStreetMap, GeoJSON, siniestros y semáforos reales de la SDM (ubicación y fases), aforos HMD, GTFS del SITP,
+    huellas de edificios.], [Tiempos de los planes semafóricos (la SDM no los publica); TransMilenio troncal.],
+    [Comunicación], [Visor en español, tema claro, tarjeta de cruce, resumen en palabras, reporte CSV/PDF y advertencias sobre lo que el modelo no mide.], [Análisis
+    costo-beneficio en horas-hombre y combustible.],
   ),
   caption: [Estado del sistema frente a los requisitos de una herramienta institucional.],
 ) <tabInstitucional>
@@ -85,15 +89,15 @@ La @tabInstitucional contrasta esos pilares con el estado del sistema.
 
 En orden de prioridad, según lo que más acercaría el sistema a una decisión real:
 
-+ *Validación GEH.* Terminar la geocodificación de los aforos HMD, ubicar los que caen en Usaquén y comparar sus volúmenes con los simulados. Es la
-  pieza que convierte el sistema de herramienta de exploración en modelo de apoyo técnico.
-+ *Demanda completa.* Agregar los viajes que entran, salen o atraviesan Usaquén, revisar el tope de copias por respuesta y calibrar contra los
-  aforos.
-+ *Transporte público real.* Importar el GTFS de TransMilenio y el SITP con `gtfs2pt` y convertir los viajes en transporte público en viajes con
-  buses, paradas y esperas.
-+ *Rangos en lugar de valores únicos.* Repetir cada comparación con varias semillas y reportar el intervalo ("entre 70 y 160 frenadas por hora"),
-  como hace Semáforos de Barranquilla.
-+ *Reporte exportable.* Descargar en PDF o CSV el resumen de cada comparación, con el programa del semáforo propuesto y sus supuestos.
-+ *Programa editable del semáforo propuesto.* Ajustar el ciclo y los repartos del semáforo nuevo desde el visor y reiniciar la comparación.
+En el sprint 10 se construyeron la validación GEH, la encuesta completa, los buses del SITP, los rangos con varias semillas, el reporte CSV/PDF y el
+programa editable del semáforo propuesto, que esta lista tenía como pendientes. Lo que queda:
+
++ *Calibrar la capacidad de la red.* Es lo que separa al sistema de pasar el GEH. Con la demanda completa, la mayoría de los vehículos no alcanza a
+  entrar y la red se llena. Hay que revisar carriles y conexiones en las avenidas, cargar los planes reales de los semáforos y sumar los aforos de
+  calzadas paralelas (la Autopista Norte con sus laterales es un solo punto de aforo y varios edges en la red).
++ *Planes reales de los semáforos.* La Secretaría de Movilidad publica dónde están sus 1.643 intersecciones semaforizadas y cuántas fases tiene cada
+  una, pero no los tiempos (los enlaces a los planes están vacíos). Hay que pedirlos con un derecho de petición; el sistema ya puede cargarlos como
+  programa propio de cada semáforo.
++ *TransMilenio troncal.* Los buses del SITP ya circulan; faltan las troncales, que van por carriles exclusivos.
 + *Prueba con usuarios reales.* Sentar a una persona de la Secretaría de Movilidad frente al visor y medir si encuentra, entiende y usa los
   resultados sin ayuda.

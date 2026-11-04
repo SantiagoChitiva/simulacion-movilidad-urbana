@@ -2,7 +2,7 @@
 
 Simulación microscópica de movilidad urbana para las localidades de Bogotá, desarrollada como proyecto de grado en Ingeniería de Sistemas de la Pontificia Universidad Javeriana.
 
-El proyecto toma los viajes de la **Encuesta de Movilidad de Bogotá 2023** dentro de Usaquén y los convierte, con un pipeline ETL, en la demanda de una simulación en **SUMO (Simulation of Urban MObility)**. Un visor web (kepler.gl) anima el resultado y deja parametrizar nuevas simulaciones: cuántos actores viales de cada tipo y qué escenario. Los aforos vehiculares HMD se exploran en los notebooks, pero todavía no alimentan la simulación.
+El proyecto toma los viajes de la **Encuesta de Movilidad de Bogotá 2023** dentro de Usaquén y los convierte, con un pipeline ETL, en la demanda de una simulación en **SUMO (Simulation of Urban MObility)**. Un visor web (kepler.gl) anima el resultado y deja parametrizar nuevas simulaciones: cuántos actores viales de cada tipo y qué escenario. Los aforos vehiculares HMD de la EODI sirven para validar los volúmenes simulados con el GEH (ver "Validación con aforos").
 
 ## Equipo
 
@@ -54,6 +54,24 @@ Los buses salen del GTFS de SIMUR (`GTFS-2026-04-29.zip`, catálogo de Mobility 
 3. Quedan versionados `pt_paradas.add.xml` (696 paradas) y `pt_vehiculos.rou.xml.gz` (7.382 buses de 9.234 viajes del día; los demás cruzan tramos sin conexión para buses en la red).
 
 Los viajes `transporte_publico` de la encuesta pasan a `<personTrip modes="public">`. En la corrida de la mañana, 3.967 de 4.556 se hacen en bus, con unos 10 minutos de espera media en la parada. Sigue siendo una aproximación: los buses arrancan en el borde de Usaquén y no hay TransMilenio troncal.
+
+### Validación con aforos (GEH)
+
+Cada corrida cuenta los vehículos por modo en los 33 puntos de aforo HMD que caen en la red (`data/processed/aforos_usaquen.json`, de `python -m etl.sumo.aforos`) y escribe `output/validacion.csv` y `validacion.json`. Ahí se compara la hora pico simulada con la aforada; el criterio es GEH < 5 en el 85 % de los puntos. Las estaciones se dividen en dos grupos fijos, calibración y control, para que el tráfico de paso (que se ajusta a las primeras) no se valide contra sí mismo.
+
+Resultados medidos en la mañana:
+
+| Demanda | Vehículos que entran a la red | Volumen simulado / aforado | Puntos con GEH < 5 |
+| --- | --- | --- | --- |
+| Solo viajes internos de la encuesta (tope de 50 copias) | 9.592 | 6 % | 0 de 33 |
+| + tráfico de paso calibrado (`trafico_paso.py`) | — | 27 % | 2 de 33 |
+| Encuesta completa (`encuesta_completa.py`), mesoscópico | 54.984 de 145.014 | 22 % | 2 de 33 |
+| Encuesta completa con rutas de duaIterate (2 iteraciones) | 54.944 de 145.014 | 22 % | 2 de 33 |
+| Encuesta completa sin control de cruces (diagnóstico) | 66.678 de 145.014 | 33 % | 2 de 33 |
+
+La **encuesta completa** (`python -m etl.sumo.encuesta_completa "<carpeta 2.PublicacionSIMUR>"`) agrega lo que la demanda interna deja por fuera: los vehículos que entran o salen de Usaquén (unos 61.500 autos en la mañana frente a 21.800 internos) y las copias que quita el tope (la mediana del factor de expansión es 123). Con eso la demanda ya alcanza el orden de magnitud de los aforos, pero la red no la mueve. La mayoría de los vehículos no alcanza a entrar en 15 minutos, y a las 10:00 quedan más de 20.000 atrapados adentro. Repartir las rutas con duaIterate no cambia el resultado y quitar el control de los cruces solo sube el volumen al 33 %. El cuello de botella es la capacidad de la red en su conjunto, no la demanda ni la elección de rutas. A eso se suma que algunos aforos, como el de la Autopista Norte con Calle 116, cubren la calzada principal y las laterales, mientras que en la red quedan en edges separados.
+
+Lo que falta para cumplir el criterio es calibrar la red, no generar más demanda: revisar carriles y conexiones de las avenidas, cargar los planes reales de los semáforos (la SDM publica dónde están y cuántas fases tienen, no sus tiempos) y sumar los aforos de calzadas paralelas.
 
 ### Otros límites conocidos
 
