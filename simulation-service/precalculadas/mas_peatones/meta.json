@@ -3,6 +3,7 @@
   "preset": "mas_peatones",
   "ventana": "am",
   "trafico_paso": false,
+  "encuesta_completa": false,
   "transporte_publico": true,
   "conteos": {
     "auto": 1574,
@@ -17,38 +18,38 @@
     "otro": 0
   },
   "semilla": null,
-  "generada": "2026-11-03T18:11:12-05:00",
+  "generada": "2026-11-04T00:29:56-05:00",
   "insumos": "687ea4098a363fb3",
-  "tamano_original": 80033913,
-  "tamano_gz": 13198561,
+  "tamano_original": 82574849,
+  "tamano_gz": 18353157,
   "resultado": {
     "viajes_generados": 24647,
     "viajes_por_modo": {
-      "auto": 1574,
       "bici": 2252,
       "peaton": 14763,
-      "transporte_publico": 3372,
       "moto": 255,
+      "transporte_publico": 3372,
+      "auto": 1574,
       "taxi": 1726,
       "escolar": 150,
       "especial": 255,
       "informal": 300
     },
-    "trips_kepler": 18126,
-    "vehiculos_cargados": 13246,
-    "vehiculos_insertados": 7797,
+    "trips_kepler": 19018,
+    "vehiculos_cargados": 15806,
+    "vehiculos_insertados": 8988,
     "personas_cargadas": 17985,
-    "teleports": 1102,
-    "colisiones": 585,
+    "teleports": 1077,
+    "colisiones": 1218,
     "validacion": {
       "periodo": "AM",
-      "etiqueta": "solo viajes de la encuesta",
+      "etiqueta": "solo viajes internos de la encuesta",
       "puntos": 52,
       "cumplen": 1,
       "porcentaje": 1.9,
       "cumple_criterio": false,
       "geh_mediano": 30.32,
-      "razon_volumen": 0.032,
+      "razon_volumen": 0.034,
       "criterio_porcentaje": 85.0,
       "umbral_geh": 5.0,
       "por_grupo": {
@@ -57,16 +58,16 @@
           "cumplen": 0,
           "porcentaje": 0.0,
           "cumple_criterio": false,
-          "geh_mediano": 27.05,
-          "razon_volumen": 0.037
+          "geh_mediano": 26.86,
+          "razon_volumen": 0.039
         },
         "control": {
           "puntos": 26,
           "cumplen": 1,
           "porcentaje": 3.8,
           "cumple_criterio": false,
-          "geh_mediano": 42.9,
-          "razon_volumen": 0.029
+          "geh_mediano": 43.71,
+          "razon_volumen": 0.031
         }
       },
       "modos_simulados": [

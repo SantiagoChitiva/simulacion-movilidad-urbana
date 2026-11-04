@@ -3,6 +3,7 @@
   "preset": "encuesta",
   "ventana": "am",
   "trafico_paso": false,
+  "encuesta_completa": false,
   "transporte_publico": true,
   "conteos": {
     "auto": 4374,
@@ -17,33 +18,33 @@
     "otro": 150
   },
   "semilla": null,
-  "generada": "2026-11-03T17:38:29-05:00",
+  "generada": "2026-11-03T23:38:27-05:00",
   "insumos": "687ea4098a363fb3",
-  "tamano_original": 64456063,
-  "tamano_gz": 10961308,
+  "tamano_original": 67325751,
+  "tamano_gz": 15016130,
   "resultado": {
     "viajes_generados": 24647,
     "viajes_por_modo": {
-      "auto": 4374,
-      "bici": 1812,
       "peaton": 10901,
-      "transporte_publico": 3372,
       "moto": 1557,
+      "bici": 1812,
+      "auto": 4374,
+      "transporte_publico": 3372,
       "taxi": 1726,
       "escolar": 150,
       "especial": 255,
       "informal": 350,
       "otro": 150
     },
-    "trips_kepler": 17756,
-    "vehiculos_cargados": 17108,
-    "vehiculos_insertados": 11282,
+    "trips_kepler": 19012,
+    "vehiculos_cargados": 19668,
+    "vehiculos_insertados": 12704,
     "personas_cargadas": 14123,
-    "teleports": 1085,
-    "colisiones": 451,
+    "teleports": 1319,
+    "colisiones": 1102,
     "validacion": {
       "periodo": "AM",
-      "etiqueta": "solo viajes de la encuesta",
+      "etiqueta": "solo viajes internos de la encuesta",
       "puntos": 52,
       "cumplen": 0,
       "porcentaje": 0.0,
@@ -58,15 +59,15 @@
           "cumplen": 0,
           "porcentaje": 0.0,
           "cumple_criterio": false,
-          "geh_mediano": 27.05,
-          "razon_volumen": 0.048
+          "geh_mediano": 27.15,
+          "razon_volumen": 0.046
         },
         "control": {
           "puntos": 26,
           "cumplen": 0,
           "porcentaje": 0.0,
           "cumple_criterio": false,
-          "geh_mediano": 42.29,
+          "geh_mediano": 42.49,
           "razon_volumen": 0.031
         }
       },
