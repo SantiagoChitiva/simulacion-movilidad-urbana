@@ -50,8 +50,8 @@ La @tabObjetivos revisa cada objetivo específico.
 ) <tabObjetivos>
 
 El objetivo general se cumplió en lo que respecta a la automatización y a la interfaz: el trabajo manual entre la encuesta y SUMO desapareció y un
-usuario sin formación técnica puede generar y comparar escenarios. La validación contra la calle ya existe como medición: cada corrida reporta su GEH frente a los
-aforos, con un grupo de estaciones de control que no se usa para calibrar. Lo que todavía no existe es un modelo que la pase. Hasta que la red esté
+usuario sin formación técnica puede generar y comparar escenarios. La validación contra la calle ya existe como medición: cada corrida calcula su GEH frente a los
+aforos (documentado en los resultados; el visor no lo muestra), con un grupo de estaciones de control que no se usa para calibrar. Lo que todavía no existe es un modelo que la pase. Hasta que la red esté
 calibrada, los resultados sirven para comparar alternativas entre sí, no para afirmar cifras absolutas.
 
 === Qué le falta para un uso institucional

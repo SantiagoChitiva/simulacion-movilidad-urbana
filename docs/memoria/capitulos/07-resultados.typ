@@ -158,7 +158,9 @@ lanzar varios viajes.
 == Validación con aforos
 
 Cada corrida cuenta los vehículos por modo en los 33 puntos de aforo HMD que caen en la red y compara su hora pico con la aforada (@tabGEH). Las
-estaciones se dividen de forma fija en un grupo de calibración (18 puntos) y uno de control (15), que nunca se usa para ajustar la demanda.
+estaciones se dividen de forma fija en un grupo de calibración (18 puntos) y uno de control (15), que nunca se usa para ajustar la demanda. La
+validación se calcula en el servicio (`output/validacion.json` y `.csv` de cada corrida) y se documenta aquí; el visor no la muestra, porque
+mientras ningún escenario cumpla el criterio una pestaña de validación no ayuda a decidir nada.
 
 #figure(
   table(
@@ -193,8 +195,9 @@ teoría espera. Webster acorta el ciclo y baja la demora cuando el tráfico es m
 Al mismo tiempo, los números no deben leerse como predicciones de la calle, por cuatro razones:
 - *Sin calibración.* El GEH muestra que los volúmenes simulados están lejos de los aforos: 2 de 33 puntos cumplen. Lo que el sistema compara bien
   es una alternativa contra otra con la misma demanda; los valores absolutos pueden estar lejos de la realidad.
-- *Demanda interna por defecto.* Las corridas del visor usan los viajes internos de Usaquén con un tope de 50 copias por respuesta. La encuesta
-  completa y el tráfico de paso son opciones, porque la red no alcanza a moverlos y la corrida se vuelve varias veces más lenta.
+- *Demanda interna por defecto.* Las corridas del visor usan los viajes internos de Usaquén con un tope de 50 copias por respuesta y los buses
+  del GTFS. La encuesta completa y el tráfico de paso solo se usaron para los experimentos de validación (por línea de comandos o la API) y no
+  se ofrecen en el visor: la red no alcanza a moverlos y la corrida se vuelve varias veces más lenta.
 - *Capacidad de la red sin calibrar.* Con la demanda completa la red se llena aunque las rutas se repartan con asignación iterativa. Las colas en
   las avenidas más cargadas son, en parte, un efecto del modelo de red.
 - *Fondo supuesto en el 3D.* El tráfico de fondo de las comparaciones 3D se agrega para que la zona no quede vacía; no es un aforo. El resumen lo

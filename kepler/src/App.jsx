@@ -25,7 +25,6 @@ import PanelCierres from './components/PanelCierres';
 import PanelDemanda from './components/PanelDemanda';
 import TarjetaActividad from './components/TarjetaActividad';
 import PanelSemaforizacion, { NIVELES } from './components/PanelSemaforizacion';
-import PanelValidacion from './components/PanelValidacion';
 import LimiteErrores from './components/simulador3d/LimiteErrores';
 
 // three.js y maplibre solo se descargan al abrir el simulador
@@ -44,14 +43,12 @@ const DATASET_PRIORIZACION = 'priorizacion';
 const DATASET_SELECCION = 'seleccion';
 const DATASET_VIAS = 'vias';
 const DATASET_CIERRES = 'cierres';
-const DATASET_VALIDACION = 'validacion';
 const CAPA_TRIPS = 'trips_layer';
 const CAPA_SEMAFOROS = 'semaforos_layer';
 const CAPA_PRIORIZACION = 'priorizacion_layer';
 const CAPA_SELECCION = 'seleccion_layer';
 const CAPA_VIAS = 'vias_layer';
 const CAPA_CIERRES = 'cierres_layer';
-const CAPA_VALIDACION = 'validacion_layer';
 
 // Tema de la interfaz (claro u oscuro) y estilo de mapa base que le corresponde
 const CLAVE_TEMA = 'visor.tema';
@@ -231,47 +228,6 @@ const configLineas = (id, dataId, label, color, thickness) => ({
   },
 });
 
-// Puntos de aforo de la pestaña Validar: verde si el GEH es menor que 5, rojo si no
-// (kepler asigna los colores ordinales en orden alfabético: "cumple" < "no cumple")
-const configValidacion = (resultados) => ({
-  version: 'v1',
-  config: {
-    visState: {
-      layers: [
-        {
-          id: CAPA_VALIDACION,
-          type: 'point',
-          config: {
-            dataId: DATASET_VALIDACION,
-            label: 'Validación (GEH)',
-            columns: { lat: 'lat', lng: 'lng', altitude: null },
-            isVisible: true,
-            visConfig: {
-              radius: 18, opacity: 0.95, filled: true, outline: true, thickness: 1.5, strokeColor: [255, 255, 255],
-              colorRange: {
-                name: 'geh', type: 'qualitative', category: 'Custom',
-                colors: resultados.map((r) => (r === 'cumple' ? '#2e9d4f' : '#d64545')),
-              },
-            },
-          },
-          visualChannels: { colorField: { name: 'resultado', type: 'string' }, colorScale: 'ordinal' },
-        },
-      ],
-      interactionConfig: {
-        tooltip: {
-          enabled: true,
-          fieldsToShow: {
-            [DATASET_VALIDACION]: [
-              { name: 'punto', format: null }, { name: 'simulado', format: null },
-              { name: 'aforo', format: null }, { name: 'geh', format: null },
-            ],
-          },
-        },
-      },
-    },
-  },
-});
-
 // feature de /intersecciones/priorizacion → cruce candidato (panel y simulador 3D)
 const aCandidato = (f) => ({
   ...f.properties,
@@ -282,7 +238,7 @@ const aCandidato = (f) => ({
 
 // Orden de dibujo, de arriba hacia abajo. reorderLayer reemplaza el orden completo: una
 // lista parcial dejaría fuera (ocultas) las capas que no nombra.
-const ORDEN_CAPAS = [CAPA_SELECCION, CAPA_VALIDACION, CAPA_PRIORIZACION, CAPA_SEMAFOROS, CAPA_CIERRES, CAPA_VIAS, CAPA_TRIPS];
+const ORDEN_CAPAS = [CAPA_SELECCION, CAPA_PRIORIZACION, CAPA_SEMAFOROS, CAPA_CIERRES, CAPA_VIAS, CAPA_TRIPS];
 const ordenCapas = (layerOrder) => [
   ...ORDEN_CAPAS.filter((id) => layerOrder.includes(id)),
   ...layerOrder.filter((id) => !ORDEN_CAPAS.includes(id)),
@@ -343,8 +299,6 @@ function Visor() {
   const [viaElegida, setViaElegida] = useState(null);
   const [vias, setVias] = useState(null);   // FeatureCollection de /red/vias (se pide una vez)
   const [estadoVias, setEstadoVias] = useState({ cargando: false, error: null });
-  const [validacionVisible, setValidacionVisible] = useState(false);
-  const [puntosValidacion, setPuntosValidacion] = useState(null);
   const abortar = useRef(null);
   const primeraCarga = useRef(true);
   const filasSemaforos = useRef([]);
@@ -601,33 +555,6 @@ function Visor() {
     );
   }, [cierres, vias, dispatch]);
 
-  // otra simulación en el mapa: los puntos de la anterior ya no aplican (la pestaña los vuelve a pedir)
-  useEffect(() => setPuntosValidacion(null), [corridaMapa]);
-
-  // puntos de aforo coloreados por GEH (pestaña Validar)
-  useEffect(() => {
-    dispatch(removeDataset(DATASET_VALIDACION));
-    if (!puntosValidacion?.length) return;
-    const filas = puntosValidacion.map((f) => ({
-      punto: `${f.via ?? f.direccion} (${f.sentido})`,
-      resultado: f.cumple ? 'cumple' : 'no cumple',
-      simulado: Math.round(f.simulado),
-      aforo: Math.round(f.real),
-      geh: f.geh,
-      lng: f.lon,
-      lat: f.lat,
-    }));
-    const resultados = [...new Set(filas.map((f) => f.resultado))].sort();
-    limpiarInteraccion();
-    dispatch(
-      addDataToMap({
-        datasets: { info: { label: 'Validación (GEH)', id: DATASET_VALIDACION }, data: processRowObject(filas) },
-        options: { centerMap: false, keepExistingConfig: true },
-        config: configValidacion(resultados),
-      })
-    );
-  }, [puntosValidacion, dispatch, limpiarInteraccion]);
-
   // anillo sobre el cruce elegido; se dibuja encima de las demás capas
   useEffect(() => {
     dispatch(removeDataset(DATASET_SELECCION));
@@ -734,9 +661,6 @@ function Visor() {
                 <button type="button" role="tab" aria-selected={pestana === 'semaforizar'} className={pestana === 'semaforizar' ? 'activa' : ''} onClick={() => setPestana('semaforizar')}>
                   Semaforizar
                 </button>
-                <button type="button" role="tab" aria-selected={pestana === 'validar'} className={pestana === 'validar' ? 'activa' : ''} onClick={() => setPestana('validar')}>
-                  Validar
-                </button>
               </div>
               <div className="pd-acciones">
                 <button
@@ -783,15 +707,6 @@ function Visor() {
                 errorVias={estadoVias.error}
                 onDescartarVia={() => setViaElegida(null)}
                 onIrADemanda={() => setPestana('demanda')}
-              />
-            )}
-            {pestana === 'validar' && (
-              <PanelValidacion
-                corrida={corridaMapa}
-                etiquetaCorrida={etiquetaCorrida}
-                puntosVisibles={validacionVisible}
-                onAlternarPuntos={setValidacionVisible}
-                onMostrarPuntos={setPuntosValidacion}
               />
             )}
             {pestana === 'semaforizar' && (

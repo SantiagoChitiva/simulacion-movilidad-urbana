@@ -132,13 +132,6 @@ export const ETAPA_COMPARACION = {
   armando_escena: 'Armando la escena 3D (vías, edificios, accesos)',
 };
 
-// GEH contra los aforos de la hora de máxima demanda (precalculada o corrida de la API)
-export const obtenerValidacion = (corrida) => {
-  if (corrida?.precalculada) return pedir(`/precalculadas/${encodeURIComponent(clavePrecalculada(corrida))}/validacion`);
-  if (corrida?.id) return pedir(`/simulaciones/${encodeURIComponent(corrida.id)}/validacion`);
-  return Promise.reject(new Error('La corrida por defecto no tiene validación; carga una precalculada o lanza una simulación.'));
-};
-
 // Vías de la red (LineStrings por edge), para elegir cierres en el mapa
 export const obtenerVias = () => pedir('/red/vias');
 

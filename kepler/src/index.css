@@ -719,14 +719,8 @@ html, body, #root {
 .sim3d .rc-acciones button:not(.sim3d-primario) { background: #f3f4f6; color: #111827; border-color: #e5e7eb; }
 
 /* pestaña Validar */
-.pv-acciones { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 4px 0; }
-.pv-acciones label { display: flex; align-items: center; gap: 6px; margin-right: auto; }
-.pv-falla { color: var(--pd-error); font-weight: 600; }
 
 /* opciones de la demanda (horario, tráfico de paso, buses, asignación) */
-.pd-opciones { display: flex; flex-direction: column; gap: 4px; margin-top: 6px; }
-.pd-opciones label { display: flex; align-items: flex-start; gap: 6px; }
-.pd-opciones input { margin-top: 2px; }
 
 /* programa del semáforo propuesto (Semaforizar y simulador 3D) */
 .ps-programa { display: flex; flex-direction: column; gap: 4px; margin: 4px 0; }

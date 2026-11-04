@@ -80,10 +80,10 @@ Duración objetivo: **7 a 8 minutos**. Una sola toma de pantalla con voz en off;
 
 ## Escena 8 — Validación con datos reales (6:30–7:20)
 
-**Pantalla:** pestaña *Validar*. Mostrar la frase de resumen, activar "Ver los puntos en el mapa" y descargar el CSV.
+**Pantalla:** la tabla de GEH del capítulo de resultados de la memoria (el visor ya no tiene pestaña de validación).
 
 **Decir:**
-> "Un modelo tiene que compararse con la realidad. Esta pestaña compara los vehículos simulados con los aforos de la Secretaría en 33 puntos de Usaquén, con el estadístico GEH, que es el estándar. Hoy el modelo no cumple el criterio: la encuesta solo describe los viajes que empiezan o terminan en la localidad, y la red de OpenStreetMap no tiene la capacidad real de las avenidas ni los tiempos reales de los semáforos, que la Secretaría no publica. Por eso el sistema sirve para comparar alternativas entre sí con la misma demanda, y lo dice explícitamente. Calibrar la red con datos de campo es el siguiente paso."
+> "Un modelo tiene que compararse con la realidad. El sistema compara los vehículos simulados con los aforos de la Secretaría en 33 puntos de Usaquén, con el estadístico GEH, que es el estándar. Hoy el modelo no cumple el criterio: la encuesta solo describe los viajes que empiezan o terminan en la localidad, y la red de OpenStreetMap no tiene la capacidad real de las avenidas ni los tiempos reales de los semáforos, que la Secretaría no publica. Por eso el sistema sirve para comparar alternativas entre sí con la misma demanda, y lo dice explícitamente. Calibrar la red con datos de campo es el siguiente paso."
 
 ## Escena 9 — Cierre (7:20–7:50)
 

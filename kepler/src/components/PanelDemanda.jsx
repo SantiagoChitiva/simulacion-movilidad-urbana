@@ -71,9 +71,6 @@ export default function PanelDemanda({
   const [estiloId, setEstiloId] = useState('normal');
   const [opciones, setOpciones] = useState(null);   // /demanda/opciones
   const [ventana, setVentana] = useState('am');
-  const [traficoPaso, setTraficoPaso] = useState(false);
-  const [encuestaCompleta, setEncuestaCompleta] = useState(false);
-  const [transportePublico, setTransportePublico] = useState(true);
 
   useEffect(() => {
     obtenerEstilos()
@@ -95,12 +92,11 @@ export default function PanelDemanda({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ventana]);
 
-  const hayPaso = !!opciones?.trafico_paso?.[ventana];
-  const hayPublico = !!opciones?.transporte_publico;
-  const pasoPedido = hayPaso && traficoPaso;
-  const hayCompleta = !!opciones?.encuesta_completa?.[ventana];
-  const completaPedida = hayCompleta && encuestaCompleta;
-  const publicoPedido = hayPublico && transportePublico;
+  // opciones fijas del visor: la encuesta de la localidad con los buses del GTFS si existen
+  // (la encuesta completa y el tráfico de paso solo se usan para la validación documentada)
+  const pasoPedido = false;
+  const completaPedida = false;
+  const publicoPedido = !!opciones?.transporte_publico;
   const [inicio, fin] = opciones ? [opciones.ventanas[ventana].inicio, opciones.ventanas[ventana].fin] : [7 * 3600, 10 * 3600];
 
   const preset = presets.find((p) => p.id === presetId);
@@ -140,9 +136,6 @@ export default function PanelDemanda({
       const o = c.opciones ?? c;
       setPresetId(c.preset);
       if ((o.ventana ?? 'am') !== ventana) setVentana(o.ventana ?? 'am');
-      setTraficoPaso(!!o.trafico_paso);
-      setEncuestaCompleta(!!o.encuesta_completa);
-      setTransportePublico(o.transporte_publico ?? false);
       setConteos({ ...Object.fromEntries(modos.map((m) => [m.id, 0])), ...c.conteos });
       setSemilla(c.semilla ?? '');
     }
@@ -183,21 +176,6 @@ export default function PanelDemanda({
               {opciones && ` (${hora(opciones.ventanas[id].inicio)}–${hora(opciones.ventanas[id].fin)})`}
             </button>
           ))}
-        </div>
-        <div className="pd-opciones">
-          <label title={hayCompleta ? '' : 'No hay complemento de la encuesta para este horario'}>
-            <input type="checkbox" checked={completaPedida} disabled={!hayCompleta} onChange={(e) => setEncuestaCompleta(e.target.checked)} />
-            Encuesta completa: vehículos que entran o salen de Usaquén y la expansión sin tope (unas quince veces más
-            vehículos; para validar con los aforos)
-          </label>
-          <label title={hayPaso ? '' : 'No hay tráfico de paso generado para este horario'}>
-            <input type="checkbox" checked={pasoPedido} disabled={!hayPaso} onChange={(e) => setTraficoPaso(e.target.checked)} />
-            Tráfico que atraviesa Usaquén (calibrado con los aforos; más de una hora de simulación)
-          </label>
-          <label title={hayPublico ? '' : 'El escenario no tiene los buses del GTFS'}>
-            <input type="checkbox" checked={publicoPedido} disabled={!hayPublico} onChange={(e) => setTransportePublico(e.target.checked)} />
-            Buses del SITP (GTFS): los viajes en transporte público usan bus
-          </label>
         </div>
       </section>
 
@@ -258,10 +236,6 @@ export default function PanelDemanda({
         <p className="pd-nota">
           Un día hábil típico según la Encuesta de Movilidad 2023, de {hora(inicio)} a {hora(fin)}, con los viajes que
           empiezan y terminan en Usaquén.
-          {completaPedida && ' Se suman los vehículos que entran o salen de la localidad.'}
-          {pasoPedido
-            ? ' A estos se suma el tráfico que atraviesa la localidad, estimado para reproducir los aforos.'
-            : ' Sin el tráfico que solo atraviesa la localidad, las avenidas quedan mucho más vacías que en la realidad.'}
         </p>
         {GRUPOS.map(([grupo, titulo]) => {
           const delGrupo = modos.filter((m) => m.grupo === grupo);

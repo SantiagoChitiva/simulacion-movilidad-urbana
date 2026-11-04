@@ -14,7 +14,7 @@ Undergraduate thesis (Pontificia Universidad Javeriana): microscopic urban-mobil
   - `App.jsx` (`Visor`) owns the map: it downloads trips with progress and an `AbortController` (`api.descargarJson`), replaces the kepler dataset, and toggles the traffic-light point layer. It opens the intersection card by reading `visState.clicked` (`clicked.object?.index ?? clicked.index` → row in `filasSemaforos`).
   - `hooks.js`: `useCorridas` handles the history, the running job, 2 s polling, and cancel. `useTamanoVentana` keeps kepler's width/height in sync with the window; the body has `overflow: hidden`.
   - Components:
-    - `PanelDemanda`: presets, per-mode counts, scale, and seed.
+    - `PanelDemanda`: presets, window, per-mode counts, scale, and seed. It always sends `encuesta_completa`/`trafico_paso`/`asignacion_iterativa` = false and `transporte_publico` = GTFS available; those options and the GEH validation are not exposed in the viewer (no Validar tab: no scenario passes, so it is documented in the memoria instead; still available via CLI/API).
     - `TarjetaActividad`: bottom-right card with progress bars and cancel.
     - `LeyendaModos`: top-center legend plus the "Semáforos" toggle.
     - `FichaInterseccion`: accesses, volumes, phases described in words (built from `ficha.enlaces`: linkIndex → access + turn), a visual phase editor (click an access light to cycle green/yellow/red; SUMO state strings only under "Opciones avanzadas"), "Calcular tiempos óptimos" (Webster) and saving as the user's program. `TablaComparacion` (tab "Comparar") compares actual / Webster / saved programs and summarizes the result in a sentence.
