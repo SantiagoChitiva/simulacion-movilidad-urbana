@@ -102,7 +102,30 @@ function TabFicha({ ficha, accesos, etiquetaCorrida, corrida }) {
         Semáforo {TIPO_LEGIBLE[ficha.tipo] ?? ficha.tipo} con {verdes} turnos de paso. Una vuelta completa de luces (el
         ciclo) dura <strong>{numero(ficha.ciclo)} s</strong>.
         {ficha.cruces.length > 1 && ` Controla ${ficha.cruces.length} nodos a la vez.`}
+        {' '}Este programa lo estimó netconvert a partir de OpenStreetMap: no es el de la Secretaría de Movilidad.
       </p>
+
+      {ficha.sdm ? (
+        <section>
+          <h3>Semáforo real (Secretaría de Movilidad)</h3>
+          <p className="pd-nota">
+            {ficha.sdm.direccion} (código {ficha.sdm.codigo}): <strong>{ficha.sdm.fases} fases</strong>,{' '}
+            {ficha.sdm.grupos} grupos de señales
+            {ficha.sdm.grupos_peatonales && ficha.sdm.grupos_peatonales !== 'N/A' ? ' con semáforos peatonales' : ''},
+            operación «{ficha.sdm.funcionamiento}»
+            {ficha.sdm.plan_vigente_desde ? `, plan vigente desde ${ficha.sdm.plan_vigente_desde}` : ''}.
+            {ficha.sdm.fases !== verdes &&
+              ` El programa simulado tiene ${verdes} turnos de paso, no ${ficha.sdm.fases}.`}{' '}
+            La SDM no publica los tiempos de verde de sus planes; si se consiguen (derecho de petición), se cargan en
+            «Configurar» como un programa propio.
+          </p>
+        </section>
+      ) : (
+        <p className="pd-nota">
+          La Secretaría de Movilidad no reporta un semáforo a menos de 60 m: puede que OpenStreetMap marque uno que no
+          existe.
+        </p>
+      )}
 
       <section>
         <h3>Accesos y tráfico simulado</h3>

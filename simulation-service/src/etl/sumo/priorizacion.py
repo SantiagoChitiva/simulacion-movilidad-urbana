@@ -42,11 +42,11 @@ from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any
 
-from .configuration import POIS_GEOJSON, SINIESTROS_GEOJSON
+from .configuration import POIS_GEOJSON, SEMAFOROS_SDM_GEOJSON, SINIESTROS_GEOJSON
 from .evidencia import leer_puntos
 from .intersecciones import _transformador, _via_osm
 
-VERSION_ANALISIS = 3
+VERSION_ANALISIS = 4
 
 # Jerarquía (mayor a menor), como CLASS_RANK de Barranquilla, más 'service'
 JERARQUIA = ["motorway", "trunk", "primary", "secondary", "tertiary", "unclassified",
@@ -62,6 +62,7 @@ SPAN_CRUCE_M = 200
 ANGULO_CRUCE_GRADOS = 35
 RADIO_DESNIVEL_M = 40
 RADIO_MISMA_CUADRA_M = 80
+RADIO_SEMAFORO_SDM_M = 40   # un semáforo real de la SDM a menos de esto: el cruce ya está semaforizado
 RADIO_SINIESTRO_M = 30
 RADIO_GENERADOR_M = 200
 TRAMO_LARGO_M = 600
@@ -442,8 +443,13 @@ def analizar_red(
     nombres: dict[str, str] | None = None,
     siniestros_path: Path = SINIESTROS_GEOJSON,
     pois_path: Path = POIS_GEOJSON,
+    semaforos_sdm_path: Path = SEMAFOROS_SDM_GEOJSON,
 ) -> dict[str, Any]:
-    """Cruces candidatos que cumplen R, con su evidencia fija (no depende de la corrida)."""
+    """Cruces candidatos que cumplen R, con su evidencia fija (no depende de la corrida).
+
+    Los semáforos reales de la SDM (evidencia.descargar_semaforos) completan los de la red:
+    OSM no tiene todos los semáforos de Bogotá.
+    """
     nombres = nombres or {}
     red = _leer_red(net_path, nombres)
     edges, nodos = red["edges"], red["nodos"]
@@ -489,6 +495,11 @@ def analizar_red(
             semaforos.agregar(x, y, n)
         if n in red["glorietas"] or any(e.enlace for e in por_nodo.get(n, ())):
             desnivel.agregar(x, y, n)
+    sdm = _Grilla(RADIO_MISMA_CUADRA_M)
+    semaforos_sdm = leer_puntos(semaforos_sdm_path)
+    for lon, lat, props in semaforos_sdm:
+        x, y = a_xy(lon, lat)
+        sdm.agregar(x, y, props.get("direccion"))
     nodos_cruce = _Grilla(RADIO_SINIESTRO_M)
     for i, c in enumerate(cruces):
         for n in c.nodos:
@@ -546,6 +557,15 @@ def analizar_red(
             (d for n in c.nodos for d, _ in semaforos.cerca(nodos[n][0], nodos[n][1], 1500)),
             default=None,
         )
+        d_sdm = min(
+            (d for n in c.nodos for d, _ in sdm.cerca(nodos[n][0], nodos[n][1], 1500)),
+            default=None,
+        )
+        if d_sdm is not None and d_sdm < RADIO_SEMAFORO_SDM_M:
+            descartes["ya tiene semáforo según la SDM (OSM no lo tiene)"] += 1
+            continue
+        if d_sdm is not None and (d_sem is None or d_sdm < d_sem):
+            d_sem = d_sdm
         if d_sem is not None and d_sem < RADIO_MISMA_CUADRA_M:
             descartes["semáforo a menos de 80 m"] += 1
             continue
@@ -586,14 +606,16 @@ def analizar_red(
         "hay_siniestros": bool(siniestros),
         "anios_siniestros": [min(anios), max(anios)] if anios else None,
         "hay_pois": pois_path.is_file(),
+        "semaforos_sdm": len(semaforos_sdm),
         "nodos_viales": len(viales),
         "cruces": len(cruces),
     }
 
 
 def analisis_con_cache(net_path: Path, nombres_path: Path | None, cache_path: Path,
-                       siniestros_path: Path = SINIESTROS_GEOJSON, pois_path: Path = POIS_GEOJSON) -> dict:
-    rutas = [net_path, siniestros_path, pois_path] + ([nombres_path] if nombres_path else [])
+                       siniestros_path: Path = SINIESTROS_GEOJSON, pois_path: Path = POIS_GEOJSON,
+                       semaforos_sdm_path: Path = SEMAFOROS_SDM_GEOJSON) -> dict:
+    rutas = [net_path, siniestros_path, pois_path, semaforos_sdm_path] + ([nombres_path] if nombres_path else [])
     firma = [VERSION_ANALISIS, _firma(*rutas)]
     if cache_path.is_file():
         try:
@@ -603,7 +625,7 @@ def analisis_con_cache(net_path: Path, nombres_path: Path | None, cache_path: Pa
         except (ValueError, KeyError, TypeError):
             pass
     nombres = json.loads(nombres_path.read_text(encoding="utf-8")) if nombres_path and nombres_path.is_file() else {}
-    analisis = analizar_red(net_path, nombres, siniestros_path, pois_path)
+    analisis = analizar_red(net_path, nombres, siniestros_path, pois_path, semaforos_sdm_path)
     cache_path.parent.mkdir(parents=True, exist_ok=True)
     cache_path.write_text(json.dumps({"firma": firma, "analisis": analisis}, ensure_ascii=False), encoding="utf-8")
     return analisis

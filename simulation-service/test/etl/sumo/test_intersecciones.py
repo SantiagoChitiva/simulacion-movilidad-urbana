@@ -123,3 +123,20 @@ def test_extraer_nombres_vias(tmp_path):
         encoding="utf-8",
     )
     assert extraer_nombres_vias(osm) == {"200": "Calle 147", "300": "AK 9"}
+
+
+def test_asociar_sdm_toma_el_mas_cercano_a_menos_de_60_m(tmp_path):
+    import json
+    from types import SimpleNamespace
+    from etl.sumo.intersecciones import asociar_sdm
+
+    def punto(lon, lat, codigo):
+        return {"type": "Feature", "geometry": {"type": "Point", "coordinates": [lon, lat]},
+                "properties": {"codigo": codigo, "fases": 3}}
+
+    sdm = tmp_path / "sdm.geojson"
+    # ~33 m y ~110 m al norte del semáforo; el segundo queda fuera del radio
+    sdm.write_text(json.dumps({"features": [punto(-74.03, 4.7003, 1), punto(-74.03, 4.701, 2)]}), encoding="utf-8")
+    cerca, lejos = SimpleNamespace(lon=-74.03, lat=4.7, sdm=None), SimpleNamespace(lon=-74.03, lat=4.69, sdm=None)
+    assert asociar_sdm([cerca, lejos], sdm) == 1
+    assert cerca.sdm["codigo"] == 1 and 30 <= cerca.sdm["distancia_m"] <= 36 and lejos.sdm is None

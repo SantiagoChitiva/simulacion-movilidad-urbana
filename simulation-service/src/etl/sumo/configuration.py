@@ -23,6 +23,7 @@ EDIFICIOS_OSM_GEOJSON = SUMO_DIR.parents[3] / "data" / "processed" / "edificios_
 # Evidencia para priorizar cruces (python -m etl.sumo.evidencia): siniestros SDM y POIs OSM
 SINIESTROS_GEOJSON = SUMO_DIR.parents[3] / "data" / "processed" / "siniestros_usaquen.geojson"
 POIS_GEOJSON = SUMO_DIR.parents[3] / "data" / "processed" / "pois_usaquen.geojson"
+SEMAFOROS_SDM_GEOJSON = SUMO_DIR.parents[3] / "data" / "processed" / "semaforos_sdm_usaquen.geojson"
 
 # Aforos de la hora de máxima demanda (EODI 2023) ubicados en la red (python -m etl.sumo.aforos)
 AFOROS_JSON = SUMO_DIR.parents[3] / "data" / "processed" / "aforos_usaquen.json"
