@@ -76,6 +76,6 @@ def test_validar(tmp_path):
 def test_escribir_y_leer_conteos(tmp_path):
     add = escribir_conteos([{"edge": "b"}, {"edge": "a"}], tmp_path / "c.add.xml", tmp_path / "c.xml", 25200, 36000)
     texto = add.read_text(encoding="utf-8")
-    assert 'edges="a b"' in texto and 'id="conteo_auto"' in texto and 'vTypes="auto informal otro"' in texto
+    assert 'edges="a b"' in texto and 'id="conteo_auto"' in texto and 'vTypes="auto informal otro auto_enc informal_enc otro_enc"' in texto
     _conteos(tmp_path / "c.xml", {"moto": {"a": {25200: 3}}})
     assert leer_conteos(tmp_path / "c.xml")["moto"]["a"][25200.0] == 3

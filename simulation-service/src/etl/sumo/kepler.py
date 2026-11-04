@@ -84,7 +84,8 @@ def angle_diff(a: float, b: float) -> float:
 
 def mode_of(kind: str, elem: ET.Element) -> str:
     if kind == "vehicle":
-        return elem.get("type", "desconocido")
+        # los vTypes del complemento de la encuesta son <modo>_enc
+        return elem.get("type", "desconocido").removesuffix("_enc")
     # personas: el modo sale del prefijo del id (peaton_12, transporte_publico_3)
     return re.sub(r"_?\d+$", "", elem.get("id", ""))
 

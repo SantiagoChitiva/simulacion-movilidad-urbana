@@ -72,6 +72,7 @@ export default function PanelDemanda({
   const [opciones, setOpciones] = useState(null);   // /demanda/opciones
   const [ventana, setVentana] = useState('am');
   const [traficoPaso, setTraficoPaso] = useState(false);
+  const [encuestaCompleta, setEncuestaCompleta] = useState(false);
   const [transportePublico, setTransportePublico] = useState(true);
   const [asignacion, setAsignacion] = useState(false);
 
@@ -98,6 +99,8 @@ export default function PanelDemanda({
   const hayPaso = !!opciones?.trafico_paso?.[ventana];
   const hayPublico = !!opciones?.transporte_publico;
   const pasoPedido = hayPaso && traficoPaso;
+  const hayCompleta = !!opciones?.encuesta_completa?.[ventana];
+  const completaPedida = hayCompleta && encuestaCompleta;
   const publicoPedido = hayPublico && transportePublico;
   const [inicio, fin] = opciones ? [opciones.ventanas[ventana].inicio, opciones.ventanas[ventana].fin] : [7 * 3600, 10 * 3600];
 
@@ -115,6 +118,7 @@ export default function PanelDemanda({
     estiloId === 'normal' &&
     !asignacion &&
     !!precalculada.trafico_paso === pasoPedido &&
+    !!precalculada.encuesta_completa === completaPedida &&
     (precalculada.transporte_publico ?? false) === publicoPedido &&
     mismosConteos(conteos, precalculada.conteos) &&
     semillaPedida === (precalculada.semilla ?? SEMILLA_SUMOCFG);
@@ -139,6 +143,7 @@ export default function PanelDemanda({
       setPresetId(c.preset);
       if ((o.ventana ?? 'am') !== ventana) setVentana(o.ventana ?? 'am');
       setTraficoPaso(!!o.trafico_paso);
+      setEncuestaCompleta(!!o.encuesta_completa);
       setTransportePublico(o.transporte_publico ?? false);
       setAsignacion(!!o.asignacion_iterativa);
       setConteos({ ...Object.fromEntries(modos.map((m) => [m.id, 0])), ...c.conteos });
@@ -161,6 +166,7 @@ export default function PanelDemanda({
       estilo: estiloId,
       ventana,
       trafico_paso: pasoPedido,
+      encuesta_completa: completaPedida,
       transporte_publico: publicoPedido,
       asignacion_iterativa: asignacion,
     });
@@ -182,6 +188,11 @@ export default function PanelDemanda({
           ))}
         </div>
         <div className="pd-opciones">
+          <label title={hayCompleta ? '' : 'No hay complemento de la encuesta para este horario'}>
+            <input type="checkbox" checked={completaPedida} disabled={!hayCompleta} onChange={(e) => setEncuestaCompleta(e.target.checked)} />
+            Encuesta completa: vehículos que entran o salen de Usaquén y la expansión sin tope (unas diez veces más
+            vehículos; para validar con los aforos)
+          </label>
           <label title={hayPaso ? '' : 'No hay tráfico de paso generado para este horario'}>
             <input type="checkbox" checked={pasoPedido} disabled={!hayPaso} onChange={(e) => setTraficoPaso(e.target.checked)} />
             Tráfico que atraviesa Usaquén (calibrado con los aforos; más de una hora de simulación)
@@ -255,6 +266,7 @@ export default function PanelDemanda({
         <p className="pd-nota">
           Un día hábil típico según la Encuesta de Movilidad 2023, de {hora(inicio)} a {hora(fin)}, con los viajes que
           empiezan y terminan en Usaquén.
+          {completaPedida && ' Se suman los vehículos que entran o salen de la localidad.'}
           {pasoPedido
             ? ' A estos se suma el tráfico que atraviesa la localidad, estimado para reproducir los aforos.'
             : ' Sin el tráfico que solo atraviesa la localidad, las avenidas quedan mucho más vacías que en la realidad.'}

@@ -30,6 +30,7 @@ from etl.sumo.cierres import CierreVial, escribir_rerouter
 from etl.sumo.geojson_reader import read_first_features
 from etl.sumo.priorizacion import a_geojson, analisis_con_cache, puntuar
 from etl.sumo.vias import vias_con_cache
+from etl.sumo.encuesta_completa import archivo_complemento
 from etl.sumo.trafico_paso import archivo_trafico_paso
 from etl.sumo.transporte_publico import archivos_transporte_publico
 from etl.sumo.programas_tls import (
@@ -127,6 +128,7 @@ def demanda_opciones() -> dict:
         "ventanas": {k: {"inicio": a, "fin": b} for k, (a, b) in VENTANAS.items()},
         "transporte_publico": archivos_transporte_publico() is not None,
         "trafico_paso": {k: archivo_trafico_paso(a) is not None for k, (a, _) in VENTANAS.items()},
+        "encuesta_completa": {k: archivo_complemento(k) is not None for k in VENTANAS},
     }
 
 
@@ -160,6 +162,7 @@ class SolicitudSimulacion(BaseModel):
     cierres: list[SolicitudCierre] = Field(default_factory=list)
     ventana: Ventana = "am"
     trafico_paso: bool = False
+    encuesta_completa: bool = False
     transporte_publico: bool = True
     asignacion_iterativa: bool = False
 
@@ -184,7 +187,11 @@ def crear_simulacion(solicitud: SolicitudSimulacion, gestor: Gestor) -> dict:
     demanda = DemandaConfig(
         solicitud.preset, dict(solicitud.conteos), ventana=solicitud.ventana, trafico_paso=solicitud.trafico_paso,
         transporte_publico=solicitud.transporte_publico, asignacion_iterativa=solicitud.asignacion_iterativa,
+        encuesta_completa=solicitud.encuesta_completa,
     )
+    if demanda.encuesta_completa and archivo_complemento(demanda.ventana) is None:
+        raise HTTPException(status_code=409, detail="No hay complemento de la encuesta para esa ventana "
+                                                    "(python -m etl.sumo.encuesta_completa).")
     if demanda.trafico_paso and archivo_trafico_paso(demanda.horas[0]) is None:
         raise HTTPException(status_code=409, detail="No hay tráfico de paso para esa ventana (python -m etl.sumo.trafico_paso).")
     cierres_viales = [

@@ -70,6 +70,7 @@ def opciones_demanda(demanda: DemandaConfig) -> dict[str, Any]:
     return {
         "ventana": getattr(demanda, "ventana", "am"),
         "trafico_paso": getattr(demanda, "trafico_paso", False),
+        "encuesta_completa": getattr(demanda, "encuesta_completa", False),
         "transporte_publico": getattr(demanda, "transporte_publico", True),
         "asignacion_iterativa": getattr(demanda, "asignacion_iterativa", False),
     }
@@ -191,6 +192,7 @@ class GestorCorridas:
             ventana=opciones.get("ventana", "am"), trafico_paso=opciones.get("trafico_paso", False),
             transporte_publico=opciones.get("transporte_publico", True),
             asignacion_iterativa=opciones.get("asignacion_iterativa", False),
+            encuesta_completa=opciones.get("encuesta_completa", False),
         )
         estilo = EstiloConductor(corrida.estilo)
         cierres = [CierreVial(**c) for c in corrida.cierres] or None

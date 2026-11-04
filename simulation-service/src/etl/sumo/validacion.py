@@ -34,13 +34,17 @@ UMBRAL_GEH = 5.0
 CRITERIO_PORCENTAJE = 85.0
 
 # modo comparable del aforo -> vTypes de la simulación que cuentan como ese modo
-VTYPES_MODO: dict[str, tuple[str, ...]] = {
+_VTYPES_BASE: dict[str, tuple[str, ...]] = {
     "auto": ("auto", "informal", "otro"),
     "moto": ("moto",),
     "taxi": ("taxi",),
     "especial": ("especial",),
     "escolar": ("escolar",),
     "bici": ("bici",),
+}
+# cada modo cuenta también los vTypes `<id>_enc` del complemento de la encuesta (encuesta_completa.py)
+VTYPES_MODO: dict[str, tuple[str, ...]] = {
+    **{m: (*ids, *(f"{i}_enc" for i in ids)) for m, ids in _VTYPES_BASE.items()},
     "bus": (BUS_PT_ID, BUS_SITP_ID),
 }
 # modos que se comparan según el tipo de estación (prefijo del ID)

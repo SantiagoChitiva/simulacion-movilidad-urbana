@@ -215,6 +215,9 @@ class DemandaConfig:
     conteos: dict[M, int] = field(default_factory=dict)   # viajes a generar por modo
     ventana: str = "am"                  # clave de VENTANAS: "am" (07-10) o "pm" (16-19)
     trafico_paso: bool = False           # suma el tráfico de paso calibrado con aforos (trafico_paso.py)
+    # suma los viajes en vehículo que entran o salen de Usaquén y las copias que quita el tope
+    # MAX_COPIAS (encuesta_completa.py): la demanda de la encuesta completa, sin escalar
+    encuesta_completa: bool = False
     transporte_publico: bool = True      # buses del GTFS y viajes en bus, si el escenario los tiene
     asignacion_iterativa: bool = False   # rutas con duaIterate (equilibrio) en vez de una pasada
 

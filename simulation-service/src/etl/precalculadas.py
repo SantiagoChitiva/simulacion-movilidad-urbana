@@ -33,6 +33,7 @@ from .etl import OnProgreso, resumen_corrida, run_pipeline
 from .sumo.configuration import DEFAULT_SCENARIO, VENTANAS, ArchivosPrecalculada, ScenarioPaths
 from .sumo.demanda import PRESETS, DemandaConfig, Preset, cargar_dia, cargar_ventana, conteos_preset
 from .sumo.intersecciones import volumenes_por_edge
+from .sumo.encuesta_completa import archivo_complemento
 from .sumo.trafico_paso import archivo_trafico_paso
 from .sumo.transporte_publico import archivos_transporte_publico
 
@@ -91,6 +92,7 @@ def generar(
     ejecutar: Callable[..., Any] = run_pipeline,
     ventana: str = "am",
     trafico_paso: bool = False,
+    encuesta_completa: bool = False,
 ) -> dict[str, Any]:
     """Simula un preset con sus conteos por defecto y guarda lo que necesita el visor."""
     escenario = ScenarioPaths.from_name(DEFAULT_SCENARIO)
@@ -103,6 +105,7 @@ def generar(
         preset, conteos, ventana=ventana,
         trafico_paso=trafico_paso and archivo_trafico_paso(VENTANAS[ventana][0]) is not None,
         transporte_publico=archivos_transporte_publico(escenario) is not None,
+        encuesta_completa=encuesta_completa and archivo_complemento(ventana) is not None,
     )
 
     resultado = ejecutar(
@@ -128,6 +131,7 @@ def generar(
         "preset": preset.value,
         "ventana": ventana,
         "trafico_paso": demanda.trafico_paso,
+        "encuesta_completa": demanda.encuesta_completa,
         "transporte_publico": demanda.transporte_publico,
         "conteos": {m.value: n for m, n in conteos.items()},
         "semilla": semilla,
@@ -210,13 +214,16 @@ def main(argv: list[str] | None = None) -> None:
     parser.add_argument("--semilla", type=int, default=None, help="semilla de SUMO (por defecto la del .sumocfg)")
     parser.add_argument("--pm", action="store_true", help="ventana de la tarde (16:00-19:00) en vez de la mañana")
     parser.add_argument("--paso", action="store_true", help="incluir el tráfico de paso calibrado con los aforos")
+    parser.add_argument("--completa", action="store_true",
+                        help="incluir los viajes que entran y salen de Usaquén y la expansión sin tope")
     args = parser.parse_args(argv)
 
     ventana = "pm" if args.pm else "am"
     for valor in args.presets or [p.value for p in Preset]:
         preset = Preset(valor)
         print(f"Generando '{clave(preset, ventana)}'...", flush=True)
-        meta = generar(preset, args.semilla, _imprimir_avance(valor), ventana=ventana, trafico_paso=args.paso)
+        meta = generar(preset, args.semilla, _imprimir_avance(valor), ventana=ventana, trafico_paso=args.paso,
+                      encuesta_completa=args.completa)
         mb = lambda n: f"{n / 1e6:.1f} MB"
         # solo ASCII: la consola de Windows suele estar en cp1252
         print(f"  listo: {meta['resultado'].get('trips_kepler', 0)} trips, "

@@ -47,13 +47,15 @@ export const reanudarSimulacion = (id) =>
   pedir(`/simulaciones/${encodeURIComponent(id)}/reanudar`, { method: 'POST' });
 
 export const crearSimulacion = ({
-  preset, conteos, semilla, estilo, cierres, ventana, trafico_paso, transporte_publico, asignacion_iterativa,
+  preset, conteos, semilla, estilo, cierres, ventana, trafico_paso, encuesta_completa, transporte_publico,
+  asignacion_iterativa,
 }) =>
   pedir('/simulaciones', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      preset, conteos, semilla, estilo, cierres, ventana, trafico_paso, transporte_publico, asignacion_iterativa,
+      preset, conteos, semilla, estilo, cierres, ventana, trafico_paso, encuesta_completa, transporte_publico,
+      asignacion_iterativa,
     }),
   });
 

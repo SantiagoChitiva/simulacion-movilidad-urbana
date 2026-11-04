@@ -31,6 +31,7 @@ from .sumo.subred import (
     SubredConfig, SubredDemandaConfig, SubredStats, caminatas_por_origen_destino, recortar_demanda, recortar_red,
     sin_paradas_de_bus,
 )
+from .sumo.encuesta_completa import archivo_complemento
 from .sumo.trafico_paso import archivo_trafico_paso
 from .sumo.transporte_publico import archivos_transporte_publico
 from .sumo.trips import TripGenerationConfig, TripGenerationResult, generate_trips
@@ -162,12 +163,19 @@ def simulate(
             raise FileNotFoundError("No hay tráfico de paso para esta ventana. Ejecuta python -m etl.sumo.trafico_paso.")
         if paso is not None:
             rutas_extra.append(paso)
+        complemento = archivo_complemento(demanda.ventana) if demanda.encuesta_completa else None
+        if demanda.encuesta_completa and complemento is None:
+            raise FileNotFoundError("No hay complemento de la encuesta para esta ventana. "
+                                    "Ejecuta python -m etl.sumo.encuesta_completa <carpeta SIMUR>.")
+        if complemento is not None:
+            rutas_extra.append(complemento)
+        grande = paso is not None or complemento is not None
         escribir_sumocfg_corrida(
             paths, additional_files=adicionales, route_files=rutas_extra, ventana=demanda.horas,
-            # con el tráfico de paso hay varias veces más vehículos a la vez en la red
-            max_vehiculos=MAX_VEHICULOS_PASO if paso is not None else None,
+            # con el tráfico de paso o la encuesta completa hay varias veces más vehículos a la vez
+            max_vehiculos=MAX_VEHICULOS_PASO if grande else None,
             # el FCD con el tráfico de paso pasa de 4 GB; kepler muestrea cada 8 s, así que 4 s basta
-            periodo_fcd=4 if paso is not None else None,
+            periodo_fcd=4 if grande else None,
         )
 
     paths.fcd.parent.mkdir(parents=True, exist_ok=True)  # SUMO no crea output/
@@ -292,6 +300,14 @@ def run_pipeline(
     return PipelineResult(etl, simulation, geojson, kepler, validacion)
 
 
+def etiqueta_demanda(demanda: DemandaConfig) -> str:
+    partes = ["encuesta completa (internos, entran y salen, sin tope)" if demanda.encuesta_completa
+              else "solo viajes internos de la encuesta"]
+    if demanda.trafico_paso:
+        partes.append("tráfico de paso calibrado con aforos")
+    return " + ".join(partes)
+
+
 def validar_corrida(
     scenario_name: str = DEFAULT_SCENARIO, run_id: str | None = None, demanda: DemandaConfig | None = None,
 ) -> dict | None:
@@ -306,7 +322,7 @@ def validar_corrida(
     resultado = validar(ValidacionConfig(
         conteos=paths.conteos, destino=paths.validacion, destino_csv=paths.validacion_csv,
         periodo=periodo_de(demanda.horas[0]), modos_simulados=tuple(modos),
-        etiqueta="con tráfico de paso calibrado con aforos" if demanda.trafico_paso else "solo viajes de la encuesta",
+        etiqueta=etiqueta_demanda(demanda),
     ))
     return resultado.resumen
 
