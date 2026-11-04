@@ -139,10 +139,16 @@ class GestorCorridas:
         for hijo in run_dir.iterdir() if run_dir.is_dir() else []:
             if hijo.name == "estado.json":
                 continue
-            if hijo.is_dir():
-                shutil.rmtree(hijo, ignore_errors=True)
-            else:
-                hijo.unlink(missing_ok=True)
+            # un proceso recién terminado puede tener el archivo abierto un instante (Windows)
+            for intento in range(10):
+                try:
+                    if hijo.is_dir():
+                        shutil.rmtree(hijo)
+                    else:
+                        hijo.unlink(missing_ok=True)
+                    break
+                except OSError:
+                    time.sleep(0.5)
 
     # --------------------------------------------------------- pública
 
@@ -269,7 +275,9 @@ class GestorCorridas:
             paths.fcd.unlink(missing_ok=True)
             self._actualizar(run_id, estado="terminado", avance=1.0, avance_etapa=1.0, resultado=resumen)
         except Cancelado:
-            self._borrar_archivos_pesados(run_id)
-            self._actualizar(run_id, estado="cancelada")
+            try:
+                self._borrar_archivos_pesados(run_id)
+            finally:   # aunque quede algún archivo, la corrida no puede quedarse en "cancelando"
+                self._actualizar(run_id, estado="cancelada")
         except Exception as exc:   # la corrida falla, el servicio sigue
             self._actualizar(run_id, estado="error", error=str(exc)[-2000:])

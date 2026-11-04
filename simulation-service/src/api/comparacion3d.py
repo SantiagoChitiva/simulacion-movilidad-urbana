@@ -41,6 +41,7 @@ from typing import Any
 from etl.sumo.configuration import DEFAULT_SCENARIO, HORA_INI, RUNS_DIR, ScenarioPaths
 from etl.sumo.escena3d import geometria_escena
 from etl.sumo.estilos import PARAMS_ESTILO, EstiloConductor
+from etl.sumo.proceso import matar_arbol
 from etl.sumo.telemetria import (
     clasificar_accion, drac, indice_riesgo, opcion_enlace, pet_cruce, riesgo_peaton, ttc,
     acumular_viaje, actualizar_balance, clasificar_colision, comparar_viajes, nuevo_balance, resumen_balance,
@@ -381,7 +382,7 @@ class Lado:
         try:
             self.proc.wait(timeout=5)
         except subprocess.TimeoutExpired:
-            self.proc.kill()
+            matar_arbol(self.proc)
         self._err.close()
 
     # -- frame

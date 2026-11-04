@@ -10,6 +10,7 @@ vivo. En su lugar:
 """
 import re
 import subprocess
+import sys
 import tempfile
 import threading
 import time
@@ -33,6 +34,21 @@ class Cancelado(Exception):
 def avance_ventana(t: float, ini: float = HORA_INI, fin: float = HORA_FIN) -> float:
     """Fracción de la ventana simulada que ya pasó, acotada a [0, 1]."""
     return min(max((t - ini) / (fin - ini), 0.0), 1.0)
+
+
+def matar_arbol(proc: subprocess.Popen) -> None:
+    """Mata el proceso y sus hijos, y espera a que termine.
+
+    En Windows, el `sumo.exe`/`duarouter.exe` del venv es el lanzador del paquete pip, que a
+    su vez abre el binario real: `proc.kill()` solo mataba el lanzador y el SUMO real seguía
+    corriendo con los archivos de salida abiertos (no se podían borrar al cancelar).
+    """
+    if proc.poll() is None:
+        if sys.platform == "win32":
+            subprocess.run(["taskkill", "/F", "/T", "/PID", str(proc.pid)],
+                           capture_output=True, check=False)
+        proc.kill()
+    proc.wait()
 
 
 def revisar_cancelacion(cancelar: threading.Event | None) -> None:
@@ -94,8 +110,7 @@ def ejecutar(
                         ultimo = avance
                         on_avance(avance)
         except BaseException:
-            proc.kill()
-            proc.wait()
+            matar_arbol(proc)
             raise
 
         out.seek(0)

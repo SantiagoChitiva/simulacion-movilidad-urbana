@@ -92,6 +92,7 @@ Conventions across `etl/sumo/` modules:
 - **Progress/cancel plumbing:** `run_pipeline(..., on_progreso(etapa, avance|None), cancelar=Event)`.
   - SUMO and duarouter block-buffer stdout when it's piped, so their step log arrives only at exit. Don't parse it.
   - duarouter progress comes from polling the last `depart` written to the `.rou.xml` (`proceso.ultimo_depart`).
+  - Kill subprocesses with `proceso.matar_arbol` (`taskkill /T` on Windows): the venv's `sumo.exe`/`duarouter.exe` are pip launchers that spawn the real binary, so `proc.kill()` left SUMO running with its outputs open, the cleanup failed and the run stayed in `cancelando`.
   - SUMO is driven by **TraCI** (`simulation._run_traci`, 60 s jumps, `traci==1.27.1` from pip); outputs are identical to a plain run.
   - The kepler export reports bytes read.
 - **Intersections** (`etl/sumo/intersecciones.py`): one `Semaforo` per `tlLogic`.

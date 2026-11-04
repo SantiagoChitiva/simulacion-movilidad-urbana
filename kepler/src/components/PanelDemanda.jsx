@@ -74,7 +74,6 @@ export default function PanelDemanda({
   const [traficoPaso, setTraficoPaso] = useState(false);
   const [encuestaCompleta, setEncuestaCompleta] = useState(false);
   const [transportePublico, setTransportePublico] = useState(true);
-  const [asignacion, setAsignacion] = useState(false);
 
   useEffect(() => {
     obtenerEstilos()
@@ -116,7 +115,6 @@ export default function PanelDemanda({
     !!precalculada &&
     cierres === 0 &&
     estiloId === 'normal' &&
-    !asignacion &&
     !!precalculada.trafico_paso === pasoPedido &&
     !!precalculada.encuesta_completa === completaPedida &&
     (precalculada.transporte_publico ?? false) === publicoPedido &&
@@ -145,7 +143,6 @@ export default function PanelDemanda({
       setTraficoPaso(!!o.trafico_paso);
       setEncuestaCompleta(!!o.encuesta_completa);
       setTransportePublico(o.transporte_publico ?? false);
-      setAsignacion(!!o.asignacion_iterativa);
       setConteos({ ...Object.fromEntries(modos.map((m) => [m.id, 0])), ...c.conteos });
       setSemilla(c.semilla ?? '');
     }
@@ -168,7 +165,7 @@ export default function PanelDemanda({
       trafico_paso: pasoPedido,
       encuesta_completa: completaPedida,
       transporte_publico: publicoPedido,
-      asignacion_iterativa: asignacion,
+      asignacion_iterativa: false,   // duaIterate no admite los buses del GTFS; no se ofrece en el visor
     });
 
   const nota = modos.find((m) => m.nota)?.nota;
@@ -201,11 +198,6 @@ export default function PanelDemanda({
             <input type="checkbox" checked={publicoPedido} disabled={!hayPublico} onChange={(e) => setTransportePublico(e.target.checked)} />
             Buses del SITP (GTFS): los viajes en transporte público usan bus
           </label>
-          <label>
-            <input type="checkbox" checked={asignacion} onChange={(e) => setAsignacion(e.target.checked)} disabled={publicoPedido} />
-            Asignación iterativa de rutas (más realista, tarda varias veces más)
-          </label>
-          {publicoPedido && <p className="pd-nota">La asignación iterativa todavía no admite los buses del GTFS.</p>}
         </div>
       </section>
 
