@@ -1,4 +1,20 @@
 \pagenumbering{arabic}
 \section{INTRODUCCIÓN}
-%La introducción es una guía para el lector, donde se presenta lo que encontrará al leer el documento.
-%De esta sección (incluida la introducción en el conteo total de páginas) comienza el conteo de páginas para un máximo de 60 páginas en el documento.
+
+La movilidad urbana es uno de los problemas más visibles de Bogotá. El TomTom Traffic Index ubicó a la ciudad en 2025 como la séptima con más congestión del mundo, con un nivel de 69,9\,\% y un aumento de 7,7 puntos porcentuales frente al año anterior \cite{eltiempo}. Quienes planifican el transporte necesitan evaluar los cambios (una política, una obra, un semáforo nuevo) antes de aplicarlos. Para eso existen los simuladores microscópicos de tráfico, como SUMO (\textit{Simulation of Urban MObility}) \cite{krajzewicz2012,lopez2018}. Sin embargo, usarlos con datos reales de la ciudad exige una preparación manual larga: zonificar, ponderar los viajes de la encuesta, construir la red, generar rutas y configurar archivos XML.
+
+Este documento es la memoria del trabajo de grado que automatizó esa cadena para la localidad de Usaquén. El resultado es un sistema que va de la Encuesta de Movilidad 2023 a una simulación SUMO reproducible y la muestra en un visor web. Sobre ese visor se construyeron dos herramientas de apoyo a decisiones de semaforización: un análisis de intersecciones con priorización de cruces sin semáforo y un simulador 3D comparativo del cruce con y sin un semáforo propuesto.
+
+\textbf{Guía de lectura.} La memoria sigue la estructura del formato de trabajo de grado del programa:
+
+\begin{itemize}[noitemsep]
+    \item El capítulo \textit{Descripción general} presenta el problema, la solución, los objetivos y el marco metodológico.
+    \item \textit{Contexto del proyecto} reúne los conceptos necesarios y compara la solución con trabajos relacionados.
+    \item \textit{Análisis del problema} resume los requerimientos, las restricciones y la especificación funcional.
+    \item \textit{Diseño de la solución} describe la arquitectura, los modelos de datos y las decisiones tecnológicas.
+    \item \textit{Desarrollo de la solución} cuenta cómo se construyó (fases, sprints) y muestra el producto final.
+    \item \textit{Resultados} presenta la verificación y la validación, con sus limitaciones.
+    \item \textit{Conclusiones} analiza el impacto, el cumplimiento de los objetivos y el trabajo futuro.
+\end{itemize}
+
+Los documentos de soporte (SPMP, SRS, SDD y la propuesta aprobada) contienen el detalle completo y se listan en los anexos. El código está en Python (\textit{pipeline} y API) y JavaScript (visor), con nombres e identificadores en español.

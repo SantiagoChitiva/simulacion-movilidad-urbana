@@ -1,0 +1,617 @@
+<mxfile host="app.diagrams.net" pages="4">
+  <diagram name="c4-context" id="T5sefZSa9DNmUCz3llG_">
+    <mxGraphModel grid="1" page="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" background="light-dark(#ffffff, #121212)" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <object placeholders="1" c4Name="Ingeniero, especialista" c4Type="Person" c4Description="Ingeniero civil, movilidad o especialista en movilidad." label="&lt;font style=&quot;font-size: 16px&quot;&gt;&lt;b&gt;%c4Name%&lt;/b&gt;&lt;/font&gt;&lt;div&gt;[%c4Type%]&lt;/div&gt;&lt;br&gt;&lt;div&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;&lt;font&gt;%c4Description%&lt;/font&gt;&lt;/font&gt;&lt;/div&gt;" id="Ll1-sdSWK7Ge32jsTx71-3">
+          <mxCell parent="1" style="html=1;fontSize=11;whiteSpace=wrap;fillColor=light-dark(#FFFFFF,#FFFFFF);strokeColor=light-dark(#57993B,#57993B);fontColor=light-dark(#57993B,#57993B);shape=mxgraph.c4.person2;align=center;metaEdit=1;points=[[0.5,0,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0]];resizable=0;flipH=0;legacyAnchorPoints=0;flipV=0;strokeWidth=4;" vertex="1">
+            <mxGeometry height="180" width="200" x="-400" y="400" as="geometry" />
+          </mxCell>
+        </object>
+        <object placeholders="1" c4Name="Sitio web" c4Type="Software System" c4Description="Permite a los usuarios finales visualizar la simulación, lanzar nuevas simulaciones con parámetros específicos." label="&lt;font style=&quot;font-size: 16px&quot;&gt;&lt;b&gt;%c4Name%&lt;/b&gt;&lt;/font&gt;&lt;div&gt;[%c4Type%]&lt;/div&gt;&lt;br&gt;&lt;div&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;&lt;font&gt;%c4Description%&lt;/font&gt;&lt;/font&gt;&lt;/div&gt;" id="Ll1-sdSWK7Ge32jsTx71-4">
+          <mxCell parent="1" style="rounded=1;whiteSpace=wrap;html=1;labelBackgroundColor=none;fillColor=light-dark(#FFFFFF,#FFFFFF);fontColor=light-dark(#5995D1,#5995D1);align=center;arcSize=10;strokeColor=light-dark(#5995D1,#5995D1);metaEdit=1;resizable=0;points=[[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];strokeWidth=4;" vertex="1">
+            <mxGeometry height="120" width="240" x="-420" y="720" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="Ll1-sdSWK7Ge32jsTx71-5" edge="1" parent="1" source="Ll1-sdSWK7Ge32jsTx71-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;defaultLabelBackgroundColor=page;dashed=1;dashPattern=8 8;endArrow=block;endFill=1;" target="Ll1-sdSWK7Ge32jsTx71-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Ll1-sdSWK7Ge32jsTx71-6" connectable="0" parent="Ll1-sdSWK7Ge32jsTx71-5" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;defaultLabelBackgroundColor=page;" value="&lt;div&gt;Lanza simulaciones&amp;nbsp;&lt;/div&gt;&lt;div&gt;y visualiza los resultados&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.2333" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <object placeholders="1" c4Name="Renderizador" c4Type="Software System" c4Description="Renderiza el mapa, los actores viales y la infraestructura mediante Kepler.gl usando la API de Mapbox." label="&lt;font style=&quot;font-size: 16px&quot;&gt;&lt;b&gt;%c4Name%&lt;/b&gt;&lt;/font&gt;&lt;div&gt;[%c4Type%]&lt;/div&gt;&lt;br&gt;&lt;div&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;&lt;font&gt;%c4Description%&lt;/font&gt;&lt;/font&gt;&lt;/div&gt;" id="Ll1-sdSWK7Ge32jsTx71-7">
+          <mxCell parent="1" style="rounded=1;whiteSpace=wrap;html=1;labelBackgroundColor=none;fillColor=light-dark(#FFFFFF,#FFFFFF);fontColor=light-dark(#CC434E,#CC434E);align=center;arcSize=10;strokeColor=light-dark(#CC434E,#CC434E);metaEdit=1;resizable=0;points=[[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];strokeWidth=4;spacing=4;" vertex="1">
+            <mxGeometry height="120" width="240" x="160" y="720" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="Ll1-sdSWK7Ge32jsTx71-9" edge="1" parent="1" source="Ll1-sdSWK7Ge32jsTx71-4" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;dashed=1;dashPattern=8 8;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;defaultLabelBackgroundColor=page;endArrow=block;endFill=1;" target="Ll1-sdSWK7Ge32jsTx71-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Ll1-sdSWK7Ge32jsTx71-10" connectable="0" parent="Ll1-sdSWK7Ge32jsTx71-9" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;defaultLabelBackgroundColor=page;" value="&lt;div&gt;Envía datos de actores viales&amp;nbsp;&lt;/div&gt;&lt;div&gt;y muestra el escenario renderizado&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.0173" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <object placeholders="1" c4Name="Servicio de simulación" c4Type="Software System" c4Description="Genera los distintos escenarios de simulación y especifica una interfaz para la comunicación; además, consume las encuestas de movilidad como dataset por defecto." label="&lt;font style=&quot;font-size: 16px&quot;&gt;&lt;b&gt;%c4Name%&lt;/b&gt;&lt;/font&gt;&lt;div&gt;[%c4Type%]&lt;/div&gt;&lt;br&gt;&lt;div&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;&lt;font&gt;%c4Description%&lt;/font&gt;&lt;/font&gt;&lt;/div&gt;" id="Ll1-sdSWK7Ge32jsTx71-11">
+          <mxCell parent="1" style="rounded=1;whiteSpace=wrap;html=1;labelBackgroundColor=none;fillColor=light-dark(#FFFFFF,#FFFFFF);fontColor=light-dark(#5995D1,#5995D1);align=center;arcSize=10;strokeColor=light-dark(#5995D1,#5995D1);metaEdit=1;resizable=0;points=[[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];strokeWidth=4;" vertex="1">
+            <mxGeometry height="120" width="240" x="-420" y="1040" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="Ll1-sdSWK7Ge32jsTx71-12" edge="1" parent="1" source="Ll1-sdSWK7Ge32jsTx71-4" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;dashed=1;dashPattern=8 8;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;defaultLabelBackgroundColor=page;endArrow=block;endFill=1;" target="Ll1-sdSWK7Ge32jsTx71-11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Ll1-sdSWK7Ge32jsTx71-15" connectable="0" parent="Ll1-sdSWK7Ge32jsTx71-12" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;defaultLabelBackgroundColor=page;" value="&lt;div&gt;Envía petición para obtener los distintos&lt;/div&gt;&lt;div&gt;escenarios de simulación o para cargar una&lt;/div&gt;&lt;div&gt;nueva parametrización del escenario&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="0.093" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <object placeholders="1" c4Name="Simulador de movilidad" c4Type="Software System" c4Description="Provee funcionalidades para simular escenarios de movilidad usando Simulation of Urban MObility (SUMO) el cual es un software para simulaciones de tráfico multimodal." label="&lt;font style=&quot;font-size: 16px&quot;&gt;&lt;b&gt;%c4Name%&lt;/b&gt;&lt;/font&gt;&lt;div&gt;[%c4Type%]&lt;/div&gt;&lt;br&gt;&lt;div&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;&lt;font&gt;%c4Description%&lt;/font&gt;&lt;/font&gt;&lt;/div&gt;" id="Ll1-sdSWK7Ge32jsTx71-13">
+          <mxCell parent="1" style="rounded=1;whiteSpace=wrap;html=1;labelBackgroundColor=none;fillColor=light-dark(#FFFFFF,#FFFFFF);fontColor=light-dark(#338033,#338033);align=center;arcSize=10;strokeColor=light-dark(#338033,#338033);metaEdit=1;resizable=0;points=[[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];strokeWidth=4;" vertex="1">
+            <mxGeometry height="120" width="240" x="160" y="1040" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="Ll1-sdSWK7Ge32jsTx71-14" edge="1" parent="1" source="Ll1-sdSWK7Ge32jsTx71-11" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;dashed=1;dashPattern=8 8;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;defaultLabelBackgroundColor=page;endArrow=block;endFill=1;" target="Ll1-sdSWK7Ge32jsTx71-13" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Ll1-sdSWK7Ge32jsTx71-17" connectable="0" parent="Ll1-sdSWK7Ge32jsTx71-14" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;defaultLabelBackgroundColor=page;" value="&lt;div&gt;Envía los archivos de entrada,&lt;/div&gt;&lt;div&gt;delega la simulación y lee los&lt;/div&gt;&lt;div&gt;archivos resultantes&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="0.0176" y="-1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <object placeholders="1" c4Name="Proveedor cartográfico" c4Type="Data Provider" c4Description="Provee la cartografía e infraestructura para las simulaciones; se uso OpenStreetMap proyecto open-source que provee mapas e infraestructura del mundo." label="&lt;font style=&quot;font-size: 16px&quot;&gt;&lt;b&gt;%c4Name%&lt;/b&gt;&lt;/font&gt;&lt;div&gt;[%c4Type%]&lt;/div&gt;&lt;br&gt;&lt;div&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;&lt;font&gt;%c4Description%&lt;/font&gt;&lt;/font&gt;&lt;/div&gt;" id="Ll1-sdSWK7Ge32jsTx71-18">
+          <mxCell parent="1" style="rounded=1;whiteSpace=wrap;html=1;labelBackgroundColor=none;fillColor=light-dark(#FFFFFF,#FFFFFF);fontColor=light-dark(#343434,#343434);align=center;arcSize=10;strokeColor=light-dark(#343434,#343434);metaEdit=1;resizable=0;points=[[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];strokeWidth=4;spacing=3;" vertex="1">
+            <mxGeometry height="120" width="240" x="-1000" y="1040" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="Ll1-sdSWK7Ge32jsTx71-19" edge="1" parent="1" source="Ll1-sdSWK7Ge32jsTx71-11" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;dashed=1;dashPattern=8 8;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;defaultLabelBackgroundColor=page;endArrow=block;endFill=1;" target="Ll1-sdSWK7Ge32jsTx71-18">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Ll1-sdSWK7Ge32jsTx71-20" connectable="0" parent="Ll1-sdSWK7Ge32jsTx71-19" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;defaultLabelBackgroundColor=page;" value="&lt;div&gt;Obtiene los archivos que definen&lt;/div&gt;&lt;div&gt;el mapa y la infraestructura de Bogotá&lt;/div&gt;&lt;div&gt;con enfoque en la localidad de Usaquen&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.0413" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <object placeholders="1" c4Name="Datos de movilidad" c4Type="Data Provider" c4Description="Provee los datos iniciales o por defecto para las simulaciones; para este proyecto se usaron los datos de la Encuesta de Movilidad de Bogotá obtenidos del (SIMUR)." label="&lt;font style=&quot;font-size: 16px&quot;&gt;&lt;b&gt;%c4Name%&lt;/b&gt;&lt;/font&gt;&lt;div&gt;[%c4Type%]&lt;/div&gt;&lt;br&gt;&lt;div&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;&lt;font&gt;%c4Description%&lt;/font&gt;&lt;/font&gt;&lt;/div&gt;" id="MvKlsDivOPCWxLc0Icxw-1">
+          <mxCell parent="1" style="rounded=1;whiteSpace=wrap;html=1;labelBackgroundColor=none;fillColor=light-dark(#FFFFFF,#FFFFFF);fontColor=light-dark(#D09A00,#D09A00);align=center;arcSize=10;strokeColor=light-dark(#FFCC01,#FFCC01);metaEdit=1;resizable=0;points=[[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];strokeWidth=4;spacing=5;" vertex="1">
+            <mxGeometry height="120" width="240" x="-420" y="1320" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="MvKlsDivOPCWxLc0Icxw-2" edge="1" parent="1" source="Ll1-sdSWK7Ge32jsTx71-11" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;dashed=1;dashPattern=8 8;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;defaultLabelBackgroundColor=page;endArrow=block;endFill=1;" target="MvKlsDivOPCWxLc0Icxw-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="MvKlsDivOPCWxLc0Icxw-6" connectable="0" parent="MvKlsDivOPCWxLc0Icxw-2" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;defaultLabelBackgroundColor=page;" value="&lt;div&gt;Obtiene los datos iniciales&lt;/div&gt;&lt;div&gt;para las simulaciones&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.1947" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="uruRclKylj2cJTQBlCcO" name="c4-container">
+    <mxGraphModel grid="1" page="0" gridSize="10" guides="1" tooltips="1" connect="0" arrows="1" fold="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <object placeholders="1" c4Name="Ingeniero, especialista" c4Type="Person" c4Description="Ingeniero civil, movilidad o especialista en movilidad." label="&lt;font style=&quot;font-size: 16px&quot;&gt;&lt;b&gt;%c4Name%&lt;/b&gt;&lt;/font&gt;&lt;div&gt;[%c4Type%]&lt;/div&gt;&lt;br&gt;&lt;div&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;&lt;font&gt;%c4Description%&lt;/font&gt;&lt;/font&gt;&lt;/div&gt;" id="SpZZzXccjcox3r2icD-f-1">
+          <mxCell parent="1" style="html=1;fontSize=11;whiteSpace=wrap;fillColor=light-dark(#FFFFFF,#FFFFFF);strokeColor=light-dark(#57993B,#57993B);fontColor=light-dark(#57993B,#57993B);shape=mxgraph.c4.person2;align=center;metaEdit=1;points=[[0.5,0,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0]];resizable=0;flipH=0;legacyAnchorPoints=0;flipV=0;strokeWidth=4;" vertex="1">
+            <mxGeometry height="180" width="200" x="980" y="140" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="SpZZzXccjcox3r2icD-f-3" edge="1" parent="1" source="SpZZzXccjcox3r2icD-f-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;defaultLabelBackgroundColor=page;dashed=1;dashPattern=8 8;endArrow=block;endFill=1;exitX=0.497;exitY=1.002;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.501;entryY=-0.025;entryDx=0;entryDy=0;entryPerimeter=0;" target="SpZZzXccjcox3r2icD-f-47">
+          <mxGeometry relative="1" x="-0.0384" as="geometry">
+            <Array as="points">
+              <mxPoint x="1079.4" y="579" />
+            </Array>
+            <mxPoint x="1080" y="303.9" as="sourcePoint" />
+            <mxPoint x="1078" y="579" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SpZZzXccjcox3r2icD-f-4" connectable="0" parent="SpZZzXccjcox3r2icD-f-3" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;defaultLabelBackgroundColor=page;" value="&lt;div&gt;Lanza simulaciones&amp;nbsp;&lt;/div&gt;&lt;div&gt;y visualiza los resultados&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.2598" as="geometry">
+            <mxPoint x="2" y="-17" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SpZZzXccjcox3r2icD-f-6" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=-0.01;entryY=0.484;entryDx=0;entryDy=0;entryPerimeter=0;dashed=1;dashPattern=8 8;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;defaultLabelBackgroundColor=page;endArrow=block;endFill=1;" target="5mU4tIuO5C6ToKhVTQKn-5">
+          <mxGeometry relative="1" x="0.5" as="geometry">
+            <mxPoint x="1200" y="680" as="sourcePoint" />
+            <mxPoint x="1630" y="682" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SpZZzXccjcox3r2icD-f-7" connectable="0" parent="SpZZzXccjcox3r2icD-f-6" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;defaultLabelBackgroundColor=page;" value="&lt;div&gt;Envía datos de actores viales&amp;nbsp;&lt;/div&gt;&lt;div&gt;y muestra el escenario renderizado&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="0.4907" as="geometry">
+            <mxPoint x="-85" y="2" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SpZZzXccjcox3r2icD-f-9" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;dashPattern=8 8;strokeColor=#000000;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;defaultLabelBackgroundColor=page;endArrow=block;endFill=1;">
+          <mxGeometry relative="1" x="0.7476" as="geometry">
+            <mxPoint x="1080" y="758" as="sourcePoint" />
+            <mxPoint x="1080" y="1158" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SpZZzXccjcox3r2icD-f-10" connectable="0" parent="SpZZzXccjcox3r2icD-f-9" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;defaultLabelBackgroundColor=page;" value="&lt;div&gt;Envía petición para obtener los distintos&lt;/div&gt;&lt;div&gt;escenarios de simulación o para cargar una&lt;/div&gt;&lt;div&gt;nueva parametrización del escenario&lt;/div&gt;&lt;div&gt;[GeoJSON/HTTP]&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="0.7619" as="geometry">
+            <mxPoint y="-152" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SpZZzXccjcox3r2icD-f-12" edge="1" parent="1" source="SpZZzXccjcox3r2icD-f-35" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=-0.01;entryY=0.505;entryDx=0;entryDy=0;entryPerimeter=0;dashed=1;dashPattern=8 8;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;defaultLabelBackgroundColor=page;endArrow=block;endFill=1;exitX=0.998;exitY=0.665;exitDx=0;exitDy=0;exitPerimeter=0;" target="5mU4tIuO5C6ToKhVTQKn-11" value="">
+          <mxGeometry relative="1" x="0.0141" as="geometry">
+            <mxPoint x="1610" y="1160" as="sourcePoint" />
+            <mxPoint x="1840" y="1440" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SpZZzXccjcox3r2icD-f-13" connectable="0" parent="SpZZzXccjcox3r2icD-f-12" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;defaultLabelBackgroundColor=page;" value="&lt;div&gt;Envía los archivos de entrada,&lt;/div&gt;&lt;div&gt;delega la simulación y lee los&lt;/div&gt;&lt;div&gt;archivos resultantes&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="0.0301" y="-1" as="geometry">
+            <mxPoint x="142" y="-1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SpZZzXccjcox3r2icD-f-15" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;dashed=1;dashPattern=8 8;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;defaultLabelBackgroundColor=page;endArrow=block;endFill=1;">
+          <mxGeometry relative="1" x="0.0194" as="geometry">
+            <mxPoint x="950.32" y="1440" as="sourcePoint" />
+            <mxPoint x="280" y="1440" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SpZZzXccjcox3r2icD-f-16" connectable="0" parent="SpZZzXccjcox3r2icD-f-15" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;defaultLabelBackgroundColor=page;" value="&lt;div&gt;Obtiene los archivos que definen&lt;/div&gt;&lt;div&gt;el mapa y la infraestructura de Bogotá&lt;/div&gt;&lt;div&gt;con enfoque en la localidad de Usaquen&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.0413" as="geometry">
+            <mxPoint x="-169" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <object placeholders="1" c4Name="Servicio de simulación" c4Type="SystemScopeBoundary" c4Application="Software System" label="&lt;font style=&quot;font-size: 16px&quot;&gt;&lt;b&gt;&lt;div style=&quot;text-align: left&quot;&gt;%c4Name%&lt;/div&gt;&lt;/b&gt;&lt;/font&gt;&lt;div style=&quot;text-align: left&quot;&gt;[%c4Application%]&lt;/div&gt;" id="SpZZzXccjcox3r2icD-f-18">
+          <mxCell parent="1" style="rounded=1;fontSize=11;whiteSpace=wrap;html=1;arcSize=20;fillColor=none;strokeColor=light-dark(#5995D1,#5995D1);fontColor=light-dark(#5995D1,#5995D1);labelBackgroundColor=none;align=left;verticalAlign=bottom;labelBorderColor=none;spacingTop=0;spacing=10;metaEdit=1;rotatable=0;perimeter=rectanglePerimeter;labelPadding=0;allowArrows=0;connectable=0;expand=0;recursiveResize=0;editable=1;pointerEvents=0;absoluteArcSize=1;points=[[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];strokeWidth=2;" vertex="1">
+            <mxGeometry height="760" width="800" x="680" y="1080" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="SpZZzXccjcox3r2icD-f-29" connectable="0" parent="1" style="group" value="" vertex="1">
+          <mxGeometry height="120" width="252" x="948" y="1160" as="geometry" />
+        </mxCell>
+        <mxCell id="SpZZzXccjcox3r2icD-f-48" edge="1" parent="SpZZzXccjcox3r2icD-f-29" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;dashPattern=8 8;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;defaultLabelBackgroundColor=page;endArrow=block;endFill=1;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="132" y="120" as="sourcePoint" />
+            <mxPoint x="132" y="197" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SpZZzXccjcox3r2icD-f-49" connectable="0" parent="SpZZzXccjcox3r2icD-f-48" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;defaultLabelBackgroundColor=page;" value="&lt;div&gt;Ejecuta simulaciones y lee los escenarios&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.0079" y="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <object placeholders="1" c4Name="Backend" c4Type="Container" c4Technology="Python, FastAPI" c4Description="Provee interfaces y endpoints para la comunicación mediante API REST JSON y WebSocket." label="&lt;font style=&quot;font-size: 16px&quot;&gt;&lt;b&gt;%c4Name%&lt;/b&gt;&lt;/font&gt;&lt;div&gt;[%c4Type%: %c4Technology%]&lt;/div&gt;&lt;br&gt;&lt;div&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;&lt;font&gt;%c4Description%&lt;/font&gt;&lt;/font&gt;&lt;/div&gt;" id="SpZZzXccjcox3r2icD-f-19">
+          <mxCell parent="SpZZzXccjcox3r2icD-f-29" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;labelBackgroundColor=none;fillColor=light-dark(#FFFFFF,#FFFFFF);fontColor=#5995D1;align=center;arcSize=10;strokeColor=light-dark(#5995D1,#5995D1);metaEdit=1;resizable=0;points=[[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];strokeWidth=4;" vertex="1">
+            <mxGeometry height="120" width="240" x="12" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="SpZZzXccjcox3r2icD-f-24" parent="SpZZzXccjcox3r2icD-f-29" style="shape=partialRectangle;whiteSpace=wrap;html=1;top=0;left=0;fillColor=none;rotation=-45;strokeColor=light-dark(#5995D1,#5995D1);strokeWidth=1;" value="" vertex="1">
+          <mxGeometry height="6" width="6" x="22" y="10" as="geometry" />
+        </mxCell>
+        <mxCell id="SpZZzXccjcox3r2icD-f-30" edge="1" parent="SpZZzXccjcox3r2icD-f-29" style="endArrow=none;html=1;rounded=1;dashed=1;dashPattern=8 8;strokeColor=light-dark(#5995D1,#5995D1);align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;defaultLabelBackgroundColor=page;edgeStyle=orthogonalEdgeStyle;curved=0;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="28" y="20" as="sourcePoint" />
+            <mxPoint x="40" y="20" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SpZZzXccjcox3r2icD-f-34" connectable="0" parent="1" style="group" value="" vertex="1">
+          <mxGeometry height="120" width="252" x="946" y="1360" as="geometry" />
+        </mxCell>
+        <object placeholders="1" c4Name="ETL" c4Type="Container" c4Technology="Python, SUMO API" c4Description="Consume los archivos estáticos de tanto la red de OpenStreetMap como la encuesta de movilidad. Limpia los datos y guarda archivos que no cambian recurrentemente." label="&lt;font style=&quot;font-size: 16px&quot;&gt;&lt;b&gt;%c4Name%&lt;/b&gt;&lt;/font&gt;&lt;div&gt;[%c4Type%: %c4Technology%]&lt;/div&gt;&lt;br&gt;&lt;div&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;&lt;font&gt;%c4Description%&lt;/font&gt;&lt;/font&gt;&lt;/div&gt;" id="SpZZzXccjcox3r2icD-f-35">
+          <mxCell parent="SpZZzXccjcox3r2icD-f-34" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;labelBackgroundColor=none;fillColor=light-dark(#FFFFFF,#FFFFFF);fontColor=#5995D1;align=center;arcSize=10;strokeColor=light-dark(#5995D1,#5995D1);metaEdit=1;resizable=0;points=[[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];strokeWidth=4;" vertex="1">
+            <mxGeometry height="120" width="240" x="12" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="SpZZzXccjcox3r2icD-f-36" parent="SpZZzXccjcox3r2icD-f-34" style="shape=partialRectangle;whiteSpace=wrap;html=1;top=0;left=0;fillColor=none;rotation=-45;strokeColor=light-dark(#5995D1,#5995D1);strokeWidth=1;" value="" vertex="1">
+          <mxGeometry height="6" width="6" x="22" y="10" as="geometry" />
+        </mxCell>
+        <mxCell id="SpZZzXccjcox3r2icD-f-37" edge="1" parent="SpZZzXccjcox3r2icD-f-34" style="endArrow=none;html=1;rounded=1;dashed=1;dashPattern=8 8;strokeColor=light-dark(#5995D1,#5995D1);align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;defaultLabelBackgroundColor=page;edgeStyle=orthogonalEdgeStyle;curved=0;" value="">
+          <mxGeometry height="50" relative="1" width="50" as="geometry">
+            <mxPoint x="28" y="20" as="sourcePoint" />
+            <mxPoint x="40" y="20" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SpZZzXccjcox3r2icD-f-38" connectable="0" parent="1" style="group" value="" vertex="1">
+          <mxGeometry height="140" width="240" x="760" y="1600" as="geometry" />
+        </mxCell>
+        <object placeholders="1" c4Name="Contenido estático" c4Type="Container" c4Technology="Directory" c4Description="net.xml, taz.xml" label="&lt;font style=&quot;font-size: 16px&quot;&gt;&lt;b&gt;%c4Name%&lt;/b&gt;&lt;/font&gt;&lt;div&gt;[%c4Type%: %c4Technology%]&lt;/div&gt;&lt;br&gt;&lt;div&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;&lt;font&gt;%c4Description%&lt;/font&gt;&lt;/font&gt;&lt;/div&gt;" id="SpZZzXccjcox3r2icD-f-32">
+          <mxCell parent="SpZZzXccjcox3r2icD-f-38" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;labelBackgroundColor=none;fillColor=light-dark(#FFFFFF,#FFFFFF);fontColor=light-dark(#5995D1,#5995D1);align=center;arcSize=10;strokeColor=light-dark(#5995D1,#5995D1);metaEdit=1;resizable=0;points=[[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];strokeWidth=4;" vertex="1">
+            <mxGeometry height="120" width="240" y="20" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="SpZZzXccjcox3r2icD-f-33" edge="1" parent="SpZZzXccjcox3r2icD-f-38" source="SpZZzXccjcox3r2icD-f-32" style="endArrow=none;html=1;rounded=1;strokeColor=light-dark(#5995D1,#5995D1);align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;defaultLabelBackgroundColor=page;edgeStyle=orthogonalEdgeStyle;exitX=0.377;exitY=0.001;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.023;entryY=0.009;entryDx=0;entryDy=0;entryPerimeter=0;innerLoopWaypoints=1;curved=0;strokeWidth=4;" target="SpZZzXccjcox3r2icD-f-32" value="">
+          <mxGeometry height="50" relative="1" width="50" x="-0.0333" as="geometry">
+            <Array as="points">
+              <mxPoint x="90.5" />
+              <mxPoint x="5.5" />
+            </Array>
+            <mxPoint x="40" as="sourcePoint" />
+            <mxPoint x="90" y="-50" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SpZZzXccjcox3r2icD-f-39" edge="1" parent="1" source="SpZZzXccjcox3r2icD-f-35" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.495;entryY=-0.028;entryDx=0;entryDy=0;entryPerimeter=0;dashed=1;dashPattern=8 8;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;defaultLabelBackgroundColor=page;endArrow=block;endFill=1;exitX=0.198;exitY=1.002;exitDx=0;exitDy=0;exitPerimeter=0;" target="SpZZzXccjcox3r2icD-f-32">
+          <mxGeometry relative="1" x="-0.2823" as="geometry" />
+        </mxCell>
+        <mxCell id="SpZZzXccjcox3r2icD-f-40" connectable="0" parent="SpZZzXccjcox3r2icD-f-39" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;defaultLabelBackgroundColor=page;" value="&lt;div&gt;Guarda datos limpios y lee archivos XML&lt;/div&gt;&lt;div&gt;para generar simulación&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.2258" y="1" as="geometry">
+            <mxPoint x="-108" y="1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SpZZzXccjcox3r2icD-f-41" connectable="0" parent="1" style="group" value="" vertex="1">
+          <mxGeometry height="140" width="240" x="1160" y="1600" as="geometry" />
+        </mxCell>
+        <object placeholders="1" c4Name="Escenarios precalculados" c4Type="Container" c4Technology="Directory" c4Description="Guarda escenarios precalculados para evitar un tiempo de espera extenso entre distintos escenarios de simulacion." label="&lt;font style=&quot;font-size: 16px&quot;&gt;&lt;b&gt;%c4Name%&lt;/b&gt;&lt;/font&gt;&lt;div&gt;[%c4Type%: %c4Technology%]&lt;/div&gt;&lt;br&gt;&lt;div&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;&lt;font&gt;%c4Description%&lt;/font&gt;&lt;/font&gt;&lt;/div&gt;" id="SpZZzXccjcox3r2icD-f-42">
+          <mxCell parent="SpZZzXccjcox3r2icD-f-41" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;labelBackgroundColor=none;fillColor=light-dark(#FFFFFF,#FFFFFF);fontColor=light-dark(#5995D1,#5995D1);align=center;arcSize=10;strokeColor=light-dark(#5995D1,#5995D1);metaEdit=1;resizable=0;points=[[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];strokeWidth=4;" vertex="1">
+            <mxGeometry height="120" width="240" y="20" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="SpZZzXccjcox3r2icD-f-43" edge="1" parent="SpZZzXccjcox3r2icD-f-41" source="SpZZzXccjcox3r2icD-f-42" style="endArrow=none;html=1;rounded=1;strokeColor=light-dark(#5995D1,#5995D1);align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;defaultLabelBackgroundColor=page;edgeStyle=orthogonalEdgeStyle;exitX=0.377;exitY=0.001;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.023;entryY=0.009;entryDx=0;entryDy=0;entryPerimeter=0;innerLoopWaypoints=1;curved=0;strokeWidth=4;" target="SpZZzXccjcox3r2icD-f-42" value="">
+          <mxGeometry height="50" relative="1" width="50" x="-0.0333" as="geometry">
+            <Array as="points">
+              <mxPoint x="90.5" />
+              <mxPoint x="5.5" />
+            </Array>
+            <mxPoint x="40" as="sourcePoint" />
+            <mxPoint x="90" y="-50" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SpZZzXccjcox3r2icD-f-44" edge="1" parent="1" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;dashPattern=8 8;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;defaultLabelBackgroundColor=page;endArrow=block;endFill=1;">
+          <mxGeometry relative="1" x="-0.4186" as="geometry">
+            <Array as="points">
+              <mxPoint x="1160" y="1551" />
+              <mxPoint x="1280" y="1551" />
+            </Array>
+            <mxPoint x="1160" y="1482" as="sourcePoint" />
+            <mxPoint x="1280" y="1620" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="SpZZzXccjcox3r2icD-f-45" connectable="0" parent="SpZZzXccjcox3r2icD-f-44" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;defaultLabelBackgroundColor=page;" value="Guarda y lee escenario calculados" vertex="1">
+          <mxGeometry relative="1" x="0.3333" y="-2" as="geometry">
+            <mxPoint x="6" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <object placeholders="1" c4Name="Sitio web" c4Type="SystemScopeBoundary" c4Application="Software System" label="&lt;font style=&quot;font-size: 16px&quot;&gt;&lt;b&gt;&lt;div style=&quot;text-align: left&quot;&gt;%c4Name%&lt;/div&gt;&lt;/b&gt;&lt;/font&gt;&lt;div style=&quot;text-align: left&quot;&gt;[%c4Application%]&lt;/div&gt;" id="SpZZzXccjcox3r2icD-f-46">
+          <mxCell parent="1" style="rounded=1;fontSize=11;whiteSpace=wrap;html=1;arcSize=20;fillColor=none;strokeColor=light-dark(#5995D1,#5995D1);fontColor=light-dark(#5995D1,#5995D1);labelBackgroundColor=none;align=left;verticalAlign=bottom;labelBorderColor=none;spacingTop=0;spacing=10;metaEdit=1;rotatable=0;perimeter=rectanglePerimeter;labelPadding=0;allowArrows=0;connectable=0;expand=0;recursiveResize=0;editable=1;pointerEvents=0;absoluteArcSize=1;points=[[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];strokeWidth=2;" vertex="1">
+            <mxGeometry height="320" width="400" x="880" y="522" as="geometry" />
+          </mxCell>
+        </object>
+        <object placeholders="1" c4Name="UI" c4Type="Container" c4Technology="React" c4Description="Permite a los usuarios finales visualizar la simulación, lanzar nuevas simulaciones con parámetros específicos." label="&lt;font style=&quot;font-size: 16px&quot;&gt;&lt;b&gt;%c4Name%&lt;/b&gt;&lt;/font&gt;&lt;div&gt;[%c4Type%:&amp;nbsp;%c4Technology%]&lt;/div&gt;&lt;br&gt;&lt;div&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;&lt;font&gt;%c4Description%&lt;/font&gt;&lt;/font&gt;&lt;/div&gt;" id="SpZZzXccjcox3r2icD-f-47">
+          <mxCell parent="1" style="shape=mxgraph.c4.webBrowserContainer2;whiteSpace=wrap;html=1;boundedLbl=1;rounded=0;labelBackgroundColor=none;strokeColor=light-dark(#118ACD, #0d5091);fillColor=light-dark(#FFFFFF,#FFFFFF);strokeColor=#118ACD;strokeColor2=#0E7DAD;fontSize=12;fontColor=light-dark(#5995D1,#5995D1);align=center;metaEdit=1;points=[[0.5,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.5,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];resizable=0;strokeWidth=2;" vertex="1">
+            <mxGeometry height="160" width="240" x="960" y="597" as="geometry" />
+          </mxCell>
+        </object>
+        <object placeholders="1" c4Name="Renderizador" c4Type="Software System" c4Description="Renderiza el mapa, los actores viales y la infraestructura mediante Kepler.gl usando la API de Mapbox." label="&lt;font style=&quot;font-size: 16px&quot;&gt;&lt;b&gt;%c4Name%&lt;/b&gt;&lt;/font&gt;&lt;div&gt;[%c4Type%]&lt;/div&gt;&lt;br&gt;&lt;div&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;&lt;font&gt;%c4Description%&lt;/font&gt;&lt;/font&gt;&lt;/div&gt;" id="5mU4tIuO5C6ToKhVTQKn-5">
+          <mxCell parent="1" style="rounded=1;whiteSpace=wrap;html=1;labelBackgroundColor=none;fillColor=light-dark(#FFFFFF,#FFFFFF);fontColor=light-dark(#CC434E,#CC434E);align=center;arcSize=10;strokeColor=light-dark(#CC434E,#CC434E);metaEdit=1;resizable=0;points=[[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];strokeWidth=4;spacing=4;" vertex="1">
+            <mxGeometry height="120" width="240" x="1680" y="622" as="geometry" />
+          </mxCell>
+        </object>
+        <object placeholders="1" c4Name="Simulador de movilidad" c4Type="Software System" c4Description="Provee funcionalidades para simular escenarios de movilidad usando Simulation of Urban MObility (SUMO) el cual es un software para simulaciones de tráfico multimodal." label="&lt;font style=&quot;font-size: 16px&quot;&gt;&lt;b&gt;%c4Name%&lt;/b&gt;&lt;/font&gt;&lt;div&gt;[%c4Type%]&lt;/div&gt;&lt;br&gt;&lt;div&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;&lt;font&gt;%c4Description%&lt;/font&gt;&lt;/font&gt;&lt;/div&gt;" id="5mU4tIuO5C6ToKhVTQKn-11">
+          <mxCell parent="1" style="rounded=1;whiteSpace=wrap;html=1;labelBackgroundColor=none;fillColor=light-dark(#FFFFFF,#FFFFFF);fontColor=light-dark(#338033,#338033);align=center;arcSize=10;strokeColor=light-dark(#338033,#338033);metaEdit=1;resizable=0;points=[[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];strokeWidth=4;" vertex="1">
+            <mxGeometry height="120" width="240" x="1840" y="1380" as="geometry" />
+          </mxCell>
+        </object>
+        <object placeholders="1" c4Name="Proveedor cartográfico" c4Type="Data Provider" c4Description="Provee la cartografía e infraestructura para las simulaciones; se uso OpenStreetMap proyecto open-source que provee mapas e infraestructura del mundo." label="&lt;font style=&quot;font-size: 16px&quot;&gt;&lt;b&gt;%c4Name%&lt;/b&gt;&lt;/font&gt;&lt;div&gt;[%c4Type%]&lt;/div&gt;&lt;br&gt;&lt;div&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;&lt;font&gt;%c4Description%&lt;/font&gt;&lt;/font&gt;&lt;/div&gt;" id="5mU4tIuO5C6ToKhVTQKn-14">
+          <mxCell parent="1" style="rounded=1;whiteSpace=wrap;html=1;labelBackgroundColor=none;fillColor=light-dark(#FFFFFF,#FFFFFF);fontColor=light-dark(#343434,#343434);align=center;arcSize=10;strokeColor=light-dark(#343434,#343434);metaEdit=1;resizable=0;points=[[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];strokeWidth=4;spacing=3;" vertex="1">
+            <mxGeometry height="120" width="240" x="30" y="1390" as="geometry" />
+          </mxCell>
+        </object>
+        <object placeholders="1" c4Name="Datos de movilidad" c4Type="Data Provider" c4Description="Provee los datos iniciales o por defecto para las simulaciones; para este proyecto se usaron los datos de la Encuesta de Movilidad de Bogotá obtenidos del (SIMUR)." label="&lt;font style=&quot;font-size: 16px&quot;&gt;&lt;b&gt;%c4Name%&lt;/b&gt;&lt;/font&gt;&lt;div&gt;[%c4Type%]&lt;/div&gt;&lt;br&gt;&lt;div&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;&lt;font&gt;%c4Description%&lt;/font&gt;&lt;/font&gt;&lt;/div&gt;" id="1ErJ3wDgshFYsbJK4SyT-1">
+          <mxCell parent="1" style="rounded=1;whiteSpace=wrap;html=1;labelBackgroundColor=none;fillColor=light-dark(#FFFFFF,#FFFFFF);fontColor=light-dark(#D09A00,#D09A00);align=center;arcSize=10;strokeColor=light-dark(#FFCC01,#FFCC01);metaEdit=1;resizable=0;points=[[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];strokeWidth=4;spacing=5;" vertex="1">
+            <mxGeometry height="120" width="240" x="958" y="2003" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="1ErJ3wDgshFYsbJK4SyT-2" edge="1" parent="1" source="SpZZzXccjcox3r2icD-f-35" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.502;entryY=-0.023;entryDx=0;entryDy=0;entryPerimeter=0;dashed=1;dashPattern=8 8;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;defaultLabelBackgroundColor=page;endArrow=block;endFill=1;" target="1ErJ3wDgshFYsbJK4SyT-1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="VYRsF4x60St2P1OxT0cd-1" connectable="0" parent="1ErJ3wDgshFYsbJK4SyT-2" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;defaultLabelBackgroundColor=page;" value="&lt;div&gt;Obtiene los datos iniciales&lt;/div&gt;&lt;div&gt;para las simulaciones&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="0.6777" y="1" as="geometry">
+            <mxPoint x="1" y="-6" as="offset" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="c4-component" id="qG_fYcMRGJtXTHQ8PGmm">
+    <mxGraphModel dx="1509" dy="2216" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="VvN21lq--vLWiRzP2Zal-0" />
+        <mxCell id="VvN21lq--vLWiRzP2Zal-1" parent="VvN21lq--vLWiRzP2Zal-0" />
+        <mxCell id="uhpqidpNTNmgNnFNpOo8-37" connectable="0" parent="VvN21lq--vLWiRzP2Zal-1" style="group" value="" vertex="1">
+          <mxGeometry height="120" width="255" x="2860" y="880" as="geometry" />
+        </mxCell>
+        <object placeholders="1" c4Name="API Demandas" c4Type="Component" c4Technology="Python, FastAPI" c4Description="Provee la interfaz para los tipos de manejo." label="&lt;font style=&quot;font-size: 16px&quot;&gt;&lt;b&gt;%c4Name%&lt;/b&gt;&lt;/font&gt;&lt;div&gt;[%c4Type%: %c4Technology%]&lt;/div&gt;&lt;br&gt;&lt;div&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;%c4Description%&lt;/font&gt;&lt;/div&gt;" id="8rPs5dg_FkbTrzYiafEU-1">
+          <mxCell parent="uhpqidpNTNmgNnFNpOo8-37" style="rounded=1;whiteSpace=wrap;html=1;labelBackgroundColor=none;fillColor=light-dark(#FFFFFF,#FFFFFF);fontColor=#5995D1;align=center;arcSize=6;strokeColor=light-dark(#5995D1,#5995D1);metaEdit=1;resizable=0;points=[[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];strokeWidth=4;" vertex="1">
+            <mxGeometry height="120" width="240" x="15" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="R4yX9dGohDrum6cIqxrN-0" parent="uhpqidpNTNmgNnFNpOo8-37" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;strokeWidth=3;strokeColor=light-dark(#5995D1,#5995D1);fillColor=light-dark(#FFFFFF,#FFFFFF);" value="" vertex="1">
+          <mxGeometry height="20" width="30" y="36" as="geometry" />
+        </mxCell>
+        <mxCell id="R4yX9dGohDrum6cIqxrN-2" parent="uhpqidpNTNmgNnFNpOo8-37" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;strokeWidth=3;strokeColor=light-dark(#5995D1,#5995D1);fillColor=light-dark(#FFFFFF,#FFFFFF);" value="" vertex="1">
+          <mxGeometry height="20" width="30" y="9" as="geometry" />
+        </mxCell>
+        <object placeholders="1" c4Name="Ingeniero, especialista" c4Type="Person" c4Description="Ingeniero civil, movilidad o especialista en movilidad." label="&lt;font style=&quot;font-size: 16px&quot;&gt;&lt;b&gt;%c4Name%&lt;/b&gt;&lt;/font&gt;&lt;div&gt;[%c4Type%]&lt;/div&gt;&lt;br&gt;&lt;div&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;&lt;font&gt;%c4Description%&lt;/font&gt;&lt;/font&gt;&lt;/div&gt;" id="QB5Tfo3aUv_iryJsPqn6-0">
+          <mxCell parent="VvN21lq--vLWiRzP2Zal-1" style="html=1;fontSize=11;whiteSpace=wrap;fillColor=light-dark(#FFFFFF,#FFFFFF);strokeColor=light-dark(#57993B,#57993B);fontColor=light-dark(#57993B,#57993B);shape=mxgraph.c4.person2;align=center;metaEdit=1;points=[[0.5,0,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0]];resizable=0;flipH=0;legacyAnchorPoints=0;flipV=0;strokeWidth=4;" vertex="1">
+            <mxGeometry height="180" width="200" x="2680" y="-579" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="QB5Tfo3aUv_iryJsPqn6-1" edge="1" parent="VvN21lq--vLWiRzP2Zal-1" source="QB5Tfo3aUv_iryJsPqn6-0" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;defaultLabelBackgroundColor=page;dashed=1;dashPattern=8 8;endArrow=block;endFill=1;exitX=0.497;exitY=1.002;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.501;entryY=-0.025;entryDx=0;entryDy=0;entryPerimeter=0;" target="QB5Tfo3aUv_iryJsPqn6-33">
+          <mxGeometry relative="1" x="-0.0384" as="geometry">
+            <Array as="points">
+              <mxPoint x="2779.4" y="-140" />
+            </Array>
+            <mxPoint x="2780" y="-415.1" as="sourcePoint" />
+            <mxPoint x="2778" y="-140" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QB5Tfo3aUv_iryJsPqn6-2" connectable="0" parent="QB5Tfo3aUv_iryJsPqn6-1" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;defaultLabelBackgroundColor=page;" value="&lt;div&gt;Lanza simulaciones&amp;nbsp;&lt;/div&gt;&lt;div&gt;y visualiza los resultados&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.2598" as="geometry">
+            <mxPoint x="2" y="-17" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QB5Tfo3aUv_iryJsPqn6-3" edge="1" parent="VvN21lq--vLWiRzP2Zal-1" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=-0.01;entryY=0.484;entryDx=0;entryDy=0;entryPerimeter=0;dashed=1;dashPattern=8 8;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;defaultLabelBackgroundColor=page;endArrow=block;endFill=1;" target="QB5Tfo3aUv_iryJsPqn6-34">
+          <mxGeometry relative="1" x="0.1093" as="geometry">
+            <mxPoint x="3870" y="398.08" as="sourcePoint" />
+            <mxPoint x="3350" y="392" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QB5Tfo3aUv_iryJsPqn6-4" connectable="0" parent="QB5Tfo3aUv_iryJsPqn6-3" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;defaultLabelBackgroundColor=page;" value="&lt;div&gt;Envía datos de actores viales&amp;nbsp;&lt;/div&gt;&lt;div&gt;y muestra el escenario renderizado&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="0.093" as="geometry">
+            <mxPoint x="-19" y="2" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QB5Tfo3aUv_iryJsPqn6-5" edge="1" parent="VvN21lq--vLWiRzP2Zal-1" source="QB5Tfo3aUv_iryJsPqn6-33" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;dashPattern=8 8;strokeColor=#000000;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;defaultLabelBackgroundColor=page;endArrow=block;endFill=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;exitPerimeter=0;">
+          <mxGeometry relative="1" x="0.686" as="geometry">
+            <Array as="points">
+              <mxPoint x="2780" y="250" />
+            </Array>
+            <mxPoint x="2740" y="-260" as="sourcePoint" />
+            <mxPoint x="2780" y="280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QB5Tfo3aUv_iryJsPqn6-6" connectable="0" parent="QB5Tfo3aUv_iryJsPqn6-5" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;defaultLabelBackgroundColor=page;" value="&lt;div&gt;Envía petición para obtener los distintos&lt;/div&gt;&lt;div&gt;escenarios de simulación o para cargar una&lt;/div&gt;&lt;div&gt;nueva parametrización del escenario&lt;/div&gt;&lt;div&gt;[GeoJSON/HTTP]&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="0.6942" as="geometry">
+            <mxPoint y="-53" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QB5Tfo3aUv_iryJsPqn6-7" edge="1" parent="VvN21lq--vLWiRzP2Zal-1" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=-0.01;entryY=0.505;entryDx=0;entryDy=0;entryPerimeter=0;dashed=1;dashPattern=8 8;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;defaultLabelBackgroundColor=page;endArrow=block;endFill=1;" target="QB5Tfo3aUv_iryJsPqn6-35" value="">
+          <mxGeometry relative="1" x="-0.69" as="geometry">
+            <mxPoint x="3950" y="1160" as="sourcePoint" />
+            <mxPoint x="3560" y="1150" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QB5Tfo3aUv_iryJsPqn6-8" connectable="0" parent="QB5Tfo3aUv_iryJsPqn6-7" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;defaultLabelBackgroundColor=page;" value="&lt;div&gt;Envía los archivos de entrada,&lt;/div&gt;&lt;div&gt;delega la simulación y lee los&lt;/div&gt;&lt;div&gt;archivos resultantes&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.6607" y="-1" as="geometry">
+            <mxPoint x="129" y="-1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QB5Tfo3aUv_iryJsPqn6-9" edge="1" parent="VvN21lq--vLWiRzP2Zal-1" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;dashed=1;dashPattern=8 8;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;defaultLabelBackgroundColor=page;endArrow=block;endFill=1;" target="QB5Tfo3aUv_iryJsPqn6-36">
+          <mxGeometry relative="1" x="-0.9895" as="geometry">
+            <mxPoint x="1440" y="1160" as="sourcePoint" />
+            <mxPoint x="1160" y="1159.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QB5Tfo3aUv_iryJsPqn6-10" connectable="0" parent="QB5Tfo3aUv_iryJsPqn6-9" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;defaultLabelBackgroundColor=page;" value="&lt;div&gt;Obtiene los archivos que definen&lt;/div&gt;&lt;div&gt;el mapa y la infraestructura de Bogotá&lt;/div&gt;&lt;div&gt;con enfoque en la localidad de Usaquen&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.6004" as="geometry">
+            <mxPoint x="-84" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <object placeholders="1" c4Name="Servicio de simulación" c4Type="SystemScopeBoundary" c4Application="Software System" label="&lt;font style=&quot;font-size: 16px&quot;&gt;&lt;b&gt;&lt;div style=&quot;text-align: left&quot;&gt;%c4Name%&lt;/div&gt;&lt;/b&gt;&lt;/font&gt;&lt;div style=&quot;text-align: left&quot;&gt;[%c4Application%]&lt;/div&gt;" id="QB5Tfo3aUv_iryJsPqn6-11">
+          <mxCell parent="VvN21lq--vLWiRzP2Zal-1" style="rounded=1;fontSize=11;whiteSpace=wrap;html=1;arcSize=20;fillColor=none;strokeColor=light-dark(#5995D1,#5995D1);fontColor=light-dark(#5995D1,#5995D1);labelBackgroundColor=none;align=left;verticalAlign=bottom;labelBorderColor=none;spacingTop=0;spacing=10;metaEdit=1;rotatable=0;perimeter=rectanglePerimeter;labelPadding=0;allowArrows=0;connectable=0;expand=0;recursiveResize=0;editable=1;pointerEvents=0;absoluteArcSize=1;points=[[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];strokeWidth=2;" vertex="1">
+            <mxGeometry height="1160" width="1520" x="2080" y="720" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="QB5Tfo3aUv_iryJsPqn6-22" connectable="0" parent="VvN21lq--vLWiRzP2Zal-1" style="group" value="" vertex="1">
+          <mxGeometry height="140" width="240" x="2080" y="2160" as="geometry" />
+        </mxCell>
+        <object placeholders="1" c4Name="Contenido estático" c4Type="Container" c4Technology="Directory" c4Description="net.xml, taz.xml" label="&lt;font style=&quot;font-size: 16px&quot;&gt;&lt;b&gt;%c4Name%&lt;/b&gt;&lt;/font&gt;&lt;div&gt;[%c4Type%: %c4Technology%]&lt;/div&gt;&lt;br&gt;&lt;div&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;&lt;font&gt;%c4Description%&lt;/font&gt;&lt;/font&gt;&lt;/div&gt;" id="QB5Tfo3aUv_iryJsPqn6-23">
+          <mxCell parent="QB5Tfo3aUv_iryJsPqn6-22" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;labelBackgroundColor=none;fillColor=light-dark(#FFFFFF,#FFFFFF);fontColor=light-dark(#5995D1,#5995D1);align=center;arcSize=10;strokeColor=light-dark(#5995D1,#5995D1);metaEdit=1;resizable=0;points=[[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];strokeWidth=4;" vertex="1">
+            <mxGeometry height="120" width="240" y="20" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="QB5Tfo3aUv_iryJsPqn6-24" edge="1" parent="QB5Tfo3aUv_iryJsPqn6-22" source="QB5Tfo3aUv_iryJsPqn6-23" style="endArrow=none;html=1;rounded=1;strokeColor=light-dark(#5995D1,#5995D1);align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;defaultLabelBackgroundColor=page;edgeStyle=orthogonalEdgeStyle;exitX=0.377;exitY=0.001;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.023;entryY=0.009;entryDx=0;entryDy=0;entryPerimeter=0;innerLoopWaypoints=1;curved=0;strokeWidth=4;" target="QB5Tfo3aUv_iryJsPqn6-23" value="">
+          <mxGeometry height="50" relative="1" width="50" x="-0.0333" as="geometry">
+            <Array as="points">
+              <mxPoint x="90.5" />
+              <mxPoint x="5.5" />
+            </Array>
+            <mxPoint x="40" as="sourcePoint" />
+            <mxPoint x="90" y="-50" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QB5Tfo3aUv_iryJsPqn6-25" edge="1" parent="VvN21lq--vLWiRzP2Zal-1" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.495;entryY=-0.028;entryDx=0;entryDy=0;entryPerimeter=0;dashed=1;dashPattern=8 8;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;defaultLabelBackgroundColor=page;endArrow=block;endFill=1;" target="QB5Tfo3aUv_iryJsPqn6-23">
+          <mxGeometry relative="1" x="-0.6639" as="geometry">
+            <mxPoint x="2198.8" y="2010" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QB5Tfo3aUv_iryJsPqn6-26" connectable="0" parent="QB5Tfo3aUv_iryJsPqn6-25" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;defaultLabelBackgroundColor=page;" value="&lt;div&gt;Guarda datos limpios y lee archivos XML&lt;/div&gt;&lt;div&gt;para generar simulación&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.5919" y="1" as="geometry">
+            <mxPoint y="16" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QB5Tfo3aUv_iryJsPqn6-27" connectable="0" parent="VvN21lq--vLWiRzP2Zal-1" style="group" value="" vertex="1">
+          <mxGeometry height="140" width="240" x="3410" y="2130" as="geometry" />
+        </mxCell>
+        <object placeholders="1" c4Name="Escenarios precalculados" c4Type="Container" c4Technology="Directory" c4Description="Guarda escenarios precalculados para evitar un tiempo de espera extenso entre distintos escenarios de simulacion." label="&lt;font style=&quot;font-size: 16px&quot;&gt;&lt;b&gt;%c4Name%&lt;/b&gt;&lt;/font&gt;&lt;div&gt;[%c4Type%: %c4Technology%]&lt;/div&gt;&lt;br&gt;&lt;div&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;&lt;font&gt;%c4Description%&lt;/font&gt;&lt;/font&gt;&lt;/div&gt;" id="QB5Tfo3aUv_iryJsPqn6-28">
+          <mxCell parent="QB5Tfo3aUv_iryJsPqn6-27" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;labelBackgroundColor=none;fillColor=light-dark(#FFFFFF,#FFFFFF);fontColor=light-dark(#5995D1,#5995D1);align=center;arcSize=10;strokeColor=light-dark(#5995D1,#5995D1);metaEdit=1;resizable=0;points=[[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];strokeWidth=4;" vertex="1">
+            <mxGeometry height="120" width="240" y="20" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="QB5Tfo3aUv_iryJsPqn6-29" edge="1" parent="QB5Tfo3aUv_iryJsPqn6-27" source="QB5Tfo3aUv_iryJsPqn6-28" style="endArrow=none;html=1;rounded=1;strokeColor=light-dark(#5995D1,#5995D1);align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;defaultLabelBackgroundColor=page;edgeStyle=orthogonalEdgeStyle;exitX=0.377;exitY=0.001;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0.023;entryY=0.009;entryDx=0;entryDy=0;entryPerimeter=0;innerLoopWaypoints=1;curved=0;strokeWidth=4;" target="QB5Tfo3aUv_iryJsPqn6-28" value="">
+          <mxGeometry height="50" relative="1" width="50" x="-0.0333" as="geometry">
+            <Array as="points">
+              <mxPoint x="90.5" />
+              <mxPoint x="5.5" />
+            </Array>
+            <mxPoint x="40" as="sourcePoint" />
+            <mxPoint x="90" y="-50" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QB5Tfo3aUv_iryJsPqn6-30" edge="1" parent="VvN21lq--vLWiRzP2Zal-1" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;dashPattern=8 8;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;defaultLabelBackgroundColor=page;endArrow=block;endFill=1;">
+          <mxGeometry relative="1" x="0.0108" as="geometry">
+            <mxPoint x="3530" y="2020" as="sourcePoint" />
+            <mxPoint x="3530" y="2150" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QB5Tfo3aUv_iryJsPqn6-31" connectable="0" parent="QB5Tfo3aUv_iryJsPqn6-30" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;defaultLabelBackgroundColor=page;" value="Guarda y lee escenario calculados" vertex="1">
+          <mxGeometry relative="1" x="0.5351" y="-2" as="geometry">
+            <mxPoint x="2" y="-50" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <object placeholders="1" c4Name="Sitio web" c4Type="SystemScopeBoundary" c4Application="Software System" label="&lt;font style=&quot;font-size: 16px&quot;&gt;&lt;b&gt;&lt;div style=&quot;text-align: left&quot;&gt;%c4Name%&lt;/div&gt;&lt;/b&gt;&lt;/font&gt;&lt;div style=&quot;text-align: left&quot;&gt;[%c4Application%]&lt;/div&gt;" id="QB5Tfo3aUv_iryJsPqn6-32">
+          <mxCell parent="VvN21lq--vLWiRzP2Zal-1" style="rounded=1;fontSize=11;whiteSpace=wrap;html=1;arcSize=20;fillColor=none;strokeColor=light-dark(#5995D1,#5995D1);fontColor=light-dark(#5995D1,#5995D1);labelBackgroundColor=none;align=left;verticalAlign=bottom;labelBorderColor=none;spacingTop=0;spacing=10;metaEdit=1;rotatable=0;perimeter=rectanglePerimeter;labelPadding=0;allowArrows=0;connectable=0;expand=0;recursiveResize=0;editable=1;pointerEvents=0;absoluteArcSize=1;points=[[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];strokeWidth=2;" vertex="1">
+            <mxGeometry height="320" width="400" x="2580" y="-197" as="geometry" />
+          </mxCell>
+        </object>
+        <object placeholders="1" c4Name="UI" c4Type="Container" c4Technology="React" c4Description="Permite a los usuarios finales visualizar la simulación, lanzar nuevas simulaciones con parámetros específicos." label="&lt;font style=&quot;font-size: 16px&quot;&gt;&lt;b&gt;%c4Name%&lt;/b&gt;&lt;/font&gt;&lt;div&gt;[%c4Type%:&amp;nbsp;%c4Technology%]&lt;/div&gt;&lt;br&gt;&lt;div&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;&lt;font&gt;%c4Description%&lt;/font&gt;&lt;/font&gt;&lt;/div&gt;" id="QB5Tfo3aUv_iryJsPqn6-33">
+          <mxCell parent="VvN21lq--vLWiRzP2Zal-1" style="shape=mxgraph.c4.webBrowserContainer2;whiteSpace=wrap;html=1;boundedLbl=1;rounded=0;labelBackgroundColor=none;strokeColor=light-dark(#118ACD, #0d5091);fillColor=light-dark(#FFFFFF,#FFFFFF);strokeColor=#118ACD;strokeColor2=#0E7DAD;fontSize=12;fontColor=light-dark(#5995D1,#5995D1);align=center;metaEdit=1;points=[[0.5,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.5,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];resizable=0;strokeWidth=2;" vertex="1">
+            <mxGeometry height="160" width="240" x="2660" y="-122" as="geometry" />
+          </mxCell>
+        </object>
+        <object placeholders="1" c4Name="Renderizador" c4Type="Software System" c4Description="Renderiza el mapa, los actores viales y la infraestructura mediante Kepler.gl usando la API de Mapbox." label="&lt;font style=&quot;font-size: 16px&quot;&gt;&lt;b&gt;%c4Name%&lt;/b&gt;&lt;/font&gt;&lt;div&gt;[%c4Type%]&lt;/div&gt;&lt;br&gt;&lt;div&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;&lt;font&gt;%c4Description%&lt;/font&gt;&lt;/font&gt;&lt;/div&gt;" id="QB5Tfo3aUv_iryJsPqn6-34">
+          <mxCell parent="VvN21lq--vLWiRzP2Zal-1" style="rounded=1;whiteSpace=wrap;html=1;labelBackgroundColor=none;fillColor=light-dark(#FFFFFF,#FFFFFF);fontColor=light-dark(#CC434E,#CC434E);align=center;arcSize=10;strokeColor=light-dark(#CC434E,#CC434E);metaEdit=1;resizable=0;points=[[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];strokeWidth=4;spacing=4;" vertex="1">
+            <mxGeometry height="120" width="240" x="4200" y="340" as="geometry" />
+          </mxCell>
+        </object>
+        <object placeholders="1" c4Name="Simulador de movilidad" c4Type="Software System" c4Description="Provee funcionalidades para simular escenarios de movilidad usando Simulation of Urban MObility (SUMO) el cual es un software para simulaciones de tráfico multimodal." label="&lt;font style=&quot;font-size: 16px&quot;&gt;&lt;b&gt;%c4Name%&lt;/b&gt;&lt;/font&gt;&lt;div&gt;[%c4Type%]&lt;/div&gt;&lt;br&gt;&lt;div&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;&lt;font&gt;%c4Description%&lt;/font&gt;&lt;/font&gt;&lt;/div&gt;" id="QB5Tfo3aUv_iryJsPqn6-35">
+          <mxCell parent="VvN21lq--vLWiRzP2Zal-1" style="rounded=1;whiteSpace=wrap;html=1;labelBackgroundColor=none;fillColor=light-dark(#FFFFFF,#FFFFFF);fontColor=light-dark(#338033,#338033);align=center;arcSize=10;strokeColor=light-dark(#338033,#338033);metaEdit=1;resizable=0;points=[[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];strokeWidth=4;" vertex="1">
+            <mxGeometry height="120" width="240" x="4310" y="1100" as="geometry" />
+          </mxCell>
+        </object>
+        <object placeholders="1" c4Name="Proveedor cartográfico" c4Type="Data Provider" c4Description="Provee la cartografía e infraestructura para las simulaciones; se uso OpenStreetMap proyecto open-source que provee mapas e infraestructura del mundo." label="&lt;font style=&quot;font-size: 16px&quot;&gt;&lt;b&gt;%c4Name%&lt;/b&gt;&lt;/font&gt;&lt;div&gt;[%c4Type%]&lt;/div&gt;&lt;br&gt;&lt;div&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;&lt;font&gt;%c4Description%&lt;/font&gt;&lt;/font&gt;&lt;/div&gt;" id="QB5Tfo3aUv_iryJsPqn6-36">
+          <mxCell parent="VvN21lq--vLWiRzP2Zal-1" style="rounded=1;whiteSpace=wrap;html=1;labelBackgroundColor=none;fillColor=light-dark(#FFFFFF,#FFFFFF);fontColor=light-dark(#343434,#343434);align=center;arcSize=10;strokeColor=light-dark(#343434,#343434);metaEdit=1;resizable=0;points=[[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];strokeWidth=4;spacing=3;" vertex="1">
+            <mxGeometry height="120" width="240" x="920" y="1100" as="geometry" />
+          </mxCell>
+        </object>
+        <object placeholders="1" c4Name="Datos de movilidad" c4Type="Data Provider" c4Description="Provee los datos iniciales o por defecto para las simulaciones; para este proyecto se usaron los datos de la Encuesta de Movilidad de Bogotá obtenidos del (SIMUR)." label="&lt;font style=&quot;font-size: 16px&quot;&gt;&lt;b&gt;%c4Name%&lt;/b&gt;&lt;/font&gt;&lt;div&gt;[%c4Type%]&lt;/div&gt;&lt;br&gt;&lt;div&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;&lt;font&gt;%c4Description%&lt;/font&gt;&lt;/font&gt;&lt;/div&gt;" id="QB5Tfo3aUv_iryJsPqn6-37">
+          <mxCell parent="VvN21lq--vLWiRzP2Zal-1" style="rounded=1;whiteSpace=wrap;html=1;labelBackgroundColor=none;fillColor=light-dark(#FFFFFF,#FFFFFF);fontColor=light-dark(#D09A00,#D09A00);align=center;arcSize=10;strokeColor=light-dark(#FFCC01,#FFCC01);metaEdit=1;resizable=0;points=[[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];strokeWidth=4;spacing=5;" vertex="1">
+            <mxGeometry height="120" width="240" x="2680" y="2070" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="QB5Tfo3aUv_iryJsPqn6-38" edge="1" parent="VvN21lq--vLWiRzP2Zal-1" style="edgeStyle=orthogonalEdgeStyle;shape=connector;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.502;entryY=-0.023;entryDx=0;entryDy=0;entryPerimeter=0;dashed=1;dashPattern=8 8;strokeColor=default;align=center;verticalAlign=middle;fontFamily=Helvetica;fontSize=11;fontColor=default;labelBackgroundColor=default;defaultLabelBackgroundColor=page;endArrow=block;endFill=1;" target="QB5Tfo3aUv_iryJsPqn6-37">
+          <mxGeometry relative="1" x="-0.8859" as="geometry">
+            <mxPoint x="2800" y="1950" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="QB5Tfo3aUv_iryJsPqn6-39" connectable="0" parent="QB5Tfo3aUv_iryJsPqn6-38" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];inheritText=1;defaultLabelBackgroundColor=page;" value="&lt;div&gt;Obtiene los datos iniciales&lt;/div&gt;&lt;div&gt;para las simulaciones&lt;/div&gt;" vertex="1">
+          <mxGeometry relative="1" x="-0.6367" y="1" as="geometry">
+            <mxPoint x="-1" y="29" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <object placeholders="1" c4Name="Backend" c4Type="ContainerScopeBoundary" c4Application="Container" label="&lt;font style=&quot;font-size: 16px&quot;&gt;&lt;b&gt;&lt;div style=&quot;text-align: left&quot;&gt;%c4Name%&lt;/div&gt;&lt;/b&gt;&lt;/font&gt;&lt;div style=&quot;text-align: left&quot;&gt;[%c4Application%]&lt;/div&gt;" id="QB5Tfo3aUv_iryJsPqn6-40">
+          <mxCell parent="VvN21lq--vLWiRzP2Zal-1" style="rounded=1;fontSize=11;whiteSpace=wrap;html=1;arcSize=20;fillColor=none;strokeColor=light-dark(#5995D1,#5995D1);fontColor=light-dark(#5995D1,#5995D1);labelBackgroundColor=none;align=left;verticalAlign=bottom;labelBorderColor=none;spacingTop=0;spacing=10;metaEdit=1;rotatable=0;perimeter=rectanglePerimeter;labelPadding=0;allowArrows=0;connectable=0;expand=0;recursiveResize=0;editable=1;pointerEvents=0;absoluteArcSize=1;points=[[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];strokeWidth=2;" vertex="1">
+            <mxGeometry height="480" width="1360" x="2160" y="800" as="geometry" />
+          </mxCell>
+        </object>
+        <object placeholders="1" c4Name="ETL" c4Type="ContainerScopeBoundary" c4Application="Container" label="&lt;font style=&quot;font-size: 16px&quot;&gt;&lt;b&gt;&lt;div style=&quot;text-align: left&quot;&gt;%c4Name%&lt;/div&gt;&lt;/b&gt;&lt;/font&gt;&lt;div style=&quot;text-align: left&quot;&gt;[%c4Application%]&lt;/div&gt;" id="QB5Tfo3aUv_iryJsPqn6-41">
+          <mxCell parent="VvN21lq--vLWiRzP2Zal-1" style="rounded=1;fontSize=11;whiteSpace=wrap;html=1;arcSize=20;fillColor=none;strokeColor=light-dark(#5995D1,#5995D1);fontColor=light-dark(#5995D1,#5995D1);labelBackgroundColor=none;align=left;verticalAlign=bottom;labelBorderColor=none;spacingTop=0;spacing=10;metaEdit=1;rotatable=0;perimeter=rectanglePerimeter;labelPadding=0;allowArrows=0;connectable=0;expand=0;recursiveResize=0;editable=1;pointerEvents=0;absoluteArcSize=1;points=[[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];strokeWidth=2;" vertex="1">
+            <mxGeometry height="360" width="1360" x="2160" y="1440" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="QB5Tfo3aUv_iryJsPqn6-42" connectable="0" parent="VvN21lq--vLWiRzP2Zal-1" style="group" value="" vertex="1">
+          <mxGeometry height="120" width="255" x="3180" y="880" as="geometry" />
+        </mxCell>
+        <object placeholders="1" c4Name="API Viajes" c4Type="Component" c4Technology="Python, FastAPI" c4Description="Provee la interfaz para los viajes." label="&lt;font style=&quot;font-size: 16px&quot;&gt;&lt;b&gt;%c4Name%&lt;/b&gt;&lt;/font&gt;&lt;div&gt;[%c4Type%: %c4Technology%]&lt;/div&gt;&lt;br&gt;&lt;div&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;%c4Description%&lt;/font&gt;&lt;/div&gt;" id="QB5Tfo3aUv_iryJsPqn6-43">
+          <mxCell parent="QB5Tfo3aUv_iryJsPqn6-42" style="rounded=1;whiteSpace=wrap;html=1;labelBackgroundColor=none;fillColor=light-dark(#FFFFFF,#FFFFFF);fontColor=#5995D1;align=center;arcSize=6;strokeColor=light-dark(#5995D1,#5995D1);metaEdit=1;resizable=0;points=[[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];strokeWidth=4;" vertex="1">
+            <mxGeometry height="120" width="240" x="15" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="QB5Tfo3aUv_iryJsPqn6-44" parent="QB5Tfo3aUv_iryJsPqn6-42" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;strokeWidth=3;strokeColor=light-dark(#5995D1,#5995D1);fillColor=light-dark(#FFFFFF,#FFFFFF);" value="" vertex="1">
+          <mxGeometry height="20" width="30" y="36" as="geometry" />
+        </mxCell>
+        <mxCell id="QB5Tfo3aUv_iryJsPqn6-45" parent="QB5Tfo3aUv_iryJsPqn6-42" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;strokeWidth=3;strokeColor=light-dark(#5995D1,#5995D1);fillColor=light-dark(#FFFFFF,#FFFFFF);" value="" vertex="1">
+          <mxGeometry height="20" width="30" y="9" as="geometry" />
+        </mxCell>
+        <mxCell id="QB5Tfo3aUv_iryJsPqn6-46" connectable="0" parent="VvN21lq--vLWiRzP2Zal-1" style="group" value="" vertex="1">
+          <mxGeometry height="120" width="255" x="2540" y="880" as="geometry" />
+        </mxCell>
+        <object placeholders="1" c4Name="API Simulaciones" c4Type="Component" c4Technology="Python, FastAPI" c4Description="Provee interfaz para las peticiones de nuevas configuraciones de simulación." label="&lt;font style=&quot;font-size: 16px&quot;&gt;&lt;b&gt;%c4Name%&lt;/b&gt;&lt;/font&gt;&lt;div&gt;[%c4Type%: %c4Technology%]&lt;/div&gt;&lt;br&gt;&lt;div&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;%c4Description%&lt;/font&gt;&lt;/div&gt;" id="QB5Tfo3aUv_iryJsPqn6-47">
+          <mxCell parent="QB5Tfo3aUv_iryJsPqn6-46" style="rounded=1;whiteSpace=wrap;html=1;labelBackgroundColor=none;fillColor=light-dark(#FFFFFF,#FFFFFF);fontColor=#5995D1;align=center;arcSize=6;strokeColor=light-dark(#5995D1,#5995D1);metaEdit=1;resizable=0;points=[[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];strokeWidth=4;" vertex="1">
+            <mxGeometry height="120" width="240" x="15" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="QB5Tfo3aUv_iryJsPqn6-48" parent="QB5Tfo3aUv_iryJsPqn6-46" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;strokeWidth=3;strokeColor=light-dark(#5995D1,#5995D1);fillColor=light-dark(#FFFFFF,#FFFFFF);" value="" vertex="1">
+          <mxGeometry height="20" width="30" y="36" as="geometry" />
+        </mxCell>
+        <mxCell id="QB5Tfo3aUv_iryJsPqn6-49" parent="QB5Tfo3aUv_iryJsPqn6-46" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;strokeWidth=3;strokeColor=light-dark(#5995D1,#5995D1);fillColor=light-dark(#FFFFFF,#FFFFFF);" value="" vertex="1">
+          <mxGeometry height="20" width="30" y="9" as="geometry" />
+        </mxCell>
+        <mxCell id="QB5Tfo3aUv_iryJsPqn6-50" connectable="0" parent="VvN21lq--vLWiRzP2Zal-1" style="group" value="" vertex="1">
+          <mxGeometry height="120" width="255" x="2224" y="880" as="geometry" />
+        </mxCell>
+        <object placeholders="1" c4Name="API Precalculadas" c4Type="Component" c4Technology="Python, FastAPI" c4Description="Provee interfaz para los escenarios de simulación precalculadas." label="&lt;font style=&quot;font-size: 16px&quot;&gt;&lt;b&gt;%c4Name%&lt;/b&gt;&lt;/font&gt;&lt;div&gt;[%c4Type%: %c4Technology%]&lt;/div&gt;&lt;br&gt;&lt;div&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;%c4Description%&lt;/font&gt;&lt;/div&gt;" id="QB5Tfo3aUv_iryJsPqn6-51">
+          <mxCell parent="QB5Tfo3aUv_iryJsPqn6-50" style="rounded=1;whiteSpace=wrap;html=1;labelBackgroundColor=none;fillColor=light-dark(#FFFFFF,#FFFFFF);fontColor=#5995D1;align=center;arcSize=6;strokeColor=light-dark(#5995D1,#5995D1);metaEdit=1;resizable=0;points=[[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];strokeWidth=4;" vertex="1">
+            <mxGeometry height="120" width="240" x="15" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="QB5Tfo3aUv_iryJsPqn6-52" parent="QB5Tfo3aUv_iryJsPqn6-50" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;strokeWidth=3;strokeColor=light-dark(#5995D1,#5995D1);fillColor=light-dark(#FFFFFF,#FFFFFF);" value="" vertex="1">
+          <mxGeometry height="20" width="30" y="36" as="geometry" />
+        </mxCell>
+        <mxCell id="QB5Tfo3aUv_iryJsPqn6-53" parent="QB5Tfo3aUv_iryJsPqn6-50" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;strokeWidth=3;strokeColor=light-dark(#5995D1,#5995D1);fillColor=light-dark(#FFFFFF,#FFFFFF);" value="" vertex="1">
+          <mxGeometry height="20" width="30" y="9" as="geometry" />
+        </mxCell>
+        <mxCell id="QB5Tfo3aUv_iryJsPqn6-55" connectable="0" parent="VvN21lq--vLWiRzP2Zal-1" style="group" value="" vertex="1">
+          <mxGeometry height="120" width="255" x="2222" y="1081" as="geometry" />
+        </mxCell>
+        <object placeholders="1" c4Name="API Escenarios" c4Type="Component" c4Technology="Python, FastAPI" c4Description="Provee interfaz para los escenarios soportados." label="&lt;font style=&quot;font-size: 16px&quot;&gt;&lt;b&gt;%c4Name%&lt;/b&gt;&lt;/font&gt;&lt;div&gt;[%c4Type%: %c4Technology%]&lt;/div&gt;&lt;br&gt;&lt;div&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;%c4Description%&lt;/font&gt;&lt;/div&gt;" id="QB5Tfo3aUv_iryJsPqn6-56">
+          <mxCell parent="QB5Tfo3aUv_iryJsPqn6-55" style="rounded=1;whiteSpace=wrap;html=1;labelBackgroundColor=none;fillColor=light-dark(#FFFFFF,#FFFFFF);fontColor=#5995D1;align=center;arcSize=6;strokeColor=light-dark(#5995D1,#5995D1);metaEdit=1;resizable=0;points=[[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];strokeWidth=4;" vertex="1">
+            <mxGeometry height="120" width="240" x="15" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="QB5Tfo3aUv_iryJsPqn6-57" parent="QB5Tfo3aUv_iryJsPqn6-55" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;strokeWidth=3;strokeColor=light-dark(#5995D1,#5995D1);fillColor=light-dark(#FFFFFF,#FFFFFF);" value="" vertex="1">
+          <mxGeometry height="20" width="30" y="36" as="geometry" />
+        </mxCell>
+        <mxCell id="QB5Tfo3aUv_iryJsPqn6-58" parent="QB5Tfo3aUv_iryJsPqn6-55" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;strokeWidth=3;strokeColor=light-dark(#5995D1,#5995D1);fillColor=light-dark(#FFFFFF,#FFFFFF);" value="" vertex="1">
+          <mxGeometry height="20" width="30" y="9" as="geometry" />
+        </mxCell>
+        <mxCell id="QB5Tfo3aUv_iryJsPqn6-59" connectable="0" parent="VvN21lq--vLWiRzP2Zal-1" style="group" value="" vertex="1">
+          <mxGeometry height="120" width="255" x="2543" y="1078" as="geometry" />
+        </mxCell>
+        <object placeholders="1" c4Name="API Intersecciones" c4Type="Component" c4Technology="Python, FastAPI" c4Description="Provee interfaz para recortar la red alrededor de intersecciones." label="&lt;font style=&quot;font-size: 16px&quot;&gt;&lt;b&gt;%c4Name%&lt;/b&gt;&lt;/font&gt;&lt;div&gt;[%c4Type%: %c4Technology%]&lt;/div&gt;&lt;br&gt;&lt;div&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;%c4Description%&lt;/font&gt;&lt;/div&gt;" id="QB5Tfo3aUv_iryJsPqn6-60">
+          <mxCell parent="QB5Tfo3aUv_iryJsPqn6-59" style="rounded=1;whiteSpace=wrap;html=1;labelBackgroundColor=none;fillColor=light-dark(#FFFFFF,#FFFFFF);fontColor=#5995D1;align=center;arcSize=6;strokeColor=light-dark(#5995D1,#5995D1);metaEdit=1;resizable=0;points=[[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];strokeWidth=4;" vertex="1">
+            <mxGeometry height="120" width="240" x="15" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="QB5Tfo3aUv_iryJsPqn6-61" parent="QB5Tfo3aUv_iryJsPqn6-59" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;strokeWidth=3;strokeColor=light-dark(#5995D1,#5995D1);fillColor=light-dark(#FFFFFF,#FFFFFF);" value="" vertex="1">
+          <mxGeometry height="20" width="30" y="36" as="geometry" />
+        </mxCell>
+        <mxCell id="QB5Tfo3aUv_iryJsPqn6-62" parent="QB5Tfo3aUv_iryJsPqn6-59" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;strokeWidth=3;strokeColor=light-dark(#5995D1,#5995D1);fillColor=light-dark(#FFFFFF,#FFFFFF);" value="" vertex="1">
+          <mxGeometry height="20" width="30" y="9" as="geometry" />
+        </mxCell>
+        <mxCell id="QB5Tfo3aUv_iryJsPqn6-63" connectable="0" parent="VvN21lq--vLWiRzP2Zal-1" style="group" value="" vertex="1">
+          <mxGeometry height="120" width="255" x="2863" y="1077" as="geometry" />
+        </mxCell>
+        <object placeholders="1" c4Name="API Cruces" c4Type="Component" c4Technology="Python, FastAPI" c4Description="Provee interfaz para la comparación 3D para el manejo de intersecciones y propuesta de instalación de semáforos." label="&lt;font style=&quot;font-size: 16px&quot;&gt;&lt;b&gt;%c4Name%&lt;/b&gt;&lt;/font&gt;&lt;div&gt;[%c4Type%: %c4Technology%]&lt;/div&gt;&lt;br&gt;&lt;div&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;%c4Description%&lt;/font&gt;&lt;/div&gt;" id="QB5Tfo3aUv_iryJsPqn6-64">
+          <mxCell parent="QB5Tfo3aUv_iryJsPqn6-63" style="rounded=1;whiteSpace=wrap;html=1;labelBackgroundColor=none;fillColor=light-dark(#FFFFFF,#FFFFFF);fontColor=#5995D1;align=center;arcSize=6;strokeColor=light-dark(#5995D1,#5995D1);metaEdit=1;resizable=0;points=[[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];strokeWidth=4;" vertex="1">
+            <mxGeometry height="120" width="240" x="15" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="QB5Tfo3aUv_iryJsPqn6-65" parent="QB5Tfo3aUv_iryJsPqn6-63" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;strokeWidth=3;strokeColor=light-dark(#5995D1,#5995D1);fillColor=light-dark(#FFFFFF,#FFFFFF);" value="" vertex="1">
+          <mxGeometry height="20" width="30" y="36" as="geometry" />
+        </mxCell>
+        <mxCell id="QB5Tfo3aUv_iryJsPqn6-66" parent="QB5Tfo3aUv_iryJsPqn6-63" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;strokeWidth=3;strokeColor=light-dark(#5995D1,#5995D1);fillColor=light-dark(#FFFFFF,#FFFFFF);" value="" vertex="1">
+          <mxGeometry height="20" width="30" y="9" as="geometry" />
+        </mxCell>
+        <mxCell id="QB5Tfo3aUv_iryJsPqn6-67" connectable="0" parent="VvN21lq--vLWiRzP2Zal-1" style="group" value="" vertex="1">
+          <mxGeometry height="120" width="255" x="3183" y="1077" as="geometry" />
+        </mxCell>
+        <object placeholders="1" c4Name="API Comparación 3D" c4Type="Component" c4Technology="Python, FastAPI" c4Description="Provee interfaz para la comparación 3D entre infraestructura propuesta e infraestructura original." label="&lt;font style=&quot;font-size: 16px&quot;&gt;&lt;b&gt;%c4Name%&lt;/b&gt;&lt;/font&gt;&lt;div&gt;[%c4Type%: %c4Technology%]&lt;/div&gt;&lt;br&gt;&lt;div&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;%c4Description%&lt;/font&gt;&lt;/div&gt;" id="QB5Tfo3aUv_iryJsPqn6-68">
+          <mxCell parent="QB5Tfo3aUv_iryJsPqn6-67" style="rounded=1;whiteSpace=wrap;html=1;labelBackgroundColor=none;fillColor=light-dark(#FFFFFF,#FFFFFF);fontColor=#5995D1;align=center;arcSize=6;strokeColor=light-dark(#5995D1,#5995D1);metaEdit=1;resizable=0;points=[[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];strokeWidth=4;" vertex="1">
+            <mxGeometry height="120" width="240" x="15" as="geometry" />
+          </mxCell>
+        </object>
+        <mxCell id="QB5Tfo3aUv_iryJsPqn6-69" parent="QB5Tfo3aUv_iryJsPqn6-67" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;strokeWidth=3;strokeColor=light-dark(#5995D1,#5995D1);fillColor=light-dark(#FFFFFF,#FFFFFF);" value="" vertex="1">
+          <mxGeometry height="20" width="30" y="36" as="geometry" />
+        </mxCell>
+        <mxCell id="QB5Tfo3aUv_iryJsPqn6-70" parent="QB5Tfo3aUv_iryJsPqn6-67" style="rounded=1;whiteSpace=wrap;html=1;roundedPerimeter=1;strokeWidth=3;strokeColor=light-dark(#5995D1,#5995D1);fillColor=light-dark(#FFFFFF,#FFFFFF);" value="" vertex="1">
+          <mxGeometry height="20" width="30" y="9" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram name="c4-code" id="QXzmvPaBgXsW-uQZgg4R">
+    <mxGraphModel dx="1094" dy="732" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="7aj2BPLeEma-HecPvLtc-0" />
+        <mxCell id="7aj2BPLeEma-HecPvLtc-1" parent="7aj2BPLeEma-HecPvLtc-0" />
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

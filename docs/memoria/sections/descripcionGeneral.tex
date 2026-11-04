@@ -1,53 +1,80 @@
 \setcounter{subsection}{0}
 \section{DESCRIPCIÓN GENERAL}
-%Aunque similar a la propuesta, no debería ser igual, se supone que debe actualizarse con nuevas referencias. Además, debe estar escrito en pasado, describiendo cuál era el problema y cómo se resolvió. 
 
 \subsection{Oportunidad, Problema}
-%Máximo 3 páginas.
-%Presenta las características, contexto, situación o aspectos de interés de la oportunidad o pro-blema seleccionado. Los estudiantes pueden partir de un problema global y multidisciplinar (por ejemplo, uno de los temas planteados en la misión de la Pontificia Universidad Javeriana) y continuar con el problema resuelto o la oportunidad que se ha aprovechado con el proyecto. 
-%Los puntos que podrían desarrollarse en este párrafo son similares a los de la propuesta. (Re-cuerda escribir en pasado, ya que se refiere al proyecto ya terminado): 
-
 
 \subsubsection{Contexto del Problema}
-%Describe las características, el contexto, la situación o el aspecto interesante del problema. Se recomienda explicar desde los conceptos más generales hasta los más específicos. La escritura debe ser coherente. 
+
+Bogotá enfrenta altos niveles de congestión y una demanda de desplazamientos que crece con la población y el parque automotor. Los ciudadanos pueden perder en promedio hasta 153 horas al año en tráfico en horas pico \cite{eltiempo}, y la velocidad promedio en esos periodos apenas supera los 15 km/h \cite{portafolio2025}. Un trayecto de cinco kilómetros puede tardar hasta 40 minutos \cite{infobae}. El sistema TransMilenio, por su parte, registra más de cuatro millones de viajes diarios \cite{alcaldia}.
+
+En ese contexto, las encuestas de movilidad de la Secretaría Distrital de Movilidad (SDM) son la fuente más completa sobre cómo se desplazan los bogotanos: orígenes, destinos, modos, horarios y variables socioeconómicas \cite{portafolio2023,sdm_encuesta_movilidad_2023}. Las entidades de planeación y los analistas necesitan convertir esa información en escenarios que respondan preguntas del tipo «¿qué pasaría si...?». Los simuladores microscópicos permiten hacerlo, porque modelan cada vehículo y cada peatón con su comportamiento en intersecciones y semáforos.
 
 \subsubsection{Formulación del Problema}
-%Basándose en la información de la sección anterior, esta sección detalla el problema específico de esta propuesta y justifica su relevancia.
+
+Aunque SUMO es un simulador abierto y ampliamente usado, su uso con datos reales tiene dos barreras. La primera es técnica: configurar una simulación implica preparar varios archivos XML y ejecutar varias utilidades de línea de comandos (\texttt{netconvert}, \texttt{duarouter}, \texttt{sumo}), y su interfaz gráfica no siempre es cómoda para explorar parámetros. La segunda es de datos: no existía una herramienta que transformara directamente la encuesta de movilidad en insumos compatibles con SUMO, de modo que los analistas debían limpiar, expandir y estructurar los datos a mano, con el costo en tiempo y el riesgo de error que eso supone.
+
+La pregunta que guió el proyecto fue: \textit{¿cómo utilizar datos que describen la movilidad urbana de Bogotá, apoyándose en herramientas de simulación como SUMO, para generar de forma automatizada escenarios de simulación y reportes comprensibles que faciliten el análisis y la toma de decisiones por parte de las entidades de planeación y gestión de la movilidad?}
 
 \subsubsection{Propuesta de Solución}
-%Esta sección debe incluir una descripción general de la solución propuesta al problema anterior. Esta sección también debe indicar el área de la propuesta (por ejemplo, desarrollo de software, ingeniería de sistemas, etc.)
+
+La solución, del área de desarrollo de software e ingeniería de sistemas, tuvo tres componentes:
+
+\begin{enumerate}[noitemsep]
+    \item Un \textbf{módulo de procesamiento de datos} (\textit{pipeline} ETL) que transforma los viajes de la encuesta en viajes, rutas, tipos de vehículo y archivos de configuración para SUMO, ejecuta la simulación y exporta los resultados.
+    \item Un \textbf{módulo web} que anima los viajes por modo sobre un mapa, permite parametrizar la demanda (presets, conteos por modo, semilla, estilo de conducción, cierres viales) y lanzar nuevas simulaciones sin editar XML.
+    \item Dos \textbf{herramientas de apoyo a la semaforización}: un análisis de intersecciones (volúmenes por acceso, edición de programas, método de Webster, priorización de cruces sin semáforo) y un simulador 3D que compara un cruce como está hoy contra el mismo cruce con un semáforo propuesto.
+\end{enumerate}
+
+SUMO se trató como el motor de ejecución: recibe insumos ya validados y produce las salidas; el aporte del proyecto fue automatizar todo el trabajo previo y posterior. El caso de estudio fue la localidad de Usaquén, con un diseño orientado a poder soportar otras localidades de la encuesta.
 
 \subsubsection{Justificación de la Solución}
-%En esta sección, los estudiantes explican por qué la solución es adecuada para abordar el pro-blema
+
+En la propuesta se comparó la solución con cuatro enfoques alternativos: modelos analíticos y teoría de colas, aprendizaje automático predictivo, APIs de tráfico en tiempo real y el modelo clásico de cuatro pasos (sección~\ref{sec:alternativas}). Ninguno cumple a la vez con cinco criterios: resolución microscópica, análisis de escenarios hipotéticos, independencia de datos privados, multimodalidad integrada y costo accesible. La simulación microscópica alimentada con datos reales y abiertos sí los cumple. Además, al automatizar la preparación de insumos, el trabajo reduce el tiempo y los errores de un proceso que hoy es manual, y deja una base reproducible y extensible para otras localidades.
 
 \subsection{Descripción del Proyecto}
-%Esta sección presenta la descripción general del proyecto. Cubre los aspectos más importantes para que el lector entienda qué se pretendía hacer.
+
+El proyecto se desarrolló entre enero y noviembre de 2026 en el Departamento de Ingeniería de Sistemas de la Pontificia Universidad Javeriana, con un equipo de cuatro estudiantes y la dirección del ingeniero Andrés Oswaldo Calderón Romero. Los datos de entrada (Encuesta de Movilidad 2023 y red de OpenStreetMap) son públicos, por lo que no se requirió una organización externa. En octubre de 2026 la propuesta se actualizó (versión 2.0) para incorporar la herramienta de semaforización y el simulador 3D, conservando el problema, el objetivo general y el marco metodológico aprobados.
 
 \subsubsection{Objetivo General}
-%Escribe aquí el objetivo general aprobado para el proyecto.
+
+Diseñar e implementar un módulo de procesamiento de datos que automatice la transformación de fuentes de datos de movilidad disponibles para Bogotá en archivos de entrada válidos para el simulador SUMO, con el fin de eliminar la intervención manual en la generación de redes viales, matrices origen–destino y archivos de rutas, y facilitar así el análisis de movilidad urbana a entidades públicas, investigadores y consultores del sector mediante una interfaz web que permita visualizar los resultados de las simulaciones y configurar nuevos escenarios de forma accesible.
 
 \subsubsection{Objetivos Específicos}
-%Escribe aqui los objetivos específicos que, juntos, ayuden a cumplir el objetivo general.
+
+\begin{enumerate}[noitemsep]
+    \item Analizar y comparar las fuentes de datos de movilidad disponibles para Bogotá (Encuesta de Movilidad 2023, aforos de hora de máxima demanda y datasets complementarios) para determinar cuáles permiten construir matrices origen–destino representativas, reconociendo sus limitaciones de periodicidad y cobertura.
+    \item Desarrollar un módulo de procesamiento de datos que automatice la transformación de los registros de la encuesta en archivos de entrada válidos para SUMO.
+    \item Validar el módulo generando los insumos de simulación para al menos una localidad representativa, verificando su coherencia frente a la encuesta y ejecutando el escenario en SUMO.
+    \item Desarrollar un módulo web que permita visualizar los resultados de SUMO y parametrizar nuevas simulaciones desde una interfaz gráfica.
+    \item Incorporar al módulo web el análisis de intersecciones y un simulador 3D comparativo que permita evaluar la instalación de un semáforo en un cruce sin señalizar, con indicadores de fluidez y de seguridad (TTC, DRAC, PET).
+\end{enumerate}
 
 \subsubsection{Marco metodológico, entregables, Estándares y Justificación}
-%Describe la metodología, así como documentos y otros productos que se entregan en este pro-yecto final de grado. La información debe resumirse en la siguiente tabla:
 
+Se usó un ciclo de vida híbrido. Las fases de datos (comprensión del dominio y de los datos, y preparación de datos) siguieron CRISP-DM. La construcción del escenario de simulación y del módulo web siguió Scrum, con sprints de dos semanas. La evaluación retomó la etapa de evaluación de CRISP-DM. La gestión del proyecto se documentó con el estándar IEEE 1058 y los procesos del ciclo de vida de ISO/IEC 12207. La figura~\ref{fig:ciclo-vida} resume el ciclo de vida.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{fig01-ciclo-vida-alto-nivel.png}
+\caption{Ciclo de vida del proyecto (CRISP-DM y Scrum).}
+\label{fig:ciclo-vida}
+\end{figure}
+
+La tabla~\ref{tab:entregables} lista los entregables, los estándares aplicados y su justificación.
 
 \begin{table}[ht]
-\renewcommand{\arraystretch}{1}
+\renewcommand{\arraystretch}{1.2}
 \centering
-\begin{tabular}{|c|c|c|}
+\small
+\begin{tabular}{|p{2.6cm}|p{4.2cm}|p{7.2cm}|}
 \hline
-\textbf{Entregable} &
-  \textbf{Estándares} &
-  \textbf{Justificación} \\ \hline
-
-\begin{tabular}[c]{@{}c@{}}   \\   \end{tabular} &   
-   &
-  \begin{tabular}[c]{@{}c@{}}  \end{tabular} \\ \hline
-\begin{tabular}[c]{@{}c@{}}  \end{tabular} &  
-   &
-  \begin{tabular}[c]{@{}c@{}}  \end{tabular} \\ \hline
+\textbf{Entregable} & \textbf{Estándares} & \textbf{Justificación} \\ \hline
+SPMP & IEEE 1058-1998, ISO/IEC 12207:2008, BPMN 2.0 & Estructura estándar del plan de gestión (alcance, cronograma, recursos y riesgos) y modelado de los procesos internos. \\ \hline
+SRS & IEEE 830-1998, ISO/IEC/IEEE 29148:2011, UML 2.5.1 & Requerimientos bien definidos, verificables y trazables hacia el diseño y las pruebas. \\ \hline
+SDD & IEEE 1016-2009, ISO/IEC/IEEE 42010, UML 2.5.1, modelo C4 & Contenido mínimo del diseño y descripción de la arquitectura mediante vistas. \\ \hline
+Plan de pruebas & ISO/IEC/IEEE 29119-1:2022 & Planificación de pruebas, diseño de casos, ejecución y trazabilidad con los requisitos. \\ \hline
+Código fuente & PEP 8, API TraCI de SUMO & Legibilidad y consistencia del código Python; control de SUMO en vivo, base del simulador 3D. \\ \hline
+Informe final (esta memoria) & IEEE 1063-2001, ISO/IEC/IEEE 26512:2018 & Documentación orientada al usuario y documentación técnica de instalación, mantenimiento y soporte. \\ \hline
 \end{tabular}
 \caption{Entregables y Estándares Asociados}
 \label{tab:entregables}

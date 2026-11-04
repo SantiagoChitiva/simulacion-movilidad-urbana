@@ -3,12 +3,36 @@
 \section{CONCLUSIONES}
 
 \subsection{Análisis de Impacto del Proyecto}
-%Explica el impacto de los resultados de este proyecto a corto, medio y largo plazo. Debe explicar el impacto en todos los grupos de interés relevantes.
-%a.	Análisis de impacto en ingeniería de sistemas
-%b.	Análisis de impacto en contextos globales, económicos, ambientales y sociales
 
+\textbf{Impacto en ingeniería de sistemas.} El proyecto deja un \textit{pipeline} de datos reproducible (semilla explícita, orden determinista, huella SHA-256 de los insumos), una arquitectura modular documentada con C4 y un patrón de módulos uniforme (\texttt{Config}/\texttt{Result}/\texttt{Stats}) que facilita extenderla. También deja decisiones de diseño con sus costos declarados, útiles para quien continúe el trabajo. Es una evidencia de cómo integrar un simulador externo (SUMO) con una API, tareas asíncronas con cancelación y una visualización en tiempo real.
 
+\textbf{Corto plazo.} Para analistas, investigadores y planificadores, el sistema reemplaza horas de preparación manual de archivos XML por una interfaz en la que se elige un preset y se ve el resultado animado en un mapa. El simulador 3D facilita explicar a un público no técnico el efecto de una intervención.
+
+\textbf{Mediano plazo.} Puede servir para evaluar de forma comparativa medidas como el día sin carro, los cierres viales o la instalación de un semáforo antes de aplicarlas, siempre que se calibre con aforos reales y programas semafóricos oficiales; sin eso los resultados son ilustrativos y no deben usarse como única base de una decisión.
+
+\textbf{Largo plazo.} Al estar construido con datos públicos y herramientas abiertas, es reproducible y adaptable a otras localidades o ciudades colombianas, y puede contribuir a la capacidad institucional y académica en simulación de tráfico.
+
+\textbf{Contextos económico, social y ambiental.} En lo económico, reduce el costo de generar escenarios (el \textit{software} y los datos son gratuitos) y puede orientar la inversión en semaforización hacia los cruces con más evidencia de riesgo. En lo social, apunta a decisiones mejor informadas sobre congestión y siniestralidad, y la priorización incorpora cercanía a colegios y centros de salud. En lo ambiental, aún no mide emisiones (se descartó la salida de emisiones por su tamaño), por lo que su aporte es indirecto, a través de la reducción de la congestión. En lo ético, los datos son abiertos o agregados y no contienen información personal identificable, y el sistema declara en la API y en la escena lo que no modela (programas de OSM, relleno ilustrativo).
 
 \subsection{Conclusiones y Trabajo Futuro}
-%Explica si se han cumplido los objetivos y por qué. Trabajos futuros que deberían explicarse en función de los resultados del proyecto.
 
+\textbf{Conclusiones.}
+\begin{enumerate}[noitemsep]
+    \item Se cumplió el objetivo general en lo esencial: se automatizó la cadena que va de la Encuesta de Movilidad 2023 a una simulación SUMO de Usaquén, ejecutable sin editar archivos a mano y con una interfaz web para visualizar y parametrizar escenarios. De los cinco objetivos específicos, cuatro se cumplieron y uno (la validación del modelo) se cumplió parcialmente.
+    \item La validación es el principal pendiente. La forma temporal de la demanda simulada reproduce la de la encuesta, pero los volúmenes no se calibraron con los aforos HMD porque estos no pudieron asociarse a la red. El modelo debe considerarse una herramienta de exploración, no de predicción.
+    \item Fue clave tratar la reproducibilidad como un requisito de diseño: permite repetir un escenario y comparar de manera justa dos configuraciones, como en el simulador 3D, donde ambos lados comparten demanda y semilla.
+    \item Varias dificultades vinieron de la herramienta (viajes descartados por desorden, errores de suscripción de TraCI, salidas gigantes) y no del modelado. Documentarlas ahorra tiempo a futuros usuarios de SUMO.
+    \item Las limitaciones se asumieron y se hicieron visibles (transporte público como caminata, programas genéricos, tráfico de fondo sintético) en vez de ocultarse, lo que protege al usuario de sobreinterpretar resultados.
+\end{enumerate}
+
+\textbf{Trabajo futuro.}
+\begin{itemize}[noitemsep]
+    \item \textbf{Calibración y validación:} geocodificar las 336 estaciones de aforo, calcular GEH y RMSE, y calibrar parámetros de conducción hasta cumplir GEH $<5$ en 85\,\% de los puntos.
+    \item \textbf{Transporte público real:} incorporar buses, paradas y rutas desde GTFS (\texttt{gtfs2pt}, \texttt{personTrip}) para sustituir la caminata.
+    \item \textbf{Semáforos reales:} usar los programas de la SDM, y permitir editar el ciclo del semáforo propuesto desde el visor.
+    \item \textbf{Reporte de la comparación 3D:} exportar las métricas de ambos escenarios y repetir con varias semillas para obtener intervalos de confianza.
+    \item \textbf{Más localidades y franjas:} extender a otras localidades de la encuesta y a los periodos de la tarde y la noche.
+    \item \textbf{Ingeniería:} ejecutar las pruebas del servicio en la integración continua, agregar pruebas al visor, y, si se publica el servicio, añadir autenticación, TLS y una cola externa para varios usuarios.
+    \item \textbf{Evaluación con usuarios:} una prueba de usabilidad con planificadores de movilidad y la validación de la priorización con la SDM.
+    \item \textbf{Emisiones:} agregar un modelo de emisiones para cuantificar el impacto ambiental.
+\end{itemize}
