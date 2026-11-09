@@ -75,6 +75,49 @@
 #set text(size: 11pt)
 
 #pagebreak()
+#figure(
+  table(
+    columns: (auto, auto, 1fr, 18%),
+    table.header([Versión], [Fecha], [Descripción del cambio], [Autor(es)]),
+
+    [0.1], [06/02/2026], [Creación inicial de la propuesta de proyecto de grado. Definición del tema, título y objetivo general del proyecto.], [Samuel Campos],
+
+    [0.2], [13/02/2026], [Desarrollo de los antecedentes y contextualización de la problemática de movilidad urbana en Bogotá.], [Erick Salazar],
+
+    [0.3], [20/02/2026], [Formulación del problema y definición de la pregunta de investigación a partir de las limitaciones identificadas en el uso de herramientas de simulación.], [Santiago Chitiva],
+
+    [0.4], [27/02/2026], [Descripción inicial de la solución propuesta mediante la integración de datos de movilidad con el simulador SUMO.], [Felipe Garrido, Samuel Campos],
+
+    [0.5], [06/03/2026], [Ampliación de la descripción de los módulos de procesamiento de datos y web, incluyendo sus principales responsabilidades dentro del sistema.], [Erick Salazar, Santiago Chitiva],
+
+    [0.6], [13/03/2026], [Desarrollo de la justificación del proyecto y análisis de los beneficios de automatizar la generación de escenarios de simulación.], [Felipe Garrido],
+
+    [0.7], [20/03/2026], [Definición y ajuste del objetivo general y los objetivos específicos, estableciendo el alcance inicial del proyecto.], [Samuel Campos, Santiago Chitiva],
+
+    [0.8], [10/04/2026], [Incorporación de los entregables del proyecto, estándares de ingeniería de software y justificación de su utilización.], [Erick Salazar, Felipe Garrido],
+
+    [0.9], [24/04/2026], [Desarrollo de la metodología de trabajo y organización de las actividades del proyecto en fases de comprensión, preparación, construcción y evaluación.], [Santiago Chitiva, Samuel Campos],
+
+    [1.0], [08/05/2026], [Consolidación de la propuesta inicial. Revisión de la estructura general, alcance, objetivos y descripción de la solución planteada.], [Todos],
+
+    [1.1], [22/05/2026], [Ampliación del marco teórico mediante la incorporación de conceptos de modelado y simulación de tráfico, matrices origen-destino y procesamiento de datos de movilidad.], [Felipe Garrido, Erick Salazar],
+
+    [1.2], [12/06/2026], [Fortalecimiento de la metodología de desarrollo mediante la descripción del pipeline ETL, las actividades de preparación de datos y los criterios de validación del escenario de simulación.], [Samuel Campos, Santiago Chitiva],
+
+    [1.3], [17/07/2026], [Actualización de las actividades de construcción del escenario de simulación e incorporación de nuevos modos de transporte y políticas de movilidad.], [Erick Salazar, Felipe Garrido],
+
+    [1.4], [14/08/2026], [Ampliación de la descripción del módulo web y de las funcionalidades de parametrización y visualización de resultados de las simulaciones.], [Santiago Chitiva, Samuel Campos],
+
+    [1.5], [11/09/2026], [Incorporación del análisis de intersecciones, evaluación de programas semafóricos y priorización de cruces sin semáforo.], [Felipe Garrido, Erick Salazar],
+
+    [1.6], [25/09/2026], [Adición de la propuesta del simulador 3D comparativo para evaluar escenarios de intersecciones con y sin semáforo, incluyendo indicadores de seguridad vial.], [Santiago Chitiva, Felipe Garrido],
+
+    [1.7], [02/10/2026], [Actualización de los objetivos específicos, entregables y resultados esperados para reflejar las nuevas funcionalidades de análisis de intersecciones y simulación 3D.], [Samuel Campos, Erick Salazar],
+
+    [2.0], [13/10/2026], [Actualización del alcance del proyecto y consolidación de la propuesta de grado. Inclusión de los cambios de alcance, nuevas funcionalidades, ajustes metodológicos y ampliación del marco teórico.], [Todos],
+  ),
+  caption: [Historial de cambios del documento.],
+) <tabHistorial>
 #outline(title: [Contenido], depth: 3)
 #pagebreak()
 
