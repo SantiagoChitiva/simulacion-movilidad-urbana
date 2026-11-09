@@ -18,6 +18,37 @@
   2026
 ]
 #pagebreak()
+#figure(
+  table(
+    columns: (auto, auto, 1fr, 18%),
+    table.header([Versión], [Fecha], [Descripción del cambio], [Autor(es)]),
+
+    [0.1], [15/05/2026], [Creación inicial del documento y presentación del proyecto de simulación de movilidad urbana.], [Santiago Chitiva],
+
+    [0.2], [19/05/2026], [Incorporación de información general sobre SUMO, sus funcionalidades y su utilidad para la simulación de escenarios de movilidad.], [Erick Salazar],
+
+    [0.3], [22/05/2026], [Desarrollo de los antecedentes relacionados con la problemática de movilidad urbana en Bogotá y contextualización del problema.], [Felipe Garrido],
+
+    [0.4], [26/05/2026], [Formulación del problema y descripción de las principales dificultades identificadas en el análisis de la movilidad urbana.], [Samuel Campos],
+
+    [0.5], [29/05/2026], [Definición inicial de la solución propuesta y descripción de la integración entre los datos de movilidad y la herramienta SUMO.], [Santiago Chitiva, Erick Salazar],
+
+    [0.6], [02/06/2026], [Descripción del módulo de procesamiento y transformación de datos, incluyendo su papel en la preparación de los escenarios de simulación.], [Felipe Garrido, Samuel Campos],
+
+    [0.7], [05/06/2026], [Incorporación de la descripción del módulo web para la configuración, ejecución y visualización de los resultados de las simulaciones.], [Erick Salazar, Samuel Campos],
+
+    [0.8], [09/06/2026], [Definición de las políticas de movilidad contempladas para los escenarios de simulación, incluyendo restricciones vehiculares, cierres de vías y modificaciones semafóricas.], [Santiago Chitiva, Felipe Garrido],
+
+    [0.9], [20/10/2026], [Ampliación de la especificación del caso de estudio, selección de localidades y consideración de fuentes de datos alternativas.], [Felipe Garrido],
+
+    [0.10], [25/10/2026], [Desarrollo de la justificación del proyecto y fortalecimiento de los argumentos sobre la utilidad de la solución propuesta.], [Samuel Campos, Erick Salazar],
+
+    [0.11], [05/11/2026], [Definición y ajuste del objetivo general y los objetivos específicos de acuerdo con el alcance planteado para el proyecto.], [Santiago Chitiva, Samuel Campos],
+
+    [1.0], [05/11/2026], [Consolidación de la versión parcial de la propuesta. Revisión de la estructura general, coherencia entre las secciones y presentación de los componentes principales del proyecto.], [Todos],
+  ),
+  caption: [Historial de cambios del documento.],
+) <tabHistorial>
 #outline(title: "Contenido", depth: 3)
 #pagebreak()
 
