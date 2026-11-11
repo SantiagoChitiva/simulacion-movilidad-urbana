@@ -64,7 +64,7 @@ prioridad #sym.arrow asignar plan de mitigación #sym.arrow monitorear en el sig
 
 #figure(
   table(
-    columns: (auto, 1fr, 1fr, auto),
+    columns: (auto, 1fr, 2fr, auto),
     table.header([ID], [Prevención], [Mitigación (si ocurre)], [Responsable]),
     [R1], [Exploración temprana de la encuesta en Fase 1 con análisis de calidad y cobertura.], [Reducir el alcance a las UPZ con mayor cobertura
     muestral.], [Samuel / Erick],
@@ -180,7 +180,7 @@ Roles: desarrollador, revisor, director y CI automático.
 
 #figure(
   table(
-    columns: (2fr, 2fr, 1fr, 2fr),
+    columns: (2fr, 2fr, 2fr, 1fr),
     table.header([Proceso de calidad], [Momento], [Responsable], [Herramienta]),
     [Revisión de cambios (peer review)], [Por cada PR], [Al menos 1 compañero], [GitHub PR reviews],
     [Pruebas unitarias automatizadas (CI)], [Por cada commit], [GitHub Actions], [pytest + pylint],

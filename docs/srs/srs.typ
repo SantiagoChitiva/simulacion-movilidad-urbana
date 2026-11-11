@@ -44,8 +44,7 @@
     grid(
       columns: (auto, 1fr, auto),
       [#image("figures/logo_javeriana.png", height: 50%)],
-      [#h(.5cm) SRS: #info.nombreProyecto],
-      [#info.logoEmpresaUri]
+      [#h(.5cm) SRS: #info.nombreProyecto]
     )
     line(length: 100%)
   },
