@@ -4,18 +4,6 @@ ieee1058:
   author: IEEE
   date: 1998
 
-iso12207:
-  type: report
-  title: ISO/IEC 12207:2008 – Systems and software engineering – Software life cycle processes
-  author: ISO/IEC
-  date: 2008
-
-bpmn:
-  type: report
-  title: Business Process Model and Notation (BPMN) Version 2.0
-  author: Object Management Group
-  date: 2011
-
 sumo:
   type: article
   title: Microscopic Traffic Simulation using SUMO
@@ -26,32 +14,12 @@ sumo:
     title: 21st International Conference on Intelligent Transportation Systems (ITSC)
   page-range: 2575-2582
 
-ortuzar:
-  type: book
-  title: Modelling Transport
-  author: ["Ortúzar, Juan de Dios", "Willumsen, Luis G."]
-  edition: 4
-  publisher: Wiley
-  date: 2011
-
 encuesta:
   type: report
   title: Encuesta de Movilidad de Bogotá 2023
   author: Secretaría Distrital de Movilidad de Bogotá
   publisher: Alcaldía Mayor de Bogotá
   date: 2023
-
-crispdm:
-  type: article
-  title: "CRISP-DM: Towards a standard process model for data mining"
-  author: ["Wirth, Rüdiger", "Hipp, Jochen"]
-  date: 2000
-
-scrum:
-  type: book
-  title: The Scrum Guide
-  author: ["Schwaber, Ken", "Sutherland, Jeff"]
-  date: 2020
 
 ieee830:
   type: report
@@ -64,12 +32,6 @@ ieee1016:
   title: IEEE Std 1016-2009 – IEEE Standard for Information Technology – Systems Design – Software Design Descriptions
   author: IEEE
   date: 2009
-
-iso29119:
-  type: report
-  title: ISO/IEC/IEEE 29119-1:2022 – Software and systems engineering – Software testing
-  author: ISO/IEC/IEEE
-  date: 2022
 
 webster:
   type: report
@@ -84,3 +46,40 @@ ssm:
   author: ["Gettman, Douglas", "Pu, Lili", "Sayed, Tarek", "Shelby, Steven"]
   publisher: Federal Highway Administration
   date: 2008
+
+iso42010:
+  type: report
+  title: ISO/IEC/IEEE 42010:2011 – Systems and software engineering – Architecture description
+  author: ISO/IEC/IEEE
+  date: 2011
+
+rup:
+  type: web
+  title: RUP. Software Architecture Document
+  author: Rational Software
+  url: http://www.ts.mah.se/RUP/RationalUnifiedProcess/webtmpl/templates/a_and_d/rup_sad.htm
+
+kruchten:
+  type: article
+  title: "Architectural Blueprints—The “4+1” View Model of Software Architecture"
+  author: ["Kruchten, Philippe"]
+  date: 1995
+  parent:
+    type: periodical
+    title: IEEE Software
+    volume: 12
+    issue: 6
+  page-range: 42-50
+  url: http://www.cs.ubc.ca/~gregor/teaching/papers/4+1view-architecture.pdf
+
+ambler-datos:
+  type: web
+  title: UML Data Modeling Profile
+  author: ["Ambler, Scott"]
+  url: http://www.agiledata.org/essays/umlDataModelingProfile.html
+
+ambler-ui:
+  type: web
+  title: User Interface Flow Diagrams
+  author: ["Ambler, Scott"]
+  url: http://www.agilemodeling.com/artifacts/uiFlowDiagram.htm

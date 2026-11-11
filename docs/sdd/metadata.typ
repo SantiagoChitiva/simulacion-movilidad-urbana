@@ -3,7 +3,7 @@
   nombreEmpresa: "Empresa EFSS",
   logoEmpresaUri: "/figures/logo_javeriana.png",
   version: "2.1",
-  fecha: "13 de octubre de 2026",
+  fecha: "11 de noviembre de 2026",
   director: "Andrés Oswaldo Calderón Romero",
   autores: (
     "Samuel Esteban Campos",

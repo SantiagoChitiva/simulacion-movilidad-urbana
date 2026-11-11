@@ -1,5 +1,5 @@
-// @brief: SPMP (Software Project Management Plan) -- IEEE Std 1058-1998 / ISO/IEC 12207:2008
-// Compilar: typst compile spmp.typ  (o desde Python: typst.compile("spmp.typ", root="."))
+// @brief: SDD (Software Design Description) -- IEEE Std 1016-2009
+// Compilar: typst compile --root . sdd.typ  (o desde Python: typst.compile("sdd.typ", root="."))
 
 #import "metadata.typ": info
 #import "sections/portada.typ": portada
@@ -63,6 +63,8 @@
     [1.4], [25/09/2026], [Incorporación de los elementos arquitectónicos del simulador 3D comparativo y de los componentes asociados a la evaluación de seguridad vial.], [Santiago Chitiva],
 
     [1.5], [24/10/2026], [Actualización general del documento para reflejar el alcance ampliado del proyecto, incluyendo ajustes en arquitectura, datos, componentes, interfaces y atributos de calidad.], [Samuel Campos, Felipe Garrido],
+
+    [2.1], [11/11/2026], [Reestructuración completa del documento para ajustarlo a la plantilla de Descripción del Diseño del Software: introducción, arquitectura (vistas lógica, física y de procesos), diseño detallado (estructura, comportamiento, persistencia e interfaz de usuario) y referencias. El contenido previo sobre arquitectura, datos, componentes, interfaces, decisiones y limitaciones se reubicó en las nuevas secciones.], [Erick Salazar],
   ),
   caption: [Historial de cambios del documento.],
 )
@@ -82,13 +84,8 @@
 #set heading(numbering: "1.1")
 
 #include "sections/1-introduccion.typ"
-#include "sections/2-descripcion-general-sistema.typ"
-#include "sections/3-arquitectura-sistema.typ"
-#include "sections/4-disenhio-datos.typ"
-#include "sections/5-disenhio-componentes.typ"
-#include "sections/6-disenhio-interfaces.typ"
-#include "sections/7-atributos-calidad.typ"
-#include "sections/8-apendices-referencias.typ"
+#include "sections/2-arquitectura.typ"
+#include "sections/3-diseno-detallado.typ"
 
 #heading[Referencias]
 #bibliography("referencias.yml", title: none, style: "ieee", full: true)
