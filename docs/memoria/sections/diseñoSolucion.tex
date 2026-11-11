@@ -36,6 +36,15 @@ Dominio y datos & Paquete \texttt{etl}: demanda, ruteo, simulación, exportació
 \label{tab:capas}
 \end{table}
 
+La figura~\ref{fig:componentes} detalla el interior de los contenedores (nivel 3 del modelo C4). En la API conviven las rutas HTTP y WebSocket, \texttt{GestorCorridas} (una corrida a la vez, con \texttt{estado.json}, avance y cancelación) y \texttt{GestorComparaciones} (comparación 3D con dos SUMO en lockstep por TraCI). El orquestador \texttt{etl.py} coordina los componentes de demanda, ruteo y simulación, exportadores, intersecciones, priorización, escenario de semaforización, escena 3D y telemetría, precalculadas y configuración. En el visor, \texttt{App.jsx} es dueño del mapa y delega en los \textit{hooks}, el cliente HTTP, los paneles de control, la ficha de intersección y el simulador 3D.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{c4-componentes.png}
+\caption{Diagrama de componentes del sistema (modelo C4, nivel 3).}
+\label{fig:componentes}
+\end{figure}
+
 \textbf{Modularidad.} Todos los módulos de \texttt{etl/sumo/} siguen el mismo patrón: un \texttt{*Config} inmutable (con \texttt{to\_args()} si invoca una herramienta de SUMO), un \texttt{*Result} y un \texttt{*Stats} mutable que acumula contadores (por ejemplo, filas inválidas y viajes generados). Los envoltorios de subprocesos ubican el binario con \texttt{shutil.which} y lanzan una excepción propia; los procesos largos aceptan un \textit{callback} de avance y un evento de cancelación. \texttt{configuration.py} es la única fuente de rutas y constantes.
 
 \subsection{Diseño de datos}

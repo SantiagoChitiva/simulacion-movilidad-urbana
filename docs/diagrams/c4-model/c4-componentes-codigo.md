@@ -51,11 +51,9 @@ C4Component
     Rel(visor, comp3d, "Simulación 3D en vivo", "WebSocket")
     Rel(rutas, jobs, "Encola corridas")
     Rel(rutas, comp3d, "Crea y cierra comparaciones")
-    Rel(rutas, inter, "Lee semaforos y programas")
-    Rel(rutas, prio, "Lee puntajes")
-    Rel(rutas, archivos, "Sirve .gz y JSON", "Archivo")
+    Rel(rutas, inter, "Lee semáforos y programas")
 
-    Rel(jobs, orq, "Llama run_pipeline con on_progreso y cancelar")
+    Rel(jobs, orq, "Llama run_pipeline")
     Rel(comp3d, orq, "Llama run_escenario_semaforo")
     Rel(comp3d, escena, "Geometría y riesgo")
     Rel(comp3d, sumo, "Dos instancias en lockstep", "TraCI")
@@ -65,14 +63,12 @@ C4Component
     Rel(orq, export, "Exporta resultados")
     Rel(orq, zona, "Arma zona A y B")
     Rel(orq, conf, "Resuelve rutas")
+    Rel(precalc, orq, "Corre cada preset")
+
     Rel(ruteo, sumo, "Ejecuta", "CLI y TraCI")
     Rel(export, archivos, "Lee FCD, escribe GeoJSON", "XML y GeoJSON")
-    Rel(demanda, archivos, "Lee encuesta", "TSV")
     Rel(inter, archivos, "Lee net.xml y vehroute", "XML")
     Rel(prio, inter, "Usa volúmenes")
-    Rel(zona, sumo, "netconvert, cutRoutes, randomTrips", "CLI")
-    Rel(precalc, orq, "Corre cada preset")
-    Rel(precalc, archivos, "Escribe precalculadas", "gzip")
 ```
 
 ### 3.2 Visor web (`kepler/`)
@@ -98,11 +94,8 @@ C4Component
     Rel(app, ficha, "Abre al hacer clic en un semáforo")
     Rel(app, sim3d, "Abre desde Semaforizar")
     Rel(hooks, cliente, "Llama")
-    Rel(app, cliente, "Descarga viajes")
     Rel(ficha, cliente, "Llama")
-    Rel(sim3d, cliente, "Crea y consulta la comparación")
     Rel(paneles, modos, "Usa")
-    Rel(app, modos, "Usa")
     Rel(cliente, apiC, "Peticiones", "JSON/HTTP")
     Rel(sim3d, apiC, "Frames de actores", "WebSocket")
 ```
