@@ -165,7 +165,7 @@ El sistema usa las siguientes comunicaciones, todas en la máquina local salvo l
 
 #figure(
   table(
-    columns: (auto, auto, 1fr),
+    columns: (1fr, 2fr, 4fr),
     table.header([*Canal*], [*Protocolo / puerto*], [*Uso*]),
     [Visor #sym.arrow API], [HTTP REST, JSON (`localhost:8000`, vía proxy `/api` de Vite)], [Demanda, corridas, intersecciones, programas,
     comparaciones, priorización y preparación del simulador 3D. Los trips precalculados se sirven en gzip con `Content-Encoding: gzip`.],
@@ -1301,7 +1301,7 @@ El almacenamiento de los datos a manejar tiene el siguiente formatos:
 
 #figure(
   table(
-    columns: (auto, auto, 1fr),
+    columns: (1fr, 2fr, 3fr),
     table.header([*Fase*], [*Formato*], [*Descripción*]),
     [F1 -- Ingestión], [TSV (Parquet previsto)], [Hoy el pipeline lee `viajes_usaquen_internos.tsv`, que salió de los notebooks con el factor de
     expansión `fexp_vj`. El Parquet de la encuesta limpia no se genera.],

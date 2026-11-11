@@ -96,7 +96,7 @@ prueba está asociado a uno o más requerimientos y especifica el método de ver
 
 #figure(
   table(
-    columns: (auto, auto, auto, 1fr, 1fr),
+    columns: (1fr, 1fr, 1fr, 2fr, 3fr),
     table.header([*ID Caso*], [*Req.*], [*Método*], [*Entrada de prueba*], [*Criterio de éxito*]),
 
     [CP-001], [RF-001], [T], [TSV con las columnas obligatorias completas; segundo TSV sin la columna `zat_des`.], [Primer caso: el pipeline continúa

@@ -34,7 +34,7 @@ herramientas que el pipeline invoca como procesos externos.
 
 #figure(
   table(
-    columns: (auto, auto, 1fr),
+    columns: (1fr, 1fr, 3fr),
     table.header([*Sistema externo*], [*Tipo de interfaz*], [*Descripción de la interacción*]),
     [OpenStreetMap],
     [Descarga de datos (HTTPS)],
@@ -145,7 +145,7 @@ No se requieren tarjetas gráficas dedicadas, aceleradores GPU, dispositivos de 
 
 #figure(
   table(
-    columns: (auto, auto, auto, 1fr),
+    columns: (2fr, 1fr, 1fr, 4fr),
     table.header([*Producto de Software*], [*Versión*], [*Fuente*], [*Propósito en el sistema*]),
     [Python],
     [3.11],
@@ -419,7 +419,7 @@ Las entidades centrales del dominio y sus relaciones son:
 
 #figure(
   table(
-    columns: (auto, 1fr, auto),
+    columns: (1fr, 4fr, 2fr),
     table.header([*Entidad*], [*Descripción*], [*Fuente / Artefacto*]),
 
     [Viaje], [Desplazamiento de un hogar entre una zona de origen y una de destino, registrado en la encuesta con su modo de transporte, hora de inicio y

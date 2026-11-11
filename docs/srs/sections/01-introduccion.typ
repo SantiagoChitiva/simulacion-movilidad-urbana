@@ -81,7 +81,7 @@ del proyecto.
 
 #figure(
   table(
-    columns: (auto, 1fr),
+    columns: (1fr, 4fr),
     table.header([*Término / Acrónimo*], [*Definición*]),
 
     [*SUMO*], [Simulation of Urban MObility. Simulador de tráfico microscópico de código abierto desarrollado por el DLR (German Aerospace Center).

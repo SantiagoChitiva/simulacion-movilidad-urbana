@@ -93,7 +93,7 @@
 
 #figure(
   table(
-    columns: 5,
+    columns: (1fr, 1fr, 2fr, 3fr, 1fr),
     table.header([*Versión*],[*Fecha*],[*Sección modificada*],[*Descripción de cambios*],[*Responsables*]),
 // filas (contenido o registro de la tabla)
     [1.0], [2026-05-31], [Todas], [Versión inicial del SRS: pipeline ETL (F1–F5) y módulo web (F6–F7).], [Equipo EFSS],
