@@ -172,7 +172,8 @@ Roles: desarrollador, revisor y CI automático.
 
 La @figBpmnCalidad muestra los tres niveles de calidad:
 + *código:* revisión por pares en cada PR y CI automático (pytest + pylint);
-+ *modelo de simulación:* validación GEH al cierre de cada sprint de simulación;
++ *modelo de simulación:* validación GEH al cierre de cada sprint de simulación y, mientras los aforos no estén calibrados, comparación de la
+  distribución horaria de salidas contra la encuesta (histograma de salidas, @figHistogramaSalidas);
 + *documentos formales:* revisión con checklist por estándar antes de cada entrega y auditoría de trazabilidad SRS #sym.arrow.l.r código
   #sym.arrow.l.r pruebas.
 
@@ -186,6 +187,7 @@ Roles: desarrollador, revisor, director y CI automático.
     [Pruebas unitarias automatizadas (CI)], [Por cada commit], [GitHub Actions], [pytest + pylint],
     [Compilación del visor], [Por cada PR que toque `kepler/`], [Autor del cambio], [`npm run build`],
     [Validación GEH del modelo], [Fin de cada sprint de simulación], [Responsable de simulación], [Script Python + aforos reales],
+    [Validación de la distribución horaria de salidas], [Por cada corrida base], [Responsable de simulación], [`validation/histograma_salidas.py`],
     [Revisión formal de documentos], [Antes de cada entrega formal], [Equipo + director], [Checklist por estándar IEEE + compilación Typst],
     [Retrospectiva de sprint], [Fin de cada sprint], [Scrum Master], [Registro de lecciones aprendidas],
     [Auditoría de trazabilidad SRS #sym.arrow.l.r código #sym.arrow.l.r pruebas], [Antes de cada entrega formal], [Responsable de documentación],

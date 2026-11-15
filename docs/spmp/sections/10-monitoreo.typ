@@ -89,6 +89,24 @@ cuantitativas y validaciones técnicas específicas para proyectos de simulació
 En el caso de componentes de simulación se requiere además la ejecución correcta en SUMO, la generación válida de archivos XML y métricas GEH dentro
 del rango esperado.
 
+*Validación preliminar de la distribución temporal (histograma de salidas).* Mientras la validación GEH contra los aforos HMD sigue pendiente, el
+equipo verifica en cada corrida base que la demanda simulada conserve la forma horaria de la Encuesta de Movilidad 2023. El script
+`simulation-service/validation/histograma_salidas.py` cuenta los viajes por intervalos de 10 minutos entre las 7:00 y las 10:00 y compara tres series
+(@figHistogramaSalidas):
+- *Encuesta (expandida):* cada viaje de la encuesta pesa su factor de expansión `fexp_vj` ($n = 109.372$). Es la referencia de la demanda real.
+- *Encuesta (insumo de SUMO):* cada viaje se replica `round(fexp_vj)` veces con tope `MAX_COPIAS`, que es lo que realmente recibe el simulador
+  ($n = 24.647$).
+- *Simulación SUMO:* la hora de inicio (`inicio_s`) de cada viaje exportado en `trips.geojson.gz` de la corrida `encuesta` ($n = 15.900$).
+
+#figure(image("/figures/histograma_salidas.png", width: 100%), caption: [Hora de salida de los viajes entre 7:00 y 10:00. Arriba, conteos por
+intervalo en escala logarítmica; abajo, porcentaje de los viajes de cada serie.]) <figHistogramaSalidas>
+
+Como los totales difieren (el tope de copias recorta la expansión y el exportador a kepler descarta las entidades que casi no se mueven), el panel
+inferior normaliza cada serie a porcentaje para comparar solo la forma de la curva. Las tres series coinciden en los picos de las horas en punto
+(7:00, 8:00 y 9:00, con cerca de 21 %, 18 % y 17 % de los viajes), reflejo del redondeo con que se reporta la hora de salida, y en el pico menor de las
+9:30. La mayor diferencia está en las 9:30 (7,5 % simulado frente a 10,7 % en la encuesta expandida). Este análisis valida la *forma temporal* de la
+demanda, no su magnitud, y por tanto no reemplaza el GEH: la métrica de validación GEH y el criterio de calibración siguen sin cambios.
+
 *Acciones correctivas.* Cuando las métricas indiquen desviaciones importantes respecto a la planeación inicial, el equipo aplicará acciones
 correctivas:
 - *Retrasos en el sprint.*

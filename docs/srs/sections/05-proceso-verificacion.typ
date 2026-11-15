@@ -263,6 +263,22 @@ prueba está asociado a uno o más requerimientos y especifica el método de ver
 ) <tabCasosPruebaNoFuncionales>
 
 
+== Verificación Parcial de la Demanda Simulada
+
+Mientras no exista el módulo de validación GEH (RF-014), se verifica que la demanda simulada conserve la forma horaria de la encuesta. El script
+`simulation-service/validation/histograma_salidas.py` agrupa en intervalos de 10 minutos, entre las 7:00 y las 10:00, la hora de salida de los viajes
+y compara tres series (@figHistogramaSalidasSrs):
+- *Encuesta (expandida):* cada viaje pesa su factor de expansión `fexp_vj` ($n = 109.372$).
+- *Encuesta (insumo de SUMO):* cada viaje se replica `round(fexp_vj)` veces con tope `MAX_COPIAS`, que es lo que recibe el simulador ($n = 24.647$).
+- *Simulación SUMO:* `inicio_s` de cada viaje de `trips.geojson.gz` de la corrida `encuesta` ($n = 15.900$).
+
+#figure(image("/figures/histograma_salidas.png", width: 100%), caption: [Hora de salida de los viajes entre 7:00 y 10:00: encuesta expandida,
+encuesta como insumo de SUMO y simulación. Arriba, conteos en escala logarítmica; abajo, porcentaje de cada serie.]) <figHistogramaSalidasSrs>
+
+Los totales difieren por el tope de copias y por el filtrado del exportador a kepler, así que el panel inferior normaliza cada serie a porcentaje. Las
+tres curvas coinciden en los picos de las horas en punto y en el de las 9:30 (la mayor diferencia: 7,5 % simulado frente a 10,7 % en la encuesta
+expandida). Esto valida la forma temporal de la demanda, no su magnitud, y no sustituye el criterio GEH de los criterios de aceptación.
+
 == Criterios de Aceptación del Sistema
 
 El sistema se considerará verificado y listo para la entrega al director del proyecto cuando se cumplan simultáneamente los siguientes criterios:

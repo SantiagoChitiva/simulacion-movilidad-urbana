@@ -617,7 +617,8 @@ redactan con la forma \"El sistema debe #sym.dots\", y se organizan en cinco fun
   porcentaje de puntos con GEH $<$ 5.],
   prioridad: [Alta],
   modulo: [Módulo de Validación (etl/validation.py)],
-  estado: [Pendiente (planeado para la Fase 4).],
+  estado: [Pendiente (planeado para la Fase 4). El GEH y el CSV no existen aún; como verificación parcial, `validation/histograma_salidas.py` compara la
+  distribución horaria de salidas simulada contra la encuesta (@figHistogramaSalidasSrs, sección 5).],
   fecha: [],
 )
 

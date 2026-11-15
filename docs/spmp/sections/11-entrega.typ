@@ -7,6 +7,7 @@ La entrega del producto se realizará entre las semanas 10 y 16 del proyecto e i
 - Conjunto de archivos de configuración SUMO (`.net.xml`, `.taz.xml`, `.rou.xml`, tipos de vehículo) para la localidad de Usaquén.
 - Simulaciones precalculadas de los cuatro presets de demanda (`simulation-service/precalculadas/`).
 - Reporte de validación del modelo con métricas GEH y RMSE por punto de aforo.
+- Histograma de horas de salida (encuesta vs. simulación) y el script que lo genera (`simulation-service/validation/histograma_salidas.py`).
 - Resultados de los escenarios hipotéticos analizados (Sprints 3 a 7), incluidas las comparaciones 3D de semáforo propuesto en los cruces prioritarios.
 - Informe final del proyecto (IEEE 1063-2001).
 - Todos los entregables formales del semestre (SPMP, SRS, SDD, Plan de Pruebas) con su fuente Typst y su PDF.
