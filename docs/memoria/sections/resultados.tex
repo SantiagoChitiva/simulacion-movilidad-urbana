@@ -4,7 +4,7 @@ Siguiendo la metodología, los resultados se organizan en tres niveles: verifica
 
 \subsection{Verificación del software}
 
-\textbf{Pruebas automáticas.} El servicio tiene 180 pruebas con \texttt{pytest} en \texttt{simulation-service/test/}, y todas pasan. Cubren: demanda y presets, generación de viajes, conversión del FCD, exportación a kepler, intersecciones, priorización, avance, cancelación y reanudación, semáforo nuevo, escena 3D, telemetría, simulaciones precalculadas, la API, la comparación 3D, la comparación de programas y la validación (aforos ubicados en la red, GEH, encuesta completa, GTFS y ventanas). Las dependencias externas se aíslan con \texttt{dependency\_overrides} y datos mínimos, de modo que las pruebas no ejecutan SUMO completo. Entre ellas, una prueba verifica que el preset \textit{encuesta} con sus conteos por defecto reproduce exactamente la expansión simple de la encuesta, lo que valida la lógica de transferencia modal en su caso base.
+\textbf{Pruebas automáticas.} El servicio tiene 182 pruebas con \texttt{pytest} en \texttt{simulation-service/test/}, y todas pasan. Cubren: demanda y presets, generación de viajes, conversión del FCD, exportación a kepler, intersecciones, priorización, avance, cancelación y reanudación, semáforo nuevo, escena 3D, telemetría, simulaciones precalculadas, la API, la comparación 3D, la comparación de programas y la validación (aforos ubicados en la red, GEH, encuesta completa, GTFS y ventanas). Las dependencias externas se aíslan con \texttt{dependency\_overrides} y datos mínimos, de modo que las pruebas no ejecutan SUMO completo. Entre ellas, una prueba verifica que el preset \textit{encuesta} con sus conteos por defecto reproduce exactamente la expansión simple de la encuesta, lo que valida la lógica de transferencia modal en su caso base.
 
 Dos limitaciones de este nivel de verificación: (i) el flujo de integración continua ejecuta las pruebas del servicio en un trabajo con Python 3.12 sobre Ubuntu, pero no en Windows, donde se desarrolló; y (ii) el visor no tiene pruebas automáticas, solo demostración funcional.
 
@@ -125,7 +125,7 @@ Las dos últimas filas descartan las explicaciones más simples. Repartir las ru
 \hline
 \textbf{Objetivo} & \textbf{Evidencia} & \textbf{Estado} \\ \hline
 OE1 & Informe de brechas (Fase 1), selección del TSV de viajes internos y de la red OSM. & Cumplido, con las brechas de aforos declaradas. \\ \hline
-OE2 & \textit{Pipeline} ETL de la encuesta a SUMO, con 180 pruebas. & Cumplido. \\ \hline
+OE2 & \textit{Pipeline} ETL de la encuesta a SUMO, con 182 pruebas. & Cumplido. \\ \hline
 OE3 & Escenario de Usaquén ejecutado en SUMO, comparación de horas de salida contra la encuesta y GEH contra 33 puntos de aforo. & Parcial: la forma temporal coincide; el GEH se cumple en 2 de 33 puntos. \\ \hline
 OE4 & Visor web con presets, parametrización, avance y cancelación. & Cumplido. \\ \hline
 OE5 & Análisis de intersecciones y simulador 3D con TTC, DRAC y PET. & Cumplido, con reporte exportable en CSV y PDF. \\ \hline

@@ -151,7 +151,7 @@
     <li>De <strong>100.174</strong> viajes de la encuesta 2023, <strong>9.341</strong> tocan Usaquén y <strong>2.648</strong> son internos; con la expansión por <code>fexp</code> (tope 50) quedan <strong>24.647</strong> en 7:00 a 10:00</li>
     <li>Sin ordenar por hora de salida, SUMO descartaba unos <strong>23.000 de 24.600</strong> viajes</li>
     <li>Una corrida completa tarda <strong>~12 min</strong>: demanda y rutas 1,5, SUMO 8 y exportación 2</li>
-    <li>La salida pasó de 1,4 GB a <strong>11,7 MB</strong> con lectura en streaming y compresión</li>
+    <li>La salida pasó de 1,4 GB a <strong>15 MB</strong> con lectura en streaming y compresión</li>
   </ul>
 </section>
 
@@ -224,7 +224,7 @@
   <h2>Verificación del software</h2>
   <div class="dos">
     <div class="cifras vertical">
-      <div><b>103</b><span>pruebas automáticas con pytest</span></div>
+      <div><b>182</b><span>pruebas automáticas con pytest, todas pasan</span></div>
       <div><b>Aisladas</b><span>las dependencias externas se simulan con datos mínimos, sin correr SUMO completo</span></div>
     </div>
     <div>
@@ -234,18 +234,43 @@
         <li>Conversión y exportación de resultados</li>
         <li>Intersecciones, priorización, escena 3D y telemetría</li>
         <li>API, avance, cancelación y comparación 3D</li>
+        <li>Validación: aforos, GEH, buses del GTFS y ventanas</li>
       </ul>
       <p class="pie">Una prueba comprueba que el preset <em>encuesta</em> reproduce exactamente la expansión simple de la encuesta.</p>
     </div>
   </div>
-  <p class="aviso">Limitación: la integración continua solo corre un directorio de pruebas vacío, así que las pruebas del servicio se ejecutan a mano. El visor se demostró funcionalmente, sin pruebas automáticas.</p>
+  <p class="aviso">La integración continua corre las pruebas en cada push (Python 3.12 en Ubuntu, no en Windows). El visor se demostró funcionalmente, sin pruebas automáticas.</p>
 </section>
 
 <section class="compacta">
   <div class="tag">Parte 4 · Control de calidad</div>
   <h2>Validación: la forma temporal coincide</h2>
   <img class="fig" src="assets/figuras/histograma_salidas.png" alt="Histograma de horas de salida">
-  <p class="pie">Encuesta expandida, encuesta como insumo y simulación siguen el mismo perfil (picos a las 7:00, 8:00 y 9:00). Valida la <strong>forma</strong> de la demanda, no su magnitud.</p>
+  <p class="pie">La simulación reproduce su insumo (máximo 0,9 puntos de diferencia por intervalo). Los picos en punto de la encuesta son redondeo de los encuestados y se reparten a propósito para que los vehículos no lleguen en ráfagas. Valida la <strong>forma</strong> de la demanda, no su magnitud.</p>
+</section>
+
+<section class="compacta">
+  <div class="tag">Parte 4 · Control de calidad</div>
+  <h2>Validación con aforos: el GEH no se puede cumplir</h2>
+  <div class="dos">
+    <table class="tabla num chica">
+      <tr><th>Demanda (mañana)</th><th>Simulado / aforado</th><th>GEH&nbsp;&lt;&nbsp;5</th></tr>
+      <tr><td>Solo viajes internos</td><td>6 %</td><td>0&nbsp;de&nbsp;33</td></tr>
+      <tr><td>+ tráfico de paso</td><td>27 %</td><td>2&nbsp;de&nbsp;33</td></tr>
+      <tr><td>Encuesta completa</td><td>22 %</td><td>2&nbsp;de&nbsp;33</td></tr>
+      <tr><td>+ asignación iterativa</td><td>22 %</td><td>2&nbsp;de&nbsp;33</td></tr>
+      <tr><td>Sin control de cruces</td><td>33 %</td><td>2&nbsp;de&nbsp;33</td></tr>
+    </table>
+    <div>
+      <h3>Por qué era inevitable</h3>
+      <ul>
+        <li>La SDM no publica los tiempos de sus semáforos: los 220 usan el programa estimado por <code>netconvert</code></li>
+        <li>La red viene de OpenStreetMap, sin carriles ni giros auditados en las avenidas</li>
+        <li>Con 4 veces más demanda la red no la mueve: ninguna demanda ni asignación pasa de 2 de 33</li>
+      </ul>
+    </div>
+  </div>
+  <p class="aviso">No es que la simulación falle: ejecuta bien la demanda que recibe. El GEH mide la calibración contra la calle, y sin esos datos ningún ajuste la alcanza. Como la misma red y la misma demanda están en los dos escenarios, las comparaciones entre alternativas siguen siendo válidas.</p>
 </section>
 
 <section>
@@ -256,14 +281,14 @@
       <tr><th>Objetivo</th><th>Estado</th></tr>
       <tr><td>OE1 · Fuentes de datos</td><td class="ok">Cumplido</td></tr>
       <tr><td>OE2 · Pipeline ETL</td><td class="ok">Cumplido</td></tr>
-      <tr><td>OE3 · Validación en SUMO</td><td class="parcial">Parcial: sin GEH ni RMSE</td></tr>
+      <tr><td>OE3 · Validación en SUMO</td><td class="parcial">Parcial: GEH 2 de 33 (inevitable)</td></tr>
       <tr><td>OE4 · Módulo web</td><td class="ok">Cumplido</td></tr>
       <tr><td>OE5 · Intersecciones y 3D</td><td class="ok">Cumplido</td></tr>
     </table>
     <div class="cifras vertical">
-      <div><b>37</b><span>de 60 requisitos implementados</span></div>
-      <div><b>15</b><span>parciales</span></div>
-      <div><b>5</b><span>pendientes: GEH, checkpoints, reporte 3D, programa editable y buses</span></div>
+      <div><b>49</b><span>de 64 requisitos implementados</span></div>
+      <div><b>12</b><span>parciales</span></div>
+      <div><b>0</b><span>pendientes</span></div>
     </div>
   </div>
 </section>
@@ -272,8 +297,8 @@
   <div class="tag">Parte 4 · Control de calidad</div>
   <h2>Limitaciones asumidas</h2>
   <ul class="grande">
-    <li><strong>Sin calibración con aforos reales:</strong> es una herramienta de exploración, no de predicción.</li>
-    <li>El transporte público se simula como caminata: no hay buses ni GTFS.</li>
+    <li><strong>Volúmenes sin calibrar (GEH en 2 de 33):</strong> sirve para comparar alternativas, no para pronosticar volúmenes.</li>
+    <li>Los buses del GTFS siguen su horario fijo, sin TransMiCable; las vías sin andén ponen peatones en la calzada.</li>
     <li>Los 220 semáforos usan el programa genérico de <code>netconvert</code>, no los de la SDM.</li>
     <li>El tráfico de fondo del 3D es sintético y usa una sola semilla (42).</li>
     <li>La priorización de cruces no se contrastó con una decisión real.</li>
@@ -295,10 +320,9 @@
     <div>
       <h3>Trabajo futuro</h3>
       <ul>
-        <li>Geocodificar los aforos y calcular GEH y RMSE</li>
-        <li>Buses y paradas desde GTFS</li>
-        <li>Programas semafóricos reales de la SDM</li>
-        <li>Varias semillas y reporte exportable del 3D</li>
+        <li>Calibrar la red para cumplir el GEH: tiempos semafóricos reales de la SDM y auditoría de carriles</li>
+        <li>Red con andenes completos</li>
+        <li>Varias semillas en el simulador 3D</li>
         <li>Más localidades, otras franjas y emisiones</li>
       </ul>
     </div>
