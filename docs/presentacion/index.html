@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Simulación de movilidad de Usaquén</title>
+<link rel="stylesheet" href="vendor/reveal/reset.css">
+<link rel="stylesheet" href="vendor/reveal/reveal.css">
+<link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ====================== PORTADA Y AGENDA ====================== -->
+<section class="portada">
+  <p class="etiqueta">Trabajo de grado · Ingeniería de Sistemas · Pontificia Universidad Javeriana</p>
+  <h1>De la Encuesta de Movilidad a una simulación SUMO de Usaquén</h1>
+  <p class="sub">Pipeline automatizado, visor web y simulador 3D para decisiones de semaforización</p>
+  <p class="autores">Director: Andrés Oswaldo Calderón Romero · Bogotá, 2026</p>
+</section>
+
+<section>
+  <h2>Contenido</h2>
+  <ol class="indice">
+    <li>Análisis de entorno y herramientas</li>
+    <li>Diseño de la solución</li>
+    <li>Solución: pipeline, escenarios y semaforización</li>
+    <li>Control de calidad y conclusiones</li>
+    <li>Video demo</li>
+  </ol>
+</section>
+
+<!-- ====================== PARTE 1 · ENTORNO Y HERRAMIENTAS ====================== -->
+<section>
+  <div class="tag">Parte 1 · Análisis de entorno y herramientas</div>
+  <h2>El síntoma: Bogotá está congestionada</h2>
+  <div class="cifras">
+    <div><b>69,9&nbsp;%</b><span>nivel de congestión en 2025, séptima del mundo (TomTom)</span></div>
+    <div><b>153 h</b><span>perdidas al año en tráfico en horas pico</span></div>
+    <div><b>~15 km/h</b><span>velocidad promedio en hora pico; 5 km pueden tardar 40 min</span></div>
+  </div>
+  <p><strong>Causas estructurales:</strong> una demanda de viajes que crece con la población y el parque automotor, una alta dependencia del vehículo particular y una oferta vial limitada por la topografía y la urbanización histórica.</p>
+</section>
+
+<section>
+  <div class="tag">Parte 1 · Análisis de entorno y herramientas</div>
+  <h2>La causa que ataca el proyecto</h2>
+  <p class="pregunta">Quien planifica necesita responder «¿qué pasaría si…?» antes de intervenir una política, una obra o un semáforo.</p>
+  <table class="tabla causas">
+    <tr><th>Causa</th><th>Efecto</th><th>Consecuencia</th></tr>
+    <tr><td><b>Barrera de datos.</b> La encuesta de movilidad no viene en un formato que SUMO entienda</td><td>Limpiar, expandir y zonificar los viajes a mano</td><td>Horas de preparación manual y riesgo de error</td></tr>
+    <tr><td><b>Barrera técnica.</b> Cada simulación exige varios XML y tres utilidades de línea de comandos</td><td>Solo un especialista puede configurar y repetir un escenario</td><td>Los escenarios no son reproducibles ni exploran variantes</td></tr>
+    <tr><td><b>Brecha de decisión.</b> Probar antes de intervenir es lento y poco accesible</td><td>Cada escenario nuevo cuesta tanto trabajo como el primero</td><td>Intervenciones, como un semáforo, sin evidencia previa</td></tr>
+  </table>
+  <p class="pie"><strong>Objetivo:</strong> automatizar la transformación de datos de movilidad de Bogotá en archivos válidos para SUMO, con una interfaz web para visualizar y configurar escenarios. Solo datos públicos y software abierto.</p>
+</section>
+
+<section class="compacta">
+  <div class="tag">Parte 1 · Análisis de entorno y herramientas</div>
+  <h2>Alternativas consideradas</h2>
+  <table class="tabla alternativas">
+    <tr><th>Enfoque</th><th>Resolución</th><th>Escenarios hipotéticos</th><th>Limitación clave</th></tr>
+    <tr><td>Modelos analíticos y colas</td><td>Macroscópica</td><td>Media</td><td>Simplificaciones fuertes; cambiar la red obliga a reformular</td></tr>
+    <tr><td>Aprendizaje automático</td><td>Según el modelo</td><td>Baja</td><td>Faltan series históricas; no explora lo que nunca ocurrió</td></tr>
+    <tr><td>APIs de tráfico en vivo</td><td>—</td><td>Ninguna</td><td>Contratos comerciales; solo describen lo que ya pasó</td></tr>
+    <tr><td>Modelo de cuatro pasos</td><td>Zonal</td><td>Media</td><td>Resultados estáticos, sin comportamiento individual</td></tr>
+    <tr class="elegida"><td>Simulación microscópica (SUMO)</td><td>Microscópica</td><td>Alta</td><td>Más pesada (~12 min por corrida); depende de la calidad de los datos</td></tr>
+  </table>
+  <p class="pie">Trabajos relacionados: <em>MoST</em> (Mónaco) es un escenario único y manual; Foxway visualiza el tráfico histórico de Bogotá sin simular; <em>Semáforos de Barranquilla</em> inspiró la priorización de cruces.</p>
+</section>
+
+<section>
+  <div class="tag">Parte 1 · Análisis de entorno y herramientas</div>
+  <h2>Herramientas elegidas</h2>
+  <div class="herramientas">
+    <div><h3>Datos</h3><p>Encuesta de Movilidad 2023, red de OpenStreetMap, siniestros de la SDM, edificios de OSM y Microsoft</p></div>
+    <div><h3>Simulación</h3><p>SUMO 1.27: <code>netconvert</code>, <code>duarouter</code>, <code>sumo</code> y control en vivo con TraCI</p></div>
+    <div><h3>Servicio</h3><p>Python 3.11, FastAPI, Pydantic, pyproj y pytest</p></div>
+    <div><h3>Visor</h3><p>React, Vite, kepler.gl, three.js y maplibre-gl</p></div>
+    <div><h3>Exploración</h3><p>pandas, geopandas, osmnx y Jupyter (CRISP-DM)</p></div>
+    <div><h3>Criterio</h3><p>Código abierto o académico gratuito, sin base de datos ni nube, reproducible</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="tag">Parte 1 · Análisis de entorno y herramientas</div>
+  <h2>Los datos de partida</h2>
+  <div class="dos">
+    <div>
+      <div class="embudo">
+        <div class="fila"><div class="barra" style="--w:90%"><b>100.174</b></div><span>viajes encuesta 2023</span></div>
+        <div class="fila"><div class="barra" style="--w:62%"><b>9.341</b></div><span>tocan Usaquén</span></div>
+        <div class="fila"><div class="barra" style="--w:34%"><b>2.648</b></div><span>son internos</span></div>
+      </div>
+      <ul>
+        <li>Ventana simulada: <strong>7:00 a 10:00</strong></li>
+        <li>Cada viaje se replica <code>round(fexp_vj)</code> veces (tope 50): <strong>24.647</strong> viajes</li>
+        <li>Red 3D de OpenStreetMap con <strong>220 semáforos</strong></li>
+      </ul>
+    </div>
+    <img class="fig" src="assets/figuras/mapa_utam_usaquen.png" alt="Mapa de UTAM de Usaquén">
+  </div>
+  <p class="pie">Brecha declarada: las 336 estaciones de aforo HMD no traen coordenadas y no pudieron asociarse a la red.</p>
+</section>
+
+<!-- ====================== PARTE 2 · DISEÑO ====================== -->
+<section>
+  <div class="tag">Parte 2 · Diseño</div>
+  <h2>De los requisitos al diseño</h2>
+  <div class="cifras">
+    <div><b>60</b><span>requisitos en el SRS: 45 funcionales, 4 de desempeño y 11 no funcionales</span></div>
+    <div><b>9</b><span>módulos funcionales, de la ingestión de datos al simulador 3D</span></div>
+    <div><b>3</b><span>tipos de usuario; el de referencia es el planificador no técnico</span></div>
+  </div>
+  <p><strong>Prioridades de diseño, en orden:</strong> reproducibilidad, mantenibilidad, respuesta fluida con un simulador lento, verosimilitud sin sobreprometer y operación local y simple.</p>
+  <p class="pie">Desempeño exigido: pipeline en 4 h como máximo, comparación 3D preparada en 60 s o menos, 30 cuadros por segundo en el visor.</p>
+</section>
+
+<section class="c4" id="arquitectura" data-background-color="#ffffff">
+  <div id="c4"></div>
+</section>
+
+<section class="compacta">
+  <div class="tag">Parte 2 · Diseño</div>
+  <h2>Estilos y decisiones que importaron</h2>
+  <table class="tabla">
+    <tr><th>Decisión</th><th>Por qué</th></tr>
+    <tr><td>Tres estilos: tubería ETL, trabajos asíncronos y WebSocket</td><td>Capas visor, API, orquestación y dominio; la API responde 202 y el visor consulta cada 2 s</td></tr>
+    <tr><td>Reproducibilidad como requisito</td><td>Semilla explícita, orden determinista y huella SHA-256 de los insumos</td></tr>
+    <tr><td>Un trabajador, archivos, sin base de datos</td><td>Una corrida pesada a la vez; las salidas de SUMO ya son archivos. Costo: no escala en usuarios</td></tr>
+    <tr><td>Presets por transferencia modal</td><td>Conservan total, origen, destino y hora de salida; son deterministas</td></tr>
+    <tr><td>Precalcular y versionar los presets</td><td>Una corrida tarda ~12 min y el visor debe mostrar algo al abrir</td></tr>
+    <tr><td>Dos SUMO en lockstep con TraCI</td><td>Comparar «sin» y «con» semáforo exige igual demanda y semilla</td></tr>
+    <tr><td>Priorización con reglas</td><td>Explicable, reproducible y sin dependencia externa</td></tr>
+  </table>
+</section>
+
+<!-- ====================== PARTE 3 · SOLUCIÓN ====================== -->
+<section>
+  <div class="tag">Parte 3 · Solución</div>
+  <h2>Pipeline: de la encuesta a la animación</h2>
+  <div class="flujo">
+    <div><b>Encuesta</b><span>TSV de viajes internos de Usaquén</span></div>
+    <div><b>Viajes</b><span>Expansión por <code>fexp</code>, ordenados por hora de salida</span></div>
+    <div><b>Rutas</b><span><code>duarouter</code> sobre la red 3D</span></div>
+    <div><b>Simulación</b><span>SUMO controlado con TraCI</span></div>
+    <div><b>Exportación</b><span>GeoJSON de trayectorias para kepler.gl</span></div>
+  </div>
+  <ul>
+    <li>De <strong>100.174</strong> viajes de la encuesta 2023, <strong>9.341</strong> tocan Usaquén y <strong>2.648</strong> son internos; con la expansión por <code>fexp</code> (tope 50) quedan <strong>24.647</strong> en 7:00 a 10:00</li>
+    <li>Sin ordenar por hora de salida, SUMO descartaba unos <strong>23.000 de 24.600</strong> viajes</li>
+    <li>Una corrida completa tarda <strong>~12 min</strong>: demanda y rutas 1,5, SUMO 8 y exportación 2</li>
+    <li>La salida pasó de 1,4 GB a <strong>11,7 MB</strong> con lectura en streaming y compresión</li>
+  </ul>
+</section>
+
+<section class="compacta">
+  <div class="tag">Parte 3 · Solución</div>
+  <h2>Escenarios «¿qué pasaría si…?»</h2>
+  <div class="dos">
+    <div>
+      <p>Cada preset es una regla de transferencia modal que redistribuye los viajes según la probabilidad de cada modo dado el rango de duración, calculada de la encuesta completa.</p>
+      <ul>
+        <li><em>Encuesta</em>, <em>más vehículos</em>, <em>más peatones</em> y <em>día sin carro</em></li>
+        <li>Conservan el total, el origen, el destino y la hora de salida</li>
+        <li>Conteos por modo con el método del mayor resto: resultado determinista</li>
+      </ul>
+    </div>
+    <table class="tabla num chica">
+      <tr><th>Preset</th><th>Vehículos</th><th>Personas</th></tr>
+      <tr><td>Más vehículos</td><td>14.404</td><td>9.234</td></tr>
+      <tr><td>Encuesta</td><td>9.592</td><td>14.123</td></tr>
+      <tr><td>Más peatones</td><td>6.125</td><td>17.985</td></tr>
+      <tr><td>Día sin carro</td><td>4.945</td><td>19.257</td></tr>
+    </table>
+  </div>
+  <p class="pie">Los cuatro presets simulan los mismos 24.647 viajes. Se precalcularon y se versionaron para que el visor abra sin esperar.</p>
+</section>
+
+<section>
+  <div class="tag">Parte 3 · Solución</div>
+  <h2>Semaforización: priorizar y comparar</h2>
+  <div class="dos">
+    <div class="tarjeta">
+      <h3>1 · Priorizar cruces sin semáforo</h3>
+      <ul>
+        <li>Reglas duras: vía principal, conflicto real, sin semáforo a menos de 80 m</li>
+        <li>Evidencia calibrada con los semáforos existentes: siniestros a 30 m, tramo largo sin señal, volumen simulado, colegios y centros de salud</li>
+        <li>Niveles: prioritario, recomendado, observación</li>
+      </ul>
+    </div>
+    <div class="tarjeta">
+      <h3>2 · Comparar en 3D</h3>
+      <ul>
+        <li>Dos SUMO en lockstep: «sin» y «con» semáforo, igual demanda y semilla</li>
+        <li>Seguimiento de un vehículo o peatón en tercera persona</li>
+        <li>Riesgo con TTC (&lt; 1,5 s), DRAC (&gt; 3,35 m/s²) y PET (&lt; 1,5 s)</li>
+      </ul>
+    </div>
+  </div>
+  <p class="pie">Instalar un semáforo reduce los conflictos transversales, pero puede aumentar demoras y colas: por eso se compara antes de decidir.</p>
+</section>
+
+<section>
+  <div class="tag">Parte 3 · Solución</div>
+  <h2>El producto en funcionamiento</h2>
+  <div class="tres">
+    <div><h3>Visor</h3><p>Viajes animados por modo, panel de demanda, avance real por etapa y cancelación.</p></div>
+    <div><h3>Intersecciones</h3><p>Ficha de los 220 semáforos: accesos, volúmenes, fases, edición de programa y método de Webster.</p></div>
+    <div><h3>Simulador 3D</h3><p>Pantalla dividida «sin» | «con» semáforo, HUD, minimapa y modo manual.</p></div>
+  </div>
+  <p class="demo">Lo vemos funcionando en el video demo (7 min), al final de la presentación</p>
+  <ol class="guion">
+    <li>Visor: cargar la simulación de la encuesta y comparar con «día sin carro»</li>
+    <li>Ficha de una intersección</li>
+    <li>Semaforizar un cruce candidato y abrir la comparación 3D</li>
+  </ol>
+</section>
+
+<!-- ====================== PARTE 4 · CONTROL DE CALIDAD ====================== -->
+<section class="compacta">
+  <div class="tag">Parte 4 · Control de calidad</div>
+  <h2>Verificación del software</h2>
+  <div class="dos">
+    <div class="cifras vertical">
+      <div><b>103</b><span>pruebas automáticas con pytest</span></div>
+      <div><b>Aisladas</b><span>las dependencias externas se simulan con datos mínimos, sin correr SUMO completo</span></div>
+    </div>
+    <div>
+      <h3>Qué cubren</h3>
+      <ul>
+        <li>Demanda, presets y generación de viajes</li>
+        <li>Conversión y exportación de resultados</li>
+        <li>Intersecciones, priorización, escena 3D y telemetría</li>
+        <li>API, avance, cancelación y comparación 3D</li>
+      </ul>
+      <p class="pie">Una prueba comprueba que el preset <em>encuesta</em> reproduce exactamente la expansión simple de la encuesta.</p>
+    </div>
+  </div>
+  <p class="aviso">Limitación: la integración continua solo corre un directorio de pruebas vacío, así que las pruebas del servicio se ejecutan a mano. El visor se demostró funcionalmente, sin pruebas automáticas.</p>
+</section>
+
+<section class="compacta">
+  <div class="tag">Parte 4 · Control de calidad</div>
+  <h2>Validación: la forma temporal coincide</h2>
+  <img class="fig" src="assets/figuras/histograma_salidas.png" alt="Histograma de horas de salida">
+  <p class="pie">Encuesta expandida, encuesta como insumo y simulación siguen el mismo perfil (picos a las 7:00, 8:00 y 9:00). Valida la <strong>forma</strong> de la demanda, no su magnitud.</p>
+</section>
+
+<section>
+  <div class="tag">Parte 4 · Control de calidad</div>
+  <h2>Cumplimiento</h2>
+  <div class="dos">
+    <table class="tabla">
+      <tr><th>Objetivo</th><th>Estado</th></tr>
+      <tr><td>OE1 · Fuentes de datos</td><td class="ok">Cumplido</td></tr>
+      <tr><td>OE2 · Pipeline ETL</td><td class="ok">Cumplido</td></tr>
+      <tr><td>OE3 · Validación en SUMO</td><td class="parcial">Parcial: sin GEH ni RMSE</td></tr>
+      <tr><td>OE4 · Módulo web</td><td class="ok">Cumplido</td></tr>
+      <tr><td>OE5 · Intersecciones y 3D</td><td class="ok">Cumplido</td></tr>
+    </table>
+    <div class="cifras vertical">
+      <div><b>37</b><span>de 60 requisitos implementados</span></div>
+      <div><b>15</b><span>parciales</span></div>
+      <div><b>5</b><span>pendientes: GEH, checkpoints, reporte 3D, programa editable y buses</span></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="tag">Parte 4 · Control de calidad</div>
+  <h2>Limitaciones asumidas</h2>
+  <ul class="grande">
+    <li><strong>Sin calibración con aforos reales:</strong> es una herramienta de exploración, no de predicción.</li>
+    <li>El transporte público se simula como caminata: no hay buses ni GTFS.</li>
+    <li>Los 220 semáforos usan el programa genérico de <code>netconvert</code>, no los de la SDM.</li>
+    <li>El tráfico de fondo del 3D es sintético y usa una sola semilla (42).</li>
+    <li>La priorización de cruces no se contrastó con una decisión real.</li>
+  </ul>
+</section>
+
+<section>
+  <div class="tag">Parte 4 · Cierre</div>
+  <h2>Conclusiones y trabajo futuro</h2>
+  <div class="dos">
+    <div>
+      <h3>Conclusiones</h3>
+      <ul>
+        <li>Se automatizó la cadena encuesta, SUMO y visor, sin editar archivos a mano; 4 de 5 objetivos cumplidos y uno parcial.</li>
+        <li>La reproducibilidad permite comparar escenarios de forma justa.</li>
+        <li>Las limitaciones se hicieron visibles para evitar sobreinterpretar resultados.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Trabajo futuro</h3>
+      <ul>
+        <li>Geocodificar los aforos y calcular GEH y RMSE</li>
+        <li>Buses y paradas desde GTFS</li>
+        <li>Programas semafóricos reales de la SDM</li>
+        <li>Varias semillas y reporte exportable del 3D</li>
+        <li>Más localidades, otras franjas y emisiones</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="portada">
+  <p class="etiqueta">Video demo · 7 minutos</p>
+  <h1>Demostración del sistema</h1>
+  <p class="sub"><a id="enlace-video" href="https://youtu.be/0gybw_l1izw?si=N5iGylybMIG6amSh" target="_blank" rel="noopener">link video YouTube</a></p>
+</section>
+
+</div>
+</div>
+
+<script src="vendor/reveal/reveal.js"></script>
+<script src="c4.js"></script>
+<script>
+  Reveal.initialize({
+    width: 1920, height: 1080, margin: 0,
+    hash: true, center: false, controls: false, progress: true,
+    transition: 'fade', transitionSpeed: 'fast', slideNumber: 'c/t'
+  });
+  C4.iniciar(document.getElementById('c4'), Reveal);
+</script>
+</body>
+</html>
