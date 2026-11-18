@@ -163,3 +163,80 @@ def _resumen_programa(net: Path, tl_id: str) -> tuple[int, float, int]:
         elif elem.tag in ("edge", "junction"):
             elem.clear()
     return fases, ciclo, controladas
+
+
+# ─────────────────────────────────── programa de Webster para el semáforo propuesto
+
+def accesos_semaforo(net: Path, tl_id: str) -> tuple[dict[str, list[int]], dict[str, int]]:
+    """Por cada edge que entra al semáforo: sus linkIndex y cuántos carriles controla.
+
+    Las cebras semaforizadas (conexiones desde un crossing, ids con ":") no son accesos.
+    """
+    enlaces: dict[str, list[int]] = {}
+    carriles: dict[str, set[str]] = {}
+    for _, elem in ET.iterparse(net, events=("end",)):
+        if elem.tag == "connection":
+            desde = elem.get("from", "")
+            if elem.get("tl") == tl_id and not desde.startswith(":"):
+                enlaces.setdefault(desde, []).append(int(elem.get("linkIndex", 0)))
+                carriles.setdefault(desde, set()).add(elem.get("fromLane", "0"))
+            elem.clear()
+        elif elem.tag in ("edge", "junction"):
+            elem.clear()
+    return enlaces, {e: len(c) for e, c in carriles.items()}
+
+
+def luces_por_fase(estados: list[str], enlaces: dict[str, list[int]]) -> list[dict[str, str]]:
+    """Por fase, la luz de cada acceso: "verde" si alguno de sus movimientos tiene G o g."""
+    luces = []
+    for estado in estados:
+        luces.append({
+            acceso: "verde" if any(i < len(estado) and estado[i] in "Gg" for i in indices) else "rojo"
+            for acceso, indices in enlaces.items()
+        })
+    return luces
+
+
+def volumenes_accesos(
+    zona_net: Path, demanda: list[Path], vtypes: Path, accesos: list[str], destino_dir: Path,
+    inicio: float, duracion_s: float = 3600, cancelar: threading.Event | None = None,
+) -> dict[str, float]:
+    """Vehículos por hora que entran por cada acceso, con una hora de SUMO sobre la zona."""
+    sumo = shutil.which("sumo")
+    if sumo is None:
+        raise SemaforoNuevoError("No se encontró 'sumo' en el PATH.")
+    destino_dir.mkdir(parents=True, exist_ok=True)
+    salida = destino_dir / "volumenes_accesos.xml"
+    adicional = destino_dir / "volumenes_accesos.add.xml"
+    adicional.write_text(
+        f'<additional><edgeData id="v" file="{escape(str(salida))}" begin="{inicio}" end="{inicio + duracion_s}" '
+        f'period="{duracion_s}" edges="{escape(" ".join(accesos))}" excludeEmpty="true"/></additional>',
+        encoding="utf-8",
+    )
+    resultado = ejecutar([
+        sumo, "-n", str(zona_net), "-r", ",".join(str(d) for d in demanda), "-a", f"{vtypes},{adicional}",
+        "-b", str(inicio), "-e", str(inicio + duracion_s), "--ignore-route-errors", "true",
+        "--no-step-log", "true", "--no-warnings", "true",
+    ], cancelar=cancelar)
+    if resultado.returncode != 0 or not salida.is_file():
+        raise SemaforoNuevoError(f"No se pudieron medir los volúmenes de los accesos:\n{resultado.stderr[-1500:]}")
+    volumenes: dict[str, float] = {}
+    for _, elem in ET.iterparse(salida, events=("end",)):
+        if elem.tag == "edge":
+            volumenes[elem.get("id")] = float(elem.get("entered", 0)) * 3600 / duracion_s
+    return volumenes
+
+
+def programa_webster_propuesto(
+    zona_tls: Path, tl_id: str, volumenes: dict[str, float], destino: Path,
+) -> tuple[Path, dict]:
+    """Escribe el programa de Webster del semáforo propuesto como additional y lo resume."""
+    from .programas_tls import escribir_programa, leer_programa, programa_webster
+
+    base = leer_programa(zona_tls, tl_id)
+    if base is None:
+        raise SemaforoNuevoError(f"La red con semáforo no tiene el programa '{tl_id}'.")
+    enlaces, carriles = accesos_semaforo(zona_tls, tl_id)
+    programa, info = programa_webster(base, luces_por_fase([f.estado for f in base.fases], enlaces), volumenes, carriles)
+    escribir_programa(programa, destino)
+    return destino, {**info, "ciclo_s": programa.ciclo_s, "fases": len(programa.fases)}

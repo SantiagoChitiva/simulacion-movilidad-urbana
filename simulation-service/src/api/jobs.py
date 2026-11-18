@@ -20,7 +20,8 @@ from etl.etl import Cancelado, resumen_corrida, run_pipeline
 from etl.sumo import configuration
 from etl.sumo.configuration import DEFAULT_SCENARIO, ScenarioPaths
 from etl.sumo.cierres import CierreVial
-from etl.sumo.demanda import DemandaConfig
+from etl.sumo.demanda import DemandaConfig, Preset
+from etl.sumo.enums.transport_mode import TransportMode
 from etl.sumo.estilos import EstiloConductor
 
 ESTADOS_FINALES = {"terminado", "error", "cancelada"}
@@ -61,6 +62,18 @@ class Corrida:
     resultado: dict[str, Any] | None = None
     estilo: str = EstiloConductor.normal.value
     cierres: list[dict[str, Any]] = field(default_factory=list)
+    # ventana, tráfico de paso, transporte público y asignación iterativa (DemandaConfig)
+    opciones: dict[str, Any] = field(default_factory=dict)
+
+
+def opciones_demanda(demanda: DemandaConfig) -> dict[str, Any]:
+    return {
+        "ventana": getattr(demanda, "ventana", "am"),
+        "trafico_paso": getattr(demanda, "trafico_paso", False),
+        "encuesta_completa": getattr(demanda, "encuesta_completa", False),
+        "transporte_publico": getattr(demanda, "transporte_publico", True),
+        "asignacion_iterativa": getattr(demanda, "asignacion_iterativa", False),
+    }
 
 
 def _ahora() -> str:
@@ -126,10 +139,16 @@ class GestorCorridas:
         for hijo in run_dir.iterdir() if run_dir.is_dir() else []:
             if hijo.name == "estado.json":
                 continue
-            if hijo.is_dir():
-                shutil.rmtree(hijo, ignore_errors=True)
-            else:
-                hijo.unlink(missing_ok=True)
+            # un proceso recién terminado puede tener el archivo abierto un instante (Windows)
+            for intento in range(10):
+                try:
+                    if hijo.is_dir():
+                        shutil.rmtree(hijo)
+                    else:
+                        hijo.unlink(missing_ok=True)
+                    break
+                except OSError:
+                    time.sleep(0.5)
 
     # --------------------------------------------------------- pública
 
@@ -155,12 +174,39 @@ class GestorCorridas:
                 {"edge_id": c.edge_id, "hora_inicio_s": c.hora_inicio_s, "hora_fin_s": c.hora_fin_s}
                 for c in (cierres or [])
             ],
+            opciones=opciones_demanda(demanda),
         )
         with self._lock:
             self._corridas[run_id] = corrida
             self._guardar(corrida)
         self._cancelaciones[run_id] = threading.Event()
         self._futuros[run_id] = self._pool.submit(self._correr, run_id, demanda, semilla, estilo, cierres)
+        return corrida
+
+    def reanudar(self, run_id: str) -> Corrida:
+        """Vuelve a encolar una corrida que terminó con error (p. ej. interrumpida por un reinicio).
+
+        Reutiliza lo que ya terminó: las rutas y la simulación (run_pipeline(reanudar=True)).
+        ValueError si la corrida no está en error.
+        """
+        corrida = self._corridas[run_id]
+        if corrida.estado != "error":
+            raise ValueError(f"Solo se reanuda una simulación con error; esta está en estado '{corrida.estado}'")
+        opciones = corrida.opciones or {}
+        demanda = DemandaConfig(
+            Preset(corrida.preset), {TransportMode(m): n for m, n in corrida.conteos.items()},
+            ventana=opciones.get("ventana", "am"), trafico_paso=opciones.get("trafico_paso", False),
+            transporte_publico=opciones.get("transporte_publico", True),
+            asignacion_iterativa=opciones.get("asignacion_iterativa", False),
+            encuesta_completa=opciones.get("encuesta_completa", False),
+        )
+        estilo = EstiloConductor(corrida.estilo)
+        cierres = [CierreVial(**c) for c in corrida.cierres] or None
+        self._actualizar(run_id, estado="en_cola", error=None, avance=0.0, avance_etapa=None)
+        self._cancelaciones[run_id] = threading.Event()
+        self._futuros[run_id] = self._pool.submit(
+            self._correr, run_id, demanda, corrida.semilla, estilo, cierres, True,
+        )
         return corrida
 
     def cancelar(self, run_id: str) -> Corrida:
@@ -204,6 +250,7 @@ class GestorCorridas:
         semilla: int | None,
         estilo: "EstiloConductor | None" = None,
         cierres: "list[CierreVial] | None" = None,
+        reanudar: bool = False,
     ) -> None:
         paths = self.paths(run_id)
         cancelar = self._cancelaciones[run_id]
@@ -221,13 +268,16 @@ class GestorCorridas:
                 cancelar=cancelar,
                 estilo=estilo,
                 cierres=cierres,
+                **({"reanudar": True} if reanudar else {}),
             )
             resumen = resumen_corrida(resultado, paths)
             # el FCD pesa ~1,4 GB con la demanda completa y ya quedó convertido para kepler
             paths.fcd.unlink(missing_ok=True)
             self._actualizar(run_id, estado="terminado", avance=1.0, avance_etapa=1.0, resultado=resumen)
         except Cancelado:
-            self._borrar_archivos_pesados(run_id)
-            self._actualizar(run_id, estado="cancelada")
+            try:
+                self._borrar_archivos_pesados(run_id)
+            finally:   # aunque quede algún archivo, la corrida no puede quedarse en "cancelando"
+                self._actualizar(run_id, estado="cancelada")
         except Exception as exc:   # la corrida falla, el servicio sigue
             self._actualizar(run_id, estado="error", error=str(exc)[-2000:])

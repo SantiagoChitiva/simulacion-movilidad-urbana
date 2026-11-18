@@ -7,16 +7,16 @@ from collections import Counter
 from dataclasses import asdict
 from functools import lru_cache
 from pathlib import Path
-from typing import Annotated, Any
+from typing import Annotated, Any, Literal
 
 from fastapi import Depends, FastAPI, HTTPException, Query, WebSocket, WebSocketDisconnect
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field, model_validator
 
 from etl import precalculadas
-from etl.etl import run_recorte
+from etl.etl import run_comparacion_programas, run_recorte
 from etl.sumo.configuration import (
-    CACHE_DIR, DEFAULT_SCENARIO, MAX_VIAJES, RUNS_DIR, ArchivosPrecalculada, ScenarioPaths,
+    CACHE_DIR, DEFAULT_SCENARIO, MAX_VIAJES, RUNS_DIR, VENTANAS, ArchivosPrecalculada, ScenarioPaths,
 )
 from etl.sumo.intersecciones import (
     HORAS_VENTANA, Semaforo, a_feature, catalogo, con_volumenes, volumenes,
@@ -29,12 +29,20 @@ from etl.sumo.estilos import EstiloConductor, INFO_ESTILOS, PARAMS_ESTILO
 from etl.sumo.cierres import CierreVial, escribir_rerouter
 from etl.sumo.geojson_reader import read_first_features
 from etl.sumo.priorizacion import a_geojson, analisis_con_cache, puntuar
+from etl.sumo.vias import vias_con_cache
+from etl.sumo.encuesta_completa import archivo_complemento
+from etl.sumo.trafico_paso import archivo_trafico_paso
+from etl.sumo.transporte_publico import archivos_transporte_publico
 from etl.sumo.programas_tls import (
-    ProgramaTLS, FasePrograma, leer_programas, leer_programa,
-    escribir_programa, validar_programa, webster,
+    ProgramaTLS, ProgramasTLSError, FasePrograma, leer_programas, leer_programa,
+    escribir_programa, programa_webster, validar_programa,
 )
 
 from .jobs import GestorCorridas
+
+Ventana = Literal["am", "pm"]
+# clave de una precalculada: el preset, con "-pm" si es de la tarde (precalculadas.clave)
+ClavePrecalculada = Annotated[str, Field(pattern="^[a-z_]+(-pm)?$")]
 from .comparacion3d import Comparacion, GestorComparaciones, correr_comparacion, mensaje_json
 
 app = FastAPI(title="Simulation Service")
@@ -92,25 +100,36 @@ def demanda_modos() -> list[dict]:
     return [{"id": modo.value, **asdict(info)} for modo, info in INFO_MODOS.items()]
 
 
-@lru_cache(maxsize=1)
-def _presets() -> list[dict]:
+@lru_cache(maxsize=2)
+def _presets(ventana: str = "am") -> list[dict]:
     tsv = ScenarioPaths.from_name(DEFAULT_SCENARIO).tsv
-    ventana, dia = cargar_ventana(tsv), cargar_dia(tsv)
+    viajes, dia = cargar_ventana(tsv, ventana), cargar_dia(tsv)
     return [
         {
             "id": preset.value,
             "nombre": info.nombre,
             "descripcion": info.descripcion,
-            "conteos": {m.value: n for m, n in conteos_preset(preset, ventana, dia).items()},
+            "conteos": {m.value: n for m, n in conteos_preset(preset, viajes, dia).items()},
         }
         for preset, info in PRESETS.items()
     ]
 
 
 @app.get("/demanda/presets")
-def demanda_presets() -> list[dict]:
-    """Presets de demanda derivados de la Encuesta, con sus conteos por modo."""
-    return _presets()
+def demanda_presets(ventana: Ventana = "am") -> list[dict]:
+    """Presets de demanda derivados de la Encuesta, con sus conteos por modo en la ventana pedida."""
+    return _presets(ventana)
+
+
+@app.get("/demanda/opciones")
+def demanda_opciones() -> dict:
+    """Ventanas simulables y qué insumos opcionales tiene el escenario (GTFS, tráfico de paso)."""
+    return {
+        "ventanas": {k: {"inicio": a, "fin": b} for k, (a, b) in VENTANAS.items()},
+        "transporte_publico": archivos_transporte_publico() is not None,
+        "trafico_paso": {k: archivo_trafico_paso(a) is not None for k, (a, _) in VENTANAS.items()},
+        "encuesta_completa": {k: archivo_complemento(k) is not None for k in VENTANAS},
+    }
 
 
 @app.get("/demanda/estilos")
@@ -141,6 +160,11 @@ class SolicitudSimulacion(BaseModel):
     semilla: int | None = Field(default=None, ge=0)
     estilo: EstiloConductor = EstiloConductor.normal
     cierres: list[SolicitudCierre] = Field(default_factory=list)
+    ventana: Ventana = "am"
+    trafico_paso: bool = False
+    encuesta_completa: bool = False
+    transporte_publico: bool = True
+    asignacion_iterativa: bool = False
 
     @model_validator(mode="after")
     def _total_valido(self) -> "SolicitudSimulacion":
@@ -160,7 +184,16 @@ def _corrida(gestor: GestorCorridas, run_id: str) -> Any:
 @app.post("/simulaciones", status_code=202)
 def crear_simulacion(solicitud: SolicitudSimulacion, gestor: Gestor) -> dict:
     """Encola una simulación con la demanda pedida; devuelve su id para consultar el estado."""
-    demanda = DemandaConfig(solicitud.preset, dict(solicitud.conteos))
+    demanda = DemandaConfig(
+        solicitud.preset, dict(solicitud.conteos), ventana=solicitud.ventana, trafico_paso=solicitud.trafico_paso,
+        transporte_publico=solicitud.transporte_publico, asignacion_iterativa=solicitud.asignacion_iterativa,
+        encuesta_completa=solicitud.encuesta_completa,
+    )
+    if demanda.encuesta_completa and archivo_complemento(demanda.ventana) is None:
+        raise HTTPException(status_code=409, detail="No hay complemento de la encuesta para esa ventana "
+                                                    "(python -m etl.sumo.encuesta_completa).")
+    if demanda.trafico_paso and archivo_trafico_paso(demanda.horas[0]) is None:
+        raise HTTPException(status_code=409, detail="No hay tráfico de paso para esa ventana (python -m etl.sumo.trafico_paso).")
     cierres_viales = [
         CierreVial(
             edge_id=c.edge_id,
@@ -188,6 +221,16 @@ def cancelar_simulacion(run_id: str, gestor: Gestor) -> dict:
         raise HTTPException(status_code=409, detail=str(exc)) from exc
 
 
+@app.post("/simulaciones/{run_id}/reanudar", status_code=202)
+def reanudar_simulacion(run_id: str, gestor: Gestor) -> dict:
+    """Reanuda una simulación que terminó con error, reutilizando las etapas ya completas."""
+    _corrida(gestor, run_id)
+    try:
+        return asdict(gestor.reanudar(run_id))
+    except ValueError as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
+
+
 @app.get("/simulaciones")
 def listar_simulaciones(gestor: Gestor) -> list[dict]:
     return [asdict(c) for c in gestor.listar()]
@@ -200,12 +243,12 @@ def obtener_simulacion(run_id: str, gestor: Gestor) -> dict:
 
 # ------------------------------------------------------------ precalculadas
 
-def _precalculada(preset: Preset) -> dict:
+def _precalculada(preset: str) -> dict:
     meta = precalculadas.cargar(preset)
     if meta is None:
         raise HTTPException(
             status_code=404,
-            detail=f"El preset '{preset.value}' no está precalculado. Ejecuta python -m etl.precalculadas",
+            detail=f"La precalculada '{preset}' no existe. Ejecuta python -m etl.precalculadas",
         )
     return meta
 
@@ -217,14 +260,24 @@ def listar_precalculadas() -> list[dict]:
 
 
 @app.get("/precalculadas/{preset}/kepler-trips")
-def kepler_trips_precalculada(preset: Preset) -> FileResponse:
+def kepler_trips_precalculada(preset: ClavePrecalculada) -> FileResponse:
     """Trips de un preset precalculado. Se envían comprimidos: el navegador los descomprime."""
     meta = _precalculada(preset)
     return FileResponse(
-        ArchivosPrecalculada.from_preset(preset.value).trips_gz,
+        ArchivosPrecalculada.from_preset(preset).trips_gz,
         media_type="application/json",
         headers={"Content-Encoding": "gzip", "X-Tamano-Original": str(meta["tamano_original"])},
     )
+
+
+@app.get("/precalculadas/{preset}/validacion")
+def validacion_precalculada(preset: ClavePrecalculada) -> dict:
+    """GEH de un preset precalculado contra los aforos de la hora de máxima demanda."""
+    _precalculada(preset)
+    validacion = precalculadas.leer_validacion(preset)
+    if validacion is None:
+        raise HTTPException(status_code=404, detail="Este preset se simuló antes de tener los aforos; vuelve a generarlo.")
+    return validacion
 
 
 # ---------------------------------------------------------- intersecciones
@@ -236,7 +289,17 @@ def _semaforos() -> dict[str, Semaforo]:
     return {s.id: s for s in lista}
 
 
-def _volumenes_corrida(gestor: GestorCorridas, run_id: str | None, precalculada: Preset | None = None):
+def _inicio_corrida(gestor: GestorCorridas, run_id: str | None, precalculada: str | None = None) -> int:
+    """Hora (s) en que empieza la ventana de una corrida o precalculada (la mañana si no se sabe)."""
+    ventana = "am"
+    if precalculada is not None:
+        ventana = (precalculadas.cargar(precalculada) or {}).get("ventana", "am")
+    elif run_id is not None and (corrida := gestor.obtener(run_id)) is not None:
+        ventana = (corrida.opciones or {}).get("ventana", "am")
+    return VENTANAS.get(ventana, VENTANAS["am"])[0]
+
+
+def _volumenes_corrida(gestor: GestorCorridas, run_id: str | None, precalculada: ClavePrecalculada | None = None):
     """Volúmenes por edge de la corrida pedida (ninguna = la corrida por defecto)."""
     if precalculada is not None:
         _precalculada(precalculada)
@@ -255,7 +318,7 @@ def _volumenes_corrida(gestor: GestorCorridas, run_id: str | None, precalculada:
 
 @app.get("/intersecciones")
 def listar_intersecciones(
-    gestor: Gestor, run_id: str | None = None, precalculada: Preset | None = None
+    gestor: Gestor, run_id: str | None = None, precalculada: ClavePrecalculada | None = None
 ) -> dict:
     """Intersecciones semaforizadas como GeoJSON de puntos, con el volumen de la corrida."""
     vols = _volumenes_corrida(gestor, run_id, precalculada)
@@ -267,7 +330,7 @@ def listar_intersecciones(
 
 @app.get("/intersecciones/priorizacion")
 def listar_priorizacion(
-    gestor: Gestor, run_id: str | None = None, precalculada: Preset | None = None
+    gestor: Gestor, run_id: str | None = None, precalculada: ClavePrecalculada | None = None
 ) -> dict:
     """Cruces sin semáforo candidatos a uno nuevo, por niveles (reglas + evidencia)."""
     vols = _volumenes_corrida(gestor, run_id, precalculada)
@@ -284,9 +347,16 @@ def listar_priorizacion(
     return {**a_geojson(cruces, umbrales, notas), "descartes": analisis["descartes"]}
 
 
+@app.get("/red/vias")
+def listar_vias() -> dict:
+    """Edges vehiculares de la red como LineStrings (para elegir cierres en el mapa)."""
+    paths = ScenarioPaths.from_name(DEFAULT_SCENARIO)
+    return vias_con_cache(paths.net, paths.nombres_vias, CACHE_DIR / "vias.json")
+
+
 @app.get("/intersecciones/{tl_id}")
 def obtener_interseccion(
-    tl_id: str, gestor: Gestor, run_id: str | None = None, precalculada: Preset | None = None
+    tl_id: str, gestor: Gestor, run_id: str | None = None, precalculada: ClavePrecalculada | None = None
 ) -> dict:
     """Ficha de una intersección: accesos, programa del semáforo y volúmenes simulados."""
     semaforo = _semaforos().get(tl_id)
@@ -380,11 +450,16 @@ def listar_programas(tl_id: str) -> list[dict]:
     if semaforo is None:
         raise HTTPException(status_code=404, detail=f"No existe la intersección '{tl_id}'")
     paths = ScenarioPaths.from_name(DEFAULT_SCENARIO)
-    programas = leer_programas(paths.net, tl_id)
-    return [
-        {"program_id": p.program_id, "tipo": p.tipo, "ciclo_s": p.ciclo_s}
-        for p in programas
+    de_red = [
+        {"program_id": p.program_id, "tipo": p.tipo, "ciclo_s": p.ciclo_s, "guardado": False}
+        for p in leer_programas(paths.net, tl_id)
     ]
+    guardados = [
+        {"program_id": p.program_id, "tipo": p.tipo, "ciclo_s": p.ciclo_s, "guardado": True}
+        for archivo in sorted(paths.root.glob(f"programa_{tl_id}_*.xml"))
+        for p in leer_programas(archivo, tl_id)
+    ]
+    return de_red + guardados
 
 
 @app.get("/intersecciones/{tl_id}/programas/{program_id}")
@@ -433,143 +508,139 @@ def guardar_programa(tl_id: str, program_id: str, solicitud: SolicitudProgramaTL
     return {**prog.to_dict(), "guardado_en": str(destino)}
 
 
+def _programa_guardado(tl_id: str, program_id: str) -> ProgramaTLS | None:
+    archivo = ScenarioPaths.from_name(DEFAULT_SCENARIO).root / f"programa_{tl_id}_{program_id}.xml"
+    programas = leer_programas(archivo, tl_id) if archivo.is_file() else []
+    return programas[0] if programas else None
+
+
+def _webster(semaforo: Semaforo, vols: dict[str, Counter] | None) -> tuple[ProgramaTLS, dict]:
+    """Programa de Webster con los volúmenes por acceso de una corrida (veh/h)."""
+    if not vols:
+        raise HTTPException(
+            status_code=409,
+            detail="La corrida no tiene volúmenes por acceso (vehroute-output): no se puede calcular Webster.",
+        )
+    base = leer_programa(ScenarioPaths.from_name(DEFAULT_SCENARIO).net, semaforo.id, semaforo.programa)
+    if base is None:
+        raise HTTPException(status_code=404, detail=f"El semáforo '{semaforo.id}' no tiene programa en la red")
+    volumenes_hora = {
+        a.edge: sum(n for tipo, n in vols.get(a.edge, Counter()).items() if tipo not in ("peaton", "transporte_publico"))
+        / HORAS_VENTANA
+        for a in semaforo.accesos
+    }
+    try:
+        programa, info = programa_webster(
+            base, [f.luces for f in semaforo.fases], volumenes_hora, {a.edge: a.carriles for a in semaforo.accesos},
+        )
+    except ProgramasTLSError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    return programa, {**info, "volumenes_hora": {k: round(v) for k, v in volumenes_hora.items()}}
+
+
 class SolicitudWebster(BaseModel):
     run_id: str | None = None
-    num_fases: int = Field(default=2, ge=1, le=8)
+    precalculada: ClavePrecalculada | None = None
 
 
 @app.post("/intersecciones/{tl_id}/programas/webster")
 def calcular_webster(tl_id: str, solicitud: SolicitudWebster, gestor: Gestor) -> dict:
-    """Calcula el programa óptimo de Webster con los volúmenes de una corrida."""
+    """Tiempos de verde de Webster con los volúmenes simulados que llegan por cada acceso."""
     semaforo = _semaforos().get(tl_id)
     if semaforo is None:
         raise HTTPException(status_code=404, detail=f"No existe la intersección '{tl_id}'")
-
-    vols = _volumenes_corrida(gestor, solicitud.run_id)
-
-    # volúmenes por acceso (veh/h)
-    volumenes_acceso: dict[str, int] = {}
-    for acceso in semaforo.accesos:
-        if vols and acceso.edge in vols:
-            total = sum(vols[acceso.edge].values())
-            volumenes_acceso[acceso.edge] = round(total / HORAS_VENTANA)
-        else:
-            # fallback: estimar con velocidad libre (solo para demostración)
-            volumenes_acceso[acceso.edge] = 300
-
-    try:
-        resultado = webster(volumenes_acceso, solicitud.num_fases)
-    except Exception as exc:
-        raise HTTPException(status_code=422, detail=str(exc)) from exc
-
-    return {
-        "tl_id": tl_id,
-        "movimientos": semaforo.movimientos,
-        **resultado,
-        "nota": "Cálculo simplificado. Los verdes son proporcionales al flujo crítico de cada fase.",
-    }
+    programa, info = _webster(semaforo, _volumenes_corrida(gestor, solicitud.run_id, solicitud.precalculada))
+    nota = (
+        "La demanda supera lo que el cruce puede despachar: se usa el ciclo máximo (150 s)."
+        if info["saturado"] else
+        "Cada fase recibe verde en proporción al acceso más cargado que atiende."
+    )
+    return {"tl_id": tl_id, **info, "programa": programa.to_dict(), "nota": nota}
 
 
-# ------------------------------------ Fase D: comparaciones
+# ------------------------------------ Fase D: comparaciones de programas
+
+ETIQUETA_PROGRAMA = {"actual": "Programa actual", "webster": "Tiempos óptimos (Webster)"}
+
 
 class SolicitudComparacion(BaseModel):
-    escenario_run_id: str
-    programas: list[str]   # lista de program_id a comparar
-    semilla: int | None = None
+    run_id: str | None = None               # corrida de la que se recortan los viajes reales
+    precalculada: ClavePrecalculada | None = None      # solo para los volúmenes de Webster
+    # "actual" (el de la red), "webster" o el program_id de un programa guardado
+    programas: list[str] = Field(default_factory=lambda: ["actual", "webster"], min_length=1, max_length=4)
+    semilla: int = 42
+    # semillas seguidas por programa: se reporta la media y el rango (entre X y Y)
+    repeticiones: int = Field(default=3, ge=1, le=5)
 
 
 _comparaciones: dict[str, dict] = {}
 
 
-def _metricas_corrida(run_id: str) -> dict:
-    """Lee las métricas básicas de una corrida de zona terminada."""
-    from etl.sumo.simulation import leer_estadisticas
-    paths = ScenarioPaths.from_name(DEFAULT_SCENARIO, run_id)
-    stats = leer_estadisticas(paths.statistics)
-    return {
-        "teleports": stats.get("teleports", 0),
-        "vehiculos_insertados": stats.get("vehiculos_insertados", 0),
-        "personas_cargadas": stats.get("personas_cargadas", 0),
-    }
-
-
 @app.post("/intersecciones/{tl_id}/comparaciones", status_code=202)
 def crear_comparacion(tl_id: str, solicitud: SolicitudComparacion, gestor: Gestor) -> dict:
-    """Encola N corridas de zona (una por programa) para comparar métricas (Fase D)."""
+    """Corre la zona del semáforo una vez por programa, con la misma demanda (Fase D)."""
     semaforo = _semaforos().get(tl_id)
     if semaforo is None:
         raise HTTPException(status_code=404, detail=f"No existe la intersección '{tl_id}'")
 
+    programas: dict[str, ProgramaTLS | None] = {}
+    for nombre in dict.fromkeys(solicitud.programas):
+        if nombre == "actual":
+            programas[nombre] = None
+        elif nombre == "webster":
+            vols = _volumenes_corrida(gestor, solicitud.run_id, solicitud.precalculada)
+            programas[nombre] = _webster(semaforo, vols)[0]
+        else:
+            guardado = _programa_guardado(tl_id, nombre)
+            if guardado is None:
+                raise HTTPException(status_code=404, detail=f"No hay un programa guardado '{nombre}' para '{tl_id}'")
+            programas[nombre] = guardado
+
     comparacion_id = uuid.uuid4().hex[:12]
-    corridas_comp: list[dict] = []
-
-    for prog_id in solicitud.programas:
-        run_id_comp = f"comp-{comparacion_id[:6]}-{prog_id[:8]}"
-        corridas_comp.append({"run_id": run_id_comp, "prog_id": prog_id, "estado": "en_cola"})
-
-        def _correr_comparacion(rid=run_id_comp, pid=prog_id):
-            try:
-                paths = ScenarioPaths.from_name(DEFAULT_SCENARIO)
-                prog = leer_programa(paths.net, tl_id, pid)
-                estado_path = RUNS_DIR / rid / "estado.json"
-                estado_path.parent.mkdir(parents=True, exist_ok=True)
-                estado_path.write_text(
-                    json.dumps({"id": rid, "estado": "en_curso", "prog_id": pid}),
-                    encoding="utf-8",
-                )
-                # Corrida simplificada: solo recortar + SUMO mínimo
-                resultado = run_recorte(
-                    semaforo_lon=semaforo.lon,
-                    semaforo_lat=semaforo.lat,
-                    run_id_origen=solicitud.escenario_run_id,
-                    radio_m=300,
-                    run_id_destino=rid,
-                )
-                metricas = _metricas_corrida(rid)
-                estado_path.write_text(
-                    json.dumps({"id": rid, "estado": "terminado", "prog_id": pid,
-                                "metricas": metricas, **resultado}),
-                    encoding="utf-8",
-                )
-                # actualizar comparación
-                _comparaciones[comparacion_id]["corridas"] = [
-                    c if c["run_id"] != rid
-                    else {**c, "estado": "terminado", "metricas": metricas}
-                    for c in _comparaciones[comparacion_id]["corridas"]
-                ]
-                todo_terminado = all(
-                    c["estado"] in ("terminado", "error")
-                    for c in _comparaciones[comparacion_id]["corridas"]
-                )
-                if todo_terminado:
-                    _comparaciones[comparacion_id]["estado"] = "terminado"
-            except Exception as exc:
-                try:
-                    estado_path.write_text(
-                        json.dumps({"id": rid, "estado": "error", "error": str(exc)[:500]}),
-                        encoding="utf-8",
-                    )
-                    _comparaciones[comparacion_id]["corridas"] = [
-                        c if c["run_id"] != rid else {**c, "estado": "error"}
-                        for c in _comparaciones[comparacion_id]["corridas"]
-                    ]
-                except Exception:
-                    pass
-
-        threading.Thread(target=_correr_comparacion, daemon=True).start()
-
-    _comparaciones[comparacion_id] = {
+    comp = {
         "id": comparacion_id,
         "tl_id": tl_id,
         "estado": "en_curso",
-        "corridas": corridas_comp,
+        "etapa": "preparando",
+        "programas": [
+            {"nombre": n, "etiqueta": ETIQUETA_PROGRAMA.get(n, f"Tu programa ({n})"),
+             "ciclo_s": p.ciclo_s if p else semaforo.ciclo, "estado": "en_cola", "metricas": None}
+            for n, p in programas.items()
+        ],
+        "error": None,
     }
+    _comparaciones[comparacion_id] = comp
+
+    def _marcar(nombre: str, **cambios) -> None:
+        comp["programas"] = [{**p, **cambios} if p["nombre"] == nombre else p for p in comp["programas"]]
+
+    def _progreso(etapa: str, _avance: float | None) -> None:
+        comp["etapa"] = etapa
+        if etapa.startswith("simulando:"):
+            _marcar(etapa.split(":", 1)[1], estado="simulando")
+
+    def _correr() -> None:
+        try:
+            run_comparacion_programas(
+                semaforo.lon, semaforo.lat, [a.edge for a in semaforo.accesos], programas,
+                run_id_destino=f"comp-{comparacion_id}", run_id_origen=solicitud.run_id,
+                semilla=solicitud.semilla, repeticiones=solicitud.repeticiones,
+                inicio=_inicio_corrida(gestor, solicitud.run_id, solicitud.precalculada),
+                on_programa=lambda n, m: _marcar(n, estado="terminado", metricas=m),
+                on_progreso=_progreso,
+            )
+            comp["estado"] = "terminado"
+        except Exception as exc:  # el error se muestra en el visor
+            comp["estado"] = "error"
+            comp["error"] = str(exc)[:500]
+
+    threading.Thread(target=_correr, daemon=True).start()
     return {"comparacion_id": comparacion_id}
 
 
 @app.get("/comparaciones/{comparacion_id}")
 def obtener_comparacion(comparacion_id: str) -> dict:
-    """Estado y métricas de una comparación de configuraciones (Fase D)."""
+    """Estado y métricas de una comparación de programas (Fase D)."""
     comp = _comparaciones.get(comparacion_id)
     if comp is None:
         raise HTTPException(status_code=404, detail=f"No existe la comparación '{comparacion_id}'")
@@ -586,6 +657,10 @@ class SolicitudComparacion3D(BaseModel):
     intensidades: dict[str, float] | None = None
     # todos los nodos de SUMO del cruce (los da la priorización); vacío = solo nodo_id
     nodos: list[str] | None = None
+    # programa del semáforo propuesto: el de netconvert (con `ciclo_s` si se pide) o Webster
+    # con los volúmenes de la zona
+    programa: Literal["netconvert", "webster"] = "netconvert"
+    ciclo_s: int | None = Field(default=None, ge=40, le=150)
 
     @model_validator(mode="after")
     def _validar_intensidades(self) -> "SolicitudComparacion3D":
@@ -616,10 +691,16 @@ def crear_comparacion_3d(nodo_id: str, solicitud: SolicitudComparacion3D, gestor
     Recorta la zona, arma la demanda y genera la variante con semáforo en segundo plano;
     el estado se consulta en GET /comparacion3d/{id}.
     """
-    run_id = solicitud.run_id if solicitud.run_id and not solicitud.run_id.startswith("precalculada-") else None
+    precalculada = solicitud.run_id.removeprefix("precalculada-") if solicitud.run_id and solicitud.run_id.startswith("precalculada-") else None
+    run_id = solicitud.run_id if solicitud.run_id and precalculada is None else None
+    opciones = {
+        "programa": solicitud.programa, "ciclo_s": solicitud.ciclo_s,
+        "inicio": _inicio_corrida(obtener_gestor(), run_id, precalculada),
+    }
     try:
         comp = gestor.crear(
             nodo_id, solicitud.lon, solicitud.lat, run_id, solicitud.intensidades, nodos=solicitud.nodos,
+            opciones=opciones,
         )
     except RuntimeError as exc:
         raise HTTPException(status_code=429, detail=str(exc)) from exc
@@ -724,6 +805,18 @@ async def ws_comparacion_3d(websocket: WebSocket, cid: str) -> None:
 
 
 # ---------------------------------------------------------------- trips de corrida
+
+@app.get("/simulaciones/{run_id}/validacion")
+def validacion_simulacion(run_id: str, gestor: Gestor) -> dict:
+    """GEH de una corrida contra los aforos de la hora de máxima demanda (validacion.py)."""
+    corrida = _corrida(gestor, run_id)
+    if corrida.estado != "terminado":
+        raise HTTPException(status_code=409, detail=f"La simulación está en estado '{corrida.estado}'")
+    paths = gestor.paths(run_id)
+    if not paths.validacion.is_file():
+        raise HTTPException(status_code=404, detail="La corrida no tiene validación (no había aforos al simular).")
+    return json.loads(paths.validacion.read_text(encoding="utf-8"))
+
 
 @app.get("/simulaciones/{run_id}/kepler-trips")
 def kepler_trips_simulacion(run_id: str, gestor: Gestor) -> FileResponse:

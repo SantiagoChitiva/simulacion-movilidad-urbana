@@ -65,6 +65,7 @@ def _analizar(tmp_path, red):
     return analizar_red(
         red.escribir(tmp_path / "red.net.xml"), {},
         siniestros_path=tmp_path / "no-siniestros.geojson", pois_path=tmp_path / "no-pois.geojson",
+        semaforos_sdm_path=tmp_path / "no-sdm.geojson",
     )
 
 
@@ -160,9 +161,12 @@ def test_siniestros_y_generadores_se_asignan_al_cruce(tmp_path):
     punto = {"type": "Feature", "geometry": {"type": "Point", "coordinates": [lon, lat]}, "properties": {"tipo": "school"}}
     (tmp_path / "s.geojson").write_text(json.dumps({"type": "FeatureCollection", "features": [punto] * 5}), encoding="utf-8")
     (tmp_path / "p.geojson").write_text(json.dumps({"type": "FeatureCollection", "features": [punto]}), encoding="utf-8")
-    analisis = analizar_red(red.escribir(tmp_path / "red.net.xml"), {}, tmp_path / "s.geojson", tmp_path / "p.geojson")
+    analisis = analizar_red(red.escribir(tmp_path / "red.net.xml"), {}, tmp_path / "s.geojson", tmp_path / "p.geojson",
+                            tmp_path / "no-sdm.geojson")
     c = analisis["candidatos"][0]
     assert c["siniestros"] == 5 and c["generadores"] == 1
+    assert c["colegios"] == 1 and c["salud"] == 0
+    assert c["brazos"] == 4
 
 
 # ─────────────────────────────────────────────── niveles (función pura)
@@ -218,3 +222,36 @@ def test_vecinos_del_mismo_nivel_se_estudian_juntos():
     niveles = {r.nodo_id: r.nivel for r in resultado}
     assert niveles == {"a": "prioritario", "b": "recomendado"}
     assert resultado[0].puntaje_total > resultado[1].puntaje_total
+
+
+def test_textos_para_no_tecnicos():
+    cand = {**_candidato("t", 0, siniestros=25, generadores=1), "calles": ["Avenida X", "Calle Y"],
+            "colegios": 1, "brazos": 3, "carriles_principal": 2, "siniestros_heridos": 4}
+    r = puntuar(_analisis([cand]))[0][0]
+    assert r.clase_principal == "tertiary" and r.medida
+    assert r.tipo_vias == "Colectora × Residencial"
+    assert "4 con heridos o muertos" in r.evidencias[0]
+    assert "1 colegio o jardín a menos de 200 m" in r.evidencias
+    assert r.contexto[0] == "Vía colectora (Avenida X) que cruza una vía residencial (Calle Y)"
+    assert "Intersección en T (3 accesos)" in r.contexto
+
+
+def _punto_red(x, y, props):
+    from pyproj import Transformer
+
+    t = Transformer.from_crs("+proj=utm +zone=18 +ellps=WGS84 +datum=WGS84 +units=m +no_defs", "EPSG:4326", always_xy=True)
+    lon, lat = t.transform(x + 600000, y + 515000)
+    return {"type": "Feature", "geometry": {"type": "Point", "coordinates": [lon, lat]}, "properties": props}
+
+
+@pytest.mark.parametrize("dx, descarte", [(20, "ya tiene semáforo según la SDM (OSM no lo tiene)"),
+                                          (60, "semáforo a menos de 80 m")])
+def test_semaforo_real_de_la_sdm_excluye(tmp_path, dx, descarte):
+    red = Red()
+    _cruz(red)
+    sdm = tmp_path / "sdm.geojson"
+    sdm.write_text(json.dumps({"type": "FeatureCollection", "features": [_punto_red(1000 + dx, 1000, {"fases": 3})]}),
+                   encoding="utf-8")
+    analisis = analizar_red(red.escribir(tmp_path / "red.net.xml"), {}, tmp_path / "s.geojson", tmp_path / "p.geojson", sdm)
+    assert analisis["candidatos"] == [] and analisis["descartes"].get(descarte) == 1
+    assert analisis["semaforos_sdm"] == 1

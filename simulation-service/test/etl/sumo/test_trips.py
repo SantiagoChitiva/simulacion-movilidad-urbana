@@ -23,6 +23,8 @@ def test_trips_sorted_by_departure(tmp_path):
     departs = [float(e.get("depart")) for e in root if e.tag in ("trip", "person")]
     # SUMO descarta todo depart menor al máximo ya leído: debe salir ordenado
     assert departs == sorted(departs)
-    assert departs == [25300, 25300, 26000, 27000]
+    # las dos copias de las 7:01:40 (con minutos: ±5 min) se reparten; la que caería antes de
+    # las 7:00 se refleja dentro de la ventana
+    assert departs == [25250, 25450, 26000, 27000]
     assert result.stats.fuera_de_ventana == 1
     assert result.stats.viajes_generados == 4

@@ -25,6 +25,18 @@ class SubredConfig:
     centro_lonlat: tuple[float, float]   # (lon, lat) del nodo central
     radio_m: float                        # radio del recorte en metros
     destino: Path                         # archivo de salida zona.net.xml
+    # andenes, cebras y walkingareas (la red de Usaquén no los tiene y los peatones caminan
+    # por los carriles). Solo para el simulador 3D: cambia los linkIndex de los semáforos,
+    # así que no sirve para comparar programas leídos de la red completa.
+    peatonal: bool = False
+
+    def args_peatonales(self) -> list[str]:
+        if not self.peatonal:
+            return []
+        return [
+            "--sidewalks.guess", "--sidewalks.guess.min-speed", "0", "--sidewalks.guess.max-speed", "40",
+            "--crossings.guess", "--crossings.guess.speed-threshold", "40", "--walkingareas",
+        ]
 
 
 @dataclass(frozen=True)
@@ -84,7 +96,8 @@ def encontrar_herramienta(nombre: str) -> str:
     except ImportError:
         pass
     for base in bases:
-        for sub in ("tools/route", "tools"):
+        # duaIterate.py está en tools/assign
+        for sub in ("tools/route", "tools", "tools/import/gtfs", "tools/assign"):
             candidato = base / sub / nombre
             if candidato.is_file():
                 return str(candidato)
@@ -134,6 +147,7 @@ def recortar_red(
             "-s", str(cfg.net_origen),
             "--keep-edges.in-geo-boundary", geo_boundary,
             "--geometry.remove", "false",
+            *cfg.args_peatonales(),
             "-o", str(cfg.destino),
         ],
         cancelar=cancelar,
@@ -192,3 +206,54 @@ def recortar_demanda(
         stats.demanda_recortada = True
 
     return SubredDemandaResult(rou=cfg.destino)
+
+
+def caminatas_por_origen_destino(rou: Path) -> int:
+    """Cambia cada `<walk edges="a ... z">` por `<walk from="a" to="z">` para que SUMO la rutee.
+
+    Las caminatas recortadas de una corrida traen la lista de edges calculada sobre la red
+    completa, donde los peatones caminan por los carriles. En una zona con andenes y cebras
+    esa secuencia puede no tener cruce entre dos edges seguidos y SUMO descarta al peatón;
+    con origen y destino la rutea por los andenes, walkingareas y cebras.
+    """
+    import xml.etree.ElementTree as ET
+
+    arbol = ET.parse(rou)
+    n = 0
+    for walk in arbol.getroot().iter("walk"):
+        edges = (walk.get("edges") or "").split()
+        if len(edges) < 2:
+            continue
+        del walk.attrib["edges"]
+        walk.set("from", edges[0])
+        walk.set("to", edges[-1])
+        n += 1
+    arbol.write(str(rou), encoding="UTF-8", xml_declaration=True)
+    return n
+
+
+def sin_paradas_de_bus(rou: Path) -> tuple[int, int]:
+    """Quita de una demanda recortada lo que depende de las paradas del SITP.
+
+    La zona no carga pt_paradas.add.xml (casi ninguna parada cae dentro), así que un bus con
+    <stop busStop> o una persona con un tramo <ride> haría fallar a SUMO. Los buses siguen
+    pasando por la zona, sin detenerse; las personas que van en bus se quitan.
+    Devuelve (paradas quitadas, personas quitadas).
+    """
+    import xml.etree.ElementTree as ET
+
+    arbol = ET.parse(rou)
+    raiz = arbol.getroot()
+    paradas = personas = 0
+    for elem in list(raiz):
+        if elem.tag == "person" and elem.find("ride") is not None:
+            raiz.remove(elem)
+            personas += 1
+        elif elem.tag == "vehicle":
+            for stop in elem.findall("stop"):
+                if stop.get("busStop"):
+                    elem.remove(stop)
+                    paradas += 1
+    if paradas or personas:
+        arbol.write(str(rou), encoding="UTF-8", xml_declaration=True)
+    return paradas, personas

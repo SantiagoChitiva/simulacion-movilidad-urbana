@@ -104,11 +104,11 @@ Un trabajador y cola en memoria & Celery/Redis & SUMO consume CPU y memoria; dos
 Archivos, no base de datos & PostgreSQL/PostGIS & Las salidas de SUMO ya son archivos; cero operación. Costo: sin consultas ad hoc ni transacciones. \\ \hline
 SUMO por subprocesos y TraCI & libsumo (C++) & Binarios probados; TraCI permite medir avance, cancelar y controlar actores. Costo: latencia del socket en 3D. \\ \hline
 Presets por transferencia modal & Reponderar al azar & Conservan total, orígenes y destinos y son deterministas. \\ \hline
-Precalcular y versionar los presets & Generar al arrancar & Una corrida tarda unos 12~min y el visor debe mostrar algo al abrir. Costo: unos 12~MB por preset. \\ \hline
+Precalcular y versionar los presets & Generar al arrancar & Una corrida tarda unos 12~min y el visor debe mostrar algo al abrir. Costo: entre 8 y 18~MB por preset. \\ \hline
 kepler.gl (capa Trip) & deck.gl a mano & Animación de trayectorias lista, con filtros y línea de tiempo. Costo: dependencia pesada. \\ \hline
 Dos SUMO en lockstep & Comparar métricas finales de dos corridas & La decisión de interés exige igual demanda y semilla en ambos lados. Costo: dos procesos SUMO por comparación. \\ \hline
 Priorización con reglas, sin LLM & Puntaje opaco con LLM & Explicable, reproducible y sin dependencia externa. Costo: umbrales ajustados a Usaquén. \\ \hline
-Transporte público como caminata & Buses con GTFS & No hay GTFS ni paradas. Costo: se subestima la carga sobre las vías. \\ \hline
+Buses del GTFS ruteados por paradas con \texttt{duarouter} & \texttt{gtfs2pt} de SUMO & \texttt{gtfs2pt} tardó más de 3~h sin terminar. Costo: las paradas que no se alcanzan se descartan. \\ \hline
 Escena 3D con relleno marcado & Solo edificios reales & Una escena vacía no se entiende. Costo: parte de la escena es ilustrativa. \\ \hline
 \end{tabular}
 \caption{Decisiones tecnológicas y de diseño.}

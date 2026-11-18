@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { obtenerPresets, obtenerEstilos } from '../api';
+import { obtenerEstilos, obtenerOpcionesDemanda, obtenerPresets } from '../api';
 
 const PASO = 50;
 const MAX_VIAJES = 100000; // mismo tope que configuration.MAX_VIAJES en la API
@@ -14,6 +14,8 @@ const GRUPOS = [
 ];
 
 const numero = (n) => n.toLocaleString('es-CO');
+const hora = (s) => `${String(Math.floor(s / 3600)).padStart(2, '0')}:00`;
+const VENTANAS = { am: 'Mañana', pm: 'Tarde' };
 const suma = (obj) => Object.values(obj).reduce((a, b) => a + b, 0);
 const mismosConteos = (a, b) => Object.keys({ ...a, ...b }).every((k) => (a[k] ?? 0) === (b[k] ?? 0));
 
@@ -55,6 +57,7 @@ export default function PanelDemanda({
   cargando,
   enCurso,
   error,
+  cierres = 0,
   onEjecutar,
   onVerCorrida,
 }) {
@@ -66,28 +69,51 @@ export default function PanelDemanda({
   const [semilla, setSemilla] = useState('');
   const [estilos, setEstilos] = useState([]);
   const [estiloId, setEstiloId] = useState('normal');
+  const [opciones, setOpciones] = useState(null);   // /demanda/opciones
+  const [ventana, setVentana] = useState('am');
 
   useEffect(() => {
-    obtenerPresets()
-      .then((p) => {
-        setPresets(p);
-        setConteos({ ...p.find((x) => x.id === 'encuesta').conteos });
-      })
-      .catch((e) => setErrorPresets(`No se pudo conectar con la API: ${e.message}`));
     obtenerEstilos()
       .then(setEstilos)
       .catch(() => {});
+    obtenerOpcionesDemanda()
+      .then(setOpciones)
+      .catch(() => {});
   }, []);
+
+  // los conteos de cada preset dependen de la ventana (la encuesta de la tarde es otra)
+  useEffect(() => {
+    obtenerPresets(ventana)
+      .then((p) => {
+        setPresets(p);
+        setConteos({ ...p.find((x) => x.id === presetId)?.conteos ?? p[0].conteos });
+      })
+      .catch((e) => setErrorPresets(`No se pudo conectar con la API: ${e.message}`));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ventana]);
+
+  // opciones fijas del visor: la encuesta de la localidad con los buses del GTFS si existen
+  // (la encuesta completa y el tráfico de paso solo se usan para la validación documentada)
+  const pasoPedido = false;
+  const completaPedida = false;
+  const publicoPedido = !!opciones?.transporte_publico;
+  const [inicio, fin] = opciones ? [opciones.ventanas[ventana].inicio, opciones.ventanas[ventana].fin] : [7 * 3600, 10 * 3600];
 
   const preset = presets.find((p) => p.id === presetId);
   const total = suma(conteos);
   const modificado = preset && modos.some((m) => (conteos[m.id] ?? 0) !== (preset.conteos[m.id] ?? 0));
 
   // precalculada que corresponde exactamente a lo que está en el panel
-  const precalculada = precalculadas.find((p) => p.preset === presetId);
+  const precalculada = precalculadas.find((p) => p.preset === presetId && (p.ventana ?? 'am') === ventana);
   const semillaPedida = semilla === '' ? SEMILLA_SUMOCFG : Number(semilla);
+  // la precalculada no tiene cierres ni otro estilo de conducción: con ellos hay que simular
   const lista =
     !!precalculada &&
+    cierres === 0 &&
+    estiloId === 'normal' &&
+    !!precalculada.trafico_paso === pasoPedido &&
+    !!precalculada.encuesta_completa === completaPedida &&
+    (precalculada.transporte_publico ?? false) === publicoPedido &&
     mismosConteos(conteos, precalculada.conteos) &&
     semillaPedida === (precalculada.semilla ?? SEMILLA_SUMOCFG);
   const enMapa = lista && corridaCargada === precalculada.id;
@@ -107,7 +133,9 @@ export default function PanelDemanda({
   const verCorrida = (id) => {
     const c = [...precalculadas, ...historial].find((x) => x.id === id) ?? null;
     if (c) {
+      const o = c.opciones ?? c;
       setPresetId(c.preset);
+      if ((o.ventana ?? 'am') !== ventana) setVentana(o.ventana ?? 'am');
       setConteos({ ...Object.fromEntries(modos.map((m) => [m.id, 0])), ...c.conteos });
       setSemilla(c.semilla ?? '');
     }
@@ -126,6 +154,11 @@ export default function PanelDemanda({
       conteos: Object.fromEntries(Object.entries(conteos).filter(([, v]) => v > 0)),
       semilla: semilla === '' ? null : Number(semilla),
       estilo: estiloId,
+      ventana,
+      trafico_paso: pasoPedido,
+      encuesta_completa: completaPedida,
+      transporte_publico: publicoPedido,
+      asignacion_iterativa: false,   // duaIterate no admite los buses del GTFS; no se ofrece en el visor
     });
 
   const nota = modos.find((m) => m.nota)?.nota;
@@ -133,6 +166,18 @@ export default function PanelDemanda({
   return (
     <div className="pd-contenido">
       {(errorPresets || error) && <p className="pd-error">{errorPresets || error}</p>}
+
+      <section>
+        <h3>Horario</h3>
+        <div className="pd-presets">
+          {Object.entries(VENTANAS).map(([id, nombre]) => (
+            <button type="button" key={id} className={id === ventana ? 'activo' : ''} onClick={() => setVentana(id)}>
+              {nombre}
+              {opciones && ` (${hora(opciones.ventanas[id].inicio)}–${hora(opciones.ventanas[id].fin)})`}
+            </button>
+          ))}
+        </div>
+      </section>
 
       <section>
         <h3>Escenario</h3>
@@ -146,7 +191,7 @@ export default function PanelDemanda({
               title={p.descripcion}
             >
               {p.nombre}
-              {precalculadas.some((x) => x.preset === p.id) && (
+              {precalculadas.some((x) => x.preset === p.id && (x.ventana ?? 'am') === ventana) && (
                 <span className="pd-lista" title="Precalculada: se carga sin correr SUMO">
                   {' '}
                   · lista
@@ -187,7 +232,11 @@ export default function PanelDemanda({
       )}
 
       <section>
-        <h3>Viajes por actor vial (07:00–10:00)</h3>
+        <h3>Viajes por actor vial ({hora(inicio)}–{hora(fin)})</h3>
+        <p className="pd-nota">
+          Un día hábil típico según la Encuesta de Movilidad 2023, de {hora(inicio)} a {hora(fin)}, con los viajes que
+          empiezan y terminan en Usaquén.
+        </p>
         {GRUPOS.map(([grupo, titulo]) => {
           const delGrupo = modos.filter((m) => m.grupo === grupo);
           if (!delGrupo.length) return null;
@@ -230,6 +279,11 @@ export default function PanelDemanda({
         </label>
       </section>
 
+      {cierres > 0 && (
+        <p className="pd-aviso">
+          {cierres === 1 ? 'Hay 1 cierre vial' : `Hay ${cierres} cierres viales`} (pestaña Cierres): se aplican a esta simulación.
+        </p>
+      )}
       {lista ? (
         <>
           <button type="button" className="pd-ejecutar" onClick={() => onVerCorrida(precalculada)} disabled={cargando || enMapa}>

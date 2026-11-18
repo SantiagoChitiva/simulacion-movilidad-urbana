@@ -2,7 +2,7 @@ import csv
 import xml.etree.ElementTree as ET
 from collections import Counter
 from collections.abc import Iterable, Iterator
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -26,6 +26,9 @@ class TripGenerationConfig:
     hora_fin: int = HORA_FIN
     max_copias: int = MAX_COPIAS
     demanda: "DemandaConfig | None" = None   # None = demanda de la encuesta tal cual
+    # con buses del GTFS en el escenario, el transporte público es un <personTrip
+    # modes="public"> (caminar, esperar, subir, caminar); sin ellos, una caminata
+    transporte_publico_real: bool = False
 
 
 @dataclass
@@ -156,32 +159,88 @@ def _add_person_walk(root: ET.Element, person_id: str, trip: TripRecord) -> None
     )
 
 
-def _add_trip(root: ET.Element, trip_id: str, trip: TripRecord) -> None:
+def _add_person_trip_publico(root: ET.Element, person_id: str, trip: TripRecord) -> None:
+    person = ET.SubElement(root, "person", {"id": person_id, "depart": f"{trip.depart:.2f}"})
+    ET.SubElement(
+        person,
+        "personTrip",
+        {"fromTaz": trip.origin_taz, "toTaz": trip.destination_taz, "modes": "public"},
+    )
+
+
+def _add_trip(root: ET.Element, trip_id: str, trip: TripRecord, transporte_publico_real: bool = False) -> None:
     if trip.mode.is_vehicle:
         _add_vehicle_trip(root, trip_id, trip)
+    elif trip.mode == TransportMode.TRANSPORTE_PUBLICO and transporte_publico_real:
+        # duarouter arma caminata a la parada, espera, viaje en un bus del GTFS y caminata
+        _add_person_trip_publico(root, trip_id, trip)
     else:
-        # PEATON y TRANSPORTE_PUBLICO: ambos se modelan como <person><walk>.
-        # Limitación: el transporte público aún no usa <ride> ni paradas.
+        # PEATON (y TRANSPORTE_PUBLICO si el escenario no tiene buses): <person><walk>
         _add_person_walk(root, trip_id, trip)
 
 
-def _build_xml(trips: Iterable[TripRecord], stats: TripGenerationStats) -> ET.ElementTree:
+def radio_redondeo(depart: float) -> float:
+    """Medio ancho del intervalo que representa una hora de la encuesta, según su redondeo.
+
+    Las respuestas se agrupan en la hora en punto (52 % en la mañana) y en la media hora
+    (18 %): quien dice "7:00" salió entre 6:30 y 7:30, quien dice "7:30" entre 7:15 y 7:45 y
+    quien da los minutos ("7:04"), a unos 5 minutos de eso.
+    """
+    segundo = round(depart) % 3600
+    if segundo == 0:
+        return 1800.0
+    if segundo == 1800:
+        return 900.0
+    return 300.0
+
+
+def salidas_dispersas(depart: float, copias: int, ini: float, fin: float) -> list[float]:
+    """`copias` salidas parejas en depart ± radio_redondeo, reflejadas para no salir de [ini, fin).
+
+    Sin esto todas las copias de una respuesta salían en el mismo segundo y la demanda llegaba
+    en ráfagas a la hora en punto. Es determinista y conserva el número de viajes.
+    """
+    if copias == 1:
+        return [depart]
+    radio = radio_redondeo(depart)
+    salidas = []
+    for i in range(copias):
+        t = depart - radio + 2 * radio * (i + 0.5) / copias
+        if t < ini:
+            t = min(2 * ini - t, fin - 1)
+        elif t >= fin:
+            t = max(2 * fin - t - 1, ini)
+        salidas.append(t)
+    return salidas
+
+
+def _build_xml(trips: Iterable[TripRecord], stats: TripGenerationStats,
+               transporte_publico_real: bool = False, ventana: tuple[float, float] | None = None) -> ET.ElementTree:
     root = _create_root()
     _add_vtypes(root)
 
+    copias = []
     for trip in trips:
-        for _ in range(trip.copies):
-            stats.viajes_generados += 1
-            stats.por_modo[trip.mode.value] += 1
+        salidas = (salidas_dispersas(trip.depart, trip.copies, *ventana) if ventana
+                   else [trip.depart] * trip.copies)
+        copias.extend((t, k, trip) for k, t in enumerate(salidas))
+    # SUMO descarta lo que llega desordenado: se ordena por la salida ya dispersa
+    # (sorted es estable con la clave de tiempo, así que empates conservan el orden del TSV)
+    copias.sort(key=lambda c: c[0])
 
-            if trip.mode.is_vehicle:
-                stats.vehiculos_generados += 1
-                number = stats.vehiculos_generados
-            else:
-                stats.personas_generadas += 1
-                number = stats.personas_generadas
+    for salida, _, original in copias:
+        trip = replace(original, depart=salida)
+        stats.viajes_generados += 1
+        stats.por_modo[trip.mode.value] += 1
 
-            _add_trip(root, f"{trip.mode.value}_{number}", trip)
+        if trip.mode.is_vehicle:
+            stats.vehiculos_generados += 1
+            number = stats.vehiculos_generados
+        else:
+            stats.personas_generadas += 1
+            number = stats.personas_generadas
+
+        _add_trip(root, f"{trip.mode.value}_{number}", trip, transporte_publico_real)
 
     tree = ET.ElementTree(root)
     ET.indent(tree, space="    ")
@@ -207,7 +266,7 @@ def generate_trips(config: TripGenerationConfig) -> TripGenerationResult:
     # ("Route file should be sorted by departure time, ignoring ..."). Por eso se
     # ordena aquí: sorted es estable, así que empates conservan el orden del TSV.
     trips = sorted(registros, key=lambda t: t.depart)
-    tree = _build_xml(trips, stats)
+    tree = _build_xml(trips, stats, config.transporte_publico_real, ventana=(config.hora_ini, config.hora_fin))
 
     config.output_path.parent.mkdir(parents=True, exist_ok=True)
     tree.write(config.output_path, encoding="UTF-8", xml_declaration=True)

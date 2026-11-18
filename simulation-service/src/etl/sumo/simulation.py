@@ -7,7 +7,7 @@ import xml.etree.ElementTree as ET
 from dataclasses import dataclass
 from pathlib import Path
 
-from .proceso import Cancelado, OnAvance, avance_ventana, ejecutar, revisar_cancelacion
+from .proceso import Cancelado, OnAvance, avance_ventana, ejecutar, matar_arbol, revisar_cancelacion
 
 # Con TraCI la simulación avanza en saltos de este tamaño (s simulados): pocos llamados
 # por corrida, así que el costo de TraCI es despreciable
@@ -164,13 +164,11 @@ def _run_traci(
             conexion = None
             proc.wait()
         except (Cancelado, SimulationError, KeyboardInterrupt):
-            proc.kill()
-            proc.wait()
+            matar_arbol(proc)
             raise
         except (traci.exceptions.TraCIException, traci.exceptions.FatalTraCIError) as exc:
             # p. ej. SUMO murió al cargar la red y TraCI no pudo conectarse
-            proc.kill()
-            proc.wait()
+            matar_arbol(proc)
             err.seek(0)
             raise _error(config, proc.returncode, err.read() or str(exc)) from exc
         finally:

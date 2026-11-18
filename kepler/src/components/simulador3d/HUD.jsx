@@ -11,7 +11,7 @@ const COLOR_ESTADO = (e) => {
   return '#9aa4ad';
 };
 const ETIQUETA_TIPO = {
-  auto: 'Carro', taxi: 'Taxi', moto: 'Moto', bici: 'Bicicleta', bus_pt: 'Bus', escolar: 'Bus escolar',
+  auto: 'Carro', taxi: 'Taxi', moto: 'Moto', bici: 'Bicicleta', bus_pt: 'Bus', bus_sitp: 'Bus SITP', bus_tm: 'TransMilenio', escolar: 'Bus escolar',
   especial: 'Vehículo especial', informal: 'Transporte informal', otro: 'Otro vehículo', peaton: 'Peatón',
 };
 
@@ -20,7 +20,7 @@ const ESTADO = {
   acelera: 'En camino', crucero: 'En camino', camina: 'Caminando', frena: 'Frenando', frena_cruce: 'Frena antes del cruce',
   cede_paso: 'Cede el paso', en_cola: 'En la fila', espera_cruzar: 'Espera para cruzar', frenada_fuerte: '¡Frenada fuerte!',
   frena_semaforo: 'Frena: semáforo', espera_semaforo: 'Espera el verde', cambia_carril: 'Cambia de carril',
-  detenido: 'Detenido', esperando_entrar: 'Esperando entrar',
+  detenido: 'Detenido', esperando_entrar: 'Entrando a la vía…',
 };
 
 const n = (v, d = 0) => (v == null ? '—' : Number(v).toFixed(d));
@@ -64,7 +64,7 @@ export default function HUD({ conSemaforo, lado, egoId, manual, subtitulo }) {
         {m && (
           <>
             <span title="Espera más larga de un vehículo en la vía que cede (la secundaria)">espera lateral {mmss(m.espera_lateral_s)}</span>
-            <span title="Colisiones detectadas por SUMO">{m.colisiones} choque{m.colisiones === 1 ? '' : 's'}</span>
+            <span title={`Choques a 5 km/h o más (cada par una vez). Aparte, ${m.contactos ?? 0} roce${m.contactos === 1 ? '' : 's'} a menos de 5 km/h: casi siempre peatones que, tras esperar en una cebra bloqueada, el modelo de SUMO deja pasar a través de un carro detenido. No son choques reales.`}>{m.colisiones} choque{m.colisiones === 1 ? '' : 's'}</span>
             <span title="Pares de vehículos que llegan al punto de cruce con menos de 1,5 s de diferencia (PET)">{m.conflictos} conflicto{m.conflictos === 1 ? '' : 's'}</span>
           </>
         )}

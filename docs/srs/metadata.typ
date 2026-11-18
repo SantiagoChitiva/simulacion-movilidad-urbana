@@ -1,8 +1,8 @@
 #let info = (
   nombreProyecto: "Generación de Escenarios Movilidad",
-  nombreEmpresa: "Empresa EFSS",
+  nombreEmpresa: "Grupo 3",
   logoEmpresaUri: "/figures/logo_javeriana.png",
-  version: "2.2",
+  version: "2.3",
   autores: (
     "Erick Salazar Suarez",
     "Felipe Garrido Flores",

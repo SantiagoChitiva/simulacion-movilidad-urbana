@@ -19,11 +19,46 @@ La @figCicloBpmn muestra las 4 fases del proyecto, la transición entre metodolo
 cada una (matrices O/D, red `.net.xml`, código Python, reportes GEH). En la versión 2.0 la Fase 3 se extiende con los Sprints 5 a 8 (ver 9.3.1); la
 estructura de fases no cambia.
 
-*Análisis de Alternativas.* Se evaluaron los siguientes modelos de ciclo de vida antes de seleccionar el híbrido:
-- *Cascada:* descartado por su rigidez ante cambios en la calidad de los datos de entrada, que no se conoce hasta la exploración.
-- *CRISP-DM puro:* insuficiente para la Fase 3, que requiere gestión de sprints y entregas incrementales de software.
-- *RUP:* se descartó por su excesiva burocracia que podría frenar la agilidad del análisis.
-- *Híbrido CRISP-DM + Scrum + Kanban:* modelo que combina exploración de datos iterativa con entregas incrementales de software.
+=== Análisis de Alternativas y Justificación
+
+Antes de fijar el ciclo de vida se compararon cinco opciones con los criterios que más pesan en este proyecto. El primero es la incertidumbre de los
+datos: hasta no explorar la encuesta, los aforos y la red no se sabía qué se podía construir. Le siguen la necesidad de entregar software que funcione
+en cada iteración, la carga documental que exige la universidad (SPMP, SRS, SDD y memoria) y el calendario de un semestre con cuatro integrantes que
+también tienen otras materias.
+
+#figure(
+  table(
+    columns: (auto, 1fr, 1fr, 1fr, 1fr),
+    table.header([Modelo], [Datos inciertos], [Software incremental], [Carga documental], [Calendario académico]),
+    [Cascada], [Mal: exige requisitos cerrados antes de conocer los datos], [Mal: una sola entrega al final], [Bien: un documento por fase],
+    [Bien en papel, frágil ante retrasos],
+    [CRISP-DM puro], [Bien: está hecho para explorar datos], [Mal: no organiza el desarrollo de una aplicación], [Media], [Bien],
+    [RUP], [Media], [Bien: iterativo], [Mal: demasiados artefactos para cuatro personas], [Mal],
+    [Scrum puro], [Media: los sprints de exploración no tienen un incremento claro], [Bien], [Media: la documentación queda a criterio del
+    equipo], [Bien],
+    [Híbrido CRISP-DM + Scrum + Kanban], [Bien], [Bien], [Media: los entregables formales se planean como paquetes propios (F5)], [Bien],
+  ),
+  caption: [Comparación de modelos de ciclo de vida.],
+) <tabAlternativasCiclo>
+
+*Cascada* se descartó primero. El riesgo principal al empezar era que los datos no alcanzaran para lo que se prometía, y en cascada ese riesgo se
+descubre tarde, cuando el diseño ya está cerrado. Eso pasó de hecho con los aforos HMD: no traen coordenadas, y en un plan en cascada la validación
+GEH habría bloqueado todo lo que venía después.
+
+*CRISP-DM puro* encaja bien con las dos primeras fases (entender los datos, prepararlos, modelar), pero no dice nada sobre cómo construir una API, un
+visor web o un simulador 3D. Usarlo hasta el final habría dejado el desarrollo de software sin ritmo ni criterio de terminado.
+
+*RUP* es iterativo y documenta bien, pero su número de roles y artefactos está pensado para equipos más grandes. Con cuatro personas y catorce horas
+semanales cada una, mantenerlo habría quitado tiempo al producto.
+
+*Scrum puro* sirve para la Fase 3, pero en las fases de exploración los sprints no terminan en algo demostrable, y forzarlos produce incrementos
+artificiales.
+
+Por eso se eligió el *híbrido*. Las fases 1 y 2 siguen CRISP-DM @crispdm porque son exploratorias. Desde la fase 3 se trabaja con sprints de Scrum
+@scrum, que terminan en algo que el director puede ver en el visor. El tablero Kanban hace visible el trabajo en curso de las dos metodologías. Los
+documentos formales se manejan como paquetes de trabajo propios (F5), con fecha y responsable, para que no queden al final. La versión 2.x del
+proyecto confirmó la elección: el alcance creció con la semaforización, el simulador 3D y la usabilidad (Sprints 6 a 9) sin que hubiera que cambiar
+la estructura de fases.
 
 *Prácticas Específicas*
 - Control de versiones: Git + GitHub con ramas por sprint (`main`, `develop`, `feat/*`).
@@ -69,7 +104,7 @@ estructura de fases no cambia.
   caption: [Herramientas y lenguajes del proyecto.],
 ) <tabHerramientas>
 
-=== Análisis de Alternativas y Justificación
+=== Alternativas
 
 - *Backend:* FastAPI frente a Flask o Django. FastAPI valida las solicitudes con Pydantic, genera la documentación en `/docs` y soporta WebSocket de
   forma nativa, lo que el simulador 3D necesita.
@@ -122,7 +157,7 @@ estructura de fases no cambia.
   caption: [Entidades externas e interfaces.],
 ) <tabInterfaces>
 
-=== Roles del Equipo
+=== Organigrama y Descripción de Roles
 
 La estructura organizacional del equipo se presenta en la @figOrganigrama.
 

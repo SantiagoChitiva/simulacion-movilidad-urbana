@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "simulation-service"
 version = "0.1.0"
 description = "Servicio de Simulacion, puente entre SUMO y los datos de entrada y salida"
-requires-python = ">=3.11"
+requires-python = ">=3.12"   # pyproj 3.8 no tiene versión para 3.11
 dependencies = [
   "fastapi[standard]==0.136.3",
   "eclipse-sumo==1.27.1",
@@ -17,6 +17,8 @@ dependencies = [
 [project.optional-dependencies]
 test = ["pytest==9.1.1"]
 validation = ["matplotlib>=3.9"]
+# solo para preparar los aforos una vez (python -m etl.sumo.aforos): leen el Excel y los shapefiles de SIMUR
+datos = ["geopandas", "openpyxl"]
 dev = ["simulation-service[test,validation]"]
 
 [tool.setuptools.packages.find]

@@ -36,7 +36,7 @@ Se exploraron tres fuentes: los aforos vehiculares de hora de máxima demanda (H
     \item Los aforos HMD son vehiculares por diseño y no cubren bien los viajes a pie; además, no traen coordenadas, solo texto libre de localización, de modo que las 336 estaciones no pudieron geocodificarse a tiempo.
     \item En la red de OSM, la cobertura de atributos es baja (velocidad máxima 23,2\,\%, carriles 27,8\,\%, nombre 41,9\,\%) y hay un área sin trazado en el Country Club.
 \end{itemize}
-La brecha de los aforos sin geocodificar es la causa de que la validación por GEH no pudiera completarse (sección~\ref{sec:limitaciones-resultados}). El alcance se definió como la localidad de Usaquén, con la ventana de 7:00 a 10:00.
+Por esa brecha la validación por GEH quedó pendiente hasta el último sprint, cuando los aforos se ubicaron con los \textit{shapefiles} de estaciones de la publicación de SIMUR, que comparten el identificador con la base de aforos (sección~\ref{sec:geh}). El alcance se definió como la localidad de Usaquén, con la ventana de 7:00 a 10:00.
 
 \textbf{Fase 2: preparación de datos.} Se implementó el \textit{pipeline} ETL: extracción de la encuesta y de la red; transformación (limpieza, expansión por factores de ponderación y zonificación TAZ); y carga en archivos de SUMO. La red se procesó con \texttt{netconvert} a partir de OpenStreetMap; se incorporó elevación (\texttt{usaquen\_3d\_v2.net.xml}) para disponer de la coordenada $z$ en las salidas, y la red final tiene 28.080 \textit{edges}, 7.338 cruces de prioridad y 220 semáforos. Se definieron nueve tipos de vehículo (\texttt{vType}) para los modos del sistema.
 
@@ -55,20 +55,22 @@ La brecha de los aforos sin geocodificar es la causa de que la validación por G
 5 & Módulo web: API FastAPI, visor kepler.gl, panel de demanda, avance real y cancelación, y presets precalculados. & Completado \\ \hline
 6 (v2.0) & Análisis de intersecciones: ficha de semáforos, volúmenes por acceso, edición de programas, Webster, recorte de zonas, comparación de programas, priorización. & Completado \\ \hline
 7 (v2.0) & Simulador 3D comparativo: dos SUMO en lockstep, escena 3D, actor en tercera persona, HUD, riesgo, minimapa, modo manual. & Completado \\ \hline
-8 (v2.0) & Reporte exportable de la comparación 3D, programa editable del semáforo propuesto y transporte público con GTFS. & Pendiente \\ \hline
+8 (v2.0) & Estabilidad del 3D. El reporte exportable de la comparación 3D, el programa editable del semáforo propuesto y el transporte público con GTFS pasaron al sprint 10. & Completado \\ \hline
+9 (v2.2) & Usabilidad para perfiles no técnicos: tarjeta de cruces, cierres con un clic, ficha en palabras, comparación de programas con SUMO real, entrada simultánea del actor, resumen del viaje y tema claro. & Completado \\ \hline
+10 & Cierre de pendientes: validación GEH con 33 puntos de aforo, buses del SITP y TransMilenio desde el GTFS, ventana de la tarde, asignación iterativa, tráfico de paso y encuesta completa, reanudación de corridas, reporte CSV/PDF, programa del semáforo propuesto y semáforos reales de la SDM. & Completado \\ \hline
 \end{tabular}
 \caption{Sprints y estado.}
 \label{tab:sprints}
 \end{table}
 
-\textbf{Fase 4: evaluación.} Se verificaron los insumos con pruebas automáticas, se comparó la distribución de horas de salida contra la encuesta (histograma) y se documentaron las limitaciones. Los resultados están en el capítulo siguiente.
+\textbf{Fase 4: evaluación.} Se verificaron los insumos con pruebas automáticas, se comparó la distribución de horas de salida contra la encuesta (histograma), se calculó el GEH contra los aforos y se documentaron las limitaciones. Los resultados están en el capítulo siguiente.
 
 \textbf{Gestión de requerimientos, riesgos y configuración.} Los requerimientos del SRS tienen un estado (implementado, parcial, pendiente) que se actualizó al construir cada uno. Los procesos de requerimientos, riesgos, configuración y calidad se modelaron con BPMN en el SPMP. El código se versionó en Git con ramas por funcionalidad (\texttt{main}, \texttt{develop}); los datos crudos de la encuesta no se versionan y viven en un almacenamiento compartido.
 
 \textbf{Dificultades y soluciones.}
 \begin{itemize}[noitemsep]
     \item \textit{Viajes perdidos:} SUMO descartaba unos 23.000 de 24.600 viajes por llegar desordenados. Se resolvió ordenándolos por hora de salida antes de rutear.
-    \item \textit{Salidas de gran tamaño:} el FCD ocupaba unos 1,4~GB. Se redujo la frecuencia de escritura, se leyó en \textit{streaming} y se comprimió el resultado a 11,7~MB.
+    \item \textit{Salidas de gran tamaño:} el FCD ocupaba unos 1,4~GB. Se redujo la frecuencia de escritura, se leyó en \textit{streaming} y se comprimió el resultado a unos 15~MB.
     \item \textit{Progreso opaco:} SUMO y \texttt{duarouter} guardan su salida estándar en búfer cuando se redirige, así que no puede interpretarse. El avance de \texttt{duarouter} se obtuvo del último \texttt{depart} escrito, y el de SUMO con TraCI.
     \item \textit{Fallos de suscripción en TraCI:} suscribirse a un actor que ya salió de la red acumula errores y termina haciendo caer a SUMO 1.27. Se filtran los actores que ya salieron antes de suscribirse.
     \item \textit{Demanda escasa en zonas pequeñas:} la demanda real en una zona de 350~m era demasiado pequeña para comparar escenarios. Se completó con tráfico de fondo sintético por modo.

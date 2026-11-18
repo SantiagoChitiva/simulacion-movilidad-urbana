@@ -19,20 +19,20 @@
 \textbf{Conclusiones.}
 \begin{enumerate}[noitemsep]
     \item Se cumplió el objetivo general en lo esencial: se automatizó la cadena que va de la Encuesta de Movilidad 2023 a una simulación SUMO de Usaquén, ejecutable sin editar archivos a mano y con una interfaz web para visualizar y parametrizar escenarios. De los cinco objetivos específicos, cuatro se cumplieron y uno (la validación del modelo) se cumplió parcialmente.
-    \item La validación es el principal pendiente. La forma temporal de la demanda simulada reproduce la de la encuesta, pero los volúmenes no se calibraron con los aforos HMD porque estos no pudieron asociarse a la red. El modelo debe considerarse una herramienta de exploración, no de predicción.
+    \item La validación es el principal pendiente. La forma temporal de la demanda simulada reproduce la de su insumo, y el GEH contra los aforos HMD se calculó, pero solo 2 de 33 puntos cumplen: la red construida desde OpenStreetMap no mueve la demanda completa. El modelo debe considerarse una herramienta de exploración, no de predicción.
     \item Fue clave tratar la reproducibilidad como un requisito de diseño: permite repetir un escenario y comparar de manera justa dos configuraciones, como en el simulador 3D, donde ambos lados comparten demanda y semilla.
     \item Varias dificultades vinieron de la herramienta (viajes descartados por desorden, errores de suscripción de TraCI, salidas gigantes) y no del modelado. Documentarlas ahorra tiempo a futuros usuarios de SUMO.
-    \item Las limitaciones se asumieron y se hicieron visibles (transporte público como caminata, programas genéricos, tráfico de fondo sintético) en vez de ocultarse, lo que protege al usuario de sobreinterpretar resultados.
+    \item Las limitaciones se asumieron y se hicieron visibles (volúmenes sin calibrar, programas semafóricos genéricos, tráfico de fondo sintético) en vez de ocultarse, lo que protege al usuario de sobreinterpretar resultados.
 \end{enumerate}
 
 \textbf{Trabajo futuro.}
 \begin{itemize}[noitemsep]
-    \item \textbf{Calibración y validación:} geocodificar las 336 estaciones de aforo, calcular GEH y RMSE, y calibrar parámetros de conducción hasta cumplir GEH $<5$ en 85\,\% de los puntos.
-    \item \textbf{Transporte público real:} incorporar buses, paradas y rutas desde GTFS (\texttt{gtfs2pt}, \texttt{personTrip}) para sustituir la caminata.
-    \item \textbf{Semáforos reales:} usar los programas de la SDM, y permitir editar el ciclo del semáforo propuesto desde el visor.
-    \item \textbf{Reporte de la comparación 3D:} exportar las métricas de ambos escenarios y repetir con varias semillas para obtener intervalos de confianza.
-    \item \textbf{Más localidades y franjas:} extender a otras localidades de la encuesta y a los periodos de la tarde y la noche.
-    \item \textbf{Ingeniería:} ejecutar las pruebas del servicio en la integración continua, agregar pruebas al visor, y, si se publica el servicio, añadir autenticación, TLS y una cola externa para varios usuarios.
+    \item \textbf{Calibración y validación:} auditar carriles, conexiones y programas semafóricos de las avenidas para que la red mueva la demanda de la encuesta completa, y calibrar hasta cumplir GEH $<5$ en el 85\,\% de los puntos, comprobándolo en el grupo de control.
+    \item \textbf{Transporte público:} los buses del SITP y de TransMilenio troncal ya salen del GTFS; faltan TransMiCable y frecuencias que respondan a la congestión.
+    \item \textbf{Semáforos reales:} usar los tiempos de los planes de la SDM, que su servidor no publica (ya se usan la ubicación y las fases de sus 199 semáforos en el área).
+    \item \textbf{Comparación 3D:} repetir con más semillas y más viajes para obtener intervalos de confianza (el reporte en CSV y PDF ya existe).
+    \item \textbf{Más localidades y franjas:} extender a otras localidades de la encuesta y al periodo de la noche (la tarde ya se simula).
+    \item \textbf{Ingeniería:} ejecutar las pruebas también en Windows en la integración continua, agregar pruebas al visor, y, si se publica el servicio, añadir autenticación, TLS y una cola externa para varios usuarios.
     \item \textbf{Evaluación con usuarios:} una prueba de usabilidad con planificadores de movilidad y la validación de la priorización con la SDM.
     \item \textbf{Emisiones:} agregar un modelo de emisiones para cuantificar el impacto ambiental.
 \end{itemize}

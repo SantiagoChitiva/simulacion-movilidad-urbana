@@ -89,23 +89,29 @@ cuantitativas y validaciones técnicas específicas para proyectos de simulació
 En el caso de componentes de simulación se requiere además la ejecución correcta en SUMO, la generación válida de archivos XML y métricas GEH dentro
 del rango esperado.
 
-*Validación preliminar de la distribución temporal (histograma de salidas).* Mientras la validación GEH contra los aforos HMD sigue pendiente, el
-equipo verifica en cada corrida base que la demanda simulada conserve la forma horaria de la Encuesta de Movilidad 2023. El script
-`simulation-service/validation/histograma_salidas.py` cuenta los viajes por intervalos de 10 minutos entre las 7:00 y las 10:00 y compara tres series
-(@figHistogramaSalidas):
+*Validación de la distribución temporal (histograma de salidas).* En cada corrida base el equipo verifica que la demanda simulada conserve la forma
+horaria de la Encuesta de Movilidad 2023. El script `simulation-service/validation/histograma_salidas.py` cuenta los viajes por intervalos de 10
+minutos entre las 7:00 y las 10:00 y compara tres series (@figHistogramaSalidas):
 - *Encuesta (expandida):* cada viaje de la encuesta pesa su factor de expansión `fexp_vj` ($n = 109.372$). Es la referencia de la demanda real.
-- *Encuesta (insumo de SUMO):* cada viaje se replica `round(fexp_vj)` veces con tope `MAX_COPIAS`, que es lo que realmente recibe el simulador
-  ($n = 24.647$).
-- *Simulación SUMO:* la hora de inicio (`inicio_s`) de cada viaje exportado en `trips.geojson.gz` de la corrida `encuesta` ($n = 15.900$).
+- *Encuesta repartida (insumo de SUMO):* cada viaje se replica `round(fexp_vj)` veces con tope `MAX_COPIAS` y las copias se reparten alrededor de
+  la hora reportada (±30 min en las horas en punto), que es exactamente lo que recibe el simulador ($n = 24.647$).
+- *Simulación SUMO:* la hora de inicio (`inicio_s`) de cada viaje exportado en `trips.geojson.gz` de la corrida `encuesta`, sin los buses
+  del GTFS ($n = 16.408$).
 
 #figure(image("/figures/histograma_salidas.png", width: 100%), caption: [Hora de salida de los viajes entre 7:00 y 10:00. Arriba, conteos por
-intervalo en escala logarítmica; abajo, porcentaje de los viajes de cada serie.]) <figHistogramaSalidas>
+intervalo en escala logarítmica; en el centro, porcentaje por intervalo; abajo, porcentaje por hora.]) <figHistogramaSalidas>
 
-Como los totales difieren (el tope de copias recorta la expansión y el exportador a kepler descarta las entidades que casi no se mueven), el panel
-inferior normaliza cada serie a porcentaje para comparar solo la forma de la curva. Las tres series coinciden en los picos de las horas en punto
-(7:00, 8:00 y 9:00, con cerca de 21 %, 18 % y 17 % de los viajes), reflejo del redondeo con que se reporta la hora de salida, y en el pico menor de las
-9:30. La mayor diferencia está en las 9:30 (7,5 % simulado frente a 10,7 % en la encuesta expandida). Este análisis valida la *forma temporal* de la
-demanda, no su magnitud, y por tanto no reemplaza el GEH: la métrica de validación GEH y el criterio de calibración siguen sin cambios.
+Como los totales difieren (el tope de copias recorta la expansión y el exportador a kepler descarta las entidades que casi no se mueven), los paneles
+de porcentaje normalizan cada serie. La simulación reproduce su insumo con una diferencia máxima de 0,9 puntos porcentuales por intervalo. Los picos
+de la encuesta en las horas en punto (cerca de 21 %, 19 % y 17 % de los viajes a las 7:00, 8:00 y 9:00) son el redondeo con que se reporta la hora
+de salida; se reparten para que la demanda no llegue a la red en ráfagas, a cambio de correrla hacia la primera hora (45 % de los viajes simulados
+entre 7:00 y 8:00 frente a 34 % en la encuesta). Este análisis valida la *forma temporal* de la demanda, no su magnitud.
+
+*Validación GEH contra los aforos.* La magnitud se mide con el GEH en los 33 puntos de aforo HMD de la red, divididos en un grupo de calibración
+(18) y uno de control (15). Con los viajes internos de la encuesta cumple 0 de 33 puntos (6 % del volumen aforado); con la encuesta completa o el
+tráfico de paso, 2 de 33 (entre 22 % y 27 %). El criterio de calibración (GEH < 5 en el 85 % de los puntos) no se alcanzó: la red construida desde
+OpenStreetMap no mueve la demanda completa. Se registra como desviación del plan de calidad, con la calibración de la capacidad de la red como
+trabajo futuro (detalle en la sección 5 del SRS).
 
 *Acciones correctivas.* Cuando las métricas indiquen desviaciones importantes respecto a la planeación inicial, el equipo aplicará acciones
 correctivas:

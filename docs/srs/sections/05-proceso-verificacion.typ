@@ -202,6 +202,23 @@ prueba está asociado a uno o más requerimientos y especifica el método de ver
     [CP-044], [RF-044, RF-034], [T, D], [Integración con SUMO real: comparación sobre un cruce de varios nodos, ego inyectado en modo manual y cambio
     de giro; capturas del visor con Chrome sin interfaz.], [Un solo tlLogic para todos los nodos del cruce; el ego acelera y frena igual en ambos
     lados; el giro pedido se aplica; la escena muestra calles, edificios, un poste por acceso y el HUD.],
+
+    [CP-045], [RF-046], [T, D], [`test_priorizacion.py` (textos, tipo de vías, brazos, colegios y salud) y recorrido del visor: elegir un cruce de la
+    lista, cambiar entre Street View, satélite y mapa.], [El porqué sale en frases ("1 colegio o jardín a menos de 200 m"); el anillo aparece sobre
+    el cruce y el mapa se centra; las tres vistas cargan.],
+
+    [CP-046], [RF-047], [D], [Script por WebSocket contra SUMO real: seis actores por los tres accesos de un cruce prioritario.], [Todos entran en el
+    mismo paso en los dos escenarios (0 s de diferencia).],
+
+    [CP-047], [RF-048], [T, D], [`test_telemetria.py` y un viaje completo a 10× en el visor.], [El resumen llega una vez por viaje, con las dos columnas
+    y el balance; el veredicto coincide con las cifras.],
+
+    [CP-048], [RF-024], [T, D], [`test_api.py::test_vias_de_la_red` y clic sobre una calle en la pestaña Cierres.], [Cada vía trae su sentido
+    contrario; no aparecen peatonales ni vías de servicio; el cierre se pinta en rojo y la lista muestra el nombre.],
+
+    [CP-049], [RF-030, RF-031], [T, D], [`test_comparacion_programas.py`, `test_api.py::test_comparacion_de_programas` y una comparación real en la
+    Avenida Calle 134 × Avenida Carrera 9.], [Webster da más verde al acceso más cargado y no toca los amarillos; la comparación real corre las dos
+    simulaciones y muestra la diferencia de tiempo perdido por vehículo.],
   ),
   caption: [Plan de casos de prueba para requerimientos funcionales.]
 ) <tabCasosPruebaFuncionales>
@@ -265,19 +282,52 @@ prueba está asociado a uno o más requerimientos y especifica el método de ver
 
 == Verificación Parcial de la Demanda Simulada
 
-Mientras no exista el módulo de validación GEH (RF-014), se verifica que la demanda simulada conserve la forma horaria de la encuesta. El script
-`simulation-service/validation/histograma_salidas.py` agrupa en intervalos de 10 minutos, entre las 7:00 y las 10:00, la hora de salida de los viajes
-y compara tres series (@figHistogramaSalidasSrs):
+La demanda simulada se verifica en dos niveles: su forma horaria frente a la encuesta (histograma de salidas) y su magnitud frente a los aforos
+(GEH, RF-014).
+
+*Forma horaria.* El script `simulation-service/validation/histograma_salidas.py` agrupa en intervalos de 10 minutos, entre las 7:00 y las 10:00, la
+hora de salida de los viajes y compara tres series (@figHistogramaSalidasSrs):
 - *Encuesta (expandida):* cada viaje pesa su factor de expansión `fexp_vj` ($n = 109.372$).
-- *Encuesta (insumo de SUMO):* cada viaje se replica `round(fexp_vj)` veces con tope `MAX_COPIAS`, que es lo que recibe el simulador ($n = 24.647$).
-- *Simulación SUMO:* `inicio_s` de cada viaje de `trips.geojson.gz` de la corrida `encuesta` ($n = 15.900$).
+- *Encuesta repartida (insumo de SUMO):* cada viaje se replica `round(fexp_vj)` veces con tope `MAX_COPIAS` y las copias se reparten alrededor de la
+  hora reportada (`trips.salidas_dispersas`: ±30 min si la respuesta es en punto, ±15 en las medias horas, ±5 en el resto), que es exactamente lo que
+  recibe el simulador ($n = 24.647$).
+- *Simulación SUMO:* `inicio_s` de cada viaje de `trips.geojson.gz` de la corrida `encuesta`, sin los buses del GTFS, que siguen su horario
+  ($n = 16.408$).
 
 #figure(image("/figures/histograma_salidas.png", width: 100%), caption: [Hora de salida de los viajes entre 7:00 y 10:00: encuesta expandida,
-encuesta como insumo de SUMO y simulación. Arriba, conteos en escala logarítmica; abajo, porcentaje de cada serie.]) <figHistogramaSalidasSrs>
+encuesta repartida como insumo de SUMO y simulación. Arriba, conteos en escala logarítmica; en el centro, porcentaje por intervalo; abajo, porcentaje
+por hora.]) <figHistogramaSalidasSrs>
 
-Los totales difieren por el tope de copias y por el filtrado del exportador a kepler, así que el panel inferior normaliza cada serie a porcentaje. Las
-tres curvas coinciden en los picos de las horas en punto y en el de las 9:30 (la mayor diferencia: 7,5 % simulado frente a 10,7 % en la encuesta
-expandida). Esto valida la forma temporal de la demanda, no su magnitud, y no sustituye el criterio GEH de los criterios de aceptación.
+Los totales difieren por el tope de copias y porque el exportador a kepler descarta las entidades que casi no se mueven, así que los dos paneles de
+porcentaje normalizan cada serie. La simulación reproduce su insumo: la mayor diferencia por intervalo es de 0,9 puntos porcentuales y por hora quedan en
+45 %, 29 % y 26 % frente a 43 %, 30 % y 26 % del insumo. Los picos de la encuesta expandida en las horas en punto (21 %, 19 % y 17 % de los viajes a las 7:00, 8:00 y 9:00)
+son el redondeo con que los encuestados reportan la hora; si todas esas copias salieran en el mismo segundo llegarían a la red en ráfagas, por eso se
+reparten. El reparto tiene un costo que se declara: corre la demanda hacia la primera hora (45 % de los viajes simulados entre 7:00 y 8:00 frente a
+34 % en la encuesta), porque las respuestas de las 7:00 se reflejan dentro de la ventana y las de las 10:00, que repartidas caerían entre 9:30 y
+10:00, quedan fuera de ella.
+
+*Magnitud (GEH).* Cada corrida cuenta los vehículos por modo en los 33 puntos de aforo HMD de la red y compara su hora pico con la aforada
+(`output/validacion.json` y `.csv`). Las estaciones se dividen de forma fija en un grupo de calibración (18 puntos) y uno de control (15).
+@tabGEHSrs resume lo medido en la mañana.
+
+#figure(
+  table(
+    columns: (1fr, auto, auto),
+    table.header([*Demanda (mañana)*], [*Simulado / aforado*], [*GEH < 5*]),
+    [Viajes internos de la encuesta (tope de 50 copias)], [6 %], [0 de 33],
+    [+ tráfico de paso calibrado con routeSampler], [27 %], [2 de 33],
+    [Encuesta completa (entran, salen y sin tope), mesoscópico], [22 %], [2 de 33],
+    [Encuesta completa con rutas de duaIterate], [22 %], [2 de 33],
+    [Encuesta completa sin control de cruces (diagnóstico)], [33 %], [2 de 33],
+  ),
+  caption: [GEH de la simulación frente a los aforos HMD con distintas demandas.],
+) <tabGEHSrs>
+
+Ninguna demanda alcanza el criterio de GEH < 5 en el 85 % de los puntos. Con la encuesta completa la demanda ya es del orden de los aforos, pero la red
+construida desde OpenStreetMap no la mueve: menos de la mitad de los vehículos alcanza a entrar y a las 10:00 quedan más de 20.000 dentro. El límite
+es la capacidad de la red (carriles, conexiones y programas semafóricos estimados por netconvert), no la encuesta. En conjunto, la simulación
+conserva la forma temporal de la demanda pero no reproduce la magnitud de los volúmenes aforados; por eso sus resultados se usan para comparar
+alternativas con la misma demanda y no como pronóstico de volúmenes.
 
 == Criterios de Aceptación del Sistema
 

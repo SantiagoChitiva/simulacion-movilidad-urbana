@@ -9,13 +9,14 @@ de una corrida, así que dependen del escenario simulado.
 Los programas son los que generó netconvert a partir de OSM, no los reales.
 """
 import json
+import math
 import xml.etree.ElementTree as ET
 from collections import Counter, defaultdict
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any
 
-from .configuration import HORA_FIN, HORA_INI
+from .configuration import HORA_FIN, HORA_INI, SEMAFOROS_SDM_GEOJSON
 
 HORAS_VENTANA = (HORA_FIN - HORA_INI) / 3600
 
@@ -96,6 +97,8 @@ class Semaforo:
     movimientos: int
     nombre: str = ""
     enlaces: list[dict[str, Any]] = field(default_factory=list)   # linkIndex -> acceso y giro
+    # semáforo real de la SDM en el mismo cruce (fases, grupos, operación; sin tiempos)
+    sdm: dict[str, Any] | None = None
 
 
 # ------------------------------------------------------------------ lectura
@@ -251,10 +254,33 @@ def _firma(path: Path) -> list[float]:
     return [st.st_mtime, st.st_size]
 
 
-def catalogo(net_path: Path, cache_path: Path, nombres_path: Path | None = None) -> list[Semaforo]:
-    """leer_semaforos con caché en disco (se invalida si cambia la red o los nombres)."""
+RADIO_SDM_M = 60   # el programa de la red y el semáforo real de la SDM son el mismo cruce
+
+
+def asociar_sdm(semaforos: list[Semaforo], sdm_path: Path) -> int:
+    """Pone en `sdm` el semáforo real más cercano (a menos de RADIO_SDM_M); devuelve cuántos."""
+    from .evidencia import leer_puntos
+
+    reales = leer_puntos(sdm_path)
+    asociados = 0
+    for s in semaforos:
+        coslat = math.cos(math.radians(s.lat))
+        mejor = min(
+            ((math.hypot((lon - s.lon) * 111_320 * coslat, (lat - s.lat) * 110_540), props) for lon, lat, props in reales),
+            default=None, key=lambda par: par[0],
+        )
+        if mejor is not None and mejor[0] <= RADIO_SDM_M:
+            s.sdm = {**mejor[1], "distancia_m": round(mejor[0])}
+            asociados += 1
+    return asociados
+
+
+def catalogo(net_path: Path, cache_path: Path, nombres_path: Path | None = None,
+             sdm_path: Path = SEMAFOROS_SDM_GEOJSON) -> list[Semaforo]:
+    """leer_semaforos con caché en disco (se invalida si cambia la red, los nombres o la capa de la SDM)."""
     hay_nombres = nombres_path is not None and nombres_path.is_file()
     firma = _firma(net_path) + (_firma(nombres_path) if hay_nombres else [])
+    firma += _firma(sdm_path) if sdm_path.is_file() else []
     if cache_path.is_file():
         try:
             datos = json.loads(cache_path.read_text(encoding="utf-8"))
@@ -264,6 +290,8 @@ def catalogo(net_path: Path, cache_path: Path, nombres_path: Path | None = None)
             pass
     nombres = json.loads(nombres_path.read_text(encoding="utf-8")) if hay_nombres else None
     semaforos = leer_semaforos(net_path, nombres)
+    if sdm_path.is_file():
+        asociar_sdm(semaforos, sdm_path)
     cache_path.parent.mkdir(parents=True, exist_ok=True)
     cache_path.write_text(
         json.dumps({"firma": firma, "semaforos": [asdict(s) for s in semaforos]}, ensure_ascii=False),

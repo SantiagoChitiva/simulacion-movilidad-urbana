@@ -2,7 +2,7 @@
 
 Simulación microscópica de movilidad urbana para las localidades de Bogotá, desarrollada como proyecto de grado en Ingeniería de Sistemas de la Pontificia Universidad Javeriana.
 
-El proyecto toma los viajes de la **Encuesta de Movilidad de Bogotá 2023** dentro de Usaquén y los convierte, con un pipeline ETL, en la demanda de una simulación en **SUMO (Simulation of Urban MObility)**. Un visor web (kepler.gl) anima el resultado y deja parametrizar nuevas simulaciones: cuántos actores viales de cada tipo y qué escenario. Los aforos vehiculares HMD se exploran en los notebooks, pero todavía no alimentan la simulación.
+El proyecto toma los viajes de la **Encuesta de Movilidad de Bogotá 2023** dentro de Usaquén y los convierte, con un pipeline ETL, en la demanda de una simulación en **SUMO (Simulation of Urban MObility)**. Un visor web (kepler.gl) anima el resultado y deja parametrizar nuevas simulaciones: cuántos actores viales de cada tipo y qué escenario. Los aforos vehiculares HMD de la EODI sirven para validar los volúmenes simulados con el GEH (ver "Validación con aforos").
 
 ## Equipo
 
@@ -41,19 +41,37 @@ La simulación cubre la ventana **07:00–10:00** sobre la red de Usaquén **con
 | Informal / Otro | vehículo `informal` / `otro` | vClass `passenger` |
 | Bicicleta | vehículo `bici` | vClass `bicycle`, usa los carriles que la red permite a bicicletas |
 | A pie (< 15 min y > 15 min) | persona `peaton` | `<person><walk>` con el modelo peatonal *striping* |
-| Transporte público | persona `transporte_publico` | **`<person><walk>`: hoy se simula como caminata** (ver abajo) |
+| Transporte público | persona `transporte_publico` | `<personTrip modes="public">`: camina a una parada, toma un bus del SITP (GTFS) y camina a su destino (ver abajo) |
 
 Con la demanda de la encuesta, SUMO carga 10.324 vehículos (bicis incluidas) e inserta 9.557. Las 14.123 personas se insertan todas.
 
-### Limitación: el transporte público se simula como caminata
+### Transporte público: buses del SITP desde el GTFS
 
-Los viajes en transporte público van de su origen a su destino **caminando**: no hay buses, paraderos ni rutas del SITP/TransMilenio en la red. El vType `bus_pt` está definido, pero ningún vehículo lo usa. Por eso, los tiempos y trayectos de ese modo **no representan un viaje en bus**. Solo dicen que esa persona se desplazó entre esas zonas.
+Los buses salen del GTFS de SIMUR (`GTFS-2026-04-29.zip`, catálogo de Mobility Database), que se descarga a `data/raw/gtfs/` y se convierte una vez con `python -m etl.sumo.transporte_publico data/raw/gtfs/GTFS-2026-04-29.zip`:
 
-No se puede arreglar con lo que hay en el repositorio: el OSM local (`data/processed/usaquen.osm.xml`, exportado con OSMnx) no trae relaciones de rutas y tiene apenas 5 paraderos. El plan para corregirlo:
+1. Se reduce a los viajes de un día hábil con al menos dos paradas en Usaquén, sin TransMilenio troncal ni TransMiCable (van por carriles exclusivos y los aforos de transporte público tampoco los cuentan).
+2. Cada parada se ubica en el carril con buses más cercano, y duarouter rutea cada viaje pasando por sus paradas. `gtfs2pt.py` de SUMO hace lo mismo con map matching, pero con esta red tardó más de tres horas sin terminar (queda como opción, `--gtfs2pt`).
+3. Quedan versionados `pt_paradas.add.xml` (696 paradas) y `pt_vehiculos.rou.xml.gz` (7.382 buses de 9.234 viajes del día; los demás cruzan tramos sin conexión para buses en la red).
 
-1. Obtener el GTFS de TransMilenio/SITP.
-2. Importarlo con `gtfs2pt.py` de SUMO. Así se generan los paraderos (`busStop`) sobre la red y los buses con sus horarios.
-3. Cambiar los viajes `transporte_publico` a `<personTrip modes="public">` para que SUMO combine caminata y bus.
+Los viajes `transporte_publico` de la encuesta pasan a `<personTrip modes="public">`. En la corrida de la mañana, 3.967 de 4.556 se hacen en bus, con unos 10 minutos de espera media en la parada. Sigue siendo una aproximación: los buses arrancan en el borde de Usaquén y no hay TransMilenio troncal.
+
+### Validación con aforos (GEH)
+
+Cada corrida cuenta los vehículos por modo en los 33 puntos de aforo HMD que caen en la red (`data/processed/aforos_usaquen.json`, de `python -m etl.sumo.aforos`) y escribe `output/validacion.csv` y `validacion.json`. Ahí se compara la hora pico simulada con la aforada; el criterio es GEH < 5 en el 85 % de los puntos. Las estaciones se dividen en dos grupos fijos, calibración y control, para que el tráfico de paso (que se ajusta a las primeras) no se valide contra sí mismo.
+
+Resultados medidos en la mañana:
+
+| Demanda | Vehículos que entran a la red | Volumen simulado / aforado | Puntos con GEH < 5 |
+| --- | --- | --- | --- |
+| Solo viajes internos de la encuesta (tope de 50 copias) | 9.592 | 6 % | 0 de 33 |
+| + tráfico de paso calibrado (`trafico_paso.py`) | — | 27 % | 2 de 33 |
+| Encuesta completa (`encuesta_completa.py`), mesoscópico | 54.984 de 145.014 | 22 % | 2 de 33 |
+| Encuesta completa con rutas de duaIterate (2 iteraciones) | 54.944 de 145.014 | 22 % | 2 de 33 |
+| Encuesta completa sin control de cruces (diagnóstico) | 66.678 de 145.014 | 33 % | 2 de 33 |
+
+La **encuesta completa** (`python -m etl.sumo.encuesta_completa "<carpeta 2.PublicacionSIMUR>"`) agrega lo que la demanda interna deja por fuera: los vehículos que entran o salen de Usaquén (unos 61.500 autos en la mañana frente a 21.800 internos) y las copias que quita el tope (la mediana del factor de expansión es 123). Con eso la demanda ya alcanza el orden de magnitud de los aforos, pero la red no la mueve. La mayoría de los vehículos no alcanza a entrar en 15 minutos, y a las 10:00 quedan más de 20.000 atrapados adentro. Repartir las rutas con duaIterate no cambia el resultado y quitar el control de los cruces solo sube el volumen al 33 %. El cuello de botella es la capacidad de la red en su conjunto, no la demanda ni la elección de rutas. A eso se suma que algunos aforos, como el de la Autopista Norte con Calle 116, cubren la calzada principal y las laterales, mientras que en la red quedan en edges separados.
+
+Lo que falta para cumplir el criterio es calibrar la red, no generar más demanda: revisar carriles y conexiones de las avenidas, cargar los planes reales de los semáforos (la SDM publica dónde están y cuántas fases tienen, no sus tiempos) y sumar los aforos de calzadas paralelas.
 
 ### Otros límites conocidos
 

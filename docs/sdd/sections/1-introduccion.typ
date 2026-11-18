@@ -37,7 +37,7 @@ El resto del repositorio (`notebooks/`, `data/`) es un espacio de exploración d
 
 *Dentro del alcance.* El sistema:
 
-- Transforma los viajes de la Encuesta de Movilidad de Bogotá 2023 @encuesta (filtrados a los internos de Usaquén, ventana 07:00--10:00) en demanda multimodal para SUMO @sumo, replicando cada viaje según su factor de expansión.
+- Transforma los viajes de la Encuesta de Movilidad de Bogotá 2023 @encuesta (filtrados a los internos de Usaquén, ventanas 07:00--10:00 y 16:00--19:00) en demanda multimodal para SUMO @sumo, replicando cada viaje según su factor de expansión.
 - Permite parametrizar la demanda (presets de cambio modal, conteos por modo, semilla, estilo de conducción y cierres viales) y ejecutar la simulación como trabajos en segundo plano con avance y cancelación.
 - Sirve resultados precalculados de los presets para consulta inmediata y visualiza los viajes animados sobre un mapa.
 - Cataloga las intersecciones semaforizadas de la red, muestra sus accesos, volúmenes y programas, y calcula un programa de Webster @webster.
@@ -45,9 +45,11 @@ El resto del repositorio (`notebooks/`, `data/`) es un espacio de exploración d
 
 *Fuera del alcance.*
 
-- *Transporte público real*: no hay buses, paradas ni GTFS; esos viajes se simulan como caminata (`<person><walk>`).
-- *Calibración y validación estadística* del modelo frente a aforos reales.
-- *Programas semafóricos reales*: los programas son los que genera `netconvert` desde OpenStreetMap, no los de la Secretaría Distrital de Movilidad.
+- *TransMiCable*: los buses del SITP y de TransMilenio troncal sí se simulan desde el GTFS (`transporte_publico.py`), pero el cable no.
+- *Calibración* del modelo frente a aforos reales: el GEH se calcula en cada corrida (`validacion.py`), pero ajustar la capacidad de la red hasta
+  cumplirlo queda fuera.
+- *Programas semafóricos reales*: los programas son los que genera `netconvert` desde OpenStreetMap. De la Secretaría Distrital de Movilidad se
+  usan la ubicación y las fases de sus semáforos, que no publica los tiempos.
 - *Autenticación, multiusuario y despliegue en la nube*: es una herramienta local de investigación.
 - Otras localidades distintas de Usaquén (el diseño es parametrizable por escenario, pero solo existe el escenario `default`).
 

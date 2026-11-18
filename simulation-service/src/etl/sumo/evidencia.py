@@ -8,10 +8,15 @@ Se descarga una sola vez y se versiona en data/processed/ (son archivos pequeño
   en datosabiertos.bogota.gov.co), filtrados a la localidad de Usaquén.
 - pois_usaquen.geojson: generadores de viajes peatonales sensibles (colegios, jardines,
   universidades, hospitales y clínicas) de OpenStreetMap vía Overpass.
+- semaforos_sdm_usaquen.geojson: intersecciones semaforizadas reales de la SDM (capa
+  INTER_SEM_POWERBI del mismo servidor ArcGIS) con su número de fases, grupos de señales,
+  modo de operación y fecha del plan vigente. La SDM no publica los tiempos (los campos
+  URL_PLANEAMIENTO y URL_ESQUEMA están vacíos en las 1.643 intersecciones de Bogotá): hay
+  que pedirlos con un derecho de petición.
 - edificios_osm.geojson: huellas de edificios de OpenStreetMap (con altura o pisos si los
   tienen) para la escena 3D; complementan las de Microsoft, que en Usaquén son incompletas.
 
-Uso: python -m etl.sumo.evidencia [siniestros|pois|edificios ...]
+Uso: python -m etl.sumo.evidencia [siniestros|pois|edificios|semaforos ...]
 
 Si un archivo no existe, la priorización simplemente no usa esa evidencia.
 """
@@ -23,11 +28,22 @@ import urllib.request
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from .configuration import EDIFICIOS_OSM_GEOJSON, POIS_GEOJSON, SINIESTROS_GEOJSON
+from .configuration import EDIFICIOS_OSM_GEOJSON, POIS_GEOJSON, SEMAFOROS_SDM_GEOJSON, SINIESTROS_GEOJSON
 
 URL_SINIESTROS = (
     "https://services2.arcgis.com/NEwhEo9GGSHXcRXV/arcgis/rest/services/HistoricoSiniestros/FeatureServer/0/query"
 )
+URL_SEMAFOROS = (
+    "https://services2.arcgis.com/NEwhEo9GGSHXcRXV/arcgis/rest/services/INTER_SEM_POWERBI/FeatureServer/0/query"
+)
+# campo de la capa -> propiedad del GeoJSON
+CAMPOS_SEMAFORO = {
+    "EXTERNO": "codigo", "DIRECCION": "direccion", "NÚMERO_FASES": "fases", "TOTAL_GRUPO_SEÑALES": "grupos",
+    "GRUPOS_VEHICULARES": "grupos_vehiculares", "GRUPOS_PEATONALES": "grupos_peatonales",
+    "GRUPOS_CICLISTAS": "grupos_ciclistas", "FUNCIONAMIENTO": "funcionamiento", "TIPO_INTERSECCIÓN": "tipo",
+    "OPERACIÓN_ACTUAL": "operacion", "FECHA_VIGENCIA_PLANEAMIENTO": "plan_vigente_desde",
+    "FUNCIÓN_DETECTORES": "detectores", "CON_CAMARA": "camara", "LOCALIDAD": "localidad",
+}
 URL_OVERPASS = "https://overpass-api.de/api/interpreter"
 # espejos de Overpass por si el principal está saturado
 URLS_OVERPASS = (URL_OVERPASS, "https://maps.mail.ru/osm/tools/overpass/api/interpreter")
@@ -47,6 +63,7 @@ class EvidenciaConfig:
     siniestros: Path = SINIESTROS_GEOJSON
     pois: Path = POIS_GEOJSON
     edificios: Path = EDIFICIOS_OSM_GEOJSON
+    semaforos: Path = SEMAFOROS_SDM_GEOJSON
     localidad: str = "USAQUEN"
     pagina: int = 2000          # maxRecordCount del servicio
     timeout_s: int = 120
@@ -57,6 +74,7 @@ class EvidenciaStats:
     siniestros: int = 0
     pois: int = 0
     edificios: int = 0
+    semaforos: int = 0
     paginas: int = 0
     pois_por_tipo: dict[str, int] = field(default_factory=dict)
 
@@ -202,6 +220,41 @@ def descargar_edificios(cfg: EvidenciaConfig = EvidenciaConfig(), stats: Evidenc
     return cfg.edificios
 
 
+def _fecha(ms) -> str | None:
+    import datetime as dt
+    if not ms:
+        return None
+    return dt.datetime.fromtimestamp(ms / 1000, tz=dt.timezone.utc).date().isoformat()
+
+
+def descargar_semaforos(cfg: EvidenciaConfig = EvidenciaConfig(), stats: EvidenciaStats | None = None) -> Path:
+    """Intersecciones semaforizadas reales de la localidad (sin tiempos: la SDM no los publica)."""
+    stats = stats if stats is not None else EvidenciaStats()
+    s, w, n, e = BBOX_USAQUEN
+    # por la caja de la red y no por localidad: los semáforos del borde (Calle 100, Suba) también están en ella
+    params = {
+        "where": "1=1", "geometry": f"{w},{s},{e},{n}", "geometryType": "esriGeometryEnvelope", "inSR": "4326",
+        "spatialRel": "esriSpatialRelIntersects", "outFields": ",".join(CAMPOS_SEMAFORO),
+        "outSR": "4326", "orderByFields": "OBJECTID", "resultRecordCount": str(cfg.pagina), "f": "geojson",
+    }
+    datos = _leer_json(f"{URL_SEMAFOROS}?{urllib.parse.urlencode(params)}", None, cfg.timeout_s)
+    if "error" in datos:
+        raise EvidenciaError(f"El servicio de semáforos respondió con error: {datos['error']}")
+    features = []
+    for f in datos.get("features", []):
+        geom = f.get("geometry") or {}
+        if geom.get("type") != "Point":
+            continue
+        props = {CAMPOS_SEMAFORO[k]: v for k, v in (f.get("properties") or {}).items() if k in CAMPOS_SEMAFORO}
+        props["plan_vigente_desde"] = _fecha(props.get("plan_vigente_desde"))
+        lon, lat = geom["coordinates"][:2]
+        features.append({"type": "Feature", "properties": props,
+                         "geometry": {"type": "Point", "coordinates": [round(lon, 6), round(lat, 6)]}})
+    stats.semaforos = len(features)
+    _escribir(cfg.semaforos, features, "SDM Bogotá - Intersecciones semafóricas (INTER_SEM_POWERBI, ArcGIS)")
+    return cfg.semaforos
+
+
 def leer_puntos(path: Path) -> list[tuple[float, float, dict]]:
     """(lon, lat, propiedades) de un GeoJSON de puntos; vacío si el archivo no existe."""
     if not path.is_file():
@@ -216,9 +269,9 @@ def leer_puntos(path: Path) -> list[tuple[float, float, dict]]:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Descarga la evidencia para priorizar cruces.")
-    parser.add_argument("fuentes", nargs="*", choices=["siniestros", "pois", "edificios"])
+    parser.add_argument("fuentes", nargs="*", choices=["siniestros", "pois", "edificios", "semaforos"])
     args = parser.parse_args()
-    args.fuentes = args.fuentes or ["siniestros", "pois", "edificios"]
+    args.fuentes = args.fuentes or ["siniestros", "pois", "edificios", "semaforos"]
     stats = EvidenciaStats()
     if "siniestros" in args.fuentes:
         print(f"siniestros -> {descargar_siniestros(stats=stats)} ({stats.siniestros})")
@@ -226,6 +279,8 @@ def main() -> None:
         print(f"pois -> {descargar_pois(stats=stats)} ({stats.pois}: {stats.pois_por_tipo})")
     if "edificios" in args.fuentes:
         print(f"edificios -> {descargar_edificios(stats=stats)} ({stats.edificios})")
+    if "semaforos" in args.fuentes:
+        print(f"semaforos -> {descargar_semaforos(stats=stats)} ({stats.semaforos})")
 
 
 if __name__ == "__main__":

@@ -286,7 +286,7 @@ con $s$ el rango percentil de siniestros, $v$ el de volumen, $g = min(g_"n" / 3,
 
 $ C_0 = (1,5 L + 5) / (1 - Y), quad L = n_"fases" dot 3 "s", quad Y = sum_i max_j (q_j / s) $
 
-con flujo de saturación $s$ = 1.800 veh/h por carril. Los verdes se reparten en proporción a $y_i / Y$ (mínimo 5 s) y el ciclo mínimo es 30 s; si $Y >= 1$ la intersección está sobresaturada y se devuelve un error. *Limitación conocida:* los accesos se asignan a las fases de forma circular (no según los movimientos compatibles reales), y si no hay volumen simulado se usa un valor de demostración de 300 veh/h. La API lo advierte en la respuesta (`nota`).
+con flujo de saturación $s$ = 1.800 veh/h por carril. Los verdes se reparten en proporción a $y_i / Y$ (mínimo 5 s) y el ciclo mínimo es 30 s; si $Y >= 1$ la intersección está sobresaturada y se devuelve un error. *Limitación conocida:* la función `webster` asigna los accesos a las fases de forma circular. Por eso la API usa `programa_webster`, que cuenta cada acceso en las fases en que de verdad tiene verde, conserva la duración de amarillos y todo rojo como tiempo perdido (más 2 s de arranque por fase verde) y responde 409 si la corrida no tiene volúmenes por acceso.
 
 ==== Variante con semáforo propuesto <sec-alg-semaforo-nuevo>
 

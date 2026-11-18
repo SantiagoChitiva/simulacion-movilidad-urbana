@@ -42,11 +42,11 @@ from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any
 
-from .configuration import POIS_GEOJSON, SINIESTROS_GEOJSON
+from .configuration import POIS_GEOJSON, SEMAFOROS_SDM_GEOJSON, SINIESTROS_GEOJSON
 from .evidencia import leer_puntos
 from .intersecciones import _transformador, _via_osm
 
-VERSION_ANALISIS = 2
+VERSION_ANALISIS = 4
 
 # Jerarquía (mayor a menor), como CLASS_RANK de Barranquilla, más 'service'
 JERARQUIA = ["motorway", "trunk", "primary", "secondary", "tertiary", "unclassified",
@@ -62,6 +62,7 @@ SPAN_CRUCE_M = 200
 ANGULO_CRUCE_GRADOS = 35
 RADIO_DESNIVEL_M = 40
 RADIO_MISMA_CUADRA_M = 80
+RADIO_SEMAFORO_SDM_M = 40   # un semáforo real de la SDM a menos de esto: el cruce ya está semaforizado
 RADIO_SINIESTRO_M = 30
 RADIO_GENERADOR_M = 200
 TRAMO_LARGO_M = 600
@@ -70,9 +71,22 @@ RADIO_NMS_M = 120
 MIN_SINIESTROS = 3
 
 PISO = {"prioritario": 75.0, "recomendado": 50.0, "observacion": 25.0}
+MEDIDA = {
+    "prioritario": "Dos o más indicadores coinciden",
+    "recomendado": "Un indicador fuerte",
+    "observacion": "Sin indicadores fuertes: hacer seguimiento",
+}
 _BAJA = {"prioritario": "recomendado", "recomendado": "observacion", "observacion": None}
 _TIPOS_SEMAFORO = {"traffic_light", "traffic_light_unregulated", "traffic_light_right_on_red"}
 _PEATONES = {"peaton", "transporte_publico"}
+_TIPOS_SALUD = {"hospital", "clinic"}
+
+# nombres para mostrar a quien no conoce la clasificación de OSM
+CLASE_LEGIBLE = {
+    "motorway": "Autopista", "trunk": "Troncal", "primary": "Primaria", "secondary": "Secundaria",
+    "tertiary": "Colectora", "unclassified": "Local", "residential": "Residencial",
+    "living_street": "Calle compartida", "service": "De servicio",
+}
 
 
 def clase_base(tipo: str | None) -> tuple[str | None, bool]:
@@ -273,6 +287,23 @@ def _rumbo_pata(e: _Edge, conjunto: set[str]) -> float:
     return e.rumbo_llegada if e.hasta in conjunto else e.rumbo_salida
 
 
+def _brazos(cruce: _Cruce) -> int:
+    """Brazos del cruce (3 = en T, 4 = en cruz): patas agrupadas por rumbo, a 45° o menos."""
+    conjunto = set(cruce.nodos)
+    rumbos = sorted(_rumbo_pata(e, conjunto) for e in cruce.patas)
+    if not rumbos:
+        return 0
+    grupos = [[rumbos[0]]]
+    for r in rumbos[1:]:
+        if r - grupos[-1][-1] <= 45:
+            grupos[-1].append(r)
+        else:
+            grupos.append([r])
+    if len(grupos) > 1 and grupos[0][0] + 360 - grupos[-1][-1] <= 45:
+        grupos[0].extend(grupos.pop())
+    return len(grupos)
+
+
 def _calles(cruce: _Cruce) -> tuple[str | None, str | None]:
     """(principal, secundaria): la de mayor jerarquía y la mejor que la corta a > 35°."""
     conjunto = set(cruce.nodos)
@@ -412,8 +443,13 @@ def analizar_red(
     nombres: dict[str, str] | None = None,
     siniestros_path: Path = SINIESTROS_GEOJSON,
     pois_path: Path = POIS_GEOJSON,
+    semaforos_sdm_path: Path = SEMAFOROS_SDM_GEOJSON,
 ) -> dict[str, Any]:
-    """Cruces candidatos que cumplen R, con su evidencia fija (no depende de la corrida)."""
+    """Cruces candidatos que cumplen R, con su evidencia fija (no depende de la corrida).
+
+    Los semáforos reales de la SDM (evidencia.descargar_semaforos) completan los de la red:
+    OSM no tiene todos los semáforos de Bogotá.
+    """
     nombres = nombres or {}
     red = _leer_red(net_path, nombres)
     edges, nodos = red["edges"], red["nodos"]
@@ -459,6 +495,11 @@ def analizar_red(
             semaforos.agregar(x, y, n)
         if n in red["glorietas"] or any(e.enlace for e in por_nodo.get(n, ())):
             desnivel.agregar(x, y, n)
+    sdm = _Grilla(RADIO_MISMA_CUADRA_M)
+    semaforos_sdm = leer_puntos(semaforos_sdm_path)
+    for lon, lat, props in semaforos_sdm:
+        x, y = a_xy(lon, lat)
+        sdm.agregar(x, y, props.get("direccion"))
     nodos_cruce = _Grilla(RADIO_SINIESTRO_M)
     for i, c in enumerate(cruces):
         for n in c.nodos:
@@ -467,11 +508,18 @@ def analizar_red(
     # siniestros: cada uno al cruce más cercano (a menos de 30 m), sin contar doble
     siniestros = leer_puntos(siniestros_path)
     por_cruce: Counter = Counter()
-    for lon, lat, _ in siniestros:
+    heridos: Counter = Counter()
+    muertos: Counter = Counter()
+    anios = [props["anio"] for _, _, props in siniestros if isinstance(props.get("anio"), int)]
+    for lon, lat, props in siniestros:
         x, y = a_xy(lon, lat)
         cercanos = list(nodos_cruce.cerca(x, y, RADIO_SINIESTRO_M))
         if cercanos:
-            por_cruce[min(cercanos)[1]] += 1
+            i = min(cercanos)[1]
+            por_cruce[i] += 1
+            gravedad = str(props.get("gravedad", "")).upper()
+            heridos[i] += "HERIDOS" in gravedad
+            muertos[i] += "MUERTOS" in gravedad
     pois = _Grilla(RADIO_GENERADOR_M)
     for lon, lat, props in leer_puntos(pois_path):
         x, y = a_xy(lon, lat)
@@ -509,6 +557,15 @@ def analizar_red(
             (d for n in c.nodos for d, _ in semaforos.cerca(nodos[n][0], nodos[n][1], 1500)),
             default=None,
         )
+        d_sdm = min(
+            (d for n in c.nodos for d, _ in sdm.cerca(nodos[n][0], nodos[n][1], 1500)),
+            default=None,
+        )
+        if d_sdm is not None and d_sdm < RADIO_SEMAFORO_SDM_M:
+            descartes["ya tiene semáforo según la SDM (OSM no lo tiene)"] += 1
+            continue
+        if d_sdm is not None and (d_sem is None or d_sdm < d_sem):
+            d_sem = d_sdm
         if d_sem is not None and d_sem < RADIO_MISMA_CUADRA_M:
             descartes["semáforo a menos de 80 m"] += 1
             continue
@@ -530,8 +587,14 @@ def analizar_red(
             "clase_principal": JERARQUIA[rango_p],
             "clase_secundaria": JERARQUIA[rango_s],
             "entradas": c.entradas,
+            "brazos": _brazos(c),
+            "carriles_principal": max(e.carriles for e in c.patas if e.calle == c.principal),
             "siniestros": por_cruce[i],
+            "siniestros_heridos": heridos[i],
+            "siniestros_muertos": muertos[i],
             "generadores": len(generadores),
+            "colegios": sum(g.get("tipo") not in _TIPOS_SALUD for g in generadores),
+            "salud": sum(g.get("tipo") in _TIPOS_SALUD for g in generadores),
             "generadores_nombres": sorted({g.get("nombre") or g.get("tipo") for g in generadores})[:5],
             "tramo_m": round(_tramo_sin_semaforo(c, red, adyacencia)),
             "distancia_semaforo_m": round(d_sem) if d_sem is not None else None,
@@ -541,15 +604,18 @@ def analizar_red(
         "semaforizados": semaforizados,
         "descartes": dict(descartes),
         "hay_siniestros": bool(siniestros),
+        "anios_siniestros": [min(anios), max(anios)] if anios else None,
         "hay_pois": pois_path.is_file(),
+        "semaforos_sdm": len(semaforos_sdm),
         "nodos_viales": len(viales),
         "cruces": len(cruces),
     }
 
 
 def analisis_con_cache(net_path: Path, nombres_path: Path | None, cache_path: Path,
-                       siniestros_path: Path = SINIESTROS_GEOJSON, pois_path: Path = POIS_GEOJSON) -> dict:
-    rutas = [net_path, siniestros_path, pois_path] + ([nombres_path] if nombres_path else [])
+                       siniestros_path: Path = SINIESTROS_GEOJSON, pois_path: Path = POIS_GEOJSON,
+                       semaforos_sdm_path: Path = SEMAFOROS_SDM_GEOJSON) -> dict:
+    rutas = [net_path, siniestros_path, pois_path, semaforos_sdm_path] + ([nombres_path] if nombres_path else [])
     firma = [VERSION_ANALISIS, _firma(*rutas)]
     if cache_path.is_file():
         try:
@@ -559,7 +625,7 @@ def analisis_con_cache(net_path: Path, nombres_path: Path | None, cache_path: Pa
         except (ValueError, KeyError, TypeError):
             pass
     nombres = json.loads(nombres_path.read_text(encoding="utf-8")) if nombres_path and nombres_path.is_file() else {}
-    analisis = analizar_red(net_path, nombres, siniestros_path, pois_path)
+    analisis = analizar_red(net_path, nombres, siniestros_path, pois_path, semaforos_sdm_path)
     cache_path.parent.mkdir(parents=True, exist_ok=True)
     cache_path.write_text(json.dumps({"firma": firma, "analisis": analisis}, ensure_ascii=False), encoding="utf-8")
     return analisis
@@ -583,6 +649,56 @@ class PuntajeCruce:
     generadores: int = 0
     tramo_m: float = 0.0
     volumen: int | None = None
+    contexto: list[str] = field(default_factory=list)   # datos del cruce que no puntúan
+    medida: str = ""
+    clase_principal: str | None = None
+    clase_secundaria: str | None = None
+    tipo_vias: str = ""         # "Primaria × Residencial"
+    brazos: int = 0
+    carriles_principal: int = 0
+    siniestros_heridos: int = 0
+    siniestros_muertos: int = 0
+    colegios: int = 0
+    salud: int = 0
+    generadores_nombres: list[str] = field(default_factory=list)
+
+
+def _plural(n: int, singular: str, plural: str) -> str:
+    return f"{n} {singular if n == 1 else plural}"
+
+
+def _texto_generadores(colegios: int, salud: int) -> str:
+    partes = []
+    if colegios:
+        partes.append(_plural(colegios, "colegio o jardín", "colegios o jardines"))
+    if salud:
+        partes.append(_plural(salud, "centro de salud", "centros de salud"))
+    return " y ".join(partes)
+
+
+def _contexto(c: dict) -> list[str]:
+    """Frases sobre el cruce en sí (tipo de vías, accesos, carriles, semáforo más cercano)."""
+    frases = []
+    calles = c.get("calles") or []
+    cp, cs = c.get("clase_principal"), c.get("clase_secundaria")
+    if cp and cs:
+        nombre_p = f" ({calles[0]})" if calles else ""
+        nombre_s = f" ({calles[1]})" if len(calles) > 1 else ""
+        frases.append(f"Vía {CLASE_LEGIBLE.get(cp, cp).lower()}{nombre_p} que cruza una vía "
+                      f"{CLASE_LEGIBLE.get(cs, cs).lower()}{nombre_s}")
+    if c.get("distancia_semaforo_m") is not None:
+        frases.append(f"El semáforo más cercano está a {c['distancia_semaforo_m']} m")
+    carriles = c.get("carriles_principal", 0)
+    if carriles >= 2:
+        frases.append(f"La vía principal tiene {carriles} carriles por sentido")
+    brazos = c.get("brazos", 0)
+    if brazos == 3:
+        frases.append("Intersección en T (3 accesos)")
+    elif brazos == 4:
+        frases.append("Intersección en cruz (4 accesos)")
+    elif brazos > 4:
+        frases.append(f"Intersección de {brazos} accesos")
+    return frases
 
 
 def _volumen(entradas: list[str], vols: dict[str, Counter]) -> int:
@@ -602,6 +718,7 @@ def puntuar(analisis: dict, volumenes_run_id: dict[str, Counter] | None = None) 
     umbrales = {
         "siniestros_p50": p50_sin, "siniestros_p75": p75_sin, "volumen_p75": p75_vol,
         "tramo_m": TRAMO_LARGO_M, "semaforizados": len(ref_sin),
+        "anios_siniestros": analisis.get("anios_siniestros"),
     }
 
     resultados = []
@@ -609,20 +726,31 @@ def puntuar(analisis: dict, volumenes_run_id: dict[str, Counter] | None = None) 
         sin, gen, tramo = c["siniestros"], c["generadores"], c["tramo_m"]
         vol = _volumen(c["entradas"], volumenes_run_id) if volumenes_run_id else None
         evidencias, fuertes = [], 0
+        via = c["calles"][0] if c["calles"] else "la vía principal"
         if analisis["hay_siniestros"] and sin >= MIN_SINIESTROS and (sin >= p75_sin or (sin >= p50_sin and gen)):
             fuertes += 1
-            evidencias.append(f"{sin} siniestros a menos de {RADIO_SINIESTRO_M} m (p75 semaforizados: {p75_sin:.0f})")
+            anios = analisis.get("anios_siniestros")
+            periodo = f" entre {anios[0]} y {anios[1]}" if anios else ""
+            graves = c.get("siniestros_heridos", 0) + c.get("siniestros_muertos", 0)
+            con_heridos = f", {graves} con heridos o muertos" if graves else ""
+            comparacion = ("más que 3 de cada 4 cruces que ya tienen semáforo" if sin >= p75_sin
+                           else "más que la mitad de los cruces con semáforo, y hay colegios o salud cerca")
+            evidencias.append(f"{sin} siniestros registrados{periodo} a menos de {RADIO_SINIESTRO_M} m"
+                              f"{con_heridos} ({comparacion})")
         if tramo >= TRAMO_LARGO_M:
             fuertes += 1
             evidencias.append(
-                f"más de {TRAMO_TOPE_M / 1000:.0f} km sin semáforo en ambos sentidos de la vía principal"
-                if tramo >= 2 * TRAMO_TOPE_M else f"tramo de {tramo:.0f} m sin semáforo sobre la vía principal"
+                f"Más de {TRAMO_TOPE_M / 1000:.0f} km sin semáforo sobre {via}, en ambos sentidos"
+                if tramo >= 2 * TRAMO_TOPE_M else f"{via} lleva {tramo:.0f} m sin un semáforo"
             )
         if vol is not None and p75_vol and vol >= p75_vol:
             fuertes += 1
-            evidencias.append(f"{vol} vehículos simulados entran al cruce (p75 semaforizados: {p75_vol:.0f})")
+            evidencias.append(f"En la simulación entran {vol} vehículos entre 7:00 y 10:00, más que en "
+                              f"3 de cada 4 cruces con semáforo")
         if gen:
-            evidencias.append(f"{gen} colegio(s) o centro(s) de salud a menos de {RADIO_GENERADOR_M} m")
+            texto = _texto_generadores(c.get("colegios", 0), c.get("salud", 0)) or _plural(
+                gen, "colegio o centro de salud", "colegios o centros de salud")
+            evidencias.append(f"{texto} a menos de {RADIO_GENERADOR_M} m")
         if fuertes >= 2:
             nivel = "prioritario"
         elif fuertes == 1:
@@ -645,6 +773,13 @@ def puntuar(analisis: dict, volumenes_run_id: dict[str, Counter] | None = None) 
             puntaje_total=round(PISO[nivel] + extra, 1), nivel=nivel, detalle=detalle,
             distancia_semaforo_m=c["distancia_semaforo_m"], calles=c["calles"], nodos=c["nodos"],
             evidencias=evidencias, siniestros=sin, generadores=gen, tramo_m=tramo, volumen=vol,
+            contexto=_contexto(c), medida=MEDIDA[nivel],
+            clase_principal=c.get("clase_principal"), clase_secundaria=c.get("clase_secundaria"),
+            tipo_vias=" × ".join(CLASE_LEGIBLE.get(k, k) for k in (c.get("clase_principal"), c.get("clase_secundaria")) if k),
+            brazos=c.get("brazos", 0), carriles_principal=c.get("carriles_principal", 0),
+            siniestros_heridos=c.get("siniestros_heridos", 0), siniestros_muertos=c.get("siniestros_muertos", 0),
+            colegios=c.get("colegios", 0), salud=c.get("salud", 0),
+            generadores_nombres=c.get("generadores_nombres", []),
         ))
         resultados[-1]._xy = (c["x"], c["y"])   # para el NMS
 
@@ -664,7 +799,8 @@ def _suprimir_vecinos(resultados: list[PuntajeCruce]) -> None:
                 nuevo = _BAJA[nivel]
                 r.puntaje_total = round(r.puntaje_total - (PISO[nivel] - PISO[nuevo]), 1)
                 r.nivel = nuevo
-                r.evidencias.append(f"se estudia junto con un cruce mejor puntuado a menos de {RADIO_NMS_M} m")
+                r.medida = MEDIDA[nuevo]
+                r.evidencias.append(f"Se estudia junto con un cruce vecino mejor puntuado (a menos de {RADIO_NMS_M} m)")
             else:
                 aceptados.append((x, y))
 

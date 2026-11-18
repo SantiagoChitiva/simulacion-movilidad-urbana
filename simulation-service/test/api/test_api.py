@@ -191,7 +191,8 @@ def test_precalculadas_listado_y_trips_comprimidos(con_precalculada):
     assert r.json()["type"] == "FeatureCollection"
 
     assert c.get("/precalculadas/mas_peatones/kepler-trips").status_code == 404
-    assert c.get("/precalculadas/no_existe/kepler-trips").status_code == 422
+    assert c.get("/precalculadas/no_existe/kepler-trips").status_code == 404
+    assert c.get("/precalculadas/Mal Formada/kepler-trips").status_code == 422
 
 
 def test_ficha_con_volumenes_de_una_precalculada(con_precalculada):
@@ -242,6 +243,9 @@ def bloqueado(tmp_path, monkeypatch):
     api.app.dependency_overrides[api.obtener_gestor] = lambda: gestor
     yield TestClient(api.app), gestor, pipeline
     pipeline.liberar.set()
+    # el hilo debe terminar antes de que se deshaga el monkeypatch de RUNS_DIR; si no,
+    # escribe su estado.json en el runs/ real (aparecían corridas "Interrumpidas" en el visor)
+    gestor._pool.shutdown(wait=True)
     api.app.dependency_overrides.clear()
 
 
@@ -280,3 +284,76 @@ def test_cancelar_corrida_en_cola(bloqueado):
 
     assert c.post(f"/simulaciones/{segunda}/cancelar").json()["estado"] == "cancelada"
     assert c.get(f"/simulaciones/{primera}").json()["estado"] == "simulando"   # la otra sigue
+
+
+# ------------------------------------------------------------ comparación de programas
+
+def test_comparacion_de_programas(con_catalogo, monkeypatch):
+    c, _ = con_catalogo
+    tl_id = c.get("/intersecciones").json()["features"][0]["properties"]["id"]
+    llamadas = {}
+
+    def _comparacion_falsa(lon, lat, accesos, programas, *, run_id_destino, run_id_origen, semilla, on_programa,
+                           on_progreso, **_kwargs):
+        llamadas["programas"] = programas
+        for nombre in programas:
+            on_progreso(f"simulando:{nombre}", None)
+            on_programa(nombre, {"demora_media_s": 10.0})
+        return {}
+
+    monkeypatch.setattr(api, "run_comparacion_programas", _comparacion_falsa)
+    cid = c.post(f"/intersecciones/{tl_id}/comparaciones", json={"programas": ["actual"]}).json()["comparacion_id"]
+    comp = c.get(f"/comparaciones/{cid}").json()
+    for _ in range(50):
+        if comp["estado"] != "en_curso":
+            break
+        threading.Event().wait(0.05)
+        comp = c.get(f"/comparaciones/{cid}").json()
+    assert comp["estado"] == "terminado"
+    assert comp["programas"][0]["etiqueta"] == "Programa actual"
+    assert comp["programas"][0]["metricas"] == {"demora_media_s": 10.0}
+    assert llamadas["programas"] == {"actual": None}
+
+    # un programa guardado que no existe, y Webster sin volúmenes
+    assert c.post(f"/intersecciones/{tl_id}/comparaciones", json={"programas": ["mio"]}).status_code == 404
+    monkeypatch.setattr(api, "_volumenes_corrida", lambda *_a, **_k: None)
+    assert c.post(f"/intersecciones/{tl_id}/programas/webster", json={}).status_code == 409
+
+
+def test_vias_de_la_red(con_catalogo, tmp_path, monkeypatch):
+    c, _ = con_catalogo
+    fc = c.get("/red/vias").json()
+    assert fc["features"] and (tmp_path / "cache" / "vias.json").is_file()
+    props = {f["properties"]["id"]: f["properties"] for f in fc["features"]}
+    con_contrario = next(p for p in props.values() if p["contrario"])
+    assert props[con_contrario["contrario"]]["contrario"] == con_contrario["id"]
+    assert all(f["geometry"]["type"] == "LineString" for f in fc["features"][:50])
+    assert not any(p["clase"] in ("peatonal", "ciclorruta", "de servicio") for p in props.values())
+
+
+def test_reanudar_corrida_con_error(tmp_path, monkeypatch):
+    monkeypatch.setattr(configuration, "RUNS_DIR", tmp_path)
+    llamadas = []
+
+    def falla_una_vez(*args, **kwargs):
+        llamadas.append(kwargs)
+        if len(llamadas) == 1:
+            raise RuntimeError("Interrumpida")
+        return _pipeline_falso(*args, **kwargs)
+
+    gestor = GestorCorridas(ejecutar=falla_una_vez)
+    api.app.dependency_overrides[api.obtener_gestor] = lambda: gestor
+    try:
+        c = TestClient(api.app)
+        run_id = c.post("/simulaciones", json={"conteos": {"auto": 10}, "ventana": "pm"}).json()["id"]
+        gestor.esperar(run_id, timeout=10)
+        assert c.get(f"/simulaciones/{run_id}").json()["estado"] == "error"
+
+        assert c.post(f"/simulaciones/{run_id}/reanudar").status_code == 202
+        gestor.esperar(run_id, timeout=10)
+        assert c.get(f"/simulaciones/{run_id}").json()["estado"] == "terminado"
+        # la segunda vez reutiliza lo hecho y conserva las opciones de la corrida
+        assert llamadas[1]["reanudar"] is True and llamadas[1]["demanda"].ventana == "pm"
+        assert c.post(f"/simulaciones/{run_id}/reanudar").status_code == 409   # ya terminó
+    finally:
+        api.app.dependency_overrides.clear()

@@ -1,5 +1,9 @@
 {
+  "clave": "dia_sin_carro",
   "preset": "dia_sin_carro",
+  "ventana": "am",
+  "trafico_paso": false,
+  "transporte_publico": true,
   "conteos": {
     "auto": 0,
     "bici": 2338,
@@ -13,10 +17,10 @@
     "otro": 0
   },
   "semilla": null,
-  "generada": "2026-10-09T10:00:25-05:00",
+  "generada": "2026-11-03T18:28:26-05:00",
   "insumos": "687ea4098a363fb3",
-  "tamano_original": 90433853,
-  "tamano_gz": 16019419,
+  "tamano_original": 85221954,
+  "tamano_gz": 13294867,
   "resultado": {
     "viajes_generados": 24647,
     "viajes_por_modo": {
@@ -27,11 +31,51 @@
       "escolar": 328,
       "especial": 480
     },
-    "trips_kepler": 16380,
-    "vehiculos_cargados": 5190,
-    "vehiculos_insertados": 4945,
+    "trips_kepler": 18192,
+    "vehiculos_cargados": 11974,
+    "vehiculos_insertados": 6669,
     "personas_cargadas": 19257,
-    "teleports": 106,
-    "colisiones": 134
+    "teleports": 999,
+    "colisiones": 842,
+    "validacion": {
+      "periodo": "AM",
+      "etiqueta": "solo viajes de la encuesta",
+      "puntos": 52,
+      "cumplen": 0,
+      "porcentaje": 0.0,
+      "cumple_criterio": false,
+      "geh_mediano": 31.17,
+      "razon_volumen": 0.029,
+      "criterio_porcentaje": 85.0,
+      "umbral_geh": 5.0,
+      "por_grupo": {
+        "calibracion": {
+          "puntos": 26,
+          "cumplen": 0,
+          "porcentaje": 0.0,
+          "cumple_criterio": false,
+          "geh_mediano": 27.05,
+          "razon_volumen": 0.038
+        },
+        "control": {
+          "puntos": 26,
+          "cumplen": 0,
+          "porcentaje": 0.0,
+          "cumple_criterio": false,
+          "geh_mediano": 45.54,
+          "razon_volumen": 0.023
+        }
+      },
+      "modos_simulados": [
+        "auto",
+        "moto",
+        "taxi",
+        "especial",
+        "escolar",
+        "bici",
+        "bus"
+      ],
+      "estaciones_no_simuladas": []
+    }
   }
 }

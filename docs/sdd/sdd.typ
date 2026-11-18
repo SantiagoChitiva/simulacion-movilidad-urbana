@@ -65,6 +65,8 @@
     [1.5], [24/10/2026], [Actualización general del documento para reflejar el alcance ampliado del proyecto, incluyendo ajustes en arquitectura, datos, componentes, interfaces y atributos de calidad.], [Samuel Campos, Felipe Garrido],
 
     [2.1], [11/11/2026], [Reestructuración completa del documento para ajustarlo a la plantilla de Descripción del Diseño del Software: introducción, arquitectura (vistas lógica, física y de procesos), diseño detallado (estructura, comportamiento, persistencia e interfaz de usuario) y referencias. El contenido previo sobre arquitectura, datos, componentes, interfaces, decisiones y limitaciones se reubicó en las nuevas secciones.], [Erick Salazar],
+
+    [2.2], [18/11/2026], [Cierre de pendientes: ventana de la tarde, buses del GTFS, módulos de validación GEH y demanda ampliada (3.1), reparto de las salidas, Webster por fases en verde (3.2) y aforos y precalculadas en el almacenamiento (3.3).], [Todos],
   ),
   caption: [Historial de cambios del documento.],
 )
