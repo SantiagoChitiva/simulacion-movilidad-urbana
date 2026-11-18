@@ -1,12 +1,12 @@
 {
  "periodo": "AM",
- "etiqueta": "solo viajes de la encuesta",
+ "etiqueta": "solo viajes internos de la encuesta",
  "puntos": 52,
  "cumplen": 0,
  "porcentaje": 0.0,
  "cumple_criterio": false,
- "geh_mediano": 31.17,
- "razon_volumen": 0.029,
+ "geh_mediano": 30.32,
+ "razon_volumen": 0.031,
  "criterio_porcentaje": 85.0,
  "umbral_geh": 5.0,
  "por_grupo": {
@@ -15,7 +15,7 @@
    "cumplen": 0,
    "porcentaje": 0.0,
    "cumple_criterio": false,
-   "geh_mediano": 27.05,
+   "geh_mediano": 27.15,
    "razon_volumen": 0.038
   },
   "control": {
@@ -23,8 +23,8 @@
    "cumplen": 0,
    "porcentaje": 0.0,
    "cumple_criterio": false,
-   "geh_mediano": 45.54,
-   "razon_volumen": 0.023
+   "geh_mediano": 42.36,
+   "razon_volumen": 0.027
   }
  },
  "modos_simulados": [
@@ -49,7 +49,7 @@
    "modos": [
     "bici"
    ],
-   "hora_pico_simulada": 34200.0,
+   "hora_pico_simulada": 33300.0,
    "simulado": 17.0,
    "real": 160.5,
    "geh": 15.23,
@@ -146,13 +146,13 @@
     "bici"
    ],
    "hora_pico_simulada": 26100.0,
-   "simulado": 102.0,
+   "simulado": 79.0,
    "real": 195.0,
-   "geh": 7.63,
+   "geh": 9.91,
    "cumple": false,
    "grupo": "calibracion",
    "simulado_por_modo": {
-    "bici": 102.0
+    "bici": 79.0
    },
    "real_por_modo": {
     "bici": 195.0
@@ -169,7 +169,7 @@
    "modos": [
     "bici"
    ],
-   "hora_pico_simulada": 28800.0,
+   "hora_pico_simulada": 27000.0,
    "simulado": 12.0,
    "real": 465.5,
    "geh": 29.35,
@@ -217,7 +217,7 @@
    "modos": [
     "bici"
    ],
-   "hora_pico_simulada": 28800.0,
+   "hora_pico_simulada": 27000.0,
    "simulado": 3.0,
    "real": 89.0,
    "geh": 12.68,
@@ -289,14 +289,14 @@
    "modos": [
     "bici"
    ],
-   "hora_pico_simulada": 31500.0,
-   "simulado": 13.0,
+   "hora_pico_simulada": 30600.0,
+   "simulado": 12.0,
    "real": 106.0,
-   "geh": 12.06,
+   "geh": 12.24,
    "cumple": false,
    "grupo": "calibracion",
    "simulado_por_modo": {
-    "bici": 13.0
+    "bici": 12.0
    },
    "real_por_modo": {
     "bici": 106.0
@@ -314,13 +314,13 @@
     "bici"
    ],
    "hora_pico_simulada": 25200.0,
-   "simulado": 10.0,
+   "simulado": 11.0,
    "real": 52.0,
-   "geh": 7.54,
+   "geh": 7.31,
    "cumple": false,
    "grupo": "calibracion",
    "simulado_por_modo": {
-    "bici": 10.0
+    "bici": 11.0
    },
    "real_por_modo": {
     "bici": 52.0
@@ -338,13 +338,13 @@
     "bici"
    ],
    "hora_pico_simulada": 26100.0,
-   "simulado": 7.0,
+   "simulado": 5.0,
    "real": 344.0,
-   "geh": 25.44,
+   "geh": 25.66,
    "cumple": false,
    "grupo": "calibracion",
    "simulado_por_modo": {
-    "bici": 7.0
+    "bici": 5.0
    },
    "real_por_modo": {
     "bici": 344.0
@@ -362,13 +362,13 @@
     "bici"
    ],
    "hora_pico_simulada": 26100.0,
-   "simulado": 1.0,
+   "simulado": 3.0,
    "real": 116.0,
-   "geh": 15.04,
+   "geh": 14.65,
    "cumple": false,
    "grupo": "calibracion",
    "simulado_por_modo": {
-    "bici": 1.0
+    "bici": 3.0
    },
    "real_por_modo": {
     "bici": 116.0
@@ -386,13 +386,13 @@
     "bici"
    ],
    "hora_pico_simulada": 26100.0,
-   "simulado": 18.0,
+   "simulado": 13.0,
    "real": 1141.0,
-   "geh": 46.65,
+   "geh": 46.96,
    "cumple": false,
    "grupo": "control",
    "simulado_por_modo": {
-    "bici": 18.0
+    "bici": 13.0
    },
    "real_por_modo": {
     "bici": 1141.0
@@ -409,14 +409,14 @@
    "modos": [
     "bici"
    ],
-   "hora_pico_simulada": null,
-   "simulado": 0.0,
+   "hora_pico_simulada": 26100.0,
+   "simulado": 3.0,
    "real": 156.0,
-   "geh": 17.66,
+   "geh": 17.16,
    "cumple": false,
    "grupo": "control",
    "simulado_por_modo": {
-    "bici": 0.0
+    "bici": 3.0
    },
    "real_por_modo": {
     "bici": 156.0
@@ -434,13 +434,13 @@
     "bici"
    ],
    "hora_pico_simulada": 26100.0,
-   "simulado": 122.0,
+   "simulado": 106.0,
    "real": 457.0,
-   "geh": 19.69,
+   "geh": 20.92,
    "cumple": false,
    "grupo": "calibracion",
    "simulado_por_modo": {
-    "bici": 122.0
+    "bici": 106.0
    },
    "real_por_modo": {
     "bici": 457.0
@@ -457,14 +457,14 @@
    "modos": [
     "bici"
    ],
-   "hora_pico_simulada": null,
-   "simulado": 0.0,
+   "hora_pico_simulada": 32400.0,
+   "simulado": 2.0,
    "real": 142.5,
-   "geh": 16.88,
+   "geh": 16.53,
    "cumple": false,
    "grupo": "calibracion",
    "simulado_por_modo": {
-    "bici": 0.0
+    "bici": 2.0
    },
    "real_por_modo": {
     "bici": 142.5
@@ -482,13 +482,13 @@
     "bus"
    ],
    "hora_pico_simulada": 28800.0,
-   "simulado": 58.0,
+   "simulado": 56.0,
    "real": 5865.5,
-   "geh": 106.71,
+   "geh": 106.77,
    "cumple": false,
    "grupo": "control",
    "simulado_por_modo": {
-    "bus": 58.0
+    "bus": 56.0
    },
    "real_por_modo": {
     "bus": 5865.5
@@ -505,14 +505,14 @@
    "modos": [
     "bus"
    ],
-   "hora_pico_simulada": 27900.0,
-   "simulado": 51.0,
+   "hora_pico_simulada": 32400.0,
+   "simulado": 55.0,
    "real": 1473.1,
-   "geh": 51.52,
+   "geh": 51.3,
    "cumple": false,
    "grupo": "control",
    "simulado_por_modo": {
-    "bus": 51.0
+    "bus": 55.0
    },
    "real_por_modo": {
     "bus": 1473.1
@@ -529,14 +529,14 @@
    "modos": [
     "bus"
    ],
-   "hora_pico_simulada": 32400.0,
-   "simulado": 10.0,
+   "hora_pico_simulada": 25200.0,
+   "simulado": 9.0,
    "real": 1318.8,
-   "geh": 50.78,
+   "geh": 50.83,
    "cumple": false,
    "grupo": "control",
    "simulado_por_modo": {
-    "bus": 10.0
+    "bus": 9.0
    },
    "real_por_modo": {
     "bus": 1318.8
@@ -553,14 +553,14 @@
    "modos": [
     "bus"
    ],
-   "hora_pico_simulada": 27900.0,
-   "simulado": 25.0,
+   "hora_pico_simulada": 31500.0,
+   "simulado": 28.0,
    "real": 336.2,
-   "geh": 23.16,
+   "geh": 22.84,
    "cumple": false,
    "grupo": "calibracion",
    "simulado_por_modo": {
-    "bus": 25.0
+    "bus": 28.0
    },
    "real_por_modo": {
     "bus": 336.2
@@ -601,14 +601,14 @@
    "modos": [
     "bus"
    ],
-   "hora_pico_simulada": 30600.0,
-   "simulado": 21.0,
+   "hora_pico_simulada": 27000.0,
+   "simulado": 20.0,
    "real": 425.0,
-   "geh": 27.05,
+   "geh": 27.15,
    "cumple": false,
    "grupo": "calibracion",
    "simulado_por_modo": {
-    "bus": 21.0
+    "bus": 20.0
    },
    "real_por_modo": {
     "bus": 425.0
@@ -625,7 +625,7 @@
    "modos": [
     "bus"
    ],
-   "hora_pico_simulada": 27900.0,
+   "hora_pico_simulada": 28800.0,
    "simulado": 25.0,
    "real": 427.5,
    "geh": 26.76,
@@ -649,14 +649,14 @@
    "modos": [
     "bus"
    ],
-   "hora_pico_simulada": 28800.0,
-   "simulado": 27.0,
+   "hora_pico_simulada": 29700.0,
+   "simulado": 28.0,
    "real": 3482.4,
-   "geh": 82.49,
+   "geh": 82.45,
    "cumple": false,
    "grupo": "control",
    "simulado_por_modo": {
-    "bus": 27.0
+    "bus": 28.0
    },
    "real_por_modo": {
     "bus": 3482.4
@@ -673,14 +673,14 @@
    "modos": [
     "bus"
    ],
-   "hora_pico_simulada": 29700.0,
-   "simulado": 38.0,
+   "hora_pico_simulada": 30600.0,
+   "simulado": 39.0,
    "real": 2323.2,
-   "geh": 66.51,
+   "geh": 66.46,
    "cumple": false,
    "grupo": "control",
    "simulado_por_modo": {
-    "bus": 38.0
+    "bus": 39.0
    },
    "real_por_modo": {
     "bus": 2323.2
@@ -745,14 +745,14 @@
    "modos": [
     "bus"
    ],
-   "hora_pico_simulada": 30600.0,
-   "simulado": 29.0,
+   "hora_pico_simulada": 28800.0,
+   "simulado": 25.0,
    "real": 1680.0,
-   "geh": 56.48,
+   "geh": 56.68,
    "cumple": false,
    "grupo": "calibracion",
    "simulado_por_modo": {
-    "bus": 29.0
+    "bus": 25.0
    },
    "real_por_modo": {
     "bus": 1680.0
@@ -770,13 +770,13 @@
     "bus"
    ],
    "hora_pico_simulada": 27000.0,
-   "simulado": 41.0,
+   "simulado": 39.0,
    "real": 1401.0,
-   "geh": 50.65,
+   "geh": 50.76,
    "cumple": false,
    "grupo": "calibracion",
    "simulado_por_modo": {
-    "bus": 41.0
+    "bus": 39.0
    },
    "real_por_modo": {
     "bus": 1401.0
@@ -793,14 +793,14 @@
    "modos": [
     "bus"
    ],
-   "hora_pico_simulada": 32400.0,
-   "simulado": 36.0,
+   "hora_pico_simulada": 30600.0,
+   "simulado": 35.0,
    "real": 774.4,
-   "geh": 36.68,
+   "geh": 36.75,
    "cumple": false,
    "grupo": "control",
    "simulado_por_modo": {
-    "bus": 36.0
+    "bus": 35.0
    },
    "real_por_modo": {
     "bus": 774.4
@@ -818,13 +818,13 @@
     "bus"
    ],
    "hora_pico_simulada": 25200.0,
-   "simulado": 17.0,
+   "simulado": 15.0,
    "real": 1906.2,
-   "geh": 60.92,
+   "geh": 61.02,
    "cumple": false,
    "grupo": "control",
    "simulado_por_modo": {
-    "bus": 17.0
+    "bus": 15.0
    },
    "real_por_modo": {
     "bus": 1906.2
@@ -890,13 +890,13 @@
     "bus"
    ],
    "hora_pico_simulada": 31500.0,
-   "simulado": 39.0,
+   "simulado": 41.0,
    "real": 455.6,
-   "geh": 26.49,
+   "geh": 26.31,
    "cumple": false,
    "grupo": "control",
    "simulado_por_modo": {
-    "bus": 39.0
+    "bus": 41.0
    },
    "real_por_modo": {
     "bus": 455.6
@@ -913,7 +913,7 @@
    "modos": [
     "bus"
    ],
-   "hora_pico_simulada": 32400.0,
+   "hora_pico_simulada": 31500.0,
    "simulado": 28.0,
    "real": 975.0,
    "geh": 42.29,
@@ -1020,17 +1020,17 @@
     "escolar",
     "bici"
    ],
-   "hora_pico_simulada": null,
-   "simulado": 0.0,
+   "hora_pico_simulada": 32400.0,
+   "simulado": 3.0,
    "real": 2406.0,
-   "geh": 69.37,
+   "geh": 69.24,
    "cumple": false,
    "grupo": "calibracion",
    "simulado_por_modo": {
     "auto": 0.0,
     "moto": 0.0,
-    "taxi": 0.0,
-    "especial": 0.0,
+    "taxi": 2.0,
+    "especial": 1.0,
     "escolar": 0.0,
     "bici": 0.0
    },
@@ -1059,7 +1059,7 @@
     "escolar",
     "bici"
    ],
-   "hora_pico_simulada": 28800.0,
+   "hora_pico_simulada": 27000.0,
    "simulado": 6.0,
    "real": 2426.0,
    "geh": 69.4,
@@ -1099,15 +1099,15 @@
     "bici"
    ],
    "hora_pico_simulada": 25200.0,
-   "simulado": 105.0,
+   "simulado": 106.0,
    "real": 702.2,
-   "geh": 29.73,
+   "geh": 29.66,
    "cumple": false,
    "grupo": "calibracion",
    "simulado_por_modo": {
     "auto": 0.0,
     "moto": 0.0,
-    "taxi": 50.0,
+    "taxi": 51.0,
     "especial": 0.0,
     "escolar": 0.0,
     "bici": 55.0
@@ -1176,10 +1176,10 @@
     "escolar",
     "bici"
    ],
-   "hora_pico_simulada": 34200.0,
-   "simulado": 14.0,
+   "hora_pico_simulada": 33300.0,
+   "simulado": 20.0,
    "real": 742.1,
-   "geh": 37.45,
+   "geh": 36.99,
    "cumple": false,
    "grupo": "control",
    "simulado_por_modo": {
@@ -1188,7 +1188,7 @@
     "taxi": 0.0,
     "especial": 0.0,
     "escolar": 0.0,
-    "bici": 14.0
+    "bici": 20.0
    },
    "real_por_modo": {
     "auto": 466.0,
@@ -1216,9 +1216,9 @@
     "bici"
    ],
    "hora_pico_simulada": 27000.0,
-   "simulado": 50.0,
+   "simulado": 47.0,
    "real": 1178.9,
-   "geh": 45.54,
+   "geh": 45.72,
    "cumple": false,
    "grupo": "control",
    "simulado_por_modo": {
@@ -1226,8 +1226,8 @@
     "moto": 0.0,
     "taxi": 0.0,
     "especial": 0.0,
-    "escolar": 0.0,
-    "bici": 50.0
+    "escolar": 1.0,
+    "bici": 46.0
    },
    "real_por_modo": {
     "auto": 863.0,
@@ -1255,17 +1255,17 @@
     "bici"
    ],
    "hora_pico_simulada": 32400.0,
-   "simulado": 185.0,
+   "simulado": 146.0,
    "real": 2870.9,
-   "geh": 68.71,
+   "geh": 70.16,
    "cumple": false,
    "grupo": "calibracion",
    "simulado_por_modo": {
     "auto": 0.0,
     "moto": 0.0,
-    "taxi": 116.0,
-    "especial": 58.0,
-    "escolar": 6.0,
+    "taxi": 76.0,
+    "especial": 60.0,
+    "escolar": 5.0,
     "bici": 5.0
    },
    "real_por_modo": {
@@ -1293,19 +1293,19 @@
     "escolar",
     "bici"
    ],
-   "hora_pico_simulada": 32400.0,
-   "simulado": 75.0,
+   "hora_pico_simulada": 31500.0,
+   "simulado": 151.0,
    "real": 2288.1,
-   "geh": 64.38,
+   "geh": 61.2,
    "cumple": false,
    "grupo": "calibracion",
    "simulado_por_modo": {
     "auto": 0.0,
     "moto": 0.0,
-    "taxi": 69.0,
+    "taxi": 142.0,
     "especial": 3.0,
     "escolar": 3.0,
-    "bici": 0.0
+    "bici": 3.0
    },
    "real_por_modo": {
     "auto": 1325.0,
@@ -1371,10 +1371,10 @@
     "escolar",
     "bici"
    ],
-   "hora_pico_simulada": 26100.0,
-   "simulado": 14.0,
+   "hora_pico_simulada": 25200.0,
+   "simulado": 12.0,
    "real": 1245.0,
-   "geh": 49.06,
+   "geh": 49.18,
    "cumple": false,
    "grupo": "control",
    "simulado_por_modo": {
@@ -1383,7 +1383,7 @@
     "taxi": 4.0,
     "especial": 1.0,
     "escolar": 2.0,
-    "bici": 7.0
+    "bici": 5.0
    },
    "real_por_modo": {
     "auto": 816.0,
@@ -1411,9 +1411,9 @@
     "bici"
    ],
    "hora_pico_simulada": 26100.0,
-   "simulado": 1.0,
+   "simulado": 3.0,
    "real": 404.0,
-   "geh": 28.32,
+   "geh": 28.11,
    "cumple": false,
    "grupo": "control",
    "simulado_por_modo": {
@@ -1422,7 +1422,7 @@
     "taxi": 0.0,
     "especial": 0.0,
     "escolar": 0.0,
-    "bici": 1.0
+    "bici": 3.0
    },
    "real_por_modo": {
     "auto": 208.0,
@@ -1450,18 +1450,18 @@
     "bici"
    ],
    "hora_pico_simulada": 26100.0,
-   "simulado": 204.0,
+   "simulado": 275.0,
    "real": 1557.0,
-   "geh": 45.6,
+   "geh": 42.36,
    "cumple": false,
    "grupo": "control",
    "simulado_por_modo": {
     "auto": 0.0,
     "moto": 0.0,
-    "taxi": 32.0,
-    "especial": 7.0,
+    "taxi": 68.0,
+    "especial": 11.0,
     "escolar": 8.0,
-    "bici": 157.0
+    "bici": 188.0
    },
    "real_por_modo": {
     "auto": 879.0,
@@ -1488,19 +1488,19 @@
     "escolar",
     "bici"
    ],
-   "hora_pico_simulada": 28800.0,
-   "simulado": 136.0,
+   "hora_pico_simulada": 31500.0,
+   "simulado": 207.0,
    "real": 816.0,
-   "geh": 31.17,
+   "geh": 26.93,
    "cumple": false,
    "grupo": "control",
    "simulado_por_modo": {
     "auto": 0.0,
     "moto": 0.0,
-    "taxi": 127.0,
+    "taxi": 193.0,
     "especial": 4.0,
-    "escolar": 4.0,
-    "bici": 1.0
+    "escolar": 6.0,
+    "bici": 4.0
    },
    "real_por_modo": {
     "auto": 488.0,

@@ -38,18 +38,18 @@ Los cuatro presets se simularon una vez con sus conteos por defecto, con la dema
 \small
 \begin{tabular}{|l|r|r|r|r|r|r|}
 \hline
-\textbf{Preset} & \textbf{Viajes} & \textbf{Vehículos insertados} & \textbf{Personas cargadas} & \textbf{Teleports} & \textbf{Colisiones} & \textbf{Tamaño (MB)} \\ \hline
-Encuesta & 24.647 & 12.704 & 14.123 & 1.319 & 1.102 & 15,0 \\ \hline
-Más vehículos & 24.647 & 17.574 & 9.234 & 1.037 & 988 & 13,1 \\ \hline
-Más peatones & 24.647 & 8.988 & 17.985 & 1.077 & 1.218 & 18,4 \\ \hline
-Día sin carro$^{*}$ & 24.647 & 6.669 & 19.257 & 999 & 842 & 13,3 \\ \hline
-Encuesta, tarde (16:00--19:00) & 19.555 & 9.321 & 10.760 & 983 & 436 & 8,2 \\ \hline
+\textbf{Preset} & \textbf{Viajes} & \textbf{Vehículos insertados} & \textbf{Personas cargadas} & \textbf{Teleports (buses)} & \textbf{Choques / peatones} & \textbf{Tamaño (MB)} \\ \hline
+Encuesta & 24.647 & 12.704 (97,6\,\%) & 14.123 & 1.319 (948) & 3 / 1.093 & 15,0 \\ \hline
+Más vehículos & 24.647 & 17.574 (98,1\,\%) & 9.234 & 1.037 (846) & 0 / 977 & 13,1 \\ \hline
+Más peatones & 24.647 & 8.988 (98,2\,\%) & 17.985 & 1.077 (886) & 3 / 1.207 & 18,4 \\ \hline
+Día sin carro & 24.647 & 7.689 (97,5\,\%) & 19.257 & 983 (904) & 1 / 1.721 & 18,9 \\ \hline
+Encuesta, tarde (16:00--19:00) & 19.555 & 10.548 (96,5\,\%) & 10.760 & 989 (836) & 1 / 1.083 & 12,0 \\ \hline
 \end{tabular}
-\caption{Resultados de las simulaciones precalculadas. Los vehículos incluyen los buses del GTFS. $^{*}$Generada con los buses del SITP, antes de agregar TransMilenio troncal y el reparto de las salidas.}
+\caption{Resultados de las simulaciones precalculadas. Los vehículos incluyen los buses del GTFS que salen dentro de la ventana; el porcentaje es sobre los vehículos cargados. Entre paréntesis, los teleports de buses. La penúltima columna separa los choques entre vehículos de los contactos de un vehículo con un peatón que camina por la calzada.}
 \label{tab:presets}
 \end{table}
 
-Todos los presets conservan el total de viajes, y el sentido del cambio es el esperado: al pasar de \textit{más vehículos} a \textit{día sin carro}, los vehículos insertados bajan de 17.574 a 6.669 y las personas cargadas suben de 9.234 a 19.257. En el preset base se cargaron 19.668 vehículos (unos 10.300 de la encuesta y el resto buses del GTFS) y se insertaron 12.704 (64,6\,\%); el resto no pudo entrar a la red durante la ventana, lo que ocurre cuando el tramo de entrada está saturado. Con los buses la red se carga más que sin ellos: antes de agregarlos se insertaba el 92,9\,\% de los vehículos, con 209 teletransportes y 80 colisiones. Los teletransportes (entre 983 y 1.319) y las colisiones (entre 436 y 1.218) son eventos del modelo de SUMO que se reportan, no se ocultan, y se discuten como limitación. Cabe notar que el mayor número de colisiones aparece en el preset con más peatones, no en el de más vehículos.
+Todos los presets conservan el total de viajes, y el sentido del cambio es el esperado: al pasar de \textit{más vehículos} a \textit{día sin carro}, los vehículos insertados bajan de 17.574 a 7.689 y las personas cargadas suben de 9.234 a 19.257. En todos los presets entra a la red entre el 96,5 y el 98,2\,\% de los vehículos cargados (en el preset base, 12.704 de 13.017: unos 10.300 de la encuesta y el resto buses del GTFS); el resto no alcanza a entrar porque el tramo de entrada está saturado. Los teletransportes (entre 983 y 1.319) son en su mayoría de buses (entre el 72 y el 92\,\%), que se quedan atascados al cambiar al carril de su parada o en cruces congestionados. Los choques entre vehículos son casi inexistentes (entre 0 y 3 por corrida). Lo que SUMO reporta como colisiones (entre 977 y 1.721) son, casi en su totalidad, vehículos que pasan sobre peatones que caminan por la calzada en vías que en la red no tienen andén, sobre todo usuarios del bus yendo a la parada. Por eso aumentan con el número de peatones (el máximo está en \textit{día sin carro}) y no con el de vehículos: es un efecto del modelo de peatones de SUMO sobre esa red, no un indicador de accidentalidad. Estos eventos se reportan, no se ocultan, y se discuten como limitación.
 
 \textbf{Tiempo de ejecución.} Una corrida completa de la encuesta tarda unos 12 minutos: generación de demanda y \texttt{duarouter} unos 1,5, SUMO unos 8 y la exportación unos 2. Es muy inferior al límite de 4 horas del requerimiento RD-001 (cumplido). La preparación de una comparación 3D toma decenas de segundos, más 240~s simulados de calentamiento al conectarse.
 
@@ -98,12 +98,15 @@ La primera fila explica por qué la demanda interna sola no puede pasar el GEH: 
 
 Las dos últimas filas descartan las explicaciones más simples. Repartir las rutas según la congestión no cambia nada, y quitar las reglas de los cruces solo sube el volumen al 33\,\%. El límite es la capacidad de la red construida desde OpenStreetMap: carriles y conexiones de las avenidas, programas de semáforo estimados por \texttt{netconvert} y aforos que cubren varias calzadas paralelas. En conjunto, la simulación conserva la forma temporal de la demanda, pero no la magnitud de los volúmenes aforados; por eso sus resultados sirven para comparar alternativas con la misma demanda y no como pronóstico de volúmenes.
 
+\textbf{Qué significa y qué no significa este resultado.} Que el GEH no se cumpla no indica que la simulación falle: SUMO ejecuta la demanda que recibe (la forma horaria coincide con su insumo), las pruebas del \textit{pipeline} pasan y los resultados se pueden reproducir. Lo que el GEH mide es la \textit{calibración} del modelo frente a la calle, y esa calibración depende de insumos que el proyecto no tenía: los tiempos de los semáforos de la SDM, que no se publican, y una red con carriles y giros auditados en las avenidas. La literatura suele reservar el criterio de GEH $<5$ en el 85\,\% de los puntos para modelos calibrados con esa información. Con la misma red y la misma demanda en los dos escenarios, el error de calibración está presente en los dos, así que las comparaciones del sistema (un preset frente a otro, un programa semafórico frente a otro, un cruce con y sin semáforo) son útiles como diferencias relativas, que es el uso para el que se construyó la herramienta. La cautela es que en las avenidas congestionadas el tamaño de esas diferencias puede estar sesgado, porque la congestión simulada no es la real.
+
 \subsection{Limitaciones y amenazas a la validez}
 \label{sec:limitaciones-resultados}
 
 \begin{itemize}[noitemsep]
     \item \textbf{Volúmenes sin calibrar.} El GEH se calculó contra los 33 puntos de aforo HMD y solo 2 cumplen, frente al 85\,\% que pide la propuesta (sección~\ref{sec:geh}). Los resultados de volumen son plausibles en su forma temporal, pero no en su magnitud. Calibrar la capacidad de la red es el principal pendiente del proyecto.
     \item \textbf{Transporte público con horario fijo.} Los buses del SITP y de TransMilenio troncal salen del GTFS de un día hábil; no hay TransMiCable y los horarios no se ajustan a la congestión de la red simulada.
+    \item \textbf{Peatones sobre la calzada.} Muchas vías de la red no tienen andén modelado, así que los peatones caminan por la calzada y SUMO registra como colisión cada vez que un vehículo los alcanza (unas mil por corrida, frente a 0 a 3 choques entre vehículos). Corregirlo exige reconstruir la red con andenes, lo que cambia los índices de enlace de los semáforos y la escena 3D.
     \item \textbf{Programas semafóricos genéricos.} Los 220 semáforos usan el programa por defecto de \texttt{netconvert}, no los de la SDM. Por tanto, las comparaciones de programas son ilustrativas.
     \item \textbf{Tráfico de fondo sintético} en las comparaciones 3D, necesario porque la demanda real es escasa en una zona de 350~m. Los resultados dependen de las intensidades elegidas.
     \item \textbf{Una semilla.} El simulador 3D usa la semilla 42; no se hizo análisis de sensibilidad ni se repitió con varias semillas, por lo que los indicadores de riesgo de un actor son ilustrativos, no estadísticos.

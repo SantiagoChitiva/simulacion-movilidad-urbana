@@ -125,6 +125,8 @@ matrices origen-destino y archivos de rutas.
     [H7], [Entrega informe final], [14–16],
     [H8 _(v2.0)_], [Módulo de intersecciones y simulador 3D comparativo operativos (Sprints 6 y 7)], [11–14],
     [H9 _(v2.2)_], [Usabilidad para la toma de decisiones (Sprint 9), SDD y borrador de la memoria], [15],
+    [H10 _(v2.3)_], [Cierre de pendientes (Sprint 10): validación GEH, transporte público con GTFS, ventana de la tarde y entrega final de
+    la documentación], [16],
   ),
   caption: [Hitos del proyecto.],
 ) <tabHitos>
@@ -136,7 +138,7 @@ matrices origen-destino y archivos de rutas.
     columns: (auto, 1fr, auto, auto),
     table.header([Ítem], [Descripción], [Cantidad], [Costo equivalente]),
     [Horas-persona totales], [Línea base: 4 personas × 10 semanas × 14 h/semana + 40 h del Sprint 5. Extensión v2.0: Sprints 6 a 8 (120 h).
-    Sprint 9 de usabilidad (40 h)], [760 h], [—],
+    Sprint 9 de usabilidad (40 h). Sprint 10 de cierre de pendientes (60 h)], [820 h], [—],
     [Herramientas de software], [SUMO, Python, FastAPI, React, kepler.gl, three.js, GitHub, GitHub Actions, Typst (todos gratuitos)], [—], [\$0 COP],
     [Datos de entrada], [Encuesta Movilidad 2023, aforos, OSM, Microsoft Building Footprints (todos públicos)], [—], [\$0 COP],
     [Infraestructura de cómputo], [Equipos personales del equipo + Google Colab], [—], [\$0 COP],
@@ -147,7 +149,7 @@ matrices origen-destino y archivos de rutas.
 
 El proyecto no maneja presupuesto monetario. Todas las herramientas son de código abierto y los datos de entrada son de acceso público. El costo total
 equivalente se expresa en horas-persona: la línea base es de 600 h-p (560 h-p de 4 integrantes × 10 semanas × 14 h/semana, más 40 h del módulo web).
-La extensión v2.0 suma 120 h-p estimadas para los Sprints 6 a 8 y la v2.2 otras 40 h-p del Sprint 9, para un total de 760 h-p (la justificación
+La extensión v2.0 suma 120 h-p estimadas para los Sprints 6 a 8 la v2.2 otras 40 h-p del Sprint 9 y la v2.3 otras 60 h-p del Sprint 10, para un total de 820 h-p (la justificación
 está en 9.3.4).
 
 == Evolución del Plan

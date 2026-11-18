@@ -452,6 +452,31 @@ def contar(path: Path, etiqueta: str) -> int:
     return n
 
 
+def buses_en_ventana(origen: Path, destino: Path, ini: float, fin: float) -> int:
+    """Copia a `destino` solo los buses que salen en [ini, fin), con sus vTypes.
+
+    El GTFS trae el día entero (6:00 a 19:00). Con el archivo completo SUMO contaba como
+    cargados miles de buses que salen después del final de la corrida y nunca entran, y el
+    porcentaje de vehículos insertados quedaba en 65 % aunque casi todos los de la ventana
+    entraran. Devuelve el número de buses copiados.
+    """
+    import xml.etree.ElementTree as ET
+
+    fuente = gzip.open(origen) if origen.suffix == ".gz" else origen
+    raiz = ET.parse(fuente).getroot()
+    salida = ET.Element(raiz.tag, raiz.attrib)
+    copiados = 0
+    for hijo in raiz:
+        if hijo.tag == "vehicle":
+            if not ini <= float(hijo.get("depart", "0")) < fin:
+                continue
+            copiados += 1
+        salida.append(hijo)
+    destino.parent.mkdir(parents=True, exist_ok=True)
+    ET.ElementTree(salida).write(destino, encoding="utf-8", xml_declaration=True)
+    return copiados
+
+
 def archivos_transporte_publico(paths: ScenarioPaths | None = None) -> TransportePublicoResult | None:
     """Paradas, buses y vTypes generados, o None si el escenario aún no tiene transporte público."""
     paths = paths or ScenarioPaths.from_name(DEFAULT_SCENARIO)

@@ -21,7 +21,7 @@ from .sumo.estilos import EstiloConductor, PARAMS_ESTILO
 from .sumo.fcd import FcdConversionResult, FcdToGeoJsonConfig, convert_fcd_to_geojson
 from .sumo.kepler import KeplerTripsConfig, KeplerTripsResult, convert_fcd_to_kepler_trips
 from .sumo.proceso import Cancelado, revisar_cancelacion
-from .sumo.simulation import SimulationConfig, SimulationResult, leer_estadisticas, run_simulation
+from .sumo.simulation import SimulationConfig, SimulationResult, clasificar_eventos, leer_estadisticas, run_simulation
 from .sumo.demanda_zona import DemandaZonaConfig, DemandaZonaResult, DemandaZonaStats, generar_demanda_zona
 from .sumo.programas_tls import ProgramaTLS
 from .sumo.semaforo_nuevo import (
@@ -33,7 +33,7 @@ from .sumo.subred import (
 )
 from .sumo.encuesta_completa import archivo_complemento
 from .sumo.trafico_paso import archivo_trafico_paso
-from .sumo.transporte_publico import archivos_transporte_publico
+from .sumo.transporte_publico import archivos_transporte_publico, buses_en_ventana
 from .sumo.trips import TripGenerationConfig, TripGenerationResult, generate_trips
 from .sumo.validacion import ValidacionConfig, escribir_conteos, periodo_de, validar
 
@@ -157,7 +157,10 @@ def simulate(
             # duarouter usa los buses como horario para los personTrip, pero no los copia a su
             # salida: SUMO los carga aparte, con sus paradas
             adicionales.append(publico.paradas)
-            rutas_extra.append(publico.vehiculos)
+            # solo los buses de la ventana: el GTFS trae el día entero (ver buses_en_ventana)
+            buses = paths.run_dir / "pt_vehiculos_ventana.rou.xml"
+            buses_en_ventana(publico.vehiculos, buses, *demanda.horas)
+            rutas_extra.append(buses)
         paso = archivo_trafico_paso(demanda.horas[0]) if demanda.trafico_paso else None
         if demanda.trafico_paso and paso is None:
             raise FileNotFoundError("No hay tráfico de paso para esta ventana. Ejecuta python -m etl.sumo.trafico_paso.")
@@ -334,6 +337,7 @@ def resumen_corrida(resultado: PipelineResult, paths: ScenarioPaths) -> dict[str
         "viajes_por_modo": dict(resultado.etl.trips.stats.por_modo),
         "trips_kepler": resultado.kepler.stats.trips_escritos,
         **leer_estadisticas(paths.statistics),
+        **clasificar_eventos(paths.sumo_log),
     }
     validacion = getattr(resultado, "validacion", None)
     if validacion is not None:

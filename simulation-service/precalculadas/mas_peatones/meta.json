@@ -18,7 +18,7 @@
     "otro": 0
   },
   "semilla": null,
-  "generada": "2026-11-04T00:29:56-05:00",
+  "generada": "2026-11-18T13:55:37-05:00",
   "insumos": "687ea4098a363fb3",
   "tamano_original": 82574849,
   "tamano_gz": 18353157,
@@ -36,11 +36,14 @@
       "informal": 300
     },
     "trips_kepler": 19018,
-    "vehiculos_cargados": 15806,
+    "vehiculos_cargados": 9155,
     "vehiculos_insertados": 8988,
     "personas_cargadas": 17985,
     "teleports": 1077,
     "colisiones": 1218,
+    "colisiones_con_peatones": 1207,
+    "colisiones_entre_vehiculos": 3,
+    "teleports_buses": 886,
     "validacion": {
       "periodo": "AM",
       "etiqueta": "solo viajes internos de la encuesta",

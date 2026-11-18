@@ -3,6 +3,7 @@ import subprocess
 import tempfile
 import threading
 import time
+import re
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass
 from pathlib import Path
@@ -66,6 +67,39 @@ def leer_estadisticas(statistics_path: Path) -> dict[str, int]:
         "personas_cargadas": int(personas.get("loaded", 0)),
         "teleports": int(attrs("teleports").get("total", 0)),
         "colisiones": int(attrs("safety").get("collisions", 0)),
+    }
+
+
+_COLISION_PERSONA = re.compile(r"Vehicle '([^']+)' collision with person '([^']+)'")
+_COLISION_VEHICULO = re.compile(r"[Cc]ollision with vehicle '([^']+)'")
+_TELEPORT_VEHICULO = re.compile(r"Teleporting vehicle '([^']+)'")
+
+
+def clasificar_eventos(log_path: Path) -> dict[str, int]:
+    """Separa en el log de SUMO lo que el statistic-output suma junto.
+
+    Casi todas las colisiones de las corridas con buses son vehículos que pasan sobre
+    personas que caminan por la calzada en vías sin andén en la red (sobre todo usuarios
+    yendo a la parada o bajando del bus): un efecto del modelo de peatones de SUMO, no un
+    choque entre vehículos. Cada pareja vehículo-persona se cuenta una vez.
+    """
+    if not log_path.is_file():
+        return {}
+    con_personas, entre_vehiculos, teleports_buses = set(), 0, 0
+    with open(log_path, encoding="utf-8", errors="replace") as f:
+        for linea in f:
+            if (m := _COLISION_PERSONA.search(linea)) is not None:
+                con_personas.add(m.groups())
+                continue
+            # con collision.action=teleport el choque entre vehículos llega como "Teleporting vehicle ...; collision with vehicle"
+            if _COLISION_VEHICULO.search(linea):
+                entre_vehiculos += 1
+            if (m := _TELEPORT_VEHICULO.search(linea)) is not None and m.group(1).startswith(("bus_", "tm_")):
+                teleports_buses += 1
+    return {
+        "colisiones_con_peatones": len(con_personas),
+        "colisiones_entre_vehiculos": entre_vehiculos,
+        "teleports_buses": teleports_buses,
     }
 
 

@@ -61,7 +61,8 @@
     Alternativas, 8.4.2 Organigrama y Descripción de Roles y 9.3.1 a 9.3.4 (descomposición, calendarización, recursos y presupuesto). Sprint 9 de
     usabilidad para perfiles no técnicos (F3.9) y estado de F3.8, F5.3 (SDD) y F5.5 (memoria) actualizados.], [Todos],
     [2.3], [18/11/2026], [Validación de la demanda (10): histograma de salidas regenerado con el reparto de las copias alrededor de la hora reportada y
-    resultado del GEH contra los aforos HMD (2 de 33 puntos), registrado como desviación del criterio de calibración.], [Todos],
+    resultado del GEH contra los aforos HMD (2 de 33 puntos), registrado como desviación del criterio de calibración. Sprint 10 de cierre de
+    pendientes (F3.10, H10, 60 h-p; total 820 h-p) y estado de la Fase 4.], [Todos],
   ),
   caption: [Historial de cambios del documento.],
 ) <tabHistorial>

@@ -120,3 +120,22 @@ def test_rutas_ultima_iteracion_toma_el_gz_y_no_las_alternativas(tmp_path):
     for nombre in ("viajes_002.rou.xml.gz", "viajes_002.rou.alt.xml.gz"):
         (tmp_path / "002" / nombre).write_bytes(b"")
     assert rutas_ultima_iteracion(tmp_path, tmp_path / "viajes.trips.xml", 3).name == "viajes_002.rou.xml.gz"
+
+
+def test_buses_en_ventana_deja_solo_los_que_salen_en_ella(tmp_path):
+    import gzip
+
+    from etl.sumo.transporte_publico import buses_en_ventana
+
+    origen = tmp_path / "pt.rou.xml.gz"
+    with gzip.open(origen, "wt", encoding="utf-8") as f:
+        f.write('<routes><vType id="bus_sitp" vClass="bus"/>'
+                '<vehicle id="a" type="bus_sitp" depart="21600.00"><route edges="e"/></vehicle>'
+                '<vehicle id="b" type="bus_sitp" depart="25200.00"><route edges="e"/><stop busStop="p" duration="10"/></vehicle>'
+                '<vehicle id="c" type="bus_sitp" depart="35999.00"><route edges="e"/></vehicle>'
+                '<vehicle id="d" type="bus_sitp" depart="36000.00"><route edges="e"/></vehicle></routes>')
+    destino = tmp_path / "ventana.rou.xml"
+    assert buses_en_ventana(origen, destino, 25200, 36000) == 2
+    texto = destino.read_text(encoding="utf-8")
+    assert 'vType id="bus_sitp"' in texto and 'busStop="p"' in texto
+    assert 'id="b"' in texto and 'id="c"' in texto and 'id="a"' not in texto and 'id="d"' not in texto

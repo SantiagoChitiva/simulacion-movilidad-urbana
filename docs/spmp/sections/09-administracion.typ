@@ -86,9 +86,13 @@ horas/semana. Esta estimación contempla tanto actividades técnicas como docume
     [Fase 3 – Extensión v2.0 (Sprints 6 a 8)], [120 h-p], [Semaforización, simulador 3D comparativo y pendientes (reporte de la comparación,
     programa editable, transporte público con GTFS).],
     [Fase 3 – Usabilidad v2.2 (Sprint 9)], [40 h-p], [Ajustes para perfiles no técnicos y comparación de programas con métricas reales.],
+    [Fase 3 – Cierre de pendientes v2.3 (Sprint 10)], [60 h-p], [Validación GEH contra 33 puntos de aforo, buses del SITP y TransMilenio
+    desde el GTFS, ventana de la tarde, encuesta completa, tráfico de paso y asignación iterativa; más largo que un sprint normal porque cada
+    experimento de validación tomaba más de una hora de simulación.],
     [Fase 4 – Evaluación y análisis], [80 h-p], [Validación formal, análisis de resultados, documentación de conclusiones.],
     [Documentación y gestión (transversal)], [80 h-p], [SPMP, SRS, SDD, Plan de pruebas, Informe final, reuniones.],
-    [Total], [760 h-p], [Línea base de 600 h-p (560 h-p + 40 h del Sprint 5), 120 h-p de la extensión v2.0 y 40 h-p del Sprint 9.],
+    [Total], [820 h-p], [Línea base de 600 h-p (560 h-p + 40 h del Sprint 5), 120 h-p de la extensión v2.0, 40 h-p del Sprint 9 y 60 h-p
+    del Sprint 10.],
   ),
   caption: [Asignación de recursos por fase.],
 ) <tabRecursos>
@@ -289,10 +293,13 @@ crítico.
     [F3.9], [_(v2.2)_ Sprint 9: Usabilidad para la toma de decisiones (tarjeta de cruces estilo Barranquilla, cierres por clic, ficha en lenguaje
     sencillo, comparación de programas con SUMO, inserción simultánea y resumen del viaje en 3D, tema claro/oscuro)], [40 h], [15], [F3.7], [—],
     [Terminada],
-    ..fase([F4], [FASE 4 – Evaluación y análisis], [80 h], [9–14], [F3.5], [—], [Pendiente]),
+    [F3.10], [_(v2.3)_ Sprint 10: Cierre de pendientes (validación GEH con aforos HMD, buses del SITP y TransMilenio desde el GTFS, ventana
+    de la tarde, encuesta completa, tráfico de paso, asignación iterativa, reanudación de corridas, reporte CSV/PDF, programa del semáforo
+    propuesto, semáforos reales de la SDM y correcciones del 3D)], [60 h], [15–16], [F3.9], [F4.1], [Terminada],
+    ..fase([F4], [FASE 4 – Evaluación y análisis], [80 h], [9–14], [F3.5], [—], [Terminada (GEH sin cumplir)]),
     [F4.1], [Validación formal del pipeline (GEH < 5 en ≥ 85% de puntos)], [24 h], [9–10], [F3.4], [F4.2], [Parcial: GEH calculado en 33 puntos; cumplen 2],
-    [F4.2], [Verificación de coherencia global del modelo simulado], [20 h], [9–10], [F3.4], [F4.1], [Pendiente],
-    [F4.3], [Documentación de conclusiones, limitaciones y trabajo futuro], [36 h], [10–14], [F4.1, F4.2], [—], [Pendiente],
+    [F4.2], [Verificación de coherencia global del modelo simulado], [20 h], [9–10], [F3.4], [F4.1], [Terminada: histograma de salidas],
+    [F4.3], [Documentación de conclusiones, limitaciones y trabajo futuro], [36 h], [10–14], [F4.1, F4.2], [—], [Terminada (memoria)],
     ..fase([F5], [DOCUMENTACIÓN Y GESTIÓN (transversal)], [80 h], [1–16], [—], [—], [En curso]),
     [F5.1], [Elaboración y actualización del SPMP], [12 h], [1–3, 11], [—], [F5.2], [v2.0],
     [F5.2], [Elaboración del SRS], [16 h], [3–4, 11], [F5.1], [—], [v2.0],
