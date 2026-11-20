@@ -1,0 +1,7696 @@
+{
+ "generado": "2026-11-20T10:45:14-05:00",
+ "corrida_origen": "base-semillas",
+ "semillas_por_cruce": 30,
+ "cruces": 59,
+ "criterio": {
+  "conflicto": "TTC < 1,5 s, DRAC > 3,35 m/s² o PET < 1,5 s, a menos de 60 m del cruce",
+  "clases": "cruce: trayectorias que se cruzan o convergen; alcance: uno detrás del otro",
+  "costo_demora_s": 10.0,
+  "veredictos": {
+   "conviene": "Conviene: reduce los conflictos de cruce sin aumentar el total ni mucho la demora.",
+   "conviene_con_costo": "Reduce los conflictos de cruce, pero aumenta el total de conflictos o más de 10 s la demora.",
+   "no_conviene": "No conviene: no reduce los conflictos de cruce y aumenta el total.",
+   "no_se_justifica": "No se justifica: no reduce los conflictos de cruce y aumenta la demora.",
+   "indiferente": "Indiferente: no hay diferencias claras.",
+   "sin_datos": "Sin datos suficientes."
+  }
+ },
+ "veredictos": {
+  "conviene_con_costo": 22,
+  "no_conviene": 36,
+  "no_se_justifica": 1
+ },
+ "resultados": [
+  {
+   "nodo_id": "cluster_10564050191_550374026",
+   "nivel": "prioritario",
+   "calles": "Avenida Calle 153 × Carrera 8A",
+   "lon": -74.030888,
+   "lat": 4.730439,
+   "veredicto": "conviene_con_costo",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 86.47,
+     "con": 116.6,
+     "diferencia": 30.13,
+     "ic95": [
+      0.29,
+      59.98
+     ],
+     "mejora_en": 6,
+     "empeora_en": 24
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 63.69,
+     "con": 91.29,
+     "diferencia": 27.6,
+     "ic95": [
+      -1.79,
+      57.0
+     ],
+     "mejora_en": 7,
+     "empeora_en": 23
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 11.43,
+     "con": 17.9,
+     "diferencia": 6.47,
+     "ic95": [
+      4.83,
+      8.11
+     ],
+     "mejora_en": 1,
+     "empeora_en": 27
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 38.9,
+     "con": 41.18,
+     "diferencia": 2.27,
+     "ic95": [
+      1.07,
+      3.47
+     ],
+     "mejora_en": 5,
+     "empeora_en": 25
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 227.03,
+     "con": 453.83,
+     "diferencia": 226.8,
+     "ic95": [
+      200.05,
+      253.55
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 66.07,
+     "con": 26.8,
+     "diferencia": -39.27,
+     "ic95": [
+      -44.41,
+      -34.12
+     ],
+     "mejora_en": 30,
+     "empeora_en": 0
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 159.67,
+     "con": 425.1,
+     "diferencia": 265.43,
+     "ic95": [
+      239.07,
+      291.8
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 183.73,
+     "con": 446.57,
+     "diferencia": 262.83,
+     "ic95": [
+      235.9,
+      289.77
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 47.67,
+     "con": 2.63,
+     "diferencia": -45.03,
+     "ic95": [
+      -49.0,
+      -41.07
+     ],
+     "mejora_en": 30,
+     "empeora_en": 0
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 30.13,
+     "con": 33.2,
+     "diferencia": 3.07,
+     "ic95": [
+      -14.21,
+      20.34
+     ],
+     "mejora_en": 6,
+     "empeora_en": 12
+    }
+   }
+  },
+  {
+   "nodo_id": "cluster_310709027_9902874515",
+   "nivel": "prioritario",
+   "calles": "Avenida Calle 161 × Carrera 8",
+   "lon": -74.027169,
+   "lat": 4.736967,
+   "veredicto": "conviene_con_costo",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 15.2,
+     "con": 17.11,
+     "diferencia": 1.91,
+     "ic95": [
+      1.43,
+      2.39
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 0.97,
+     "con": 2.5,
+     "diferencia": 1.52,
+     "ic95": [
+      1.08,
+      1.97
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 3.13,
+     "con": 5.23,
+     "diferencia": 2.1,
+     "ic95": [
+      1.52,
+      2.68
+     ],
+     "mejora_en": 2,
+     "empeora_en": 26
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 16.52,
+     "con": 16.9,
+     "diferencia": 0.38,
+     "ic95": [
+      0.33,
+      0.44
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 25.83,
+     "con": 103.4,
+     "diferencia": 77.57,
+     "ic95": [
+      71.21,
+      83.92
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 5.87,
+     "con": 3.27,
+     "diferencia": -2.6,
+     "ic95": [
+      -3.87,
+      -1.33
+     ],
+     "mejora_en": 20,
+     "empeora_en": 6
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 19.83,
+     "con": 99.53,
+     "diferencia": 79.7,
+     "ic95": [
+      73.22,
+      86.18
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 20.5,
+     "con": 101.57,
+     "diferencia": 81.07,
+     "ic95": [
+      74.83,
+      87.31
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 5.4,
+     "con": 2.0,
+     "diferencia": -3.4,
+     "ic95": [
+      -4.42,
+      -2.38
+     ],
+     "mejora_en": 28,
+     "empeora_en": 1
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 0.0,
+     "con": 0.17,
+     "diferencia": 0.17,
+     "ic95": [
+      -0.08,
+      0.41
+     ],
+     "mejora_en": 0,
+     "empeora_en": 2
+    }
+   }
+  },
+  {
+   "nodo_id": "cluster_389524221_9902200935_9902200946",
+   "nivel": "prioritario",
+   "calles": "Calle 163A × Carrera 17",
+   "lon": -74.040564,
+   "lat": 4.742824,
+   "veredicto": "conviene_con_costo",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 210.79,
+     "con": 215.7,
+     "diferencia": 4.91,
+     "ic95": [
+      -1.95,
+      11.77
+     ],
+     "mejora_en": 10,
+     "empeora_en": 19
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 183.86,
+     "con": 188.26,
+     "diferencia": 4.4,
+     "ic95": [
+      -2.34,
+      11.15
+     ],
+     "mejora_en": 12,
+     "empeora_en": 18
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 2.6,
+     "con": 4.97,
+     "diferencia": 2.37,
+     "ic95": [
+      1.86,
+      2.87
+     ],
+     "mejora_en": 0,
+     "empeora_en": 27
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 33.34,
+     "con": 34.77,
+     "diferencia": 1.42,
+     "ic95": [
+      0.85,
+      2.0
+     ],
+     "mejora_en": 7,
+     "empeora_en": 23
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 21.23,
+     "con": 81.0,
+     "diferencia": 59.77,
+     "ic95": [
+      51.56,
+      67.97
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 9.93,
+     "con": 4.67,
+     "diferencia": -5.27,
+     "ic95": [
+      -6.66,
+      -3.87
+     ],
+     "mejora_en": 30,
+     "empeora_en": 0
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 10.93,
+     "con": 75.93,
+     "diferencia": 65.0,
+     "ic95": [
+      56.88,
+      73.12
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 12.4,
+     "con": 79.87,
+     "diferencia": 67.47,
+     "ic95": [
+      58.83,
+      76.11
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 9.2,
+     "con": 1.53,
+     "diferencia": -7.67,
+     "ic95": [
+      -8.99,
+      -6.35
+     ],
+     "mejora_en": 30,
+     "empeora_en": 0
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 29.27,
+     "con": 29.6,
+     "diferencia": 0.33,
+     "ic95": [
+      -3.95,
+      4.62
+     ],
+     "mejora_en": 15,
+     "empeora_en": 13
+    }
+   }
+  },
+  {
+   "nodo_id": "1122748934",
+   "nivel": "recomendado",
+   "calles": "Avenida Carrera 7 × Calle 190",
+   "lon": -74.02758,
+   "lat": 4.766976,
+   "veredicto": "conviene_con_costo",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 45.75,
+     "con": 49.76,
+     "diferencia": 4.01,
+     "ic95": [
+      2.77,
+      5.25
+     ],
+     "mejora_en": 2,
+     "empeora_en": 28
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 12.21,
+     "con": 15.59,
+     "diferencia": 3.37,
+     "ic95": [
+      2.29,
+      4.45
+     ],
+     "mejora_en": 2,
+     "empeora_en": 28
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 1.3,
+     "con": 3.53,
+     "diferencia": 2.23,
+     "ic95": [
+      1.86,
+      2.61
+     ],
+     "mejora_en": 1,
+     "empeora_en": 29
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 23.69,
+     "con": 23.77,
+     "diferencia": 0.08,
+     "ic95": [
+      0.0,
+      0.16
+     ],
+     "mejora_en": 8,
+     "empeora_en": 18
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 4.57,
+     "con": 68.13,
+     "diferencia": 63.57,
+     "ic95": [
+      58.43,
+      68.71
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 2.9,
+     "con": 1.13,
+     "diferencia": -1.77,
+     "ic95": [
+      -2.6,
+      -0.93
+     ],
+     "mejora_en": 21,
+     "empeora_en": 3
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 1.6,
+     "con": 66.77,
+     "diferencia": 65.17,
+     "ic95": [
+      60.24,
+      70.1
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 3.1,
+     "con": 67.13,
+     "diferencia": 64.03,
+     "ic95": [
+      59.04,
+      69.02
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 1.97,
+     "con": 0.7,
+     "diferencia": -1.27,
+     "ic95": [
+      -1.98,
+      -0.55
+     ],
+     "mejora_en": 20,
+     "empeora_en": 4
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 0.13,
+     "con": 0.1,
+     "diferencia": -0.03,
+     "ic95": [
+      -0.3,
+      0.23
+     ],
+     "mejora_en": 2,
+     "empeora_en": 2
+    }
+   }
+  },
+  {
+   "nodo_id": "2429286177",
+   "nivel": "recomendado",
+   "calles": "Avenida Calle 192 × Carrera 11A",
+   "lon": -74.032596,
+   "lat": 4.769834,
+   "veredicto": "conviene_con_costo",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 820.46,
+     "con": 889.12,
+     "diferencia": 68.67,
+     "ic95": [
+      20.34,
+      116.99
+     ],
+     "mejora_en": 7,
+     "empeora_en": 23
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 775.52,
+     "con": 844.04,
+     "diferencia": 68.52,
+     "ic95": [
+      19.6,
+      117.44
+     ],
+     "mejora_en": 8,
+     "empeora_en": 22
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 29.3,
+     "con": 29.27,
+     "diferencia": -0.03,
+     "ic95": [
+      -0.28,
+      0.22
+     ],
+     "mejora_en": 7,
+     "empeora_en": 6
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 35.26,
+     "con": 37.05,
+     "diferencia": 1.8,
+     "ic95": [
+      0.7,
+      2.89
+     ],
+     "mejora_en": 8,
+     "empeora_en": 22
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 225.63,
+     "con": 255.6,
+     "diferencia": 29.97,
+     "ic95": [
+      6.76,
+      53.17
+     ],
+     "mejora_en": 8,
+     "empeora_en": 22
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 10.5,
+     "con": 1.1,
+     "diferencia": -9.4,
+     "ic95": [
+      -11.14,
+      -7.66
+     ],
+     "mejora_en": 30,
+     "empeora_en": 0
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 209.27,
+     "con": 254.03,
+     "diferencia": 44.77,
+     "ic95": [
+      21.4,
+      68.13
+     ],
+     "mejora_en": 6,
+     "empeora_en": 24
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 182.77,
+     "con": 202.97,
+     "diferencia": 20.2,
+     "ic95": [
+      1.82,
+      38.58
+     ],
+     "mejora_en": 10,
+     "empeora_en": 20
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 6.6,
+     "con": 0.0,
+     "diferencia": -6.6,
+     "ic95": [
+      -7.99,
+      -5.21
+     ],
+     "mejora_en": 30,
+     "empeora_en": 0
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 176.13,
+     "con": 173.23,
+     "diferencia": -2.9,
+     "ic95": [
+      -15.62,
+      9.82
+     ],
+     "mejora_en": 17,
+     "empeora_en": 12
+    }
+   }
+  },
+  {
+   "nodo_id": "311443968",
+   "nivel": "recomendado",
+   "calles": "Avenida Carrera 45 × Calle 187 Bis",
+   "lon": -74.043802,
+   "lat": 4.763556,
+   "veredicto": "conviene_con_costo",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 10.99,
+     "con": 429.19,
+     "diferencia": 418.19,
+     "ic95": [
+      352.64,
+      483.75
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 1.09,
+     "con": 395.28,
+     "diferencia": 394.19,
+     "ic95": [
+      330.81,
+      457.56
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 1.47,
+     "con": 14.17,
+     "diferencia": 12.7,
+     "ic95": [
+      11.79,
+      13.61
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 20.19,
+     "con": 23.82,
+     "diferencia": 3.63,
+     "ic95": [
+      3.05,
+      4.21
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 49.87,
+     "con": 289.57,
+     "diferencia": 239.7,
+     "ic95": [
+      216.89,
+      262.51
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 24.17,
+     "con": 14.17,
+     "diferencia": -10.0,
+     "ic95": [
+      -12.35,
+      -7.65
+     ],
+     "mejora_en": 28,
+     "empeora_en": 1
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 21.57,
+     "con": 270.73,
+     "diferencia": 249.17,
+     "ic95": [
+      226.39,
+      271.94
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 32.67,
+     "con": 244.0,
+     "diferencia": 211.33,
+     "ic95": [
+      191.17,
+      231.49
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 17.13,
+     "con": 8.93,
+     "diferencia": -8.2,
+     "ic95": [
+      -9.74,
+      -6.66
+     ],
+     "mejora_en": 28,
+     "empeora_en": 0
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 0.0,
+     "con": 67.33,
+     "diferencia": 67.33,
+     "ic95": [
+      50.94,
+      83.73
+     ],
+     "mejora_en": 0,
+     "empeora_en": 29
+    }
+   }
+  },
+  {
+   "nodo_id": "320915112",
+   "nivel": "recomendado",
+   "calles": "Calle 162 × Carrera 8G",
+   "lon": -74.030328,
+   "lat": 4.739067,
+   "veredicto": "conviene_con_costo",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 298.34,
+     "con": 297.97,
+     "diferencia": -0.37,
+     "ic95": [
+      -15.17,
+      14.43
+     ],
+     "mejora_en": 13,
+     "empeora_en": 17
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 245.79,
+     "con": 244.81,
+     "diferencia": -0.98,
+     "ic95": [
+      -14.66,
+      12.69
+     ],
+     "mejora_en": 14,
+     "empeora_en": 16
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 2.2,
+     "con": 3.73,
+     "diferencia": 1.53,
+     "ic95": [
+      0.98,
+      2.09
+     ],
+     "mejora_en": 3,
+     "empeora_en": 23
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 28.99,
+     "con": 29.1,
+     "diferencia": 0.1,
+     "ic95": [
+      -0.06,
+      0.27
+     ],
+     "mejora_en": 11,
+     "empeora_en": 14
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 20.13,
+     "con": 52.03,
+     "diferencia": 31.9,
+     "ic95": [
+      26.88,
+      36.92
+     ],
+     "mejora_en": 1,
+     "empeora_en": 29
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 5.53,
+     "con": 3.4,
+     "diferencia": -2.13,
+     "ic95": [
+      -3.17,
+      -1.1
+     ],
+     "mejora_en": 23,
+     "empeora_en": 4
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 14.5,
+     "con": 48.57,
+     "diferencia": 34.07,
+     "ic95": [
+      29.13,
+      39.01
+     ],
+     "mejora_en": 1,
+     "empeora_en": 29
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 17.47,
+     "con": 51.63,
+     "diferencia": 34.17,
+     "ic95": [
+      29.16,
+      39.17
+     ],
+     "mejora_en": 1,
+     "empeora_en": 29
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 3.43,
+     "con": 0.57,
+     "diferencia": -2.87,
+     "ic95": [
+      -3.62,
+      -2.12
+     ],
+     "mejora_en": 27,
+     "empeora_en": 0
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 9.97,
+     "con": 8.7,
+     "diferencia": -1.27,
+     "ic95": [
+      -5.33,
+      2.8
+     ],
+     "mejora_en": 14,
+     "empeora_en": 15
+    }
+   }
+  },
+  {
+   "nodo_id": "510582442",
+   "nivel": "recomendado",
+   "calles": "Avenida Carrera 7 × Calle 201",
+   "lon": -74.026034,
+   "lat": 4.777129,
+   "veredicto": "conviene_con_costo",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 48.33,
+     "con": 143.61,
+     "diferencia": 95.28,
+     "ic95": [
+      84.55,
+      106.01
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 7.98,
+     "con": 84.35,
+     "diferencia": 76.37,
+     "ic95": [
+      67.87,
+      84.87
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 21.23,
+     "con": 32.97,
+     "diferencia": 11.73,
+     "ic95": [
+      9.66,
+      13.81
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 40.02,
+     "con": 41.19,
+     "diferencia": 1.17,
+     "ic95": [
+      0.61,
+      1.73
+     ],
+     "mejora_en": 3,
+     "empeora_en": 27
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 325.2,
+     "con": 388.1,
+     "diferencia": 62.9,
+     "ic95": [
+      38.96,
+      86.84
+     ],
+     "mejora_en": 4,
+     "empeora_en": 26
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 26.57,
+     "con": 22.63,
+     "diferencia": -3.93,
+     "ic95": [
+      -6.37,
+      -1.5
+     ],
+     "mejora_en": 19,
+     "empeora_en": 10
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 277.73,
+     "con": 361.4,
+     "diferencia": 83.67,
+     "ic95": [
+      62.56,
+      104.78
+     ],
+     "mejora_en": 1,
+     "empeora_en": 29
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 293.47,
+     "con": 350.47,
+     "diferencia": 57.0,
+     "ic95": [
+      34.57,
+      79.43
+     ],
+     "mejora_en": 5,
+     "empeora_en": 25
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 15.37,
+     "con": 14.23,
+     "diferencia": -1.13,
+     "ic95": [
+      -3.09,
+      0.82
+     ],
+     "mejora_en": 15,
+     "empeora_en": 11
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 0.0,
+     "con": 0.0,
+     "diferencia": 0.0,
+     "ic95": [
+      0.0,
+      0.0
+     ],
+     "mejora_en": 0,
+     "empeora_en": 0
+    }
+   }
+  },
+  {
+   "nodo_id": "538691367",
+   "nivel": "recomendado",
+   "calles": "Calle 163 × Carrera 8",
+   "lon": -74.026625,
+   "lat": 4.73863,
+   "veredicto": "conviene_con_costo",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 15.18,
+     "con": 16.38,
+     "diferencia": 1.21,
+     "ic95": [
+      1.15,
+      1.27
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 1.48,
+     "con": 2.4,
+     "diferencia": 0.93,
+     "ic95": [
+      0.87,
+      0.98
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 2.17,
+     "con": 4.03,
+     "diferencia": 1.87,
+     "ic95": [
+      1.48,
+      2.26
+     ],
+     "mejora_en": 0,
+     "empeora_en": 27
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 13.22,
+     "con": 13.5,
+     "diferencia": 0.28,
+     "ic95": [
+      0.22,
+      0.34
+     ],
+     "mejora_en": 0,
+     "empeora_en": 28
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 25.2,
+     "con": 67.73,
+     "diferencia": 42.53,
+     "ic95": [
+      39.33,
+      45.74
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 8.67,
+     "con": 2.8,
+     "diferencia": -5.87,
+     "ic95": [
+      -6.98,
+      -4.75
+     ],
+     "mejora_en": 30,
+     "empeora_en": 0
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 16.53,
+     "con": 64.83,
+     "diferencia": 48.3,
+     "ic95": [
+      45.11,
+      51.49
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 18.13,
+     "con": 67.33,
+     "diferencia": 49.2,
+     "ic95": [
+      46.15,
+      52.25
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 7.6,
+     "con": 0.7,
+     "diferencia": -6.9,
+     "ic95": [
+      -7.89,
+      -5.91
+     ],
+     "mejora_en": 30,
+     "empeora_en": 0
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 0.03,
+     "con": 0.0,
+     "diferencia": -0.03,
+     "ic95": [
+      -0.1,
+      0.03
+     ],
+     "mejora_en": 1,
+     "empeora_en": 0
+    }
+   }
+  },
+  {
+   "nodo_id": "551126563",
+   "nivel": "recomendado",
+   "calles": "Calle 162 × Carrera 8D",
+   "lon": -74.028999,
+   "lat": 4.738726,
+   "veredicto": "conviene_con_costo",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 66.25,
+     "con": 66.14,
+     "diferencia": -0.11,
+     "ic95": [
+      -2.23,
+      2.01
+     ],
+     "mejora_en": 16,
+     "empeora_en": 13
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 39.61,
+     "con": 39.46,
+     "diferencia": -0.15,
+     "ic95": [
+      -1.8,
+      1.5
+     ],
+     "mejora_en": 18,
+     "empeora_en": 11
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 1.8,
+     "con": 4.2,
+     "diferencia": 2.4,
+     "ic95": [
+      2.03,
+      2.77
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 26.67,
+     "con": 26.73,
+     "diferencia": 0.06,
+     "ic95": [
+      -0.04,
+      0.17
+     ],
+     "mejora_en": 12,
+     "empeora_en": 15
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 23.07,
+     "con": 58.7,
+     "diferencia": 35.63,
+     "ic95": [
+      32.81,
+      38.45
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 16.47,
+     "con": 10.57,
+     "diferencia": -5.9,
+     "ic95": [
+      -7.86,
+      -3.94
+     ],
+     "mejora_en": 28,
+     "empeora_en": 2
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 6.53,
+     "con": 48.07,
+     "diferencia": 41.53,
+     "ic95": [
+      38.9,
+      44.16
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 12.47,
+     "con": 55.33,
+     "diferencia": 42.87,
+     "ic95": [
+      39.96,
+      45.77
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 12.43,
+     "con": 4.07,
+     "diferencia": -8.37,
+     "ic95": [
+      -9.87,
+      -6.86
+     ],
+     "mejora_en": 30,
+     "empeora_en": 0
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 0.23,
+     "con": 0.17,
+     "diferencia": -0.07,
+     "ic95": [
+      -0.16,
+      0.03
+     ],
+     "mejora_en": 2,
+     "empeora_en": 0
+    }
+   }
+  },
+  {
+   "nodo_id": "cluster_10118843418_10118843421_259708154",
+   "nivel": "recomendado",
+   "calles": "Calle 164 × Carrera 19A",
+   "lon": -74.042601,
+   "lat": 4.744234,
+   "veredicto": "conviene_con_costo",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 22.77,
+     "con": 27.2,
+     "diferencia": 4.42,
+     "ic95": [
+      4.26,
+      4.58
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 5.77,
+     "con": 9.38,
+     "diferencia": 3.6,
+     "ic95": [
+      3.47,
+      3.74
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 2.2,
+     "con": 4.27,
+     "diferencia": 2.07,
+     "ic95": [
+      1.7,
+      2.43
+     ],
+     "mejora_en": 0,
+     "empeora_en": 28
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 34.51,
+     "con": 35.75,
+     "diferencia": 1.23,
+     "ic95": [
+      1.11,
+      1.35
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 22.53,
+     "con": 141.87,
+     "diferencia": 119.33,
+     "ic95": [
+      106.82,
+      131.84
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 12.27,
+     "con": 9.83,
+     "diferencia": -2.43,
+     "ic95": [
+      -4.24,
+      -0.63
+     ],
+     "mejora_en": 20,
+     "empeora_en": 8
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 9.43,
+     "con": 129.97,
+     "diferencia": 120.53,
+     "ic95": [
+      107.66,
+      133.41
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 14.93,
+     "con": 133.77,
+     "diferencia": 118.83,
+     "ic95": [
+      106.44,
+      131.23
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 6.9,
+     "con": 2.03,
+     "diferencia": -4.87,
+     "ic95": [
+      -6.25,
+      -3.49
+     ],
+     "mejora_en": 27,
+     "empeora_en": 1
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 0.0,
+     "con": 0.0,
+     "diferencia": 0.0,
+     "ic95": [
+      0.0,
+      0.0
+     ],
+     "mejora_en": 0,
+     "empeora_en": 0
+    }
+   }
+  },
+  {
+   "nodo_id": "cluster_10280783883_269722175_3522514422",
+   "nivel": "recomendado",
+   "calles": "Carrera 13 × Calle 122",
+   "lon": -74.039727,
+   "lat": 4.700856,
+   "veredicto": "conviene_con_costo",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 34.54,
+     "con": 478.59,
+     "diferencia": 444.05,
+     "ic95": [
+      392.83,
+      495.27
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 16.21,
+     "con": 446.61,
+     "diferencia": 430.4,
+     "ic95": [
+      380.37,
+      480.43
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 3.5,
+     "con": 12.0,
+     "diferencia": 8.5,
+     "ic95": [
+      7.85,
+      9.15
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 28.59,
+     "con": 36.98,
+     "diferencia": 8.39,
+     "ic95": [
+      7.45,
+      9.34
+     ],
+     "mejora_en": 0,
+     "empeora_en": 29
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 60.37,
+     "con": 182.47,
+     "diferencia": 122.1,
+     "ic95": [
+      109.66,
+      134.54
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 8.43,
+     "con": 0.47,
+     "diferencia": -7.97,
+     "ic95": [
+      -9.29,
+      -6.64
+     ],
+     "mejora_en": 28,
+     "empeora_en": 0
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 49.37,
+     "con": 181.07,
+     "diferencia": 131.7,
+     "ic95": [
+      119.35,
+      144.05
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 54.9,
+     "con": 182.4,
+     "diferencia": 127.5,
+     "ic95": [
+      115.0,
+      140.0
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 5.9,
+     "con": 0.27,
+     "diferencia": -5.63,
+     "ic95": [
+      -6.76,
+      -4.51
+     ],
+     "mejora_en": 28,
+     "empeora_en": 0
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 0.0,
+     "con": 124.17,
+     "diferencia": 124.17,
+     "ic95": [
+      106.33,
+      142.0
+     ],
+     "mejora_en": 0,
+     "empeora_en": 28
+    }
+   }
+  },
+  {
+   "nodo_id": "cluster_10282486897_10282486908_10282522112_310799586",
+   "nivel": "recomendado",
+   "calles": "Carrera 20 × Calle 168",
+   "lon": -74.043302,
+   "lat": 4.748537,
+   "veredicto": "conviene_con_costo",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 36.4,
+     "con": 38.5,
+     "diferencia": 2.11,
+     "ic95": [
+      1.86,
+      2.36
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 20.36,
+     "con": 21.79,
+     "diferencia": 1.42,
+     "ic95": [
+      1.23,
+      1.62
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 2.03,
+     "con": 4.13,
+     "diferencia": 2.1,
+     "ic95": [
+      1.78,
+      2.42
+     ],
+     "mejora_en": 0,
+     "empeora_en": 29
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 45.34,
+     "con": 46.14,
+     "diferencia": 0.8,
+     "ic95": [
+      0.64,
+      0.95
+     ],
+     "mejora_en": 1,
+     "empeora_en": 29
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 11.7,
+     "con": 90.0,
+     "diferencia": 78.3,
+     "ic95": [
+      70.75,
+      85.85
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 7.07,
+     "con": 4.03,
+     "diferencia": -3.03,
+     "ic95": [
+      -4.47,
+      -1.6
+     ],
+     "mejora_en": 23,
+     "empeora_en": 6
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 4.6,
+     "con": 85.87,
+     "diferencia": 81.27,
+     "ic95": [
+      73.3,
+      89.24
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 6.5,
+     "con": 89.23,
+     "diferencia": 82.73,
+     "ic95": [
+      74.69,
+      90.78
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 5.47,
+     "con": 0.97,
+     "diferencia": -4.5,
+     "ic95": [
+      -5.54,
+      -3.46
+     ],
+     "mejora_en": 28,
+     "empeora_en": 0
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 1.73,
+     "con": 1.73,
+     "diferencia": 0.0,
+     "ic95": [
+      0.0,
+      0.0
+     ],
+     "mejora_en": 0,
+     "empeora_en": 0
+    }
+   }
+  },
+  {
+   "nodo_id": "cluster_10282607527_10282607528_10282607573_2013138355_#1more",
+   "nivel": "recomendado",
+   "calles": "Calle 151 × Carrera 12C",
+   "lon": -74.035292,
+   "lat": 4.729761,
+   "veredicto": "conviene_con_costo",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 22.45,
+     "con": 24.08,
+     "diferencia": 1.63,
+     "ic95": [
+      1.47,
+      1.8
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 4.34,
+     "con": 5.47,
+     "diferencia": 1.14,
+     "ic95": [
+      1.04,
+      1.23
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 3.6,
+     "con": 3.93,
+     "diferencia": 0.33,
+     "ic95": [
+      0.0,
+      0.66
+     ],
+     "mejora_en": 4,
+     "empeora_en": 13
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 33.56,
+     "con": 35.52,
+     "diferencia": 1.97,
+     "ic95": [
+      1.68,
+      2.25
+     ],
+     "mejora_en": 1,
+     "empeora_en": 29
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 45.1,
+     "con": 134.93,
+     "diferencia": 89.83,
+     "ic95": [
+      84.97,
+      94.7
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 13.37,
+     "con": 1.17,
+     "diferencia": -12.2,
+     "ic95": [
+      -13.69,
+      -10.71
+     ],
+     "mejora_en": 30,
+     "empeora_en": 0
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 30.5,
+     "con": 133.0,
+     "diferencia": 102.5,
+     "ic95": [
+      97.79,
+      107.21
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 33.43,
+     "con": 134.57,
+     "diferencia": 101.13,
+     "ic95": [
+      96.26,
+      106.01
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 11.8,
+     "con": 0.37,
+     "diferencia": -11.43,
+     "ic95": [
+      -12.7,
+      -10.17
+     ],
+     "mejora_en": 30,
+     "empeora_en": 0
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 0.0,
+     "con": 0.0,
+     "diferencia": 0.0,
+     "ic95": [
+      0.0,
+      0.0
+     ],
+     "mejora_en": 0,
+     "empeora_en": 0
+    }
+   }
+  },
+  {
+   "nodo_id": "cluster_1092908739_551166283",
+   "nivel": "recomendado",
+   "calles": "Calle 165 × Carrera 7H",
+   "lon": -74.02525,
+   "lat": 4.74154,
+   "veredicto": "conviene_con_costo",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 29.12,
+     "con": 48.22,
+     "diferencia": 19.1,
+     "ic95": [
+      18.68,
+      19.52
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 11.59,
+     "con": 29.15,
+     "diferencia": 17.57,
+     "ic95": [
+      17.16,
+      17.97
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 6.77,
+     "con": 9.13,
+     "diferencia": 2.37,
+     "ic95": [
+      2.06,
+      2.67
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 23.42,
+     "con": 23.79,
+     "diferencia": 0.37,
+     "ic95": [
+      0.26,
+      0.48
+     ],
+     "mejora_en": 2,
+     "empeora_en": 26
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 101.7,
+     "con": 321.73,
+     "diferencia": 220.03,
+     "ic95": [
+      212.55,
+      227.52
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 18.23,
+     "con": 0.97,
+     "diferencia": -17.27,
+     "ic95": [
+      -18.73,
+      -15.8
+     ],
+     "mejora_en": 30,
+     "empeora_en": 0
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 80.47,
+     "con": 320.47,
+     "diferencia": 240.0,
+     "ic95": [
+      233.0,
+      247.0
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 89.9,
+     "con": 321.7,
+     "diferencia": 231.8,
+     "ic95": [
+      224.6,
+      239.0
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 13.0,
+     "con": 0.03,
+     "diferencia": -12.97,
+     "ic95": [
+      -14.03,
+      -11.9
+     ],
+     "mejora_en": 30,
+     "empeora_en": 0
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 0.03,
+     "con": 0.07,
+     "diferencia": 0.03,
+     "ic95": [
+      -0.09,
+      0.15
+     ],
+     "mejora_en": 1,
+     "empeora_en": 2
+    }
+   }
+  },
+  {
+   "nodo_id": "cluster_1458184285_9902201012",
+   "nivel": "recomendado",
+   "calles": "Calle 163A × Carrera 8G Bis A",
+   "lon": -74.03067,
+   "lat": 4.740281,
+   "veredicto": "conviene_con_costo",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 158.93,
+     "con": 170.34,
+     "diferencia": 11.41,
+     "ic95": [
+      -2.17,
+      24.99
+     ],
+     "mejora_en": 12,
+     "empeora_en": 18
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 122.35,
+     "con": 132.1,
+     "diferencia": 9.75,
+     "ic95": [
+      -2.42,
+      21.91
+     ],
+     "mejora_en": 12,
+     "empeora_en": 18
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 1.5,
+     "con": 3.13,
+     "diferencia": 1.63,
+     "ic95": [
+      1.38,
+      1.88
+     ],
+     "mejora_en": 0,
+     "empeora_en": 29
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 25.07,
+     "con": 25.26,
+     "diferencia": 0.19,
+     "ic95": [
+      -0.12,
+      0.5
+     ],
+     "mejora_en": 7,
+     "empeora_en": 21
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 9.67,
+     "con": 111.5,
+     "diferencia": 101.83,
+     "ic95": [
+      94.86,
+      108.8
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 3.1,
+     "con": 2.23,
+     "diferencia": -0.87,
+     "ic95": [
+      -1.64,
+      -0.09
+     ],
+     "mejora_en": 18,
+     "empeora_en": 8
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 6.23,
+     "con": 108.8,
+     "diferencia": 102.57,
+     "ic95": [
+      95.62,
+      109.52
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 7.17,
+     "con": 110.0,
+     "diferencia": 102.83,
+     "ic95": [
+      95.82,
+      109.84
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 2.77,
+     "con": 1.57,
+     "diferencia": -1.2,
+     "ic95": [
+      -1.88,
+      -0.52
+     ],
+     "mejora_en": 19,
+     "empeora_en": 6
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 9.5,
+     "con": 11.03,
+     "diferencia": 1.53,
+     "ic95": [
+      -2.8,
+      5.87
+     ],
+     "mejora_en": 10,
+     "empeora_en": 17
+    }
+   }
+  },
+  {
+   "nodo_id": "cluster_320915103_9902860510_9902874511",
+   "nivel": "recomendado",
+   "calles": "Avenida Calle 161 × Carrera 8F",
+   "lon": -74.030016,
+   "lat": 4.73772,
+   "veredicto": "conviene_con_costo",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 103.6,
+     "con": 106.0,
+     "diferencia": 2.4,
+     "ic95": [
+      -6.12,
+      10.93
+     ],
+     "mejora_en": 15,
+     "empeora_en": 15
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 70.52,
+     "con": 72.4,
+     "diferencia": 1.88,
+     "ic95": [
+      -5.56,
+      9.33
+     ],
+     "mejora_en": 15,
+     "empeora_en": 15
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 1.53,
+     "con": 4.07,
+     "diferencia": 2.53,
+     "ic95": [
+      2.12,
+      2.95
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 26.91,
+     "con": 27.32,
+     "diferencia": 0.41,
+     "ic95": [
+      0.15,
+      0.67
+     ],
+     "mejora_en": 7,
+     "empeora_en": 22
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 7.2,
+     "con": 53.97,
+     "diferencia": 46.77,
+     "ic95": [
+      42.04,
+      51.49
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 4.6,
+     "con": 2.37,
+     "diferencia": -2.23,
+     "ic95": [
+      -3.57,
+      -0.9
+     ],
+     "mejora_en": 18,
+     "empeora_en": 6
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 2.57,
+     "con": 51.6,
+     "diferencia": 49.03,
+     "ic95": [
+      43.99,
+      54.08
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 3.67,
+     "con": 52.0,
+     "diferencia": 48.33,
+     "ic95": [
+      43.46,
+      53.21
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 3.33,
+     "con": 0.07,
+     "diferencia": -3.27,
+     "ic95": [
+      -4.13,
+      -2.41
+     ],
+     "mejora_en": 28,
+     "empeora_en": 0
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 0.2,
+     "con": 0.63,
+     "diferencia": 0.43,
+     "ic95": [
+      -0.14,
+      1.0
+     ],
+     "mejora_en": 2,
+     "empeora_en": 7
+    }
+   }
+  },
+  {
+   "nodo_id": "cluster_360200473_9902860507_9902874514",
+   "nivel": "recomendado",
+   "calles": "Avenida Calle 161 × Carrera 8B",
+   "lon": -74.028136,
+   "lat": 4.737207,
+   "veredicto": "conviene_con_costo",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 17.82,
+     "con": 18.32,
+     "diferencia": 0.5,
+     "ic95": [
+      0.44,
+      0.56
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 0.91,
+     "con": 1.28,
+     "diferencia": 0.37,
+     "ic95": [
+      0.33,
+      0.41
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 1.0,
+     "con": 2.4,
+     "diferencia": 1.4,
+     "ic95": [
+      1.17,
+      1.63
+     ],
+     "mejora_en": 0,
+     "empeora_en": 28
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 16.96,
+     "con": 17.37,
+     "diferencia": 0.41,
+     "ic95": [
+      0.35,
+      0.47
+     ],
+     "mejora_en": 0,
+     "empeora_en": 29
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 1.77,
+     "con": 9.07,
+     "diferencia": 7.3,
+     "ic95": [
+      5.81,
+      8.79
+     ],
+     "mejora_en": 0,
+     "empeora_en": 29
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 1.67,
+     "con": 0.9,
+     "diferencia": -0.77,
+     "ic95": [
+      -1.36,
+      -0.17
+     ],
+     "mejora_en": 12,
+     "empeora_en": 3
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 0.1,
+     "con": 8.17,
+     "diferencia": 8.07,
+     "ic95": [
+      6.38,
+      9.75
+     ],
+     "mejora_en": 0,
+     "empeora_en": 29
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 0.7,
+     "con": 9.07,
+     "diferencia": 8.37,
+     "ic95": [
+      6.7,
+      10.03
+     ],
+     "mejora_en": 0,
+     "empeora_en": 29
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 1.27,
+     "con": 0.03,
+     "diferencia": -1.23,
+     "ic95": [
+      -1.72,
+      -0.75
+     ],
+     "mejora_en": 19,
+     "empeora_en": 1
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 0.0,
+     "con": 0.0,
+     "diferencia": 0.0,
+     "ic95": [
+      0.0,
+      0.0
+     ],
+     "mejora_en": 0,
+     "empeora_en": 0
+    }
+   }
+  },
+  {
+   "nodo_id": "cluster_389527748_9902200933_9902200944",
+   "nivel": "recomendado",
+   "calles": "Calle 163A × Carrera 16A",
+   "lon": -74.038326,
+   "lat": 4.742296,
+   "veredicto": "conviene_con_costo",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 65.81,
+     "con": 57.15,
+     "diferencia": -8.66,
+     "ic95": [
+      -17.42,
+      0.11
+     ],
+     "mejora_en": 18,
+     "empeora_en": 12
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 44.35,
+     "con": 35.84,
+     "diferencia": -8.51,
+     "ic95": [
+      -16.76,
+      -0.27
+     ],
+     "mejora_en": 18,
+     "empeora_en": 12
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 4.17,
+     "con": 5.3,
+     "diferencia": 1.13,
+     "ic95": [
+      0.64,
+      1.63
+     ],
+     "mejora_en": 5,
+     "empeora_en": 22
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 37.99,
+     "con": 35.19,
+     "diferencia": -2.8,
+     "ic95": [
+      -4.94,
+      -0.66
+     ],
+     "mejora_en": 21,
+     "empeora_en": 9
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 50.73,
+     "con": 144.37,
+     "diferencia": 93.63,
+     "ic95": [
+      86.79,
+      100.48
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 20.0,
+     "con": 13.8,
+     "diferencia": -6.2,
+     "ic95": [
+      -8.11,
+      -4.29
+     ],
+     "mejora_en": 25,
+     "empeora_en": 4
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 30.37,
+     "con": 130.1,
+     "diferencia": 99.73,
+     "ic95": [
+      92.84,
+      106.63
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 33.43,
+     "con": 140.63,
+     "diferencia": 107.2,
+     "ic95": [
+      99.9,
+      114.5
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 18.07,
+     "con": 5.2,
+     "diferencia": -12.87,
+     "ic95": [
+      -14.6,
+      -11.13
+     ],
+     "mejora_en": 30,
+     "empeora_en": 0
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 6.67,
+     "con": 2.6,
+     "diferencia": -4.07,
+     "ic95": [
+      -7.02,
+      -1.11
+     ],
+     "mejora_en": 21,
+     "empeora_en": 6
+    }
+   }
+  },
+  {
+   "nodo_id": "cluster_510582454_7578480194",
+   "nivel": "recomendado",
+   "calles": "Avenida Carrera 7 × Calle 234",
+   "lon": -74.030344,
+   "lat": 4.808914,
+   "veredicto": "conviene_con_costo",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 41.12,
+     "con": 1433.0,
+     "diferencia": 1391.88,
+     "ic95": [
+      1361.18,
+      1422.57
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 19.73,
+     "con": 1367.02,
+     "diferencia": 1347.29,
+     "ic95": [
+      1317.06,
+      1377.52
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 12.53,
+     "con": 27.97,
+     "diferencia": 15.43,
+     "ic95": [
+      13.75,
+      17.12
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 34.79,
+     "con": 47.29,
+     "diferencia": 12.5,
+     "ic95": [
+      10.83,
+      14.17
+     ],
+     "mejora_en": 0,
+     "empeora_en": 29
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 291.5,
+     "con": 145.7,
+     "diferencia": -145.8,
+     "ic95": [
+      -160.27,
+      -131.33
+     ],
+     "mejora_en": 30,
+     "empeora_en": 0
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 33.23,
+     "con": 3.67,
+     "diferencia": -29.57,
+     "ic95": [
+      -32.36,
+      -26.77
+     ],
+     "mejora_en": 30,
+     "empeora_en": 0
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 241.07,
+     "con": 138.77,
+     "diferencia": -102.3,
+     "ic95": [
+      -115.63,
+      -88.97
+     ],
+     "mejora_en": 30,
+     "empeora_en": 0
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 261.07,
+     "con": 133.7,
+     "diferencia": -127.37,
+     "ic95": [
+      -140.43,
+      -114.3
+     ],
+     "mejora_en": 30,
+     "empeora_en": 0
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 8.9,
+     "con": 0.8,
+     "diferencia": -8.1,
+     "ic95": [
+      -9.59,
+      -6.61
+     ],
+     "mejora_en": 30,
+     "empeora_en": 0
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 1.1,
+     "con": 81.17,
+     "diferencia": 80.07,
+     "ic95": [
+      76.89,
+      83.24
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    }
+   }
+  },
+  {
+   "nodo_id": "cluster_5150641155_7737988112",
+   "nivel": "recomendado",
+   "calles": "Carrera 4 × Calle 189",
+   "lon": -74.024025,
+   "lat": 4.765731,
+   "veredicto": "conviene_con_costo",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 27.04,
+     "con": 73.77,
+     "diferencia": 46.72,
+     "ic95": [
+      9.42,
+      84.03
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 5.54,
+     "con": 47.08,
+     "diferencia": 41.54,
+     "ic95": [
+      4.52,
+      78.57
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 3.27,
+     "con": 4.37,
+     "diferencia": 1.1,
+     "ic95": [
+      0.87,
+      1.33
+     ],
+     "mejora_en": 0,
+     "empeora_en": 26
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 22.63,
+     "con": 23.52,
+     "diferencia": 0.89,
+     "ic95": [
+      0.52,
+      1.27
+     ],
+     "mejora_en": 2,
+     "empeora_en": 25
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 173.4,
+     "con": 460.5,
+     "diferencia": 287.1,
+     "ic95": [
+      261.43,
+      312.77
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 51.5,
+     "con": 33.3,
+     "diferencia": -18.2,
+     "ic95": [
+      -22.46,
+      -13.94
+     ],
+     "mejora_en": 27,
+     "empeora_en": 3
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 118.1,
+     "con": 424.97,
+     "diferencia": 306.87,
+     "ic95": [
+      280.15,
+      333.58
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 130.87,
+     "con": 389.53,
+     "diferencia": 258.67,
+     "ic95": [
+      236.55,
+      280.78
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 35.43,
+     "con": 17.17,
+     "diferencia": -18.27,
+     "ic95": [
+      -21.66,
+      -14.87
+     ],
+     "mejora_en": 29,
+     "empeora_en": 0
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 0.0,
+     "con": 8.5,
+     "diferencia": 8.5,
+     "ic95": [
+      -8.88,
+      25.88
+     ],
+     "mejora_en": 0,
+     "empeora_en": 1
+    }
+   }
+  },
+  {
+   "nodo_id": "cluster_612924313_830820569_9622498026_9622498101",
+   "nivel": "recomendado",
+   "calles": "Calle 147 × Carrera 13",
+   "lon": -74.037073,
+   "lat": 4.727598,
+   "veredicto": "conviene_con_costo",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 32.37,
+     "con": 38.56,
+     "diferencia": 6.19,
+     "ic95": [
+      5.93,
+      6.46
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 9.33,
+     "con": 14.29,
+     "diferencia": 4.97,
+     "ic95": [
+      4.76,
+      5.17
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 4.67,
+     "con": 8.13,
+     "diferencia": 3.47,
+     "ic95": [
+      2.75,
+      4.18
+     ],
+     "mejora_en": 1,
+     "empeora_en": 27
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 34.97,
+     "con": 38.52,
+     "diferencia": 3.55,
+     "ic95": [
+      3.12,
+      3.98
+     ],
+     "mejora_en": 0,
+     "empeora_en": 28
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 44.8,
+     "con": 218.5,
+     "diferencia": 173.7,
+     "ic95": [
+      155.39,
+      192.01
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 14.97,
+     "con": 8.7,
+     "diferencia": -6.27,
+     "ic95": [
+      -8.1,
+      -4.43
+     ],
+     "mejora_en": 27,
+     "empeora_en": 1
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 29.63,
+     "con": 209.73,
+     "diferencia": 180.1,
+     "ic95": [
+      161.44,
+      198.76
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 32.03,
+     "con": 214.57,
+     "diferencia": 182.53,
+     "ic95": [
+      163.45,
+      201.62
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 13.43,
+     "con": 4.4,
+     "diferencia": -9.03,
+     "ic95": [
+      -10.65,
+      -7.41
+     ],
+     "mejora_en": 29,
+     "empeora_en": 0
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 0.0,
+     "con": 0.0,
+     "diferencia": 0.0,
+     "ic95": [
+      0.0,
+      0.0
+     ],
+     "mejora_en": 0,
+     "empeora_en": 0
+    }
+   }
+  },
+  {
+   "nodo_id": "1028886058",
+   "nivel": "recomendado",
+   "calles": "Avenida Carrera 7 × Calle 224",
+   "lon": -74.030412,
+   "lat": 4.800668,
+   "veredicto": "no_conviene",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 32.47,
+     "con": 94.22,
+     "diferencia": 61.75,
+     "ic95": [
+      51.6,
+      71.9
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 6.13,
+     "con": 51.69,
+     "diferencia": 45.56,
+     "ic95": [
+      38.41,
+      52.72
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 13.17,
+     "con": 35.7,
+     "diferencia": 22.53,
+     "ic95": [
+      20.13,
+      24.94
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 25.02,
+     "con": 24.26,
+     "diferencia": -0.76,
+     "ic95": [
+      -1.0,
+      -0.52
+     ],
+     "mejora_en": 27,
+     "empeora_en": 2
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 356.3,
+     "con": 457.4,
+     "diferencia": 101.1,
+     "ic95": [
+      72.58,
+      129.62
+     ],
+     "mejora_en": 2,
+     "empeora_en": 28
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 42.13,
+     "con": 42.73,
+     "diferencia": 0.6,
+     "ic95": [
+      -2.2,
+      3.4
+     ],
+     "mejora_en": 11,
+     "empeora_en": 18
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 295.57,
+     "con": 409.57,
+     "diferencia": 114.0,
+     "ic95": [
+      84.73,
+      143.27
+     ],
+     "mejora_en": 1,
+     "empeora_en": 29
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 314.23,
+     "con": 421.1,
+     "diferencia": 106.87,
+     "ic95": [
+      81.7,
+      132.03
+     ],
+     "mejora_en": 1,
+     "empeora_en": 29
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 25.0,
+     "con": 26.07,
+     "diferencia": 1.07,
+     "ic95": [
+      -1.05,
+      3.18
+     ],
+     "mejora_en": 11,
+     "empeora_en": 18
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 0.0,
+     "con": 0.0,
+     "diferencia": 0.0,
+     "ic95": [
+      0.0,
+      0.0
+     ],
+     "mejora_en": 0,
+     "empeora_en": 0
+    }
+   }
+  },
+  {
+   "nodo_id": "1092891557",
+   "nivel": "recomendado",
+   "calles": "Calle 163 × Transversal 7A",
+   "lon": -74.024002,
+   "lat": 4.737888,
+   "veredicto": "no_conviene",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 62.06,
+     "con": 64.11,
+     "diferencia": 2.06,
+     "ic95": [
+      -2.62,
+      6.73
+     ],
+     "mejora_en": 13,
+     "empeora_en": 16
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 34.25,
+     "con": 36.09,
+     "diferencia": 1.84,
+     "ic95": [
+      -2.34,
+      6.02
+     ],
+     "mejora_en": 12,
+     "empeora_en": 17
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 1.03,
+     "con": 2.7,
+     "diferencia": 1.67,
+     "ic95": [
+      1.42,
+      1.91
+     ],
+     "mejora_en": 0,
+     "empeora_en": 29
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 15.59,
+     "con": 15.65,
+     "diferencia": 0.05,
+     "ic95": [
+      -0.06,
+      0.16
+     ],
+     "mejora_en": 12,
+     "empeora_en": 15
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 0.27,
+     "con": 11.93,
+     "diferencia": 11.67,
+     "ic95": [
+      10.11,
+      13.23
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 0.0,
+     "con": 0.0,
+     "diferencia": 0.0,
+     "ic95": [
+      0.0,
+      0.0
+     ],
+     "mejora_en": 0,
+     "empeora_en": 0
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 0.27,
+     "con": 11.93,
+     "diferencia": 11.67,
+     "ic95": [
+      10.11,
+      13.23
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 0.27,
+     "con": 11.93,
+     "diferencia": 11.67,
+     "ic95": [
+      10.11,
+      13.23
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 0.0,
+     "con": 0.0,
+     "diferencia": 0.0,
+     "ic95": [
+      0.0,
+      0.0
+     ],
+     "mejora_en": 0,
+     "empeora_en": 0
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 0.3,
+     "con": 0.97,
+     "diferencia": 0.67,
+     "ic95": [
+      -0.31,
+      1.64
+     ],
+     "mejora_en": 2,
+     "empeora_en": 6
+    }
+   }
+  },
+  {
+   "nodo_id": "1381298625",
+   "nivel": "recomendado",
+   "calles": "Avenida Carrera 7 × Calle 235",
+   "lon": -74.030781,
+   "lat": 4.811533,
+   "veredicto": "no_conviene",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 26.63,
+     "con": 33.82,
+     "diferencia": 7.19,
+     "ic95": [
+      6.7,
+      7.68
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 6.55,
+     "con": 12.11,
+     "diferencia": 5.56,
+     "ic95": [
+      5.16,
+      5.96
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 8.47,
+     "con": 9.43,
+     "diferencia": 0.97,
+     "ic95": [
+      0.09,
+      1.84
+     ],
+     "mejora_en": 7,
+     "empeora_en": 17
+    },
+    "demora_peaton_s": {
+     "n": 29,
+     "sin": 38.83,
+     "con": 40.0,
+     "diferencia": 1.17,
+     "ic95": [
+      0.81,
+      1.52
+     ],
+     "mejora_en": 2,
+     "empeora_en": 27
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 119.27,
+     "con": 369.3,
+     "diferencia": 250.03,
+     "ic95": [
+      238.04,
+      262.03
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 19.97,
+     "con": 23.07,
+     "diferencia": 3.1,
+     "ic95": [
+      0.7,
+      5.5
+     ],
+     "mejora_en": 11,
+     "empeora_en": 19
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 89.57,
+     "con": 339.9,
+     "diferencia": 250.33,
+     "ic95": [
+      239.74,
+      260.92
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 107.0,
+     "con": 345.7,
+     "diferencia": 238.7,
+     "ic95": [
+      227.35,
+      250.05
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 8.87,
+     "con": 8.9,
+     "diferencia": 0.03,
+     "ic95": [
+      -1.5,
+      1.56
+     ],
+     "mejora_en": 14,
+     "empeora_en": 12
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 0.0,
+     "con": 0.0,
+     "diferencia": 0.0,
+     "ic95": [
+      0.0,
+      0.0
+     ],
+     "mejora_en": 0,
+     "empeora_en": 0
+    }
+   }
+  },
+  {
+   "nodo_id": "1830782215",
+   "nivel": "recomendado",
+   "calles": "Carrera 6 × Calle 181A",
+   "lon": -74.024485,
+   "lat": 4.757981,
+   "veredicto": "no_conviene",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 22.11,
+     "con": 22.63,
+     "diferencia": 0.52,
+     "ic95": [
+      0.36,
+      0.68
+     ],
+     "mejora_en": 2,
+     "empeora_en": 26
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 4.98,
+     "con": 5.36,
+     "diferencia": 0.38,
+     "ic95": [
+      0.25,
+      0.52
+     ],
+     "mejora_en": 5,
+     "empeora_en": 25
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 0.7,
+     "con": 2.33,
+     "diferencia": 1.63,
+     "ic95": [
+      1.35,
+      1.92
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 30.86,
+     "con": 30.96,
+     "diferencia": 0.1,
+     "ic95": [
+      0.03,
+      0.17
+     ],
+     "mejora_en": 7,
+     "empeora_en": 21
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 3.27,
+     "con": 10.93,
+     "diferencia": 7.67,
+     "ic95": [
+      6.09,
+      9.24
+     ],
+     "mejora_en": 1,
+     "empeora_en": 29
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 2.97,
+     "con": 4.33,
+     "diferencia": 1.37,
+     "ic95": [
+      0.18,
+      2.56
+     ],
+     "mejora_en": 9,
+     "empeora_en": 16
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 0.27,
+     "con": 6.3,
+     "diferencia": 6.03,
+     "ic95": [
+      4.85,
+      7.22
+     ],
+     "mejora_en": 0,
+     "empeora_en": 29
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 1.87,
+     "con": 9.13,
+     "diferencia": 7.27,
+     "ic95": [
+      5.86,
+      8.67
+     ],
+     "mejora_en": 0,
+     "empeora_en": 29
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 2.07,
+     "con": 3.17,
+     "diferencia": 1.1,
+     "ic95": [
+      0.16,
+      2.04
+     ],
+     "mejora_en": 8,
+     "empeora_en": 16
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 0.0,
+     "con": 0.0,
+     "diferencia": 0.0,
+     "ic95": [
+      0.0,
+      0.0
+     ],
+     "mejora_en": 0,
+     "empeora_en": 0
+    }
+   }
+  },
+  {
+   "nodo_id": "1884662912",
+   "nivel": "recomendado",
+   "calles": "Carrera 4 × Diagonal 183A",
+   "lon": -74.024157,
+   "lat": 4.761597,
+   "veredicto": "no_conviene",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 20.13,
+     "con": 23.12,
+     "diferencia": 2.99,
+     "ic95": [
+      1.74,
+      4.23
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 3.41,
+     "con": 5.65,
+     "diferencia": 2.24,
+     "ic95": [
+      1.09,
+      3.38
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 2.37,
+     "con": 4.53,
+     "diferencia": 2.17,
+     "ic95": [
+      1.67,
+      2.67
+     ],
+     "mejora_en": 0,
+     "empeora_en": 26
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 19.6,
+     "con": 19.69,
+     "diferencia": 0.09,
+     "ic95": [
+      0.02,
+      0.16
+     ],
+     "mejora_en": 7,
+     "empeora_en": 15
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 26.1,
+     "con": 154.03,
+     "diferencia": 127.93,
+     "ic95": [
+      118.26,
+      137.6
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 15.07,
+     "con": 24.53,
+     "diferencia": 9.47,
+     "ic95": [
+      7.29,
+      11.64
+     ],
+     "mejora_en": 0,
+     "empeora_en": 29
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 11.0,
+     "con": 129.27,
+     "diferencia": 118.27,
+     "ic95": [
+      109.39,
+      127.15
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 15.47,
+     "con": 122.43,
+     "diferencia": 106.97,
+     "ic95": [
+      99.51,
+      114.43
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 9.63,
+     "con": 14.63,
+     "diferencia": 5.0,
+     "ic95": [
+      3.15,
+      6.85
+     ],
+     "mejora_en": 2,
+     "empeora_en": 26
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 0.0,
+     "con": 0.3,
+     "diferencia": 0.3,
+     "ic95": [
+      -0.31,
+      0.91
+     ],
+     "mejora_en": 0,
+     "empeora_en": 1
+    }
+   }
+  },
+  {
+   "nodo_id": "2547434496",
+   "nivel": "recomendado",
+   "calles": "Calle 159 × Carrera 16C",
+   "lon": -74.040516,
+   "lat": 4.737917,
+   "veredicto": "no_conviene",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 175.82,
+     "con": 179.08,
+     "diferencia": 3.25,
+     "ic95": [
+      0.12,
+      6.39
+     ],
+     "mejora_en": 10,
+     "empeora_en": 20
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 151.69,
+     "con": 154.41,
+     "diferencia": 2.72,
+     "ic95": [
+      -0.36,
+      5.8
+     ],
+     "mejora_en": 11,
+     "empeora_en": 19
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 3.93,
+     "con": 5.13,
+     "diferencia": 1.2,
+     "ic95": [
+      0.82,
+      1.58
+     ],
+     "mejora_en": 2,
+     "empeora_en": 24
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 44.36,
+     "con": 45.19,
+     "diferencia": 0.82,
+     "ic95": [
+      -0.26,
+      1.91
+     ],
+     "mejora_en": 8,
+     "empeora_en": 22
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 36.2,
+     "con": 114.23,
+     "diferencia": 78.03,
+     "ic95": [
+      73.66,
+      82.41
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 17.93,
+     "con": 25.8,
+     "diferencia": 7.87,
+     "ic95": [
+      5.49,
+      10.24
+     ],
+     "mejora_en": 2,
+     "empeora_en": 27
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 17.03,
+     "con": 83.23,
+     "diferencia": 66.2,
+     "ic95": [
+      62.58,
+      69.82
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 23.37,
+     "con": 103.1,
+     "diferencia": 79.73,
+     "ic95": [
+      75.69,
+      83.78
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 16.2,
+     "con": 20.5,
+     "diferencia": 4.3,
+     "ic95": [
+      2.56,
+      6.04
+     ],
+     "mejora_en": 5,
+     "empeora_en": 24
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 21.3,
+     "con": 22.7,
+     "diferencia": 1.4,
+     "ic95": [
+      -0.82,
+      3.62
+     ],
+     "mejora_en": 10,
+     "empeora_en": 16
+    }
+   }
+  },
+  {
+   "nodo_id": "309815424",
+   "nivel": "recomendado",
+   "calles": "Calle 180 × Carrera 7 Este",
+   "lon": -74.015761,
+   "lat": 4.757618,
+   "veredicto": "no_conviene",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 245.78,
+     "con": 337.54,
+     "diferencia": 91.76,
+     "ic95": [
+      -79.9,
+      263.41
+     ],
+     "mejora_en": 9,
+     "empeora_en": 21
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 222.96,
+     "con": 312.63,
+     "diferencia": 89.67,
+     "ic95": [
+      -77.92,
+      257.25
+     ],
+     "mejora_en": 9,
+     "empeora_en": 21
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 9.87,
+     "con": 19.3,
+     "diferencia": 9.43,
+     "ic95": [
+      3.15,
+      15.71
+     ],
+     "mejora_en": 4,
+     "empeora_en": 25
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 35.85,
+     "con": 37.98,
+     "diferencia": 2.12,
+     "ic95": [
+      -2.0,
+      6.25
+     ],
+     "mejora_en": 10,
+     "empeora_en": 19
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 32.6,
+     "con": 121.8,
+     "diferencia": 89.2,
+     "ic95": [
+      73.48,
+      104.92
+     ],
+     "mejora_en": 1,
+     "empeora_en": 29
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 4.3,
+     "con": 5.13,
+     "diferencia": 0.83,
+     "ic95": [
+      -0.39,
+      2.06
+     ],
+     "mejora_en": 12,
+     "empeora_en": 17
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 27.83,
+     "con": 115.97,
+     "diferencia": 88.13,
+     "ic95": [
+      72.3,
+      103.97
+     ],
+     "mejora_en": 1,
+     "empeora_en": 29
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 24.17,
+     "con": 98.77,
+     "diferencia": 74.6,
+     "ic95": [
+      62.67,
+      86.53
+     ],
+     "mejora_en": 1,
+     "empeora_en": 29
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 2.3,
+     "con": 2.6,
+     "diferencia": 0.3,
+     "ic95": [
+      -0.55,
+      1.15
+     ],
+     "mejora_en": 7,
+     "empeora_en": 13
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 57.5,
+     "con": 79.93,
+     "diferencia": 22.43,
+     "ic95": [
+      -20.42,
+      65.29
+     ],
+     "mejora_en": 9,
+     "empeora_en": 12
+    }
+   }
+  },
+  {
+   "nodo_id": "310665050",
+   "nivel": "recomendado",
+   "calles": "Avenida Calle 134 × Carrera 13",
+   "lon": -74.04183,
+   "lat": 4.715879,
+   "veredicto": "no_conviene",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 38.75,
+     "con": 43.16,
+     "diferencia": 4.42,
+     "ic95": [
+      1.56,
+      7.27
+     ],
+     "mejora_en": 1,
+     "empeora_en": 28
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 16.9,
+     "con": 20.59,
+     "diferencia": 3.69,
+     "ic95": [
+      0.93,
+      6.46
+     ],
+     "mejora_en": 1,
+     "empeora_en": 29
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 0.7,
+     "con": 2.8,
+     "diferencia": 2.1,
+     "ic95": [
+      1.73,
+      2.47
+     ],
+     "mejora_en": 0,
+     "empeora_en": 29
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 52.01,
+     "con": 55.66,
+     "diferencia": 3.65,
+     "ic95": [
+      3.38,
+      3.92
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 22.1,
+     "con": 118.3,
+     "diferencia": 96.2,
+     "ic95": [
+      89.09,
+      103.31
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 1.0,
+     "con": 2.57,
+     "diferencia": 1.57,
+     "ic95": [
+      0.92,
+      2.21
+     ],
+     "mejora_en": 3,
+     "empeora_en": 21
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 20.93,
+     "con": 114.83,
+     "diferencia": 93.9,
+     "ic95": [
+      86.87,
+      100.93
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 21.3,
+     "con": 118.3,
+     "diferencia": 97.0,
+     "ic95": [
+      89.86,
+      104.14
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 0.83,
+     "con": 0.0,
+     "diferencia": -0.83,
+     "ic95": [
+      -1.19,
+      -0.48
+     ],
+     "mejora_en": 17,
+     "empeora_en": 0
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 0.0,
+     "con": 0.43,
+     "diferencia": 0.43,
+     "ic95": [
+      -0.17,
+      1.04
+     ],
+     "mejora_en": 0,
+     "empeora_en": 3
+    }
+   }
+  },
+  {
+   "nodo_id": "4833399953",
+   "nivel": "recomendado",
+   "calles": "Carrera 4 × Calle 187A",
+   "lon": -74.024094,
+   "lat": 4.763753,
+   "veredicto": "no_conviene",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 12.5,
+     "con": 18.61,
+     "diferencia": 6.1,
+     "ic95": [
+      5.91,
+      6.3
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 0.59,
+     "con": 5.66,
+     "diferencia": 5.07,
+     "ic95": [
+      4.9,
+      5.24
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 1.4,
+     "con": 3.17,
+     "diferencia": 1.77,
+     "ic95": [
+      1.55,
+      1.98
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 17.84,
+     "con": 18.01,
+     "diferencia": 0.17,
+     "ic95": [
+      0.11,
+      0.23
+     ],
+     "mejora_en": 3,
+     "empeora_en": 24
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 27.8,
+     "con": 164.03,
+     "diferencia": 136.23,
+     "ic95": [
+      126.84,
+      145.63
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 18.37,
+     "con": 18.9,
+     "diferencia": 0.53,
+     "ic95": [
+      -1.6,
+      2.67
+     ],
+     "mejora_en": 11,
+     "empeora_en": 16
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 8.6,
+     "con": 141.07,
+     "diferencia": 132.47,
+     "ic95": [
+      124.13,
+      140.81
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 14.4,
+     "con": 141.2,
+     "diferencia": 126.8,
+     "ic95": [
+      118.63,
+      134.97
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 13.07,
+     "con": 10.2,
+     "diferencia": -2.87,
+     "ic95": [
+      -4.44,
+      -1.3
+     ],
+     "mejora_en": 21,
+     "empeora_en": 7
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 0.0,
+     "con": 0.0,
+     "diferencia": 0.0,
+     "ic95": [
+      0.0,
+      0.0
+     ],
+     "mejora_en": 0,
+     "empeora_en": 0
+    }
+   }
+  },
+  {
+   "nodo_id": "510582425",
+   "nivel": "recomendado",
+   "calles": "Avenida Carrera 7 × Calle 193",
+   "lon": -74.027054,
+   "lat": 4.769746,
+   "veredicto": "no_conviene",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 59.94,
+     "con": 62.37,
+     "diferencia": 2.43,
+     "ic95": [
+      -38.27,
+      43.13
+     ],
+     "mejora_en": 4,
+     "empeora_en": 26
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 46.13,
+     "con": 48.24,
+     "diferencia": 2.11,
+     "ic95": [
+      -37.61,
+      41.83
+     ],
+     "mejora_en": 4,
+     "empeora_en": 26
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 1.3,
+     "con": 6.43,
+     "diferencia": 5.13,
+     "ic95": [
+      4.39,
+      5.87
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 37.25,
+     "con": 37.95,
+     "diferencia": 0.7,
+     "ic95": [
+      -0.27,
+      1.67
+     ],
+     "mejora_en": 4,
+     "empeora_en": 25
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 2.6,
+     "con": 51.7,
+     "diferencia": 49.1,
+     "ic95": [
+      45.22,
+      52.98
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 1.67,
+     "con": 2.47,
+     "diferencia": 0.8,
+     "ic95": [
+      -0.02,
+      1.62
+     ],
+     "mejora_en": 6,
+     "empeora_en": 16
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 0.9,
+     "con": 49.13,
+     "diferencia": 48.23,
+     "ic95": [
+      44.4,
+      52.07
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 1.63,
+     "con": 49.4,
+     "diferencia": 47.77,
+     "ic95": [
+      44.07,
+      51.46
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 0.7,
+     "con": 1.3,
+     "diferencia": 0.6,
+     "ic95": [
+      -0.02,
+      1.22
+     ],
+     "mejora_en": 7,
+     "empeora_en": 14
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 24.83,
+     "con": 22.3,
+     "diferencia": -2.53,
+     "ic95": [
+      -24.03,
+      18.97
+     ],
+     "mejora_en": 4,
+     "empeora_en": 3
+    }
+   }
+  },
+  {
+   "nodo_id": "5117607016",
+   "nivel": "recomendado",
+   "calles": "Carrera 6 × Calle 182",
+   "lon": -74.024816,
+   "lat": 4.759244,
+   "veredicto": "no_conviene",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 22.3,
+     "con": 25.37,
+     "diferencia": 3.07,
+     "ic95": [
+      2.33,
+      3.81
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 4.47,
+     "con": 7.0,
+     "diferencia": 2.53,
+     "ic95": [
+      1.91,
+      3.15
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 1.37,
+     "con": 3.4,
+     "diferencia": 2.03,
+     "ic95": [
+      1.7,
+      2.37
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 27.51,
+     "con": 27.55,
+     "diferencia": 0.03,
+     "ic95": [
+      -0.05,
+      0.12
+     ],
+     "mejora_en": 9,
+     "empeora_en": 15
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 11.23,
+     "con": 67.67,
+     "diferencia": 56.43,
+     "ic95": [
+      49.39,
+      63.47
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 9.6,
+     "con": 18.93,
+     "diferencia": 9.33,
+     "ic95": [
+      6.81,
+      11.85
+     ],
+     "mejora_en": 2,
+     "empeora_en": 28
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 1.2,
+     "con": 47.6,
+     "diferencia": 46.4,
+     "ic95": [
+      40.85,
+      51.95
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 5.8,
+     "con": 57.47,
+     "diferencia": 51.67,
+     "ic95": [
+      45.37,
+      57.97
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 8.0,
+     "con": 13.53,
+     "diferencia": 5.53,
+     "ic95": [
+      3.15,
+      7.92
+     ],
+     "mejora_en": 5,
+     "empeora_en": 24
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 0.0,
+     "con": 0.13,
+     "diferencia": 0.13,
+     "ic95": [
+      -0.03,
+      0.3
+     ],
+     "mejora_en": 0,
+     "empeora_en": 3
+    }
+   }
+  },
+  {
+   "nodo_id": "5145478643",
+   "nivel": "recomendado",
+   "calles": "Avenida Calle 161 × Carrera 7F",
+   "lon": -74.025569,
+   "lat": 4.736462,
+   "veredicto": "no_conviene",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 17.76,
+     "con": 18.99,
+     "diferencia": 1.23,
+     "ic95": [
+      0.57,
+      1.89
+     ],
+     "mejora_en": 2,
+     "empeora_en": 28
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 2.86,
+     "con": 3.87,
+     "diferencia": 1.02,
+     "ic95": [
+      0.38,
+      1.65
+     ],
+     "mejora_en": 2,
+     "empeora_en": 28
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 1.0,
+     "con": 3.6,
+     "diferencia": 2.6,
+     "ic95": [
+      2.27,
+      2.93
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 14.81,
+     "con": 15.09,
+     "diferencia": 0.28,
+     "ic95": [
+      0.21,
+      0.35
+     ],
+     "mejora_en": 1,
+     "empeora_en": 28
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 1.63,
+     "con": 30.27,
+     "diferencia": 28.63,
+     "ic95": [
+      25.01,
+      32.25
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 1.13,
+     "con": 0.8,
+     "diferencia": -0.33,
+     "ic95": [
+      -0.86,
+      0.19
+     ],
+     "mejora_en": 11,
+     "empeora_en": 5
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 0.5,
+     "con": 29.47,
+     "diferencia": 28.97,
+     "ic95": [
+      25.38,
+      32.55
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 0.73,
+     "con": 29.87,
+     "diferencia": 29.13,
+     "ic95": [
+      25.47,
+      32.8
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 0.97,
+     "con": 0.4,
+     "diferencia": -0.57,
+     "ic95": [
+      -1.09,
+      -0.04
+     ],
+     "mejora_en": 15,
+     "empeora_en": 4
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 0.27,
+     "con": 0.13,
+     "diferencia": -0.13,
+     "ic95": [
+      -0.32,
+      0.06
+     ],
+     "mejora_en": 2,
+     "empeora_en": 0
+    }
+   }
+  },
+  {
+   "nodo_id": "5150683924",
+   "nivel": "recomendado",
+   "calles": "Carrera 4 × Calle 191",
+   "lon": -74.024193,
+   "lat": 4.767887,
+   "veredicto": "no_conviene",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 22.19,
+     "con": 26.8,
+     "diferencia": 4.6,
+     "ic95": [
+      1.73,
+      7.47
+     ],
+     "mejora_en": 1,
+     "empeora_en": 29
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 4.25,
+     "con": 8.03,
+     "diferencia": 3.79,
+     "ic95": [
+      1.26,
+      6.31
+     ],
+     "mejora_en": 1,
+     "empeora_en": 29
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 1.43,
+     "con": 3.73,
+     "diferencia": 2.3,
+     "ic95": [
+      1.94,
+      2.66
+     ],
+     "mejora_en": 0,
+     "empeora_en": 28
+    },
+    "demora_peaton_s": {
+     "n": 29,
+     "sin": 34.04,
+     "con": 34.28,
+     "diferencia": 0.23,
+     "ic95": [
+      -0.05,
+      0.51
+     ],
+     "mejora_en": 8,
+     "empeora_en": 21
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 13.27,
+     "con": 77.9,
+     "diferencia": 64.63,
+     "ic95": [
+      59.5,
+      69.76
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 10.97,
+     "con": 20.1,
+     "diferencia": 9.13,
+     "ic95": [
+      6.73,
+      11.53
+     ],
+     "mejora_en": 3,
+     "empeora_en": 27
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 1.67,
+     "con": 56.57,
+     "diferencia": 54.9,
+     "ic95": [
+      50.29,
+      59.51
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 6.57,
+     "con": 66.5,
+     "diferencia": 59.93,
+     "ic95": [
+      55.02,
+      64.85
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 8.83,
+     "con": 14.17,
+     "diferencia": 5.33,
+     "ic95": [
+      3.31,
+      7.36
+     ],
+     "mejora_en": 4,
+     "empeora_en": 25
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 0.03,
+     "con": 0.43,
+     "diferencia": 0.4,
+     "ic95": [
+      -0.42,
+      1.22
+     ],
+     "mejora_en": 1,
+     "empeora_en": 2
+    }
+   }
+  },
+  {
+   "nodo_id": "551106796",
+   "nivel": "recomendado",
+   "calles": "Calle 165 × Carrera 8G",
+   "lon": -74.02972,
+   "lat": 4.742511,
+   "veredicto": "no_conviene",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 111.8,
+     "con": 109.49,
+     "diferencia": -2.31,
+     "ic95": [
+      -20.64,
+      16.02
+     ],
+     "mejora_en": 15,
+     "empeora_en": 15
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 90.5,
+     "con": 87.91,
+     "diferencia": -2.59,
+     "ic95": [
+      -19.42,
+      14.24
+     ],
+     "mejora_en": 15,
+     "empeora_en": 15
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 2.0,
+     "con": 5.23,
+     "diferencia": 3.23,
+     "ic95": [
+      2.75,
+      3.72
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 28.84,
+     "con": 28.65,
+     "diferencia": -0.18,
+     "ic95": [
+      -1.03,
+      0.66
+     ],
+     "mejora_en": 17,
+     "empeora_en": 12
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 10.7,
+     "con": 78.3,
+     "diferencia": 67.6,
+     "ic95": [
+      60.47,
+      74.73
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 4.83,
+     "con": 4.63,
+     "diferencia": -0.2,
+     "ic95": [
+      -1.37,
+      0.97
+     ],
+     "mejora_en": 14,
+     "empeora_en": 14
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 5.53,
+     "con": 73.13,
+     "diferencia": 67.6,
+     "ic95": [
+      60.96,
+      74.24
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 7.53,
+     "con": 76.1,
+     "diferencia": 68.57,
+     "ic95": [
+      61.64,
+      75.49
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 3.6,
+     "con": 2.7,
+     "diferencia": -0.9,
+     "ic95": [
+      -2.07,
+      0.27
+     ],
+     "mejora_en": 16,
+     "empeora_en": 10
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 46.37,
+     "con": 41.43,
+     "diferencia": -4.93,
+     "ic95": [
+      -18.23,
+      8.36
+     ],
+     "mejora_en": 16,
+     "empeora_en": 13
+    }
+   }
+  },
+  {
+   "nodo_id": "551166279",
+   "nivel": "recomendado",
+   "calles": "Calle 165 × Carrera 8C",
+   "lon": -74.026888,
+   "lat": 4.741936,
+   "veredicto": "no_conviene",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 16.53,
+     "con": 18.93,
+     "diferencia": 2.4,
+     "ic95": [
+      2.31,
+      2.49
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 1.64,
+     "con": 3.39,
+     "diferencia": 1.75,
+     "ic95": [
+      1.68,
+      1.82
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 2.77,
+     "con": 4.47,
+     "diferencia": 1.7,
+     "ic95": [
+      1.33,
+      2.07
+     ],
+     "mejora_en": 0,
+     "empeora_en": 27
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 22.07,
+     "con": 22.25,
+     "diferencia": 0.17,
+     "ic95": [
+      0.09,
+      0.25
+     ],
+     "mejora_en": 6,
+     "empeora_en": 22
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 19.5,
+     "con": 115.33,
+     "diferencia": 95.83,
+     "ic95": [
+      87.79,
+      103.88
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 8.13,
+     "con": 11.63,
+     "diferencia": 3.5,
+     "ic95": [
+      2.15,
+      4.85
+     ],
+     "mejora_en": 2,
+     "empeora_en": 24
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 10.4,
+     "con": 102.87,
+     "diferencia": 92.47,
+     "ic95": [
+      85.01,
+      99.93
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 15.17,
+     "con": 109.7,
+     "diferencia": 94.53,
+     "ic95": [
+      86.75,
+      102.31
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 5.73,
+     "con": 7.57,
+     "diferencia": 1.83,
+     "ic95": [
+      0.87,
+      2.8
+     ],
+     "mejora_en": 5,
+     "empeora_en": 22
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 0.03,
+     "con": 0.07,
+     "diferencia": 0.03,
+     "ic95": [
+      -0.03,
+      0.1
+     ],
+     "mejora_en": 0,
+     "empeora_en": 1
+    }
+   }
+  },
+  {
+   "nodo_id": "551166637",
+   "nivel": "recomendado",
+   "calles": "Calle 162 × Carrera 8B Bis",
+   "lon": -74.027885,
+   "lat": 4.738399,
+   "veredicto": "no_conviene",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 19.26,
+     "con": 19.89,
+     "diferencia": 0.63,
+     "ic95": [
+      0.53,
+      0.73
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 1.4,
+     "con": 1.83,
+     "diferencia": 0.43,
+     "ic95": [
+      0.37,
+      0.49
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 0.33,
+     "con": 2.5,
+     "diferencia": 2.17,
+     "ic95": [
+      1.91,
+      2.43
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 17.78,
+     "con": 18.05,
+     "diferencia": 0.27,
+     "ic95": [
+      0.2,
+      0.34
+     ],
+     "mejora_en": 1,
+     "empeora_en": 26
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 6.77,
+     "con": 18.57,
+     "diferencia": 11.8,
+     "ic95": [
+      9.6,
+      14.0
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 5.37,
+     "con": 4.93,
+     "diferencia": -0.43,
+     "ic95": [
+      -1.6,
+      0.73
+     ],
+     "mejora_en": 15,
+     "empeora_en": 10
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 1.37,
+     "con": 13.63,
+     "diferencia": 12.27,
+     "ic95": [
+      10.36,
+      14.18
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 2.17,
+     "con": 14.17,
+     "diferencia": 12.0,
+     "ic95": [
+      10.04,
+      13.96
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 4.9,
+     "con": 4.6,
+     "diferencia": -0.3,
+     "ic95": [
+      -1.45,
+      0.85
+     ],
+     "mejora_en": 13,
+     "empeora_en": 13
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 0.0,
+     "con": 0.0,
+     "diferencia": 0.0,
+     "ic95": [
+      0.0,
+      0.0
+     ],
+     "mejora_en": 0,
+     "empeora_en": 0
+    }
+   }
+  },
+  {
+   "nodo_id": "5643318184",
+   "nivel": "recomendado",
+   "calles": "Carrera 2 × Carrera 2 Este",
+   "lon": -74.022543,
+   "lat": 4.764568,
+   "veredicto": "no_conviene",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 18.76,
+     "con": 19.84,
+     "diferencia": 1.08,
+     "ic95": [
+      0.97,
+      1.19
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 1.67,
+     "con": 2.44,
+     "diferencia": 0.77,
+     "ic95": [
+      0.7,
+      0.84
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 1.63,
+     "con": 3.03,
+     "diferencia": 1.4,
+     "ic95": [
+      1.13,
+      1.67
+     ],
+     "mejora_en": 0,
+     "empeora_en": 27
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 20.65,
+     "con": 21.22,
+     "diferencia": 0.57,
+     "ic95": [
+      0.48,
+      0.66
+     ],
+     "mejora_en": 0,
+     "empeora_en": 28
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 5.5,
+     "con": 31.1,
+     "diferencia": 25.6,
+     "ic95": [
+      24.02,
+      27.18
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 3.4,
+     "con": 6.0,
+     "diferencia": 2.6,
+     "ic95": [
+      1.7,
+      3.5
+     ],
+     "mejora_en": 4,
+     "empeora_en": 26
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 2.03,
+     "con": 24.23,
+     "diferencia": 22.2,
+     "ic95": [
+      20.56,
+      23.84
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 3.0,
+     "con": 28.07,
+     "diferencia": 25.07,
+     "ic95": [
+      23.54,
+      26.59
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 2.73,
+     "con": 5.0,
+     "diferencia": 2.27,
+     "ic95": [
+      1.52,
+      3.01
+     ],
+     "mejora_en": 2,
+     "empeora_en": 24
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 0.0,
+     "con": 0.0,
+     "diferencia": 0.0,
+     "ic95": [
+      0.0,
+      0.0
+     ],
+     "mejora_en": 0,
+     "empeora_en": 0
+    }
+   }
+  },
+  {
+   "nodo_id": "7602175454",
+   "nivel": "recomendado",
+   "calles": "",
+   "lon": -74.019902,
+   "lat": 4.673935,
+   "veredicto": "no_conviene",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 104.73,
+     "con": 113.9,
+     "diferencia": 9.17,
+     "ic95": [
+      8.55,
+      9.8
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 7.0,
+     "con": 14.21,
+     "diferencia": 7.21,
+     "ic95": [
+      6.74,
+      7.68
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 14.53,
+     "con": 21.13,
+     "diferencia": 6.6,
+     "ic95": [
+      4.87,
+      8.33
+     ],
+     "mejora_en": 2,
+     "empeora_en": 26
+    },
+    "demora_peaton_s": {
+     "n": 27,
+     "sin": 60.64,
+     "con": 60.94,
+     "diferencia": 0.3,
+     "ic95": [
+      -0.28,
+      0.88
+     ],
+     "mejora_en": 10,
+     "empeora_en": 16
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 135.9,
+     "con": 339.1,
+     "diferencia": 203.2,
+     "ic95": [
+      181.02,
+      225.38
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 24.47,
+     "con": 31.37,
+     "diferencia": 6.9,
+     "ic95": [
+      3.79,
+      10.01
+     ],
+     "mejora_en": 6,
+     "empeora_en": 23
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 106.5,
+     "con": 304.33,
+     "diferencia": 197.83,
+     "ic95": [
+      176.7,
+      218.97
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 117.73,
+     "con": 312.67,
+     "diferencia": 194.93,
+     "ic95": [
+      174.37,
+      215.5
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 15.43,
+     "con": 18.8,
+     "diferencia": 3.37,
+     "ic95": [
+      1.61,
+      5.12
+     ],
+     "mejora_en": 5,
+     "empeora_en": 20
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 0.07,
+     "con": 0.07,
+     "diferencia": 0.0,
+     "ic95": [
+      0.0,
+      0.0
+     ],
+     "mejora_en": 0,
+     "empeora_en": 0
+    }
+   }
+  },
+  {
+   "nodo_id": "7723669834",
+   "nivel": "recomendado",
+   "calles": "Calle 163A × Carrera 13B",
+   "lon": -74.034087,
+   "lat": 4.741118,
+   "veredicto": "no_conviene",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 285.18,
+     "con": 434.72,
+     "diferencia": 149.53,
+     "ic95": [
+      128.85,
+      170.22
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 238.21,
+     "con": 377.74,
+     "diferencia": 139.52,
+     "ic95": [
+      119.71,
+      159.33
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 2.67,
+     "con": 4.4,
+     "diferencia": 1.73,
+     "ic95": [
+      1.28,
+      2.18
+     ],
+     "mejora_en": 3,
+     "empeora_en": 27
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 31.04,
+     "con": 34.17,
+     "diferencia": 3.14,
+     "ic95": [
+      1.82,
+      4.45
+     ],
+     "mejora_en": 5,
+     "empeora_en": 25
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 34.07,
+     "con": 174.23,
+     "diferencia": 140.17,
+     "ic95": [
+      125.06,
+      155.27
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 0.03,
+     "con": 0.27,
+     "diferencia": 0.23,
+     "ic95": [
+      -0.0,
+      0.47
+     ],
+     "mejora_en": 1,
+     "empeora_en": 6
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 33.83,
+     "con": 173.87,
+     "diferencia": 140.03,
+     "ic95": [
+      125.07,
+      154.99
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 34.07,
+     "con": 174.23,
+     "diferencia": 140.17,
+     "ic95": [
+      125.06,
+      155.27
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 0.0,
+     "con": 0.0,
+     "diferencia": 0.0,
+     "ic95": [
+      0.0,
+      0.0
+     ],
+     "mejora_en": 0,
+     "empeora_en": 0
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 28.33,
+     "con": 91.1,
+     "diferencia": 62.77,
+     "ic95": [
+      48.36,
+      77.17
+     ],
+     "mejora_en": 1,
+     "empeora_en": 29
+    }
+   }
+  },
+  {
+   "nodo_id": "7995734298",
+   "nivel": "recomendado",
+   "calles": "Vía Vereda las Lajas",
+   "lon": -74.022233,
+   "lat": 4.674887,
+   "veredicto": "no_conviene",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 117.63,
+     "con": 138.02,
+     "diferencia": 20.39,
+     "ic95": [
+      16.06,
+      24.72
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 26.65,
+     "con": 44.19,
+     "diferencia": 17.54,
+     "ic95": [
+      13.99,
+      21.08
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 14.8,
+     "con": 21.17,
+     "diferencia": 6.37,
+     "ic95": [
+      4.81,
+      7.93
+     ],
+     "mejora_en": 1,
+     "empeora_en": 28
+    },
+    "demora_peaton_s": {
+     "n": 29,
+     "sin": 73.4,
+     "con": 74.25,
+     "diferencia": 0.85,
+     "ic95": [
+      0.29,
+      1.41
+     ],
+     "mejora_en": 7,
+     "empeora_en": 22
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 205.87,
+     "con": 494.57,
+     "diferencia": 288.7,
+     "ic95": [
+      273.7,
+      303.7
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 20.17,
+     "con": 23.77,
+     "diferencia": 3.6,
+     "ic95": [
+      1.29,
+      5.91
+     ],
+     "mejora_en": 8,
+     "empeora_en": 22
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 180.37,
+     "con": 468.13,
+     "diferencia": 287.77,
+     "ic95": [
+      271.9,
+      303.63
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 188.67,
+     "con": 471.97,
+     "diferencia": 283.3,
+     "ic95": [
+      268.49,
+      298.11
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 11.0,
+     "con": 13.03,
+     "diferencia": 2.03,
+     "ic95": [
+      0.24,
+      3.83
+     ],
+     "mejora_en": 6,
+     "empeora_en": 20
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 1.07,
+     "con": 1.1,
+     "diferencia": 0.03,
+     "ic95": [
+      -0.22,
+      0.28
+     ],
+     "mejora_en": 5,
+     "empeora_en": 5
+    }
+   }
+  },
+  {
+   "nodo_id": "9428137443",
+   "nivel": "recomendado",
+   "calles": "Avenida Carrera 7",
+   "lon": -74.03041,
+   "lat": 4.793883,
+   "veredicto": "no_conviene",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 33.47,
+     "con": 58.79,
+     "diferencia": 25.31,
+     "ic95": [
+      14.57,
+      36.06
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 9.43,
+     "con": 29.36,
+     "diferencia": 19.94,
+     "ic95": [
+      10.5,
+      29.37
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 9.17,
+     "con": 11.27,
+     "diferencia": 2.1,
+     "ic95": [
+      -1.02,
+      5.22
+     ],
+     "mejora_en": 4,
+     "empeora_en": 17
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 34.73,
+     "con": 32.78,
+     "diferencia": -1.95,
+     "ic95": [
+      -2.68,
+      -1.22
+     ],
+     "mejora_en": 24,
+     "empeora_en": 3
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 354.67,
+     "con": 518.53,
+     "diferencia": 163.87,
+     "ic95": [
+      140.55,
+      187.19
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 31.33,
+     "con": 34.1,
+     "diferencia": 2.77,
+     "ic95": [
+      -0.19,
+      5.73
+     ],
+     "mejora_en": 12,
+     "empeora_en": 17
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 306.6,
+     "con": 478.53,
+     "diferencia": 171.93,
+     "ic95": [
+      148.89,
+      194.97
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 327.2,
+     "con": 494.97,
+     "diferencia": 167.77,
+     "ic95": [
+      147.85,
+      187.68
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 8.97,
+     "con": 9.23,
+     "diferencia": 0.27,
+     "ic95": [
+      -1.36,
+      1.89
+     ],
+     "mejora_en": 13,
+     "empeora_en": 13
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 0.0,
+     "con": 0.33,
+     "diferencia": 0.33,
+     "ic95": [
+      -0.35,
+      1.01
+     ],
+     "mejora_en": 0,
+     "empeora_en": 1
+    }
+   }
+  },
+  {
+   "nodo_id": "9430176693",
+   "nivel": "recomendado",
+   "calles": "Avenida Carrera 9 × Calle 181",
+   "lon": -74.031189,
+   "lat": 4.757067,
+   "veredicto": "no_conviene",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 48.14,
+     "con": 49.36,
+     "diferencia": 1.22,
+     "ic95": [
+      0.28,
+      2.15
+     ],
+     "mejora_en": 7,
+     "empeora_en": 22
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 28.59,
+     "con": 29.65,
+     "diferencia": 1.05,
+     "ic95": [
+      0.21,
+      1.89
+     ],
+     "mejora_en": 8,
+     "empeora_en": 22
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 0.97,
+     "con": 3.17,
+     "diferencia": 2.2,
+     "ic95": [
+      1.79,
+      2.61
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 44.58,
+     "con": 41.59,
+     "diferencia": -2.99,
+     "ic95": [
+      -3.24,
+      -2.74
+     ],
+     "mejora_en": 30,
+     "empeora_en": 0
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 1.37,
+     "con": 31.53,
+     "diferencia": 30.17,
+     "ic95": [
+      26.17,
+      34.16
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 0.33,
+     "con": 1.9,
+     "diferencia": 1.57,
+     "ic95": [
+      1.0,
+      2.14
+     ],
+     "mejora_en": 0,
+     "empeora_en": 20
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 1.03,
+     "con": 29.57,
+     "diferencia": 28.53,
+     "ic95": [
+      24.91,
+      32.16
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 1.17,
+     "con": 30.57,
+     "diferencia": 29.4,
+     "ic95": [
+      25.53,
+      33.27
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 0.2,
+     "con": 1.37,
+     "diferencia": 1.17,
+     "ic95": [
+      0.67,
+      1.67
+     ],
+     "mejora_en": 1,
+     "empeora_en": 19
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 1.57,
+     "con": 1.9,
+     "diferencia": 0.33,
+     "ic95": [
+      -0.33,
+      1.0
+     ],
+     "mejora_en": 6,
+     "empeora_en": 10
+    }
+   }
+  },
+  {
+   "nodo_id": "cluster_10118843427_312410487",
+   "nivel": "recomendado",
+   "calles": "Calle 164 × Carrera 22",
+   "lon": -74.045674,
+   "lat": 4.744984,
+   "veredicto": "no_conviene",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 18.05,
+     "con": 20.71,
+     "diferencia": 2.66,
+     "ic95": [
+      2.5,
+      2.82
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 4.59,
+     "con": 6.31,
+     "diferencia": 1.72,
+     "ic95": [
+      1.6,
+      1.84
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 2.4,
+     "con": 5.33,
+     "diferencia": 2.93,
+     "ic95": [
+      2.47,
+      3.39
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 19.52,
+     "con": 19.6,
+     "diferencia": 0.08,
+     "ic95": [
+      -0.12,
+      0.28
+     ],
+     "mejora_en": 7,
+     "empeora_en": 19
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 10.2,
+     "con": 147.97,
+     "diferencia": 137.77,
+     "ic95": [
+      130.55,
+      144.98
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 2.4,
+     "con": 6.37,
+     "diferencia": 3.97,
+     "ic95": [
+      2.82,
+      5.12
+     ],
+     "mejora_en": 1,
+     "empeora_en": 26
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 7.37,
+     "con": 140.9,
+     "diferencia": 133.53,
+     "ic95": [
+      126.86,
+      140.21
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 8.0,
+     "con": 124.5,
+     "diferencia": 116.5,
+     "ic95": [
+      110.79,
+      122.21
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 1.1,
+     "con": 0.0,
+     "diferencia": -1.1,
+     "ic95": [
+      -1.47,
+      -0.73
+     ],
+     "mejora_en": 21,
+     "empeora_en": 0
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 0.83,
+     "con": 0.77,
+     "diferencia": -0.07,
+     "ic95": [
+      -0.16,
+      0.03
+     ],
+     "mejora_en": 2,
+     "empeora_en": 0
+    }
+   }
+  },
+  {
+   "nodo_id": "cluster_10280810132_10280810139_369183801",
+   "nivel": "recomendado",
+   "calles": "Calle 140 × Carrera 16",
+   "lon": -74.042314,
+   "lat": 4.721783,
+   "veredicto": "no_conviene",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 136.31,
+     "con": 149.36,
+     "diferencia": 13.05,
+     "ic95": [
+      -22.05,
+      48.14
+     ],
+     "mejora_en": 8,
+     "empeora_en": 22
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 112.71,
+     "con": 124.73,
+     "diferencia": 12.02,
+     "ic95": [
+      -22.06,
+      46.1
+     ],
+     "mejora_en": 8,
+     "empeora_en": 22
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 4.53,
+     "con": 6.2,
+     "diferencia": 1.67,
+     "ic95": [
+      0.91,
+      2.42
+     ],
+     "mejora_en": 6,
+     "empeora_en": 22
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 41.29,
+     "con": 42.53,
+     "diferencia": 1.25,
+     "ic95": [
+      0.78,
+      1.72
+     ],
+     "mejora_en": 4,
+     "empeora_en": 26
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 67.77,
+     "con": 115.27,
+     "diferencia": 47.5,
+     "ic95": [
+      40.37,
+      54.63
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 7.9,
+     "con": 6.9,
+     "diferencia": -1.0,
+     "ic95": [
+      -2.46,
+      0.46
+     ],
+     "mejora_en": 18,
+     "empeora_en": 12
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 59.47,
+     "con": 107.57,
+     "diferencia": 48.1,
+     "ic95": [
+      41.21,
+      54.99
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 61.83,
+     "con": 111.63,
+     "diferencia": 49.8,
+     "ic95": [
+      42.64,
+      56.96
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 6.7,
+     "con": 5.37,
+     "diferencia": -1.33,
+     "ic95": [
+      -2.78,
+      0.11
+     ],
+     "mejora_en": 19,
+     "empeora_en": 10
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 21.57,
+     "con": 26.57,
+     "diferencia": 5.0,
+     "ic95": [
+      -8.06,
+      18.06
+     ],
+     "mejora_en": 7,
+     "empeora_en": 19
+    }
+   }
+  },
+  {
+   "nodo_id": "cluster_10282607553_10282607579_10282607580_524643477_#2more",
+   "nivel": "recomendado",
+   "calles": "Calle 151 × Carrera 14 Bis",
+   "lon": -74.03848,
+   "lat": 4.731187,
+   "veredicto": "no_conviene",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 323.08,
+     "con": 334.19,
+     "diferencia": 11.11,
+     "ic95": [
+      -6.6,
+      28.82
+     ],
+     "mejora_en": 11,
+     "empeora_en": 19
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 293.9,
+     "con": 304.55,
+     "diferencia": 10.65,
+     "ic95": [
+      -6.93,
+      28.23
+     ],
+     "mejora_en": 11,
+     "empeora_en": 19
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 5.0,
+     "con": 6.27,
+     "diferencia": 1.27,
+     "ic95": [
+      0.57,
+      1.96
+     ],
+     "mejora_en": 5,
+     "empeora_en": 19
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 74.67,
+     "con": 77.64,
+     "diferencia": 2.97,
+     "ic95": [
+      2.31,
+      3.63
+     ],
+     "mejora_en": 2,
+     "empeora_en": 28
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 36.07,
+     "con": 93.57,
+     "diferencia": 57.5,
+     "ic95": [
+      48.39,
+      66.61
+     ],
+     "mejora_en": 1,
+     "empeora_en": 29
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 5.17,
+     "con": 9.8,
+     "diferencia": 4.63,
+     "ic95": [
+      2.93,
+      6.33
+     ],
+     "mejora_en": 5,
+     "empeora_en": 24
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 30.4,
+     "con": 83.0,
+     "diferencia": 52.6,
+     "ic95": [
+      43.64,
+      61.56
+     ],
+     "mejora_en": 1,
+     "empeora_en": 29
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 32.8,
+     "con": 88.9,
+     "diferencia": 56.1,
+     "ic95": [
+      47.11,
+      65.09
+     ],
+     "mejora_en": 1,
+     "empeora_en": 29
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 3.83,
+     "con": 6.0,
+     "diferencia": 2.17,
+     "ic95": [
+      1.05,
+      3.28
+     ],
+     "mejora_en": 6,
+     "empeora_en": 20
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 66.43,
+     "con": 69.4,
+     "diferencia": 2.97,
+     "ic95": [
+      -4.48,
+      10.41
+     ],
+     "mejora_en": 11,
+     "empeora_en": 18
+    }
+   }
+  },
+  {
+   "nodo_id": "cluster_1830407856_7347679714",
+   "nivel": "recomendado",
+   "calles": "Avenida Carrera 7 × Calle 191A",
+   "lon": -74.027524,
+   "lat": 4.768706,
+   "veredicto": "no_conviene",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 12.07,
+     "con": 12.83,
+     "diferencia": 0.76,
+     "ic95": [
+      0.7,
+      0.82
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 1.0,
+     "con": 1.56,
+     "diferencia": 0.55,
+     "ic95": [
+      0.5,
+      0.6
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 1.1,
+     "con": 2.93,
+     "diferencia": 1.83,
+     "ic95": [
+      1.59,
+      2.08
+     ],
+     "mejora_en": 0,
+     "empeora_en": 29
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 30.43,
+     "con": 31.27,
+     "diferencia": 0.84,
+     "ic95": [
+      0.69,
+      0.99
+     ],
+     "mejora_en": 1,
+     "empeora_en": 28
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 7.07,
+     "con": 25.6,
+     "diferencia": 18.53,
+     "ic95": [
+      16.08,
+      20.99
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 5.97,
+     "con": 7.07,
+     "diferencia": 1.1,
+     "ic95": [
+      -0.02,
+      2.22
+     ],
+     "mejora_en": 9,
+     "empeora_en": 15
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 0.77,
+     "con": 18.3,
+     "diferencia": 17.53,
+     "ic95": [
+      15.13,
+      19.94
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 3.53,
+     "con": 21.73,
+     "diferencia": 18.2,
+     "ic95": [
+      15.73,
+      20.67
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 4.7,
+     "con": 5.43,
+     "diferencia": 0.73,
+     "ic95": [
+      -0.31,
+      1.78
+     ],
+     "mejora_en": 9,
+     "empeora_en": 13
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 0.0,
+     "con": 0.0,
+     "diferencia": 0.0,
+     "ic95": [
+      0.0,
+      0.0
+     ],
+     "mejora_en": 0,
+     "empeora_en": 0
+    }
+   }
+  },
+  {
+   "nodo_id": "cluster_309815395_7737988119",
+   "nivel": "recomendado",
+   "calles": "Carrera 4 × Calle 182C",
+   "lon": -74.023952,
+   "lat": 4.759919,
+   "veredicto": "no_conviene",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 23.47,
+     "con": 29.99,
+     "diferencia": 6.52,
+     "ic95": [
+      5.89,
+      7.15
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 4.75,
+     "con": 10.06,
+     "diferencia": 5.31,
+     "ic95": [
+      4.79,
+      5.84
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 4.53,
+     "con": 7.43,
+     "diferencia": 2.9,
+     "ic95": [
+      2.38,
+      3.42
+     ],
+     "mejora_en": 0,
+     "empeora_en": 28
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 29.05,
+     "con": 31.04,
+     "diferencia": 1.99,
+     "ic95": [
+      1.82,
+      2.16
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 61.27,
+     "con": 327.0,
+     "diferencia": 265.73,
+     "ic95": [
+      256.21,
+      275.26
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 13.9,
+     "con": 32.43,
+     "diferencia": 18.53,
+     "ic95": [
+      16.25,
+      20.82
+     ],
+     "mejora_en": 0,
+     "empeora_en": 29
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 47.1,
+     "con": 293.57,
+     "diferencia": 246.47,
+     "ic95": [
+      237.79,
+      255.15
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 50.03,
+     "con": 276.27,
+     "diferencia": 226.23,
+     "ic95": [
+      218.21,
+      234.26
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 8.3,
+     "con": 18.2,
+     "diferencia": 9.9,
+     "ic95": [
+      8.12,
+      11.68
+     ],
+     "mejora_en": 1,
+     "empeora_en": 28
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 0.03,
+     "con": 0.1,
+     "diferencia": 0.07,
+     "ic95": [
+      -0.03,
+      0.16
+     ],
+     "mejora_en": 0,
+     "empeora_en": 2
+    }
+   }
+  },
+  {
+   "nodo_id": "cluster_325230916_9601980360",
+   "nivel": "recomendado",
+   "calles": "Calle 187 × Carrera 11",
+   "lon": -74.032433,
+   "lat": 4.764029,
+   "veredicto": "no_conviene",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 84.46,
+     "con": 87.8,
+     "diferencia": 3.34,
+     "ic95": [
+      -2.32,
+      9.0
+     ],
+     "mejora_en": 10,
+     "empeora_en": 20
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 60.77,
+     "con": 63.7,
+     "diferencia": 2.93,
+     "ic95": [
+      -2.8,
+      8.67
+     ],
+     "mejora_en": 11,
+     "empeora_en": 18
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 4.7,
+     "con": 8.1,
+     "diferencia": 3.4,
+     "ic95": [
+      2.74,
+      4.06
+     ],
+     "mejora_en": 0,
+     "empeora_en": 29
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 27.57,
+     "con": 29.24,
+     "diferencia": 1.67,
+     "ic95": [
+      1.38,
+      1.97
+     ],
+     "mejora_en": 1,
+     "empeora_en": 29
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 37.1,
+     "con": 172.17,
+     "diferencia": 135.07,
+     "ic95": [
+      128.66,
+      141.47
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 5.5,
+     "con": 6.07,
+     "diferencia": 0.57,
+     "ic95": [
+      -0.37,
+      1.5
+     ],
+     "mejora_en": 10,
+     "empeora_en": 16
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 30.77,
+     "con": 162.9,
+     "diferencia": 132.13,
+     "ic95": [
+      125.67,
+      138.6
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 33.67,
+     "con": 170.03,
+     "diferencia": 136.37,
+     "ic95": [
+      129.85,
+      142.89
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 3.7,
+     "con": 3.17,
+     "diferencia": -0.53,
+     "ic95": [
+      -1.3,
+      0.23
+     ],
+     "mejora_en": 16,
+     "empeora_en": 9
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 3.63,
+     "con": 3.4,
+     "diferencia": -0.23,
+     "ic95": [
+      -2.72,
+      2.25
+     ],
+     "mejora_en": 6,
+     "empeora_en": 10
+    }
+   }
+  },
+  {
+   "nodo_id": "cluster_325231219_5449510467_9600821048_9655021925",
+   "nivel": "recomendado",
+   "calles": "Avenida Carrera 7 × Calle 189",
+   "lon": -74.027584,
+   "lat": 4.765779,
+   "veredicto": "no_conviene",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 46.27,
+     "con": 54.15,
+     "diferencia": 7.88,
+     "ic95": [
+      7.37,
+      8.39
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 12.74,
+     "con": 19.71,
+     "diferencia": 6.97,
+     "ic95": [
+      6.56,
+      7.37
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 1.77,
+     "con": 6.57,
+     "diferencia": 4.8,
+     "ic95": [
+      4.39,
+      5.21
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 26.16,
+     "con": 29.88,
+     "diferencia": 3.72,
+     "ic95": [
+      3.47,
+      3.97
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 12.83,
+     "con": 56.9,
+     "diferencia": 44.07,
+     "ic95": [
+      39.32,
+      48.81
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 0.2,
+     "con": 0.63,
+     "diferencia": 0.43,
+     "ic95": [
+      0.05,
+      0.82
+     ],
+     "mejora_en": 3,
+     "empeora_en": 11
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 12.33,
+     "con": 55.53,
+     "diferencia": 43.2,
+     "ic95": [
+      38.52,
+      47.88
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 12.63,
+     "con": 52.17,
+     "diferencia": 39.53,
+     "ic95": [
+      35.17,
+      43.89
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 0.0,
+     "con": 0.0,
+     "diferencia": 0.0,
+     "ic95": [
+      0.0,
+      0.0
+     ],
+     "mejora_en": 0,
+     "empeora_en": 0
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 0.0,
+     "con": 0.0,
+     "diferencia": 0.0,
+     "ic95": [
+      0.0,
+      0.0
+     ],
+     "mejora_en": 0,
+     "empeora_en": 0
+    }
+   }
+  },
+  {
+   "nodo_id": "cluster_373258747_9902200947_9902735480",
+   "nivel": "recomendado",
+   "calles": "Calle 163A × Carrera 18A",
+   "lon": -74.041686,
+   "lat": 4.743078,
+   "veredicto": "no_conviene",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 172.43,
+     "con": 175.08,
+     "diferencia": 2.64,
+     "ic95": [
+      -1.74,
+      7.03
+     ],
+     "mejora_en": 11,
+     "empeora_en": 19
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 146.71,
+     "con": 149.01,
+     "diferencia": 2.29,
+     "ic95": [
+      -1.95,
+      6.54
+     ],
+     "mejora_en": 12,
+     "empeora_en": 18
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 0.8,
+     "con": 3.6,
+     "diferencia": 2.8,
+     "ic95": [
+      2.42,
+      3.18
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 34.65,
+     "con": 35.77,
+     "diferencia": 1.12,
+     "ic95": [
+      -0.1,
+      2.33
+     ],
+     "mejora_en": 10,
+     "empeora_en": 20
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 0.9,
+     "con": 28.23,
+     "diferencia": 27.33,
+     "ic95": [
+      24.66,
+      30.01
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 0.2,
+     "con": 0.07,
+     "diferencia": -0.13,
+     "ic95": [
+      -0.32,
+      0.06
+     ],
+     "mejora_en": 4,
+     "empeora_en": 1
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 0.7,
+     "con": 28.13,
+     "diferencia": 27.43,
+     "ic95": [
+      24.79,
+      30.07
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 0.8,
+     "con": 28.23,
+     "diferencia": 27.43,
+     "ic95": [
+      24.79,
+      30.08
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 0.13,
+     "con": 0.0,
+     "diferencia": -0.13,
+     "ic95": [
+      -0.26,
+      -0.0
+     ],
+     "mejora_en": 4,
+     "empeora_en": 0
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 21.93,
+     "con": 22.43,
+     "diferencia": 0.5,
+     "ic95": [
+      -1.69,
+      2.69
+     ],
+     "mejora_en": 11,
+     "empeora_en": 17
+    }
+   }
+  },
+  {
+   "nodo_id": "cluster_375308578_7347679681",
+   "nivel": "recomendado",
+   "calles": "Avenida Carrera 7 × Calle 186",
+   "lon": -74.027327,
+   "lat": 4.762798,
+   "veredicto": "no_conviene",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 34.99,
+     "con": 37.66,
+     "diferencia": 2.67,
+     "ic95": [
+      -0.98,
+      6.32
+     ],
+     "mejora_en": 6,
+     "empeora_en": 24
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 15.72,
+     "con": 17.79,
+     "diferencia": 2.08,
+     "ic95": [
+      -0.96,
+      5.11
+     ],
+     "mejora_en": 8,
+     "empeora_en": 22
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 3.33,
+     "con": 6.33,
+     "diferencia": 3.0,
+     "ic95": [
+      1.96,
+      4.04
+     ],
+     "mejora_en": 4,
+     "empeora_en": 26
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 42.58,
+     "con": 28.16,
+     "diferencia": -14.42,
+     "ic95": [
+      -15.25,
+      -13.59
+     ],
+     "mejora_en": 30,
+     "empeora_en": 0
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 21.23,
+     "con": 176.33,
+     "diferencia": 155.1,
+     "ic95": [
+      144.71,
+      165.49
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 6.57,
+     "con": 21.47,
+     "diferencia": 14.9,
+     "ic95": [
+      13.07,
+      16.73
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 13.93,
+     "con": 154.77,
+     "diferencia": 140.83,
+     "ic95": [
+      131.21,
+      150.46
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 17.13,
+     "con": 155.77,
+     "diferencia": 138.63,
+     "ic95": [
+      129.06,
+      148.2
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 4.9,
+     "con": 16.03,
+     "diferencia": 11.13,
+     "ic95": [
+      9.55,
+      12.72
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 0.43,
+     "con": 0.7,
+     "diferencia": 0.27,
+     "ic95": [
+      -0.41,
+      0.94
+     ],
+     "mejora_en": 8,
+     "empeora_en": 7
+    }
+   }
+  },
+  {
+   "nodo_id": "cluster_4280397987_9888169054_9888169060_9889935375_#4more",
+   "nivel": "recomendado",
+   "calles": "Calle 142 × Carrera 20",
+   "lon": -74.04779,
+   "lat": 4.724414,
+   "veredicto": "no_conviene",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 161.31,
+     "con": 158.57,
+     "diferencia": -2.74,
+     "ic95": [
+      -13.65,
+      8.16
+     ],
+     "mejora_en": 14,
+     "empeora_en": 16
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 142.54,
+     "con": 139.36,
+     "diferencia": -3.18,
+     "ic95": [
+      -13.83,
+      7.47
+     ],
+     "mejora_en": 14,
+     "empeora_en": 15
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 3.53,
+     "con": 5.43,
+     "diferencia": 1.9,
+     "ic95": [
+      1.03,
+      2.77
+     ],
+     "mejora_en": 2,
+     "empeora_en": 26
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 41.38,
+     "con": 42.78,
+     "diferencia": 1.41,
+     "ic95": [
+      0.25,
+      2.56
+     ],
+     "mejora_en": 8,
+     "empeora_en": 22
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 28.3,
+     "con": 130.3,
+     "diferencia": 102.0,
+     "ic95": [
+      89.13,
+      114.87
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 11.4,
+     "con": 23.1,
+     "diferencia": 11.7,
+     "ic95": [
+      9.27,
+      14.13
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 16.8,
+     "con": 106.87,
+     "diferencia": 90.07,
+     "ic95": [
+      78.36,
+      101.78
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 19.1,
+     "con": 120.23,
+     "diferencia": 101.13,
+     "ic95": [
+      88.42,
+      113.84
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 9.83,
+     "con": 15.4,
+     "diferencia": 5.57,
+     "ic95": [
+      4.03,
+      7.1
+     ],
+     "mejora_en": 2,
+     "empeora_en": 27
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 79.37,
+     "con": 73.13,
+     "diferencia": -6.23,
+     "ic95": [
+      -13.96,
+      1.49
+     ],
+     "mejora_en": 19,
+     "empeora_en": 8
+    }
+   }
+  },
+  {
+   "nodo_id": "cluster_5150683936_5152388986",
+   "nivel": "recomendado",
+   "calles": "Carrera 2 × Calle 190A",
+   "lon": -74.023012,
+   "lat": 4.76748,
+   "veredicto": "no_conviene",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 19.95,
+     "con": 21.37,
+     "diferencia": 1.42,
+     "ic95": [
+      0.66,
+      2.17
+     ],
+     "mejora_en": 2,
+     "empeora_en": 28
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 2.99,
+     "con": 3.87,
+     "diferencia": 0.87,
+     "ic95": [
+      0.17,
+      1.58
+     ],
+     "mejora_en": 2,
+     "empeora_en": 28
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 2.0,
+     "con": 3.53,
+     "diferencia": 1.53,
+     "ic95": [
+      1.23,
+      1.84
+     ],
+     "mejora_en": 0,
+     "empeora_en": 27
+    },
+    "demora_peaton_s": {
+     "n": 29,
+     "sin": 31.21,
+     "con": 31.42,
+     "diferencia": 0.21,
+     "ic95": [
+      0.01,
+      0.41
+     ],
+     "mejora_en": 7,
+     "empeora_en": 21
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 11.4,
+     "con": 71.57,
+     "diferencia": 60.17,
+     "ic95": [
+      54.89,
+      65.44
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 7.27,
+     "con": 12.17,
+     "diferencia": 4.9,
+     "ic95": [
+      3.04,
+      6.76
+     ],
+     "mejora_en": 3,
+     "empeora_en": 23
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 2.23,
+     "con": 56.27,
+     "diferencia": 54.03,
+     "ic95": [
+      49.31,
+      58.76
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 8.33,
+     "con": 66.47,
+     "diferencia": 58.13,
+     "ic95": [
+      53.07,
+      63.2
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 4.13,
+     "con": 7.53,
+     "diferencia": 3.4,
+     "ic95": [
+      2.45,
+      4.35
+     ],
+     "mejora_en": 2,
+     "empeora_en": 27
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 0.17,
+     "con": 0.0,
+     "diferencia": -0.17,
+     "ic95": [
+      -0.41,
+      0.08
+     ],
+     "mejora_en": 2,
+     "empeora_en": 0
+    }
+   }
+  },
+  {
+   "nodo_id": "cluster_5174057865_5174057866_7347679591_8373716200_#1more",
+   "nivel": "recomendado",
+   "calles": "Avenida Carrera 7 × Calle 172A",
+   "lon": -74.02381,
+   "lat": 4.750205,
+   "veredicto": "no_conviene",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 28.79,
+     "con": 30.17,
+     "diferencia": 1.38,
+     "ic95": [
+      1.13,
+      1.63
+     ],
+     "mejora_en": 0,
+     "empeora_en": 29
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 7.75,
+     "con": 8.6,
+     "diferencia": 0.85,
+     "ic95": [
+      0.64,
+      1.06
+     ],
+     "mejora_en": 2,
+     "empeora_en": 28
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 1.33,
+     "con": 3.33,
+     "diferencia": 2.0,
+     "ic95": [
+      1.65,
+      2.35
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 29.12,
+     "con": 33.72,
+     "diferencia": 4.6,
+     "ic95": [
+      4.28,
+      4.92
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 4.5,
+     "con": 103.33,
+     "diferencia": 98.83,
+     "ic95": [
+      90.47,
+      107.19
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 0.7,
+     "con": 1.87,
+     "diferencia": 1.17,
+     "ic95": [
+      0.57,
+      1.76
+     ],
+     "mejora_en": 3,
+     "empeora_en": 22
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 2.57,
+     "con": 98.87,
+     "diferencia": 96.3,
+     "ic95": [
+      88.02,
+      104.58
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 4.37,
+     "con": 103.33,
+     "diferencia": 98.97,
+     "ic95": [
+      90.63,
+      107.31
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 0.03,
+     "con": 0.0,
+     "diferencia": -0.03,
+     "ic95": [
+      -0.1,
+      0.03
+     ],
+     "mejora_en": 1,
+     "empeora_en": 0
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 0.0,
+     "con": 0.07,
+     "diferencia": 0.07,
+     "ic95": [
+      -0.03,
+      0.16
+     ],
+     "mejora_en": 0,
+     "empeora_en": 2
+    }
+   }
+  },
+  {
+   "nodo_id": "cluster_551166248_551166273",
+   "nivel": "recomendado",
+   "calles": "Calle 165 × Carrera 8F",
+   "lon": -74.028416,
+   "lat": 4.742248,
+   "veredicto": "no_conviene",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 18.19,
+     "con": 19.95,
+     "diferencia": 1.76,
+     "ic95": [
+      1.66,
+      1.85
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 2.01,
+     "con": 3.31,
+     "diferencia": 1.3,
+     "ic95": [
+      1.22,
+      1.38
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 2.23,
+     "con": 4.27,
+     "diferencia": 2.03,
+     "ic95": [
+      1.67,
+      2.39
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 20.68,
+     "con": 21.04,
+     "diferencia": 0.36,
+     "ic95": [
+      0.27,
+      0.45
+     ],
+     "mejora_en": 1,
+     "empeora_en": 27
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 13.3,
+     "con": 75.63,
+     "diferencia": 62.33,
+     "ic95": [
+      58.06,
+      66.61
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 9.33,
+     "con": 13.33,
+     "diferencia": 4.0,
+     "ic95": [
+      2.39,
+      5.61
+     ],
+     "mejora_en": 5,
+     "empeora_en": 24
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 3.7,
+     "con": 61.87,
+     "diferencia": 58.17,
+     "ic95": [
+      54.05,
+      62.28
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 7.87,
+     "con": 70.27,
+     "diferencia": 62.4,
+     "ic95": [
+      58.14,
+      66.66
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 6.13,
+     "con": 7.13,
+     "diferencia": 1.0,
+     "ic95": [
+      -0.17,
+      2.17
+     ],
+     "mejora_en": 13,
+     "empeora_en": 16
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 0.0,
+     "con": 0.0,
+     "diferencia": 0.0,
+     "ic95": [
+      0.0,
+      0.0
+     ],
+     "mejora_en": 0,
+     "empeora_en": 0
+    }
+   }
+  },
+  {
+   "nodo_id": "cluster_551166759_9902201004_9902226519",
+   "nivel": "recomendado",
+   "calles": "Calle 163A × Carrera 8B Bis",
+   "lon": -74.027592,
+   "lat": 4.739492,
+   "veredicto": "no_conviene",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 18.34,
+     "con": 20.22,
+     "diferencia": 1.88,
+     "ic95": [
+      1.79,
+      1.96
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 1.35,
+     "con": 2.65,
+     "diferencia": 1.3,
+     "ic95": [
+      1.24,
+      1.36
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 1.97,
+     "con": 3.9,
+     "diferencia": 1.93,
+     "ic95": [
+      1.55,
+      2.31
+     ],
+     "mejora_en": 0,
+     "empeora_en": 29
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 17.93,
+     "con": 18.52,
+     "diferencia": 0.59,
+     "ic95": [
+      0.48,
+      0.7
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 20.07,
+     "con": 91.33,
+     "diferencia": 71.27,
+     "ic95": [
+      67.09,
+      75.44
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 2.6,
+     "con": 3.1,
+     "diferencia": 0.5,
+     "ic95": [
+      -0.45,
+      1.45
+     ],
+     "mejora_en": 8,
+     "empeora_en": 16
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 16.43,
+     "con": 87.53,
+     "diferencia": 71.1,
+     "ic95": [
+      67.21,
+      74.99
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 18.27,
+     "con": 89.63,
+     "diferencia": 71.37,
+     "ic95": [
+      67.32,
+      75.41
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 2.03,
+     "con": 1.8,
+     "diferencia": -0.23,
+     "ic95": [
+      -1.07,
+      0.61
+     ],
+     "mejora_en": 11,
+     "empeora_en": 12
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 0.0,
+     "con": 0.0,
+     "diferencia": 0.0,
+     "ic95": [
+      0.0,
+      0.0
+     ],
+     "mejora_en": 0,
+     "empeora_en": 0
+    }
+   }
+  },
+  {
+   "nodo_id": "1028886340",
+   "nivel": "recomendado",
+   "calles": "Avenida Carrera 7",
+   "lon": -74.027988,
+   "lat": 4.7838,
+   "veredicto": "no_se_justifica",
+   "metricas": {
+    "demora_media_s": {
+     "n": 30,
+     "sin": 54.59,
+     "con": 385.74,
+     "diferencia": 331.15,
+     "ic95": [
+      297.84,
+      364.46
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "espera_media_s": {
+     "n": 30,
+     "sin": 6.64,
+     "con": 223.2,
+     "diferencia": 216.56,
+     "ic95": [
+      195.24,
+      237.88
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "cola_max_veh": {
+     "n": 30,
+     "sin": 16.2,
+     "con": 112.67,
+     "diferencia": 96.47,
+     "ic95": [
+      86.97,
+      105.97
+     ],
+     "mejora_en": 0,
+     "empeora_en": 30
+    },
+    "demora_peaton_s": {
+     "n": 30,
+     "sin": 35.74,
+     "con": 34.62,
+     "diferencia": -1.11,
+     "ic95": [
+      -1.57,
+      -0.66
+     ],
+     "mejora_en": 28,
+     "empeora_en": 2
+    },
+    "conflictos": {
+     "n": 30,
+     "sin": 288.37,
+     "con": 296.07,
+     "diferencia": 7.7,
+     "ic95": [
+      -14.26,
+      29.66
+     ],
+     "mejora_en": 17,
+     "empeora_en": 13
+    },
+    "conflictos_cruce": {
+     "n": 30,
+     "sin": 27.3,
+     "con": 29.23,
+     "diferencia": 1.93,
+     "ic95": [
+      -0.9,
+      4.77
+     ],
+     "mejora_en": 10,
+     "empeora_en": 18
+    },
+    "conflictos_alcance": {
+     "n": 30,
+     "sin": 260.0,
+     "con": 266.33,
+     "diferencia": 6.33,
+     "ic95": [
+      -15.31,
+      27.97
+     ],
+     "mejora_en": 16,
+     "empeora_en": 14
+    },
+    "conflictos_ttc": {
+     "n": 30,
+     "sin": 253.17,
+     "con": 270.23,
+     "diferencia": 17.07,
+     "ic95": [
+      -2.87,
+      37.01
+     ],
+     "mejora_en": 13,
+     "empeora_en": 17
+    },
+    "conflictos_pet": {
+     "n": 30,
+     "sin": 17.6,
+     "con": 12.9,
+     "diferencia": -4.7,
+     "ic95": [
+      -6.86,
+      -2.54
+     ],
+     "mejora_en": 25,
+     "empeora_en": 4
+    },
+    "teleports": {
+     "n": 30,
+     "sin": 0.0,
+     "con": 0.0,
+     "diferencia": 0.0,
+     "ic95": [
+      0.0,
+      0.0
+     ],
+     "mejora_en": 0,
+     "empeora_en": 0
+    }
+   }
+  }
+ ]
+}
