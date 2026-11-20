@@ -9,8 +9,11 @@ programa cargado de cada tlLogic, así que basta con pasarlo como additional.
 Métricas (las mismas para todos los programas):
 - tiempo perdido y espera media por vehículo (tripinfo de todos los vehículos de la zona),
 - cola más larga y detenciones en los accesos del semáforo (detectores E2 por carril),
-- tiempo perdido de los peatones (personinfo).
+- tiempo perdido de los peatones (personinfo),
+- opcional (`ssm`): conflictos entre vehículos cerca del cruce con el dispositivo SSM de
+  SUMO (TTC < 1,5 s, DRAC > 3,35 m/s², PET < 1,5 s; los umbrales de telemetria.py).
 """
+import math
 import shutil
 import threading
 import xml.etree.ElementTree as ET
@@ -20,9 +23,12 @@ from pathlib import Path
 from .configuration import HORA_INI
 from .proceso import ejecutar, revisar_cancelacion
 from .programas_tls import ProgramaTLS, escribir_programa
+from .telemetria import DRAC_CRITICO, PET_CRITICO, TTC_CRITICO
 
 DURACION_S = 3600
 PERIODO_E2_S = 60
+RADIO_CONFLICTOS_M = 60    # conflictos que cuentan: los de cerca del cruce, no los de toda la zona
+VENTANA_CONFLICTO_S = 10   # un mismo par de vehículos cuenta una vez cada 10 s
 
 
 class ComparacionProgramaError(RuntimeError):
@@ -40,8 +46,26 @@ class ComparacionProgramaConfig:
     semilla: int = 42
     inicio: float = HORA_INI
     duracion_s: float = DURACION_S
+    adicionales: tuple[Path, ...] = ()    # p. ej. el programa propuesto de un semáforo nuevo
+    ssm: bool = False                     # registrar conflictos (TTC, DRAC, PET)
+    nodos: tuple[str, ...] = ()           # nodos del cruce: centro para filtrar los conflictos
+
+    def args_ssm(self) -> list[str]:
+        if not self.ssm:
+            return []
+        return [
+            "--device.ssm.probability", "1",
+            "--device.ssm.deterministic", "true",
+            "--device.ssm.measures", "TTC DRAC PET",
+            "--device.ssm.thresholds", f"{TTC_CRITICO} {DRAC_CRITICO} {PET_CRITICO}",
+            "--device.ssm.range", "50",
+            "--device.ssm.file", str(self.destino_dir / "ssm.xml"),
+        ]
 
     def to_args(self, adicionales: list[Path]) -> list[str]:
+        return [*self._args_base(adicionales), *self.args_ssm()]
+
+    def _args_base(self, adicionales: list[Path]) -> list[str]:
         return [
             "-n", str(self.zona_net),
             "-r", ",".join(str(d) for d in self.demanda),
@@ -137,6 +161,99 @@ def leer_metricas(tripinfo: Path, e2: Path, statistics: Path) -> dict[str, float
     }
 
 
+def centro_nodos(net: Path, nodos: tuple[str, ...] | list[str]) -> tuple[float, float] | None:
+    """Centro (coordenadas de la red) de los nodos de un cruce; None si no aparece ninguno."""
+    buscados, puntos = set(nodos), []
+    for _, elem in ET.iterparse(net, events=("end",)):
+        if elem.tag == "junction" and elem.get("id") in buscados:
+            puntos.append((float(elem.get("x")), float(elem.get("y"))))
+        if elem.tag in ("edge", "junction"):
+            elem.clear()
+    if not puntos:
+        return None
+    return sum(p[0] for p in puntos) / len(puntos), sum(p[1] for p in puntos) / len(puntos)
+
+
+# tipos de encuentro del dispositivo SSM de SUMO (atributo "type" de cada medida)
+TIPOS_ALCANCE = frozenset({1, 2, 3, 18})            # uno detrás del otro en el mismo carril
+TIPOS_CRUCE = frozenset({*range(4, 18), 19})        # convergencia, cruce y área de conflicto
+
+
+def clase_encuentro(tipo: int | None) -> str:
+    """"cruce" (convergencia o cruce de trayectorias), "alcance" (uno detrás del otro) u "otro"."""
+    if tipo in TIPOS_CRUCE:
+        return "cruce"
+    if tipo in TIPOS_ALCANCE:
+        return "alcance"
+    return "otro"
+
+
+def _medida(conflicto: ET.Element, tag: str) -> tuple[float | None, tuple[float, float] | None, int | None]:
+    """Valor, posición y tipo de encuentro de una medida SSM (minTTC, maxDRAC, PET); None si es NA."""
+    elem = conflicto.find(tag)
+    if elem is None:
+        return None, None, None
+    try:
+        valor = float(elem.get("value", "NA"))
+    except ValueError:
+        return None, None, None
+    try:
+        tipo = int(elem.get("type", ""))
+    except ValueError:
+        tipo = None
+    try:   # "x,y" o, en una red 3D, "x,y,z"
+        x, y = (float(v) for v in elem.get("position", "").split(",")[:2])
+        return valor, (x, y), tipo
+    except ValueError:
+        return valor, None, tipo
+
+
+def leer_conflictos(
+    ssm: Path, centro: tuple[float, float] | None, radio_m: float = RADIO_CONFLICTOS_M,
+) -> dict[str, int]:
+    """Conflictos graves cerca del cruce en la salida del dispositivo SSM.
+
+    Cada vehículo con el dispositivo registra sus conflictos, así que un mismo encuentro
+    aparece dos veces (A con B y B con A): cada par cuenta una vez por ventana de 10 s.
+    Se separan por la clase del encuentro de la medida que lo hizo grave: los de cruce
+    (trayectorias que se cruzan o convergen, los que un semáforo busca evitar) y los de
+    alcance (uno detrás del otro, que aumentan con las colas del rojo).
+    Sin `centro` se cuentan los de toda la zona.
+    """
+    claves = ("graves", "ttc", "drac", "pet", "cruce", "alcance")
+    vistos: dict[str, set] = {k: set() for k in claves}
+    if ssm.is_file():
+        for _, elem in ET.iterparse(ssm, events=("end",)):
+            if elem.tag != "conflict":
+                continue
+            medidas = {
+                "ttc": (*_medida(elem, "minTTC"), lambda v: v < TTC_CRITICO),
+                "pet": (*_medida(elem, "PET"), lambda v: v < PET_CRITICO),
+                "drac": (*_medida(elem, "maxDRAC"), lambda v: v > DRAC_CRITICO),
+            }
+            graves = {k: m for k, m in medidas.items() if m[0] is not None and m[3](m[0])}
+            pos = next((m[1] for m in graves.values() if m[1] is not None), None)
+            cerca = centro is None or (pos is not None and math.dist(pos, centro) <= radio_m)
+            if graves and cerca:
+                clave = (frozenset((elem.get("ego"), elem.get("foe"))),
+                         int(float(elem.get("begin", 0)) // VENTANA_CONFLICTO_S))
+                vistos["graves"].add(clave)
+                for k in graves:
+                    vistos[k].add(clave)
+                clase = clase_encuentro(next(iter(graves.values()))[2])
+                if clase in vistos:
+                    vistos[clase].add(clave)
+            elem.clear()
+    return {
+        "conflictos": len(vistos["graves"]),
+        "conflictos_cruce": len(vistos["cruce"]),
+        "conflictos_alcance": len(vistos["alcance"]),
+        "conflictos_ttc": len(vistos["ttc"]),
+        "conflictos_drac": len(vistos["drac"]),
+        "conflictos_pet": len(vistos["pet"]),
+    }
+
+
 def agregar_semillas(corridas: list[dict[str, float | int | None]]) -> dict:
     """Métricas de varias semillas: la media de cada una y su rango (mínimo, máximo).
 
@@ -171,7 +288,7 @@ def correr_programa(
     salida_e2 = cfg.destino_dir / "e2.xml"
     detectores = cfg.destino_dir / "detectores.add.xml"
     n = escribir_detectores(cfg.zona_net, cfg.accesos, detectores, salida_e2)
-    adicionales = [detectores]
+    adicionales = [detectores, *cfg.adicionales]
     if cfg.programa is not None:
         programa = cfg.destino_dir / "programa.add.xml"
         escribir_programa(cfg.programa, programa)
@@ -183,6 +300,9 @@ def correr_programa(
             f"SUMO falló en la zona (código {resultado.returncode}):\n{resultado.stderr[-2000:]}"
         )
     metricas = leer_metricas(cfg.destino_dir / "tripinfo.xml", salida_e2, cfg.destino_dir / "statistics.xml")
+    if cfg.ssm:
+        centro = centro_nodos(cfg.zona_net, cfg.nodos)
+        metricas.update(leer_conflictos(cfg.destino_dir / "ssm.xml", centro))
     if stats is not None:
         stats.detectores += n
         stats.vehiculos += metricas["vehiculos"] or 0

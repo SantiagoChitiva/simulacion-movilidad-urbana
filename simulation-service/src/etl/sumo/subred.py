@@ -259,6 +259,42 @@ def sin_paradas_de_bus(rou: Path) -> tuple[int, int]:
     return paradas, personas
 
 
+def _extremos(etapa) -> tuple[str | None, str | None]:
+    """Edge donde empieza y donde termina una etapa de una persona (None si no se sabe)."""
+    if etapa.get("edges"):
+        edges = etapa.get("edges").split()
+        return edges[0], edges[-1]
+    return etapa.get("from"), etapa.get("to")
+
+
+def sin_planes_cortados(rou: Path) -> int:
+    """Quita las personas cuyo plan quedó con huecos después del recorte.
+
+    cutRoutes.py conserva los tramos de una persona que caen en la zona y descarta el
+    resto; si el viaje en bus pasaba por fuera, quedan dos caminatas que no se tocan
+    (termina en un edge y la siguiente empieza en otro) y SUMO aborta con "Disconnected
+    plan for person". Devuelve cuántas quitó.
+    """
+    import xml.etree.ElementTree as ET
+
+    arbol = ET.parse(rou)
+    raiz = arbol.getroot()
+    quitadas = 0
+    for persona in [e for e in raiz if e.tag == "person"]:
+        etapas = [e for e in persona if e.tag in ("walk", "ride", "personTrip", "stop")]
+        extremos = [_extremos(e) for e in etapas]
+        cortado = any(
+            fin is not None and ini is not None and fin != ini
+            for (_, fin), (ini, _) in zip(extremos, extremos[1:])
+        )
+        if cortado:
+            raiz.remove(persona)
+            quitadas += 1
+    if quitadas:
+        arbol.write(str(rou), encoding="UTF-8", xml_declaration=True)
+    return quitadas
+
+
 def sin_vtypes_repetidos(rou: Path, ids: set[str]) -> int:
     """Quita de una demanda recortada los vTypes que ya define el additional de la zona.
 
