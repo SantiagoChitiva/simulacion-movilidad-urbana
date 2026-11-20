@@ -224,7 +224,7 @@
   <h2>Verificación del software</h2>
   <div class="dos">
     <div class="cifras vertical">
-      <div><b>182</b><span>pruebas automáticas con pytest, todas pasan</span></div>
+      <div><b>192</b><span>pruebas automáticas con pytest, todas pasan</span></div>
       <div><b>Aisladas</b><span>las dependencias externas se simulan con datos mínimos, sin correr SUMO completo</span></div>
     </div>
     <div>
@@ -273,6 +273,26 @@
   <p class="aviso">No es que la simulación falle: ejecuta bien la demanda que recibe. El GEH mide la calibración contra la calle, y sin esos datos ningún ajuste la alcanza. Como la misma red y la misma demanda están en los dos escenarios, las comparaciones entre alternativas siguen siendo válidas.</p>
 </section>
 
+<section class="compacta">
+  <div class="tag">Parte 4 · Control de calidad</div>
+  <h2>Semáforos propuestos: 59 cruces × 30 semillas</h2>
+  <div class="dos">
+    <table class="tabla num chica">
+      <tr><th>Cruce</th><th>Conflictos de cruce</th><th>De alcance</th><th>Demora</th></tr>
+      <tr><td>Av.&nbsp;Calle&nbsp;153 × Cra.&nbsp;8A</td><td>66&nbsp;→&nbsp;27</td><td>160&nbsp;→&nbsp;425</td><td>+30&nbsp;s</td></tr>
+      <tr><td>Av.&nbsp;Calle&nbsp;161 × Cra.&nbsp;8</td><td>5,9&nbsp;→&nbsp;3,3</td><td>20&nbsp;→&nbsp;100</td><td>+1,9&nbsp;s</td></tr>
+      <tr><td>Calle&nbsp;163A × Cra.&nbsp;17</td><td>9,9&nbsp;→&nbsp;4,7</td><td>11&nbsp;→&nbsp;76</td><td>+4,9&nbsp;s</td></tr>
+    </table>
+    <div class="cifras vertical">
+      <div><b>22</b><span>reducen los conflictos de cruce, con costo (los 3 prioritarios)</span></div>
+      <div><b>36</b><span>no convienen: no reducen los de cruce y suben el total</span></div>
+      <div><b>0</b><span>convienen sin costo: en 57 de 59 suben los alcances por las colas</span></div>
+    </div>
+  </div>
+  <p class="pie">Cada semilla: una hora sin y con el semáforo (Webster), misma demanda en los dos lados; varían las salidas reales (±5 min) y el tráfico de fondo. Conflictos con el SSM de SUMO (TTC, DRAC, PET), diferencia pareada con IC 95 %. 3.540 horas simuladas en 11&nbsp;h.</p>
+  <p class="aviso">El semáforo cambia choques en ángulo por choques por alcance. Respalda los 3 prioritarios si se acepta ese costo; en la mayoría de recomendados conviene probar antes medidas más baratas.</p>
+</section>
+
 <section>
   <div class="tag">Parte 4 · Control de calidad</div>
   <h2>Cumplimiento</h2>
@@ -300,7 +320,7 @@
     <li><strong>Volúmenes sin calibrar (GEH en 2 de 33):</strong> sirve para comparar alternativas, no para pronosticar volúmenes.</li>
     <li>Los buses del GTFS siguen su horario fijo, sin TransMiCable; las vías sin andén ponen peatones en la calzada.</li>
     <li>Los 220 semáforos usan el programa genérico de <code>netconvert</code>, no los de la SDM.</li>
-    <li>El tráfico de fondo del 3D es sintético y usa una sola semilla (42).</li>
+    <li>El tráfico de fondo del 3D es sintético; los conflictos son simulados (SSM), no siniestros observados.</li>
     <li>La priorización de cruces no se contrastó con una decisión real.</li>
   </ul>
 </section>
@@ -322,7 +342,7 @@
       <ul>
         <li>Calibrar la red para cumplir el GEH: tiempos semafóricos reales de la SDM y auditoría de carriles</li>
         <li>Red con andenes completos</li>
-        <li>Varias semillas en el simulador 3D</li>
+        <li>Semáforos actuados o coordinados y medidas más baratas en los cruces</li>
         <li>Más localidades, otras franjas y emisiones</li>
       </ul>
     </div>

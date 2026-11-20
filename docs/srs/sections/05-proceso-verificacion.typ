@@ -331,6 +331,13 @@ es la capacidad de la red (carriles, conexiones y programas semafóricos estimad
 conserva la forma temporal de la demanda pero no reproduce la magnitud de los volúmenes aforados; por eso sus resultados se usan para comparar
 alternativas con la misma demanda y no como pronóstico de volúmenes.
 
+*Semáforos propuestos con 30 semillas.* La comparación sin/con semáforo propuesto se repitió en los 59 cruces prioritarios y recomendados de la
+priorización, con 30 semillas por cruce (`python -m etl.sumo.estudio_semillas`; resumen en `simulation-service/estudios/semillas/`). Cada semilla
+varía las salidas de los viajes reales (±5 min) y el tráfico de fondo, y los dos lados reciben la misma demanda. Los conflictos se miden con el
+dispositivo SSM de SUMO (TTC < 1,5 s, DRAC > 3,35 m/s², PET < 1,5 s, a menos de 60 m del cruce) y se separan en conflictos de cruce y de alcance.
+Resultado: 22 cruces (los 3 prioritarios entre ellos) reducen los conflictos de cruce con un IC 95 % por debajo de cero, pero en 57 de 59 sube el
+total por los alcances en las colas; 36 no convienen y ninguno conviene sin costo.
+
 == Criterios de Aceptación del Sistema
 
 El sistema se considerará verificado y listo para la entrega al director del proyecto cuando se cumplan simultáneamente los siguientes criterios:
