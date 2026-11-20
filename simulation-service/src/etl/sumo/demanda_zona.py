@@ -11,6 +11,7 @@ para ver el efecto de un semáforo. Por eso la zona combina:
 
 Los dos lados de la comparación usan exactamente los mismos archivos de demanda.
 """
+import random
 import sys
 import threading
 import xml.etree.ElementTree as ET
@@ -20,7 +21,7 @@ from pathlib import Path
 from .configuration import HORA_INI
 from .proceso import ejecutar, revisar_cancelacion
 from .subred import SubredError, encontrar_herramienta
-from .vtypes import BUS_PT_ID, VTYPES
+from .vtypes import BUS_PT_ID, PARAMS_BUS_SITP, VTYPE_BUS_SITP, VTYPE_BUS_TM, VTYPES
 
 # modo de fondo -> (vType, vClass de randomTrips)
 _MODOS_FONDO: dict[str, tuple[str, str]] = {
@@ -86,13 +87,66 @@ class DemandaZonaStats:
     viajes_sinteticos: dict[str, int] = field(default_factory=dict)
 
 
+# vTypes que define el additional de la zona: los del proyecto y los de los buses del GTFS
+# (en una corrida, estos últimos vienen en pt_vehiculos.rou.xml, que la zona no carga)
+IDS_VTYPES_ZONA = frozenset([*(v.id for v in VTYPES.values()), VTYPE_BUS_SITP["id"], VTYPE_BUS_TM["id"]])
+
+
 def escribir_vtypes(destino: Path) -> Path:
-    """Additional con los vTypes del proyecto (las rutas recortadas no los traen)."""
+    """Additional con los vTypes de la zona (a las rutas recortadas se les quitan: subred.sin_vtypes_repetidos)."""
     raiz = ET.Element("additional")
     for vtype in VTYPES.values():
         ET.SubElement(raiz, "vType", vtype.to_xml_attrs())
+    for atributos in (VTYPE_BUS_SITP, VTYPE_BUS_TM):
+        vtype = ET.SubElement(raiz, "vType", atributos)
+        for clave, valor in PARAMS_BUS_SITP.items():
+            ET.SubElement(vtype, "param", key=clave, value=valor)
     arbol = ET.ElementTree(raiz)
     ET.indent(arbol, space="  ")
+    destino.parent.mkdir(parents=True, exist_ok=True)
+    arbol.write(str(destino), encoding="UTF-8", xml_declaration=True)
+    return destino
+
+
+# corrimiento máximo de la salida de un viaje real entre semillas (s)
+AMPLITUD_SALIDAS_S = 300
+_ENTIDADES = ("vehicle", "trip", "person", "flow")
+
+
+def variar_salidas(
+    origen: Path, destino: Path, semilla: int, amplitud_s: float = AMPLITUD_SALIDAS_S,
+    inicio: float | None = None, fin: float | None = None,
+) -> Path:
+    """Copia de una demanda recortada con cada salida corrida al azar hasta ±`amplitud_s`.
+
+    Los viajes, sus orígenes, destinos y rutas no cambian; solo el instante exacto de salida,
+    que la encuesta tampoco conoce (las respuestas se redondean y las copias de cada una ya
+    se reparten al azar alrededor de la hora reportada). Con `inicio`/`fin` las salidas
+    quedan dentro de la ventana. El archivo se reordena por salida: SUMO descarta lo que
+    llega desordenado.
+    """
+    rng = random.Random(semilla)
+    arbol = ET.parse(origen)
+    raiz = arbol.getroot()
+    fijos, entidades = [], []
+    for elem in list(raiz):
+        raiz.remove(elem)
+        depart = elem.get("depart") if elem.tag in _ENTIDADES else None
+        try:
+            t = float(depart)
+        except (TypeError, ValueError):
+            fijos.append(elem)   # vTypes, rutas con nombre, salidas "triggered"...
+            continue
+        t += rng.uniform(-amplitud_s, amplitud_s)
+        if inicio is not None:
+            t = max(t, inicio)
+        if fin is not None:
+            t = min(t, fin - 1)
+        elem.set("depart", f"{t:.2f}")
+        entidades.append((t, elem))
+    entidades.sort(key=lambda par: par[0])
+    raiz.extend(fijos)
+    raiz.extend(e for _, e in entidades)
     destino.parent.mkdir(parents=True, exist_ok=True)
     arbol.write(str(destino), encoding="UTF-8", xml_declaration=True)
     return destino

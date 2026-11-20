@@ -1,6 +1,6 @@
 import xml.etree.ElementTree as ET
 
-from etl.sumo.demanda_zona import DemandaZonaConfig, contar_viajes, escribir_vtypes
+from etl.sumo.demanda_zona import IDS_VTYPES_ZONA, DemandaZonaConfig, contar_viajes, escribir_vtypes
 from etl.sumo.vtypes import VTYPES
 
 
@@ -23,7 +23,8 @@ def test_args_random_trips_peatones(tmp_path):
 def test_escribir_vtypes(tmp_path):
     destino = escribir_vtypes(tmp_path / "vtypes.add.xml")
     ids = {v.get("id") for v in ET.parse(destino).getroot().iter("vType")}
-    assert ids == set(VTYPES)
+    # los del proyecto y los de los buses del GTFS (que la zona no carga de pt_vehiculos)
+    assert ids == set(VTYPES) | {"bus_sitp", "bus_tm"} == set(IDS_VTYPES_ZONA)
 
 
 def test_contar_viajes(tmp_path):

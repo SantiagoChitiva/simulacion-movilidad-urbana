@@ -623,7 +623,7 @@ redactan con la forma \"El sistema debe #sym.dots\", y se organizan en cinco fun
   modulo: [Módulo de Validación (etl/validation.py)],
   estado: [Implementado en `etl/sumo/aforos.py` y `etl/sumo/validacion.py`: los aforos HMD de la EODI se ubican en la red por los shapefiles de
   estaciones y cada corrida escribe `validacion.csv` y `validacion.json`, con el porcentaje de puntos con GEH < 5 por grupo de calibración y de
-  control. La demanda puede ampliarse con la encuesta completa (`encuesta_completa.py`: vehículos que entran y salen de Usaquén y expansión sin tope)
+  control, el RMSE y el RMSE porcentual. La demanda puede ampliarse con la encuesta completa (`encuesta_completa.py`: vehículos que entran y salen de Usaquén y expansión sin tope)
   y el tráfico de paso. Medido en la mañana: 2 de 33 puntos cumplen (22 % del volumen aforado con la encuesta completa); la red no alcanza a mover
   esa demanda, así que el criterio del 85 % queda pendiente de calibrar su capacidad. Como verificación complementaria de la forma horaria,
   `validation/histograma_salidas.py` compara la distribución de salidas simulada contra la encuesta (@figHistogramaSalidasSrs, sección 5).],

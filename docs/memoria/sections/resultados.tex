@@ -4,7 +4,7 @@ Siguiendo la metodología, los resultados se organizan en tres niveles: verifica
 
 \subsection{Verificación del software}
 
-\textbf{Pruebas automáticas.} El servicio tiene 182 pruebas con \texttt{pytest} en \texttt{simulation-service/test/}, y todas pasan. Cubren: demanda y presets, generación de viajes, conversión del FCD, exportación a kepler, intersecciones, priorización, avance, cancelación y reanudación, semáforo nuevo, escena 3D, telemetría, simulaciones precalculadas, la API, la comparación 3D, la comparación de programas y la validación (aforos ubicados en la red, GEH, encuesta completa, GTFS y ventanas). Las dependencias externas se aíslan con \texttt{dependency\_overrides} y datos mínimos, de modo que las pruebas no ejecutan SUMO completo. Entre ellas, una prueba verifica que el preset \textit{encuesta} con sus conteos por defecto reproduce exactamente la expansión simple de la encuesta, lo que valida la lógica de transferencia modal en su caso base.
+\textbf{Pruebas automáticas.} El servicio tiene 192 pruebas con \texttt{pytest} en \texttt{simulation-service/test/}, y todas pasan. Cubren: demanda y presets, generación de viajes, conversión del FCD, exportación a kepler, intersecciones, priorización, avance, cancelación y reanudación, semáforo nuevo, escena 3D, telemetría, simulaciones precalculadas, la API, la comparación 3D, la comparación de programas, el estudio de semillas (conflictos SSM, diferencias pareadas y veredicto) y la validación (aforos ubicados en la red, GEH, encuesta completa, GTFS y ventanas). Las dependencias externas se aíslan con \texttt{dependency\_overrides} y datos mínimos, de modo que las pruebas no ejecutan SUMO completo. Entre ellas, una prueba verifica que el preset \textit{encuesta} con sus conteos por defecto reproduce exactamente la expansión simple de la encuesta, lo que valida la lógica de transferencia modal en su caso base.
 
 Dos limitaciones de este nivel de verificación: (i) el flujo de integración continua ejecuta las pruebas del servicio en un trabajo con Python 3.12 sobre Ubuntu, pero no en Windows, donde se desarrolló; y (ii) el visor no tiene pruebas automáticas, solo demostración funcional.
 
@@ -81,24 +81,53 @@ Los aforos HMD se ubicaron en la red cruzando su identificador con los \textit{s
 \renewcommand{\arraystretch}{1.15}
 \centering
 \small
-\begin{tabular}{|p{6.4cm}|r|r|r|}
+\begin{tabular}{|p{5.0cm}|r|r|r|r|}
 \hline
-\textbf{Demanda (mañana)} & \textbf{Vehículos que entran} & \textbf{Simulado / aforado} & \textbf{GEH $<5$} \\ \hline
-Viajes internos de la encuesta (tope de 50 copias) & 9.592 & 6\,\% & 0 de 33 \\ \hline
-+ tráfico de paso calibrado con \textit{routeSampler} & -- & 27\,\% & 2 de 33 \\ \hline
-Encuesta completa (entran, salen y sin tope), mesoscópico & 54.984 de 145.014 & 22\,\% & 2 de 33 \\ \hline
-Encuesta completa con rutas de duaIterate & 54.944 de 145.014 & 22\,\% & 2 de 33 \\ \hline
-Encuesta completa sin control de cruces (diagnóstico) & 66.678 de 145.014 & 33\,\% & 2 de 33 \\ \hline
+\textbf{Demanda (mañana)} & \textbf{Vehículos que entran} & \textbf{Simulado / aforado} & \textbf{GEH $<5$} & \textbf{RMSE (veh/h)} \\ \hline
+Viajes internos de la encuesta (tope de 50 copias) & 9.592 & 6\,\% & 0 de 33 & 1.260 (155\,\%) \\ \hline
++ tráfico de paso calibrado con \textit{routeSampler} & -- & 27\,\% & 2 de 33 & n.d.$^{*}$ \\ \hline
+Encuesta completa (entran, salen y sin tope), mesoscópico & 54.984 de 145.014 & 22\,\% & 2 de 33 & 1.123 (138\,\%) \\ \hline
+Encuesta completa con rutas de duaIterate & 54.944 de 145.014 & 22\,\% & 2 de 33 & 1.125 (138\,\%) \\ \hline
+Encuesta completa sin control de cruces (diagnóstico) & 66.678 de 145.014 & 33\,\% & 2 de 33 & 1.049 (129\,\%) \\ \hline
 \end{tabular}
-\caption{GEH de la simulación frente a los aforos HMD con distintas demandas.}
+\caption{GEH y RMSE de la simulación frente a los aforos HMD con distintas demandas. Entre paréntesis, el RMSE porcentual sobre el aforo medio (814 veh/h). $^{*}$La corrida con tráfico de paso no se conservó y el RMSE se agregó después.}
 \label{tab:geh}
 \end{table}
 
 La primera fila explica por qué la demanda interna sola no puede pasar el GEH: solo tiene los viajes que empiezan y terminan en Usaquén, y la mediana del factor de expansión en la mañana es 123 frente al tope de 50. La encuesta completa corrige las dos cosas con los datos de la propia encuesta: agrega los vehículos que entran o salen por las vías arteriales del borde (unos 61.500 autos frente a 21.800 internos) y las copias que el tope quitaba. Con eso la demanda ya es del orden de los aforos, pero la red no la mueve: menos de la mitad de los vehículos alcanza a entrar y a las 10:00 quedan más de 20.000 atrapados adentro.
 
+El RMSE, calculado sobre los mismos puntos, cuenta lo mismo con otra métrica: entre 1.049 y 1.260 veh/h, más que el propio aforo medio. Lo dominan las avenidas de mayor volumen (hasta 4.700 veh/h aforados en un punto), donde la simulación queda más lejos, y baja poco al ampliar la demanda porque la red no deja entrar a los vehículos adicionales.
+
 Las dos últimas filas descartan las explicaciones más simples. Repartir las rutas según la congestión no cambia nada, y quitar las reglas de los cruces solo sube el volumen al 33\,\%. El límite es la capacidad de la red construida desde OpenStreetMap: carriles y conexiones de las avenidas, programas de semáforo estimados por \texttt{netconvert} y aforos que cubren varias calzadas paralelas. En conjunto, la simulación conserva la forma temporal de la demanda, pero no la magnitud de los volúmenes aforados; por eso sus resultados sirven para comparar alternativas con la misma demanda y no como pronóstico de volúmenes.
 
 \textbf{Qué significa y qué no significa este resultado.} Que el GEH no se cumpla no indica que la simulación falle: SUMO ejecuta la demanda que recibe (la forma horaria coincide con su insumo), las pruebas del \textit{pipeline} pasan y los resultados se pueden reproducir. Lo que el GEH mide es la \textit{calibración} del modelo frente a la calle, y esa calibración depende de insumos que el proyecto no tenía: los tiempos de los semáforos de la SDM, que no se publican, y una red con carriles y giros auditados en las avenidas. La literatura suele reservar el criterio de GEH $<5$ en el 85\,\% de los puntos para modelos calibrados con esa información. Con la misma red y la misma demanda en los dos escenarios, el error de calibración está presente en los dos, así que las comparaciones del sistema (un preset frente a otro, un programa semafórico frente a otro, un cruce con y sin semáforo) son útiles como diferencias relativas, que es el uso para el que se construyó la herramienta. La cautela es que en las avenidas congestionadas el tamaño de esas diferencias puede estar sesgado, porque la congestión simulada no es la real.
+
+\subsection{Semáforos propuestos con muchas semillas}
+\label{sec:semillas}
+
+El simulador 3D compara un cruce sin y con el semáforo propuesto en una sola corrida, así que una diferencia puede deberse al azar de esa corrida. Para decidir con datos se repitió la comparación en los 59 cruces de la priorización con nivel prioritario (3) o recomendado (56), con 30 semillas por cruce (3.540 horas simuladas, unas 11 horas de cómputo). Cada semilla corre una hora en la zona del cruce (300~m) dos veces, sin y con el semáforo propuesto (programa de Webster), con la misma demanda en los dos lados. Lo que cambia entre semillas es la demanda: las salidas de los viajes reales de la encuesta se desplazan al azar hasta $\pm 5$~min y el tráfico de fondo sintético se genera de nuevo; los viajes siguen siendo los de la encuesta. Los conflictos se cuentan con el dispositivo SSM de SUMO (TTC $<1{,}5$~s, DRAC $>3{,}35$~m/s$^2$ o PET $<1{,}5$~s, a menos de 60~m del cruce, cada par de vehículos una vez cada 10~s) y se separan por tipo de encuentro: \textit{de cruce} (trayectorias que se cruzan o convergen, los que un semáforo busca evitar) y \textit{de alcance} (un vehículo detrás de otro, que crecen con las colas del rojo). Para cada indicador se calcula la diferencia pareada por semilla con su intervalo de confianza del 95\,\%.
+
+El criterio de decisión es explícito: el semáforo \textit{conviene} si reduce los conflictos de cruce (intervalo por debajo de cero) con a lo sumo 10~s de demora adicional por vehículo, que es aproximadamente un nivel de servicio. Si reduce los de cruce pero la demora sube más, \textit{conviene con costo}; si no los reduce y sube el total de conflictos, \textit{no conviene}. Los conflictos de alcance se reportan, pero no deciden: un semáforo se instala para evitar los conflictos en ángulo, que son los graves; los de alcance aparecen con cualquier cola, ocurren a baja velocidad y el modelo de seguimiento de SUMO los sobrecuenta en las filas. Un criterio que exigiera no aumentar el total de conflictos no aprobaría ningún cruce, ni siquiera dándole a cada conflicto de cruce un peso diez veces mayor que a uno de alcance.
+
+\begin{table}[ht]
+\renewcommand{\arraystretch}{1.15}
+\centering
+\small
+\begin{tabular}{|p{4.2cm}|c|c|c|p{2.6cm}|}
+\hline
+\textbf{Cruce (nivel prioritario)} & \textbf{Conflictos de cruce} & \textbf{De alcance} & \textbf{Demora (s/veh)} & \textbf{Veredicto} \\ \hline
+Av. Calle 153 $\times$ Cra.~8A & 66,1 $\to$ 26,8 & 160 $\to$ 425 & 86,5 $\to$ 116,6 & Conviene con costo \\ \hline
+Av. Calle 161 $\times$ Cra.~8 & 5,9 $\to$ 3,3 & 20 $\to$ 100 & 15,2 $\to$ 17,1 & Conviene \\ \hline
+Calle 163A $\times$ Cra.~17 & 9,9 $\to$ 4,7 & 11 $\to$ 76 & 210,8 $\to$ 215,7 & Conviene \\ \hline
+Los 59 cruces (suma de medias) & 715 $\to$ 654 & 2.968 $\to$ 8.563 & mediana $+3{,}3$ & 13 conviene, 9 con costo, 36 no conviene, 1 no se justifica \\ \hline
+\end{tabular}
+\caption{Sin $\to$ con el semáforo propuesto: media por hora simulada en 30 semillas. Resumen completo en \texttt{simulation-service/estudios/semillas/resumen.csv}.}
+\label{tab:semillas}
+\end{table}
+
+La tabla~\ref{tab:semillas} resume el resultado. En los tres cruces prioritarios el semáforo reduce los conflictos de cruce a la mitad o menos, y en la Av. Calle 153 lo hace en las 30 semillas. En los tres, sin embargo, multiplica los conflictos de alcance: los vehículos que antes cruzaban cediendo el paso ahora se detienen y forman colas. En 57 de los 59 cruces el total de conflictos sube, porque los de alcance son mucho más numerosos que los de cruce. Ese intercambio (menos choques en ángulo, más choques por alcance) es el efecto que la literatura de seguridad vial describe al instalar un semáforo, y su balance depende de que los choques en ángulo son los más graves. En 36 cruces el semáforo ni siquiera reduce los conflictos de cruce; en 21 de ellos los aumenta, en parte porque la clase \textit{de cruce} incluye las convergencias por cambio de carril para entrar a una cola. La demora sube de forma significativa en 43 cruces, pero en la mayoría es moderada (mediana de 3,3~s); en cinco cruces (tres de la Av. Carrera 7, la Av. Carrera 45 con Calle 187 Bis y la Carrera 13 con Calle 122) la zona se satura y la demora crece varios minutos. En total, 13 cruces convienen (dos de ellos prioritarios) y 9 reducen los conflictos de cruce con más de 10~s de demora adicional. Con 20 semillas el conteo era 12 / 8 / 38 / 1, casi igual al de 30, así que las conclusiones son estables frente al número de repeticiones.
+
+La lectura útil es doble. Para los tres cruces prioritarios el resultado respalda la propuesta: en la Av. Calle 161 con Carrera 8 y en la Calle 163A con Carrera 17 reduce los conflictos graves con menos de 5~s de demora adicional, y en la Av. Calle 153 los reduce a cambio de unos 30~s más de demora, que podrían bajar con un mejor programa; un programa de Webster de tiempo fijo, sin detectores ni coordinación con los semáforos vecinos, es el caso menos favorable. Para los recomendados, la mayoría no muestra beneficio de seguridad en la simulación, lo que sugiere revisar primero medidas más baratas (señalización, reductores, prohibir el giro a la izquierda). Las cautelas de la sección~\ref{sec:geh} siguen vigentes: la red y los semáforos no están calibrados y el tráfico de fondo es sintético.
 
 \subsection{Limitaciones y amenazas a la validez}
 \label{sec:limitaciones-resultados}
@@ -109,7 +138,7 @@ Las dos últimas filas descartan las explicaciones más simples. Repartir las ru
     \item \textbf{Peatones sobre la calzada.} Muchas vías de la red no tienen andén modelado, así que los peatones caminan por la calzada y SUMO registra como colisión cada vez que un vehículo los alcanza (unas mil por corrida, frente a 0 a 3 choques entre vehículos). Corregirlo exige reconstruir la red con andenes, lo que cambia los índices de enlace de los semáforos y la escena 3D.
     \item \textbf{Programas semafóricos genéricos.} Los 220 semáforos usan el programa por defecto de \texttt{netconvert}, no los de la SDM. Por tanto, las comparaciones de programas son ilustrativas.
     \item \textbf{Tráfico de fondo sintético} en las comparaciones 3D, necesario porque la demanda real es escasa en una zona de 350~m. Los resultados dependen de las intensidades elegidas.
-    \item \textbf{Una semilla.} El simulador 3D usa la semilla 42; no se hizo análisis de sensibilidad ni se repitió con varias semillas, por lo que los indicadores de riesgo de un actor son ilustrativos, no estadísticos.
+    \item \textbf{Semillas y conflictos simulados.} El simulador 3D usa una sola semilla (42), así que lo que muestra de un actor es ilustrativo. La decisión por cruce se apoya en el estudio de 30 semillas (sección~\ref{sec:semillas}), cuyos conflictos son indicadores sustitutos de siniestros medidos con el modelo de seguimiento de SUMO, no siniestros observados.
     \item \textbf{Priorización sin validación externa.} La evidencia se calibró contra los semáforos ya existentes de la red, pero no se contrastó con una decisión real de la SDM ni con un conjunto independiente.
     \item \textbf{Ventana horaria y alcance.} Solo se simulan las puntas de la mañana (7:00 a 10:00) y de la tarde (16:00 a 19:00) en Usaquén. Los datos crudos de la encuesta no se versionan, por lo que reproducir desde cero requiere el TSV filtrado.
     \item \textbf{Escena 3D parcialmente ilustrativa} (edificios de relleno marcados) y sin prueba de usuario: la usabilidad quedó \textit{implementada, pendiente de prueba con usuarios}.
@@ -125,10 +154,10 @@ Las dos últimas filas descartan las explicaciones más simples. Repartir las ru
 \hline
 \textbf{Objetivo} & \textbf{Evidencia} & \textbf{Estado} \\ \hline
 OE1 & Informe de brechas (Fase 1), selección del TSV de viajes internos y de la red OSM. & Cumplido, con las brechas de aforos declaradas. \\ \hline
-OE2 & \textit{Pipeline} ETL de la encuesta a SUMO, con 182 pruebas. & Cumplido. \\ \hline
-OE3 & Escenario de Usaquén ejecutado en SUMO, comparación de horas de salida contra la encuesta y GEH contra 33 puntos de aforo. & Parcial: la forma temporal coincide; el GEH se cumple en 2 de 33 puntos. \\ \hline
+OE2 & \textit{Pipeline} ETL de la encuesta a SUMO, con 192 pruebas. & Cumplido. \\ \hline
+OE3 & Escenario de Usaquén ejecutado en SUMO, comparación de horas de salida contra la encuesta y GEH y RMSE contra 33 puntos de aforo. & Parcial: la forma temporal coincide; el GEH se cumple en 2 de 33 puntos. \\ \hline
 OE4 & Visor web con presets, parametrización, avance y cancelación. & Cumplido. \\ \hline
-OE5 & Análisis de intersecciones y simulador 3D con TTC, DRAC y PET. & Cumplido, con reporte exportable en CSV y PDF. \\ \hline
+OE5 & Análisis de intersecciones, simulador 3D con TTC, DRAC y PET y comparación sin/con semáforo en 59 cruces con 30 semillas. & Cumplido, con reporte exportable en CSV y PDF. \\ \hline
 \end{tabular}
 \caption{Cumplimiento de los objetivos específicos.}
 \label{tab:objetivos}

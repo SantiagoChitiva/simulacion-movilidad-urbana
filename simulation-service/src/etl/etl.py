@@ -22,7 +22,9 @@ from .sumo.fcd import FcdConversionResult, FcdToGeoJsonConfig, convert_fcd_to_ge
 from .sumo.kepler import KeplerTripsConfig, KeplerTripsResult, convert_fcd_to_kepler_trips
 from .sumo.proceso import Cancelado, revisar_cancelacion
 from .sumo.simulation import SimulationConfig, SimulationResult, clasificar_eventos, leer_estadisticas, run_simulation
-from .sumo.demanda_zona import DemandaZonaConfig, DemandaZonaResult, DemandaZonaStats, generar_demanda_zona
+from .sumo.demanda_zona import (
+    IDS_VTYPES_ZONA, DemandaZonaConfig, DemandaZonaResult, DemandaZonaStats, generar_demanda_zona,
+)
 from .sumo.programas_tls import ProgramaTLS
 from .sumo.semaforo_nuevo import (
     SemaforoNuevoConfig, accesos_semaforo, agregar_semaforo, programa_webster_propuesto, volumenes_accesos,
@@ -30,6 +32,8 @@ from .sumo.semaforo_nuevo import (
 from .sumo.subred import (
     SubredConfig, SubredDemandaConfig, SubredStats, caminatas_por_origen_destino, recortar_demanda, recortar_red,
     sin_paradas_de_bus,
+    sin_planes_cortados,
+    sin_vtypes_repetidos,
 )
 from .sumo.encuesta_completa import archivo_complemento
 from .sumo.trafico_paso import archivo_trafico_paso
@@ -452,8 +456,10 @@ def _preparar_zona(
             ), cancelar=cancelar)
             rutas_reales = zona_rou
             sin_paradas_de_bus(zona_rou)
+            sin_vtypes_repetidos(zona_rou, IDS_VTYPES_ZONA)
             if peatonal:
                 caminatas_por_origen_destino(zona_rou)
+            sin_planes_cortados(zona_rou)
         except (RuntimeError, FileNotFoundError):
             rutas_reales = None   # sin viajes reales: la zona queda solo con fondo sintético
 

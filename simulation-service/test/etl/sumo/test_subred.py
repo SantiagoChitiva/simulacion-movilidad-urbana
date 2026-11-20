@@ -35,6 +35,34 @@ def test_sin_paradas_de_bus(tmp_path):
     assert "busStop" not in texto and 'id="q"' in texto and 'id="b"' in texto
 
 
+def test_sin_vtypes_repetidos_deja_los_que_no_define_la_zona(tmp_path):
+    from etl.sumo.subred import sin_vtypes_repetidos
+
+    rou = tmp_path / "zona.rou.xml"
+    rou.write_text(
+        '<routes><vType id="auto" vClass="passenger"/><vType id="auto_enc" vClass="passenger"/>'
+        '<vehicle id="v" type="auto" depart="0"><route edges="a"/></vehicle></routes>', encoding="utf-8",
+    )
+    assert sin_vtypes_repetidos(rou, {"auto", "moto"}) == 1
+    texto = rou.read_text(encoding="utf-8")
+    assert 'vType id="auto"' not in texto and 'id="auto_enc"' in texto and 'vehicle id="v"' in texto
+    assert sin_vtypes_repetidos(rou, {"auto"}) == 0
+
+
+def test_sin_planes_cortados(tmp_path):
+    from etl.sumo.subred import sin_planes_cortados
+
+    rou = tmp_path / "zona.rou.xml"
+    rou.write_text(
+        '<routes><person id="cortada" depart="0"><walk from="a" to="b"/><walk edges="c d"/></person>'
+        '<person id="sigue" depart="0"><walk edges="a b"/><walk from="b" to="c"/></person>'
+        '<person id="sola" depart="0"><walk from="x" to="y"/></person></routes>', encoding="utf-8",
+    )
+    assert sin_planes_cortados(rou) == 1
+    texto = rou.read_text(encoding="utf-8")
+    assert 'id="cortada"' not in texto and 'id="sigue"' in texto and 'id="sola"' in texto
+
+
 def test_encuentra_duaiterate_en_tools_assign():
     from etl.sumo.subred import encontrar_herramienta
     assert encontrar_herramienta("duaIterate.py").replace("\\", "/").endswith("tools/assign/duaIterate.py")

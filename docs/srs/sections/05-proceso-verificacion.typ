@@ -312,22 +312,32 @@ reparten. El reparto tiene un costo que se declara: corre la demanda hacia la pr
 
 #figure(
   table(
-    columns: (1fr, auto, auto),
-    table.header([*Demanda (mañana)*], [*Simulado / aforado*], [*GEH < 5*]),
-    [Viajes internos de la encuesta (tope de 50 copias)], [6 %], [0 de 33],
-    [+ tráfico de paso calibrado con routeSampler], [27 %], [2 de 33],
-    [Encuesta completa (entran, salen y sin tope), mesoscópico], [22 %], [2 de 33],
-    [Encuesta completa con rutas de duaIterate], [22 %], [2 de 33],
-    [Encuesta completa sin control de cruces (diagnóstico)], [33 %], [2 de 33],
+    columns: (1fr, auto, auto, auto),
+    table.header([*Demanda (mañana)*], [*Simulado / aforado*], [*GEH < 5*], [*RMSE (veh/h)*]),
+    [Viajes internos de la encuesta (tope de 50 copias)], [6 %], [0 de 33], [1.260 (155 %)],
+    [+ tráfico de paso calibrado con routeSampler], [27 %], [2 de 33], [n.d.],
+    [Encuesta completa (entran, salen y sin tope), mesoscópico], [22 %], [2 de 33], [1.123 (138 %)],
+    [Encuesta completa con rutas de duaIterate], [22 %], [2 de 33], [1.125 (138 %)],
+    [Encuesta completa sin control de cruces (diagnóstico)], [33 %], [2 de 33], [1.049 (129 %)],
   ),
-  caption: [GEH de la simulación frente a los aforos HMD con distintas demandas.],
+  caption: [GEH y RMSE de la simulación frente a los aforos HMD con distintas demandas. Entre paréntesis, el RMSE porcentual sobre el aforo
+  medio (814 veh/h); la corrida con tráfico de paso no se conservó.],
 ) <tabGEHSrs>
 
 Ninguna demanda alcanza el criterio de GEH < 5 en el 85 % de los puntos. Con la encuesta completa la demanda ya es del orden de los aforos, pero la red
 construida desde OpenStreetMap no la mueve: menos de la mitad de los vehículos alcanza a entrar y a las 10:00 quedan más de 20.000 dentro. El límite
-es la capacidad de la red (carriles, conexiones y programas semafóricos estimados por netconvert), no la encuesta. En conjunto, la simulación
+es la capacidad de la red (carriles, conexiones y programas semafóricos estimados por netconvert), no la encuesta. El RMSE (entre 1.049 y
+1.260 veh/h, dominado por las avenidas de mayor volumen) lleva a la misma conclusión. En conjunto, la simulación
 conserva la forma temporal de la demanda pero no reproduce la magnitud de los volúmenes aforados; por eso sus resultados se usan para comparar
 alternativas con la misma demanda y no como pronóstico de volúmenes.
+
+*Semáforos propuestos con 30 semillas.* La comparación sin/con semáforo propuesto se repitió en los 59 cruces prioritarios y recomendados de la
+priorización, con 30 semillas por cruce (`python -m etl.sumo.estudio_semillas`; resumen en `simulation-service/estudios/semillas/`). Cada semilla
+varía las salidas de los viajes reales (±5 min) y el tráfico de fondo, y los dos lados reciben la misma demanda. Los conflictos se miden con el
+dispositivo SSM de SUMO (TTC < 1,5 s, DRAC > 3,35 m/s², PET < 1,5 s, a menos de 60 m del cruce) y se separan en conflictos de cruce y de alcance.
+Resultado: 22 cruces (los 3 prioritarios entre ellos) reducen los conflictos de cruce con un IC 95 % por debajo de cero; 13 lo hacen con a lo
+sumo 10 s de demora adicional (conviene) y 9 con más (conviene con costo). 36 no convienen. En 57 de 59 sube el total de conflictos por los
+alcances en las colas, que se reportan pero no deciden.
 
 == Criterios de Aceptación del Sistema
 
