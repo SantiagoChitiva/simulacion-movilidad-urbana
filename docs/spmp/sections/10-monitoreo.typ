@@ -112,7 +112,7 @@ entre 7:00 y 8:00 frente a 34 % en la encuesta). Este análisis valida la *forma
 tráfico de paso, 2 de 33 (entre 22 % y 27 %), con un RMSE de 1.049 a 1.260 veh/h frente a un aforo medio de 814 veh/h. El criterio de calibración (GEH < 5 en el 85 % de los puntos) no se alcanzó: la red construida desde
 OpenStreetMap no mueve la demanda completa. Se registra como desviación del plan de calidad, con la calibración de la capacidad de la red como
 trabajo futuro (detalle en la sección 5 del SRS). El estudio de semillas de los semáforos propuestos (59 cruces × 30 semillas, 3.540 horas
-simuladas) da intervalos de confianza para la decisión por cruce: 22 reducen los conflictos de cruce con costo, 36 no convienen.
+simuladas) da intervalos de confianza para la decisión por cruce: 13 convienen, 9 convienen con costo de demora y 36 no convienen.
 
 *Acciones correctivas.* Cuando las métricas indiquen desviaciones importantes respecto a la planeación inicial, el equipo aplicará acciones
 correctivas:

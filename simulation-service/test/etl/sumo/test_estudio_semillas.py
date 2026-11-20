@@ -89,7 +89,7 @@ def _resumen(cruce_ic, total_ic, demora_dif, demora_ic):
 def test_veredicto():
     assert veredicto(_resumen([-3, -1], [-4, 0], 4, [3, 5])) == "conviene"
     assert veredicto(_resumen([-3, -1], [-4, 0], 25, [20, 30])) == "conviene_con_costo"
-    assert veredicto(_resumen([-3, -1], [2, 9], 4, [3, 5])) == "conviene_con_costo"   # más alcances
+    assert veredicto(_resumen([-3, -1], [2, 9], 4, [3, 5])) == "conviene"   # más alcances: se reportan, no deciden
     assert veredicto(_resumen([-1, 1], [2, 9], 4, [3, 5])) == "no_conviene"
     assert veredicto(_resumen([-1, 1], [-1, 1], 4, [3, 5])) == "no_se_justifica"
     assert veredicto(_resumen([-1, 1], [-1, 1], 0.5, [-1, 2])) == "indiferente"

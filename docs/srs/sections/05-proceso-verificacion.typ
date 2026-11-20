@@ -335,8 +335,9 @@ alternativas con la misma demanda y no como pronóstico de volúmenes.
 priorización, con 30 semillas por cruce (`python -m etl.sumo.estudio_semillas`; resumen en `simulation-service/estudios/semillas/`). Cada semilla
 varía las salidas de los viajes reales (±5 min) y el tráfico de fondo, y los dos lados reciben la misma demanda. Los conflictos se miden con el
 dispositivo SSM de SUMO (TTC < 1,5 s, DRAC > 3,35 m/s², PET < 1,5 s, a menos de 60 m del cruce) y se separan en conflictos de cruce y de alcance.
-Resultado: 22 cruces (los 3 prioritarios entre ellos) reducen los conflictos de cruce con un IC 95 % por debajo de cero, pero en 57 de 59 sube el
-total por los alcances en las colas; 36 no convienen y ninguno conviene sin costo.
+Resultado: 22 cruces (los 3 prioritarios entre ellos) reducen los conflictos de cruce con un IC 95 % por debajo de cero; 13 lo hacen con a lo
+sumo 10 s de demora adicional (conviene) y 9 con más (conviene con costo). 36 no convienen. En 57 de 59 sube el total de conflictos por los
+alcances en las colas, que se reportan pero no deciden.
 
 == Criterios de Aceptación del Sistema
 

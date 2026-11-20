@@ -18,8 +18,8 @@ Por cruce (los de nivel prioritario y recomendado de la priorización):
    separados en conflictos de cruce (trayectorias que se cruzan o convergen: los que un
    semáforo busca evitar) y de alcance (uno detrás del otro: aumentan con las colas).
 
-El veredicto se toma con los conflictos de cruce y se reporta su costo: más demora o más
-conflictos en total (ver `veredicto`).
+El veredicto se toma con los conflictos de cruce y la demora; el aumento de los de alcance
+se reporta, pero no decide (ver `veredicto`).
 
 Uso (desde simulation-service/, después de una corrida de la encuesta que conserve rutas):
     python -m etl.sumo.estudio_semillas --origen <run_id> [--semillas 30] [--procesos 3]
@@ -92,12 +92,15 @@ def diferencia_pareada(sin: list[float], con: list[float]) -> dict:
 
 
 def veredicto(resumen: dict) -> str:
-    """Conclusión del cruce: seguridad con los conflictos de cruce, costo con la demora y el total.
+    """Conclusión del cruce: seguridad con los conflictos de cruce, costo con la demora.
 
-    - conviene: reduce los conflictos de cruce (IC 95 % por debajo de 0), el total de
-      conflictos no sube y la demora sube a lo sumo COSTO_DEMORA_S por vehículo;
-    - conviene_con_costo: reduce los de cruce, pero sube el total (más alcances por las
-      colas) o la demora sube más que eso;
+    Un semáforo se instala para evitar los conflictos de cruce (en ángulo, los graves); los
+    de alcance crecen con cualquier cola, son de baja velocidad y el modelo de seguimiento
+    de SUMO los sobrecuenta, así que se reportan pero no deciden.
+
+    - conviene: reduce los conflictos de cruce (IC 95 % por debajo de 0) y la demora sube
+      a lo sumo COSTO_DEMORA_S por vehículo;
+    - conviene_con_costo: reduce los de cruce, pero la demora sube más que eso;
     - no_conviene: no reduce los de cruce y sube el total de conflictos;
     - no_se_justifica: no reduce los de cruce y sube la demora;
     - indiferente: lo demás.
@@ -108,7 +111,7 @@ def veredicto(resumen: dict) -> str:
         return "sin_datos"
     sube_total = total["ic95"][0] > 0
     if cruce["ic95"][1] < 0:
-        return "conviene" if not sube_total and demora["diferencia"] <= COSTO_DEMORA_S else "conviene_con_costo"
+        return "conviene" if demora["diferencia"] <= COSTO_DEMORA_S else "conviene_con_costo"
     if sube_total:
         return "no_conviene"
     if demora["ic95"][0] > 0:
@@ -117,8 +120,8 @@ def veredicto(resumen: dict) -> str:
 
 
 TEXTO_VEREDICTO = {
-    "conviene": "Conviene: reduce los conflictos de cruce sin aumentar el total ni mucho la demora.",
-    "conviene_con_costo": "Reduce los conflictos de cruce, pero aumenta el total de conflictos o más de 10 s la demora.",
+    "conviene": "Conviene: reduce los conflictos de cruce y la demora sube a lo sumo 10 s por vehículo.",
+    "conviene_con_costo": "Reduce los conflictos de cruce, pero la demora sube más de 10 s por vehículo.",
     "no_conviene": "No conviene: no reduce los conflictos de cruce y aumenta el total.",
     "no_se_justifica": "No se justifica: no reduce los conflictos de cruce y aumenta la demora.",
     "indiferente": "Indiferente: no hay diferencias claras.",
