@@ -3,7 +3,7 @@ import json
 import pytest
 
 from etl.sumo.validacion import (
-    PERIODO_BIN_S, ValidacionConfig, _hora_pico, escribir_conteos, geh, leer_conteos, periodo_de, validar,
+    PERIODO_BIN_S, ValidacionConfig, _hora_pico, escribir_conteos, geh, leer_conteos, periodo_de, rmse, validar,
 )
 
 
@@ -13,6 +13,15 @@ def test_geh_valores_conocidos():
     # M=150, C=100: sqrt(2*2500/250) = sqrt(20)
     assert geh(150, 100) == pytest.approx(20 ** 0.5)
     assert geh(150, 100) == geh(100, 150)
+
+
+def test_rmse_y_rmse_porcentual():
+    filas = [{"simulado": 90, "real": 100}, {"simulado": 130, "real": 100}]
+    # sqrt((100 + 900) / 2) = sqrt(500); aforo medio 100
+    valor, porcentaje = rmse(filas)
+    assert valor == pytest.approx(500 ** 0.5, abs=0.05)
+    assert porcentaje == pytest.approx(500 ** 0.5, abs=0.05)
+    assert rmse([]) == (None, None)
 
 
 def test_periodo_de():
@@ -69,6 +78,8 @@ def test_validar(tmp_path):
     assert filas["TP_1"]["simulado"] == 100 and filas["TP_1"]["real"] == 100 and filas["TP_1"]["cumple"]
     assert not filas["TP_2"]["cumple"]
     assert resumen["porcentaje"] == 50.0 and not resumen["cumple_criterio"]
+    # errores 0 y 990 veh/h: sqrt(990^2 / 2) = 700; aforo medio 550
+    assert resumen["rmse"] == 700.0 and resumen["rmse_porcentual"] == 127.3
     assert "TPU_3" in resumen["estaciones_no_simuladas"]
     assert (tmp_path / "v.csv").read_text(encoding="utf-8").startswith("id,direccion")
 

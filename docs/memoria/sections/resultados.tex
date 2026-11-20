@@ -81,20 +81,22 @@ Los aforos HMD se ubicaron en la red cruzando su identificador con los \textit{s
 \renewcommand{\arraystretch}{1.15}
 \centering
 \small
-\begin{tabular}{|p{6.4cm}|r|r|r|}
+\begin{tabular}{|p{5.0cm}|r|r|r|r|}
 \hline
-\textbf{Demanda (mañana)} & \textbf{Vehículos que entran} & \textbf{Simulado / aforado} & \textbf{GEH $<5$} \\ \hline
-Viajes internos de la encuesta (tope de 50 copias) & 9.592 & 6\,\% & 0 de 33 \\ \hline
-+ tráfico de paso calibrado con \textit{routeSampler} & -- & 27\,\% & 2 de 33 \\ \hline
-Encuesta completa (entran, salen y sin tope), mesoscópico & 54.984 de 145.014 & 22\,\% & 2 de 33 \\ \hline
-Encuesta completa con rutas de duaIterate & 54.944 de 145.014 & 22\,\% & 2 de 33 \\ \hline
-Encuesta completa sin control de cruces (diagnóstico) & 66.678 de 145.014 & 33\,\% & 2 de 33 \\ \hline
+\textbf{Demanda (mañana)} & \textbf{Vehículos que entran} & \textbf{Simulado / aforado} & \textbf{GEH $<5$} & \textbf{RMSE (veh/h)} \\ \hline
+Viajes internos de la encuesta (tope de 50 copias) & 9.592 & 6\,\% & 0 de 33 & 1.260 (155\,\%) \\ \hline
++ tráfico de paso calibrado con \textit{routeSampler} & -- & 27\,\% & 2 de 33 & n.d.$^{*}$ \\ \hline
+Encuesta completa (entran, salen y sin tope), mesoscópico & 54.984 de 145.014 & 22\,\% & 2 de 33 & 1.123 (138\,\%) \\ \hline
+Encuesta completa con rutas de duaIterate & 54.944 de 145.014 & 22\,\% & 2 de 33 & 1.125 (138\,\%) \\ \hline
+Encuesta completa sin control de cruces (diagnóstico) & 66.678 de 145.014 & 33\,\% & 2 de 33 & 1.049 (129\,\%) \\ \hline
 \end{tabular}
-\caption{GEH de la simulación frente a los aforos HMD con distintas demandas.}
+\caption{GEH y RMSE de la simulación frente a los aforos HMD con distintas demandas. Entre paréntesis, el RMSE porcentual sobre el aforo medio (814 veh/h). $^{*}$La corrida con tráfico de paso no se conservó y el RMSE se agregó después.}
 \label{tab:geh}
 \end{table}
 
 La primera fila explica por qué la demanda interna sola no puede pasar el GEH: solo tiene los viajes que empiezan y terminan en Usaquén, y la mediana del factor de expansión en la mañana es 123 frente al tope de 50. La encuesta completa corrige las dos cosas con los datos de la propia encuesta: agrega los vehículos que entran o salen por las vías arteriales del borde (unos 61.500 autos frente a 21.800 internos) y las copias que el tope quitaba. Con eso la demanda ya es del orden de los aforos, pero la red no la mueve: menos de la mitad de los vehículos alcanza a entrar y a las 10:00 quedan más de 20.000 atrapados adentro.
+
+El RMSE, calculado sobre los mismos puntos, cuenta lo mismo con otra métrica: entre 1.049 y 1.260 veh/h, más que el propio aforo medio. Lo dominan las avenidas de mayor volumen (hasta 4.700 veh/h aforados en un punto), donde la simulación queda más lejos, y baja poco al ampliar la demanda porque la red no deja entrar a los vehículos adicionales.
 
 Las dos últimas filas descartan las explicaciones más simples. Repartir las rutas según la congestión no cambia nada, y quitar las reglas de los cruces solo sube el volumen al 33\,\%. El límite es la capacidad de la red construida desde OpenStreetMap: carriles y conexiones de las avenidas, programas de semáforo estimados por \texttt{netconvert} y aforos que cubren varias calzadas paralelas. En conjunto, la simulación conserva la forma temporal de la demanda, pero no la magnitud de los volúmenes aforados; por eso sus resultados sirven para comparar alternativas con la misma demanda y no como pronóstico de volúmenes.
 
@@ -126,7 +128,7 @@ Las dos últimas filas descartan las explicaciones más simples. Repartir las ru
 \textbf{Objetivo} & \textbf{Evidencia} & \textbf{Estado} \\ \hline
 OE1 & Informe de brechas (Fase 1), selección del TSV de viajes internos y de la red OSM. & Cumplido, con las brechas de aforos declaradas. \\ \hline
 OE2 & \textit{Pipeline} ETL de la encuesta a SUMO, con 182 pruebas. & Cumplido. \\ \hline
-OE3 & Escenario de Usaquén ejecutado en SUMO, comparación de horas de salida contra la encuesta y GEH contra 33 puntos de aforo. & Parcial: la forma temporal coincide; el GEH se cumple en 2 de 33 puntos. \\ \hline
+OE3 & Escenario de Usaquén ejecutado en SUMO, comparación de horas de salida contra la encuesta y GEH y RMSE contra 33 puntos de aforo. & Parcial: la forma temporal coincide; el GEH se cumple en 2 de 33 puntos. \\ \hline
 OE4 & Visor web con presets, parametrización, avance y cancelación. & Cumplido. \\ \hline
 OE5 & Análisis de intersecciones y simulador 3D con TTC, DRAC y PET. & Cumplido, con reporte exportable en CSV y PDF. \\ \hline
 \end{tabular}

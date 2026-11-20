@@ -41,8 +41,8 @@ movilidad urbana disponibles para Bogotá en archivos de entrada válidos para e
 - Construcción de zonas de análisis de tráfico (TAZ) a partir de las Unidades de Planeamiento Zonal (UPZ) de Usaquén, generando el archivo `.taz.xml`.
 - Producción de archivos de rutas (`.rou.xml`) y tipos de vehículo (`.vtype.xml`) compatibles con duarouter y SUMO.
 - Variación paramétrica de las configuraciones de entrada para la generación de escenarios hipotéticos de movilidad.
-- Validación estadística de los resultados mediante el estadístico GEH y RMSE, contrastando los volúmenes simulados con los aforos reales (pendiente,
-  ver RF-014).
+- Validación estadística de los resultados mediante el estadístico GEH y RMSE, contrastando los volúmenes simulados con los aforos reales (implementada;
+  el criterio no se alcanza, ver RF-014).
 - Módulo web que permite visualizar de forma interactiva los resultados producidos por SUMO (métricas de congestión, tiempos de viaje, flujos vehiculares
   por segmento) y parametrizar nuevas simulaciones desde una interfaz gráfica, sin necesidad de editar archivos XML ni interactuar con la línea de
   comandos.

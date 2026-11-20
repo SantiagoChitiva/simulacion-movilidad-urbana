@@ -109,7 +109,7 @@ entre 7:00 y 8:00 frente a 34 % en la encuesta). Este análisis valida la *forma
 
 *Validación GEH contra los aforos.* La magnitud se mide con el GEH en los 33 puntos de aforo HMD de la red, divididos en un grupo de calibración
 (18) y uno de control (15). Con los viajes internos de la encuesta cumple 0 de 33 puntos (6 % del volumen aforado); con la encuesta completa o el
-tráfico de paso, 2 de 33 (entre 22 % y 27 %). El criterio de calibración (GEH < 5 en el 85 % de los puntos) no se alcanzó: la red construida desde
+tráfico de paso, 2 de 33 (entre 22 % y 27 %), con un RMSE de 1.049 a 1.260 veh/h frente a un aforo medio de 814 veh/h. El criterio de calibración (GEH < 5 en el 85 % de los puntos) no se alcanzó: la red construida desde
 OpenStreetMap no mueve la demanda completa. Se registra como desviación del plan de calidad, con la calibración de la capacidad de la red como
 trabajo futuro (detalle en la sección 5 del SRS).
 

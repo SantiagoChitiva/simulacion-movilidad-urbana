@@ -127,12 +127,24 @@ def _hora_pico(serie: dict[float, float]) -> tuple[float | None, float]:
     return mejor
 
 
+def rmse(filas: list[dict]) -> tuple[float | None, float | None]:
+    """RMSE (veh/h) entre simulado y aforado, y RMSE porcentual (sobre el aforo medio)."""
+    if not filas:
+        return None, None
+    valor = math.sqrt(sum((f["simulado"] - f["real"]) ** 2 for f in filas) / len(filas))
+    media = sum(f["real"] for f in filas) / len(filas)
+    return round(valor, 1), round(100 * valor / media, 1) if media else None
+
+
 def _indicadores(filas: list[dict]) -> dict:
-    """Puntos, cuántos cumplen GEH < 5, porcentaje, GEH mediano y razón de volúmenes."""
+    """Puntos, cuántos cumplen GEH < 5, porcentaje, GEH mediano, RMSE y razón de volúmenes."""
     cumplen = sum(1 for f in filas if f["cumple"])
     porcentaje = round(100 * cumplen / len(filas), 1) if filas else 0.0
     real_total = sum(f["real"] for f in filas)
+    valor_rmse, rmse_pct = rmse(filas)
     return {
+        "rmse": valor_rmse,
+        "rmse_porcentual": rmse_pct,
         "puntos": len(filas),
         "cumplen": cumplen,
         "porcentaje": porcentaje,
