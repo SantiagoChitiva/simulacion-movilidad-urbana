@@ -257,3 +257,23 @@ def sin_paradas_de_bus(rou: Path) -> tuple[int, int]:
     if paradas or personas:
         arbol.write(str(rou), encoding="UTF-8", xml_declaration=True)
     return paradas, personas
+
+
+def sin_vtypes_repetidos(rou: Path, ids: set[str]) -> int:
+    """Quita de una demanda recortada los vTypes que ya define el additional de la zona.
+
+    Las rutas de una corrida traen los vTypes del proyecto (trips.py los escribe y duarouter
+    y cutRoutes.py los conservan), y la zona los carga también como additional: SUMO no
+    acepta el mismo id dos veces ("Another vehicle type ... exists"). Los que no están en
+    `ids` (p. ej. los `_enc` de la encuesta completa) se dejan. Devuelve cuántos quitó.
+    """
+    import xml.etree.ElementTree as ET
+
+    arbol = ET.parse(rou)
+    raiz = arbol.getroot()
+    repetidos = [e for e in raiz if e.tag == "vType" and e.get("id") in ids]
+    for elem in repetidos:
+        raiz.remove(elem)
+    if repetidos:
+        arbol.write(str(rou), encoding="UTF-8", xml_declaration=True)
+    return len(repetidos)

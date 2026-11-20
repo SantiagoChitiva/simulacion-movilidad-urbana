@@ -87,7 +87,7 @@ class DemandaZonaStats:
 
 
 def escribir_vtypes(destino: Path) -> Path:
-    """Additional con los vTypes del proyecto (las rutas recortadas no los traen)."""
+    """Additional con los vTypes del proyecto (a las rutas recortadas se les quitan: subred.sin_vtypes_repetidos)."""
     raiz = ET.Element("additional")
     for vtype in VTYPES.values():
         ET.SubElement(raiz, "vType", vtype.to_xml_attrs())

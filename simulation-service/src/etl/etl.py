@@ -30,12 +30,14 @@ from .sumo.semaforo_nuevo import (
 from .sumo.subred import (
     SubredConfig, SubredDemandaConfig, SubredStats, caminatas_por_origen_destino, recortar_demanda, recortar_red,
     sin_paradas_de_bus,
+    sin_vtypes_repetidos,
 )
 from .sumo.encuesta_completa import archivo_complemento
 from .sumo.trafico_paso import archivo_trafico_paso
 from .sumo.transporte_publico import archivos_transporte_publico, buses_en_ventana
 from .sumo.trips import TripGenerationConfig, TripGenerationResult, generate_trips
 from .sumo.validacion import ValidacionConfig, escribir_conteos, periodo_de, validar
+from .sumo.vtypes import VTYPES
 
 __all__ = [
     "Cancelado", "run_pipeline", "run_etl", "simulate", "export_geojson", "export_kepler_trips",
@@ -452,6 +454,7 @@ def _preparar_zona(
             ), cancelar=cancelar)
             rutas_reales = zona_rou
             sin_paradas_de_bus(zona_rou)
+            sin_vtypes_repetidos(zona_rou, {v.id for v in VTYPES.values()})
             if peatonal:
                 caminatas_por_origen_destino(zona_rou)
         except (RuntimeError, FileNotFoundError):
