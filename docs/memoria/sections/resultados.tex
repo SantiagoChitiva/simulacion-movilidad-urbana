@@ -3,6 +3,7 @@
 Siguiendo la metodología, los resultados se organizan en tres niveles: verificación del software (¿se construyó bien?), validación técnica del modelo (¿reproduce los datos de la encuesta?) y evaluación del cumplimiento de los requerimientos y los objetivos. Al final se declaran las limitaciones.
 
 \subsection{Verificación del software}
+\label{sec:verificacion}
 
 \textbf{Pruebas automáticas.} El servicio tiene 192 pruebas con \texttt{pytest} en \texttt{simulation-service/test/}, y todas pasan. Cubren: demanda y presets, generación de viajes, conversión del FCD, exportación a kepler, intersecciones, priorización, avance, cancelación y reanudación, semáforo nuevo, escena 3D, telemetría, simulaciones precalculadas, la API, la comparación 3D, la comparación de programas, el estudio de semillas (conflictos SSM, diferencias pareadas y veredicto) y la validación (aforos ubicados en la red, GEH, encuesta completa, GTFS y ventanas). Las dependencias externas se aíslan con \texttt{dependency\_overrides} y datos mínimos, de modo que las pruebas no ejecutan SUMO completo. Entre ellas, una prueba verifica que el preset \textit{encuesta} con sus conteos por defecto reproduce exactamente la expansión simple de la encuesta, lo que valida la lógica de transferencia modal en su caso base.
 
@@ -14,6 +15,7 @@ Dos limitaciones de este nivel de verificación: (i) el flujo de integración co
 \renewcommand{\arraystretch}{1.15}
 \centering
 \small
+\resizebox{\textwidth}{!}{%
 \begin{tabular}{|l|c|c|c|c|c|}
 \hline
 \textbf{Tipo} & \textbf{Total} & \textbf{Implementado / cumplido} & \textbf{Parcial} & \textbf{Pendiente} & \textbf{Otro} \\ \hline
@@ -21,7 +23,7 @@ Funcionales (RF) & 48 & 41 & 6 & 0 & 1 reemplazado \\ \hline
 Desempeño (RD) & 4 & 2 & 0 & 0 & 1 no aplica, 1 por verificar \\ \hline
 No funcionales (RNF) & 12 & 6 & 6 & 0 & 0 \\ \hline
 \textbf{Total} & \textbf{64} & \textbf{49} & \textbf{12} & \textbf{0} & \textbf{3} \\ \hline
-\end{tabular}
+\end{tabular}}
 \caption{Estado de los requerimientos del SRS.}
 \label{tab:estado-req}
 \end{table}
@@ -36,6 +38,7 @@ Los cuatro presets se simularon una vez con sus conteos por defecto, con la dema
 \renewcommand{\arraystretch}{1.15}
 \centering
 \small
+\resizebox{\textwidth}{!}{%
 \begin{tabular}{|l|r|r|r|r|r|r|}
 \hline
 \textbf{Preset} & \textbf{Viajes} & \textbf{Vehículos insertados} & \textbf{Personas cargadas} & \textbf{Teleports (buses)} & \textbf{Choques / peatones} & \textbf{Tamaño (MB)} \\ \hline
@@ -44,7 +47,7 @@ Más vehículos & 24.647 & 17.574 (98,1\,\%) & 9.234 & 1.037 (846) & 0 / 977 & 1
 Más peatones & 24.647 & 8.988 (98,2\,\%) & 17.985 & 1.077 (886) & 3 / 1.207 & 18,4 \\ \hline
 Día sin carro & 24.647 & 7.689 (97,5\,\%) & 19.257 & 983 (904) & 1 / 1.721 & 18,9 \\ \hline
 Encuesta, tarde (16:00--19:00) & 19.555 & 10.548 (96,5\,\%) & 10.760 & 989 (836) & 1 / 1.083 & 12,0 \\ \hline
-\end{tabular}
+\end{tabular}}
 \caption{Resultados de las simulaciones precalculadas. Los vehículos incluyen los buses del GTFS que salen dentro de la ventana; el porcentaje es sobre los vehículos cargados. Entre paréntesis, los teleports de buses. La penúltima columna separa los choques entre vehículos de los contactos de un vehículo con un peatón que camina por la calzada.}
 \label{tab:presets}
 \end{table}
@@ -81,6 +84,7 @@ Los aforos HMD se ubicaron en la red cruzando su identificador con los \textit{s
 \renewcommand{\arraystretch}{1.15}
 \centering
 \small
+\resizebox{\textwidth}{!}{%
 \begin{tabular}{|p{5.0cm}|r|r|r|r|}
 \hline
 \textbf{Demanda (mañana)} & \textbf{Vehículos que entran} & \textbf{Simulado / aforado} & \textbf{GEH $<5$} & \textbf{RMSE (veh/h)} \\ \hline
@@ -89,7 +93,7 @@ Viajes internos de la encuesta (tope de 50 copias) & 9.592 & 6\,\% & 0 de 33 & 1
 Encuesta completa (entran, salen y sin tope), mesoscópico & 54.984 de 145.014 & 22\,\% & 2 de 33 & 1.123 (138\,\%) \\ \hline
 Encuesta completa con rutas de duaIterate & 54.944 de 145.014 & 22\,\% & 2 de 33 & 1.125 (138\,\%) \\ \hline
 Encuesta completa sin control de cruces (diagnóstico) & 66.678 de 145.014 & 33\,\% & 2 de 33 & 1.049 (129\,\%) \\ \hline
-\end{tabular}
+\end{tabular}}
 \caption{GEH y RMSE de la simulación frente a los aforos HMD con distintas demandas. Entre paréntesis, el RMSE porcentual sobre el aforo medio (814 veh/h). $^{*}$La corrida con tráfico de paso no se conservó y el RMSE se agregó después.}
 \label{tab:geh}
 \end{table}
@@ -113,6 +117,7 @@ El criterio de decisión es explícito: el semáforo \textit{conviene} si reduce
 \renewcommand{\arraystretch}{1.15}
 \centering
 \small
+\resizebox{\textwidth}{!}{%
 \begin{tabular}{|p{4.2cm}|c|c|c|p{2.6cm}|}
 \hline
 \textbf{Cruce (nivel prioritario)} & \textbf{Conflictos de cruce} & \textbf{De alcance} & \textbf{Demora (s/veh)} & \textbf{Veredicto} \\ \hline
@@ -120,7 +125,7 @@ Av. Calle 153 $\times$ Cra.~8A & 66,1 $\to$ 26,8 & 160 $\to$ 425 & 86,5 $\to$ 11
 Av. Calle 161 $\times$ Cra.~8 & 5,9 $\to$ 3,3 & 20 $\to$ 100 & 15,2 $\to$ 17,1 & Conviene \\ \hline
 Calle 163A $\times$ Cra.~17 & 9,9 $\to$ 4,7 & 11 $\to$ 76 & 210,8 $\to$ 215,7 & Conviene \\ \hline
 Los 59 cruces (suma de medias) & 715 $\to$ 654 & 2.968 $\to$ 8.563 & mediana $+3{,}3$ & 13 conviene, 9 con costo, 36 no conviene, 1 no se justifica \\ \hline
-\end{tabular}
+\end{tabular}}
 \caption{Sin $\to$ con el semáforo propuesto: media por hora simulada en 30 semillas. Resumen completo en \texttt{simulation-service/estudios/semillas/resumen.csv}.}
 \label{tab:semillas}
 \end{table}
