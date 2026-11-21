@@ -26,8 +26,8 @@
     <li>Análisis de entorno y herramientas</li>
     <li>Diseño de la solución</li>
     <li>Solución: pipeline, escenarios y semaforización</li>
-    <li>Control de calidad y conclusiones</li>
     <li>Video demo</li>
+    <li>Control de calidad y conclusiones</li>
   </ol>
 </section>
 
@@ -76,7 +76,7 @@
   <div class="herramientas">
     <div><h3>Datos</h3><p>Encuesta de Movilidad 2023, red de OpenStreetMap, siniestros de la SDM, edificios de OSM y Microsoft</p></div>
     <div><h3>Simulación</h3><p>SUMO 1.27: <code>netconvert</code>, <code>duarouter</code>, <code>sumo</code> y control en vivo con TraCI</p></div>
-    <div><h3>Servicio</h3><p>Python 3.11, FastAPI, Pydantic, pyproj y pytest</p></div>
+    <div><h3>Servicio</h3><p>Python 3.12, FastAPI, Pydantic, pyproj y pytest</p></div>
     <div><h3>Visor</h3><p>React, Vite, kepler.gl, three.js y maplibre-gl</p></div>
     <div><h3>Exploración</h3><p>pandas, geopandas, osmnx y Jupyter (CRISP-DM)</p></div>
     <div><h3>Criterio</h3><p>Código abierto o académico gratuito, sin base de datos ni nube, reproducible</p></div>
@@ -101,7 +101,7 @@
     </div>
     <img class="fig" src="assets/figuras/mapa_utam_usaquen.png" alt="Mapa de UTAM de Usaquén">
   </div>
-  <p class="pie">Brecha declarada: las 336 estaciones de aforo HMD no traen coordenadas y no pudieron asociarse a la red.</p>
+  <p class="pie">Aforos HMD para validar: las estaciones no traen coordenadas; se ubicaron con los shapefiles de estaciones de SIMUR y 33 puntos caen en la red.</p>
 </section>
 
 <!-- ====================== PARTE 2 · DISEÑO ====================== -->
@@ -109,7 +109,7 @@
   <div class="tag">Parte 2 · Diseño</div>
   <h2>De los requisitos al diseño</h2>
   <div class="cifras">
-    <div><b>60</b><span>requisitos en el SRS: 45 funcionales, 4 de desempeño y 11 no funcionales</span></div>
+    <div><b>64</b><span>requisitos en el SRS: 48 funcionales, 4 de desempeño y 12 no funcionales</span></div>
     <div><b>9</b><span>módulos funcionales, de la ingestión de datos al simulador 3D</span></div>
     <div><b>3</b><span>tipos de usuario; el de referencia es el planificador no técnico</span></div>
   </div>
@@ -175,7 +175,7 @@
       <tr><td>Día sin carro</td><td>4.945</td><td>19.257</td></tr>
     </table>
   </div>
-  <p class="pie">Los cuatro presets simulan los mismos 24.647 viajes. Se precalcularon y se versionaron para que el visor abra sin esperar.</p>
+  <p class="pie">Los cuatro presets simulan los mismos 24.647 viajes (vehículos de la encuesta, sin los buses del GTFS). Se precalcularon y se versionaron para que el visor abra sin esperar.</p>
 </section>
 
 <section>
@@ -210,12 +210,18 @@
     <div><h3>Intersecciones</h3><p>Ficha de los 220 semáforos: accesos, volúmenes, fases, edición de programa y método de Webster.</p></div>
     <div><h3>Simulador 3D</h3><p>Pantalla dividida «sin» | «con» semáforo, HUD, minimapa y modo manual.</p></div>
   </div>
-  <p class="demo">Lo vemos funcionando en el video demo (7 min), al final de la presentación</p>
+  <p class="demo">Lo vemos funcionando ahora, en el video demo (7 min)</p>
   <ol class="guion">
     <li>Visor: cargar la simulación de la encuesta y comparar con «día sin carro»</li>
     <li>Ficha de una intersección</li>
     <li>Semaforizar un cruce candidato y abrir la comparación 3D</li>
   </ol>
+</section>
+
+<section class="portada">
+  <p class="etiqueta">Video demo · 7 minutos</p>
+  <h1>Demostración del sistema</h1>
+  <p class="sub"><a id="enlace-video" href="https://youtu.be/0gybw_l1izw?si=N5iGylybMIG6amSh" target="_blank" rel="noopener">link video YouTube</a></p>
 </section>
 
 <!-- ====================== PARTE 4 · CONTROL DE CALIDAD ====================== -->
@@ -347,12 +353,6 @@
       </ul>
     </div>
   </div>
-</section>
-
-<section class="portada">
-  <p class="etiqueta">Video demo · 7 minutos</p>
-  <h1>Demostración del sistema</h1>
-  <p class="sub"><a id="enlace-video" href="https://youtu.be/0gybw_l1izw?si=N5iGylybMIG6amSh" target="_blank" rel="noopener">link video YouTube</a></p>
 </section>
 
 </div>
