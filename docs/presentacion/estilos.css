@@ -23,6 +23,7 @@
 .portada { display: flex; flex-direction: column; justify-content: center; }
 .portada .etiqueta { font-size: 28px; color: var(--azul); letter-spacing: .04em; text-transform: uppercase; font-weight: 600; }
 .portada .sub { font-size: 44px; color: var(--suave); }
+.portada h1.proyecto { font-size: 80px; line-height: 1.15; }
 .portada .autores { font-size: 30px; color: var(--suave); margin-top: 60px; }
 
 .cifras { display: flex; gap: 40px; margin: 40px 0; }
@@ -145,7 +146,7 @@ html, body, .reveal, .reveal-viewport { background: #fff !important; }
 .reveal section.compacta .cifras.vertical > div { padding: 14px 26px; }
 .reveal section.compacta .cifras.vertical b { font-size: 64px; }
 .reveal section.compacta .fig { max-height: 640px; }
-.reveal .slides > section.portada { padding-top: 320px; }
+.reveal .slides > section.portada { padding-top: 220px; }
 .portada .sub a { color: var(--azul); text-decoration: underline; }
 .indice { font-size: 56px; line-height: 1.5; margin: 40px 0 0 1.2em; }
 .indice li { margin-bottom: 16px; }

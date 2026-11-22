@@ -90,7 +90,7 @@ horas/semana. Esta estimación contempla tanto actividades técnicas como docume
     desde el GTFS, ventana de la tarde, encuesta completa, tráfico de paso y asignación iterativa; más largo que un sprint normal porque cada
     experimento de validación tomaba más de una hora de simulación.],
     [Fase 4 – Evaluación y análisis], [80 h-p], [Validación formal, análisis de resultados, documentación de conclusiones.],
-    [Documentación y gestión (transversal)], [80 h-p], [SPMP, SRS, SDD, Plan de pruebas, Informe final, reuniones.],
+    [Documentación y gestión (transversal)], [80 h-p], [SPMP, SRS, SDD, control de calidad, memoria del trabajo de grado, reuniones.],
     [Total], [820 h-p], [Línea base de 600 h-p (560 h-p + 40 h del Sprint 5), 120 h-p de la extensión v2.0, 40 h-p del Sprint 9 y 60 h-p
     del Sprint 10.],
   ),
@@ -105,7 +105,7 @@ Esta decisión se tomó deliberadamente para disponer de tiempo adicional destin
 - problemas de integración y riesgos académicos.
 
 La estrategia busca evitar que el proyecto llegue al cierre del semestre sin margen de maniobra. La extensión v2.0 se planea dentro de ese margen
-(semanas 11 a 14), dejando las semanas 15 y 16 para el informe final y la sustentación.
+(semanas 11 a 14), dejando las semanas 15 y 16 para la memoria y la sustentación.
 
 *Validación de las estimaciones.* Las estimaciones fueron revisadas colectivamente y ajustadas durante reuniones con el director del proyecto. Los
 principales criterios utilizados para validarlas fueron:
@@ -305,7 +305,7 @@ crítico.
     [F5.2], [Elaboración del SRS], [16 h], [3–4, 11], [F5.1], [—], [v2.0],
     [F5.3], [Elaboración del SDD], [16 h], [5–6, 15], [F5.2], [—], [v1.0 (20/10/2026)],
     [F5.4], [Elaboración del Plan de Pruebas], [10 h], [6–7], [F5.2], [—], [Completado (documento de control de calidad)],
-    [F5.5], [Elaboración del Informe Final (memoria del trabajo de grado)], [18 h], [14–16], [F4.3], [—], [Borrador],
+    [F5.5], [Elaboración de la memoria del trabajo de grado], [18 h], [14–16], [F4.3], [—], [Completado],
     [F5.6], [Reuniones de equipo (lunes) y con director (quincenal)], [8 h], [1–16], [—], [Todos], [En curso],
   )),
   caption: [Calendarización con camino crítico (WBS + prerrequisitos).],

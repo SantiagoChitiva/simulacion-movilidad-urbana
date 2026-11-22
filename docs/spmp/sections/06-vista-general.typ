@@ -103,7 +103,7 @@ matrices origen-destino y archivos de rutas.
     [Código Fuente], [PEP 8 / API TraCI], [`simulation-service` (pipeline ETL, API, simulador 3D) y visor web `kepler`], [Repositorio GitHub], [9],
     [Módulo de semaforización y simulador 3D _(v2.0)_], [PEP 8 / API TraCI], [Intersecciones, priorización y comparación 3D sin / con semáforo
     propuesto], [Director / Jurados], [11–14],
-    [Informe Final], [IEEE 1063-2001], [Documento final con resultados], [Jurados / Universidad], [10–16],
+    [Memoria del trabajo de grado], [Formato de memoria del Departamento (PUJ)], [Documento final con resultados], [Jurados / Universidad], [10–16],
   ),
   caption: [Entregables del proyecto.],
 ) <tabEntregables>
@@ -122,7 +122,7 @@ matrices origen-destino y archivos de rutas.
     [H4], [Entrega SDD y Plan de Pruebas], [8–10],
     [H5], [Escenario base validado en SUMO (Sprint 1)], [10–12],
     [H6], [Escenarios hipotéticos analizados (Sprint 3–4)], [12–14],
-    [H7], [Entrega informe final], [14–16],
+    [H7], [Entrega de la memoria del trabajo de grado], [14–16],
     [H8 _(v2.0)_], [Módulo de intersecciones y simulador 3D comparativo operativos (Sprints 6 y 7)], [11–14],
     [H9 _(v2.2)_], [Usabilidad para la toma de decisiones (Sprint 9), SDD y borrador de la memoria], [15],
     [H10 _(v2.3)_], [Cierre de pendientes (Sprint 10): validación GEH, transporte público con GTFS, ventana de la tarde y entrega final de

@@ -129,7 +129,7 @@ la estructura de fases.
     [Código fuente], [Pasa el 90% de las pruebas unitarias. Cumple PEP 8. Documentado con docstrings.], [pytest + GitHub Actions + pylint],
     [Pipeline validado], [GEH < 5 en al menos el 85% de los puntos de aforo. Ejecutable en SUMO sin errores.], [Métricas GEH y RMSE vs. aforos
     reales],
-    [Informe final], [Incluye todos los elementos del IEEE 1063-2001. Aprobado por jurados.], [Revisión de jurados en la exposición],
+    [Memoria del trabajo de grado], [Sigue el formato de memoria del Departamento, con máximo 60 páginas. Aprobada por jurados.], [Revisión de jurados en la exposición],
     [Módulo web], [Permite visualizar métricas de SUMO. Permite lanzar una simulación parametrizada exitosamente desde la interfaz.], [Prueba funcional
     manual + revisión del director],
     [Módulo de semaforización _(v2.0)_], [Muestra la ficha de cualquier semáforo con volúmenes por acceso, guarda un programa válido, calcula Webster y
@@ -311,7 +311,7 @@ Responsabilidades de calidad documental: el Responsable de Documentación debe g
 actual del proyecto y con las decisiones tomadas durante el desarrollo. Asimismo, debe asegurar que las versiones entregadas cumplan con los
 lineamientos establecidos por la Pontificia Universidad Javeriana y los estándares IEEE seleccionados.
 
-Entregables asociados: SPMP, SRS, SDD, plan de pruebas, informe final, diagramas BPMN, tablas y anexos.
+Entregables asociados: SPMP, SRS, SDD, documento de control de calidad, memoria del trabajo de grado, diagramas BPMN, tablas y anexos.
 
 *Responsabilidad compartida del equipo.* Aunque existen roles especializados, el proyecto adopta un enfoque colaborativo donde todos los integrantes
 participan activamente en decisiones críticas relacionadas con arquitectura, calidad, alcance y validación. Las siguientes actividades son

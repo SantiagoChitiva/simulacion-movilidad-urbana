@@ -9,7 +9,7 @@ La entrega del producto se realizará entre las semanas 10 y 16 del proyecto e i
 - Reporte de validación del modelo con métricas GEH y RMSE por punto de aforo.
 - Histograma de horas de salida (encuesta vs. simulación) y el script que lo genera (`simulation-service/validation/histograma_salidas.py`).
 - Resultados de los escenarios hipotéticos analizados (Sprints 3 a 7), incluidas las comparaciones 3D de semáforo propuesto en los cruces prioritarios.
-- Informe final del proyecto (IEEE 1063-2001).
+- Memoria del trabajo de grado (formato del Departamento de Ingeniería de Sistemas).
 - Todos los entregables formales del semestre (SPMP, SRS, SDD, Plan de Pruebas) con su fuente Typst y su PDF.
 
 La aceptación de cada entregable sigue los criterios descritos en la sección 8.3. La aceptación final está condicionada a la aprobación del informe por

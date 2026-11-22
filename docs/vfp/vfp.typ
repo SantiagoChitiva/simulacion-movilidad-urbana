@@ -122,7 +122,8 @@
 
     [2.1], [22/11/2026], [Actualización de cierre. Código del proyecto (ISIST-2610-03), estado final de los cambios de alcance (reporte 3D,
     programa del semáforo propuesto, buses del GTFS y validación GEH implementados), sprints 9 y 10, fuentes del primer objetivo específico
-    ajustadas a las que se usaron y documento de control de calidad como entregable de pruebas.], [Todos],
+    ajustadas a las que se usaron, documento de control de calidad como entregable de pruebas y el informe final renombrado como memoria
+    del trabajo de grado, asociada al formato del departamento.], [Todos],
   ),
   caption: [Historial de cambios del documento.],
 ) <tabHistorial>
@@ -316,11 +317,12 @@ procesamiento de datos orientado a la generación de insumos para simulación de
     Python, con el fin de asegurar legibilidad, consistencia y buenas prácticas en la escritura del código, facilitando su mantenimiento y
     colaboración. Asimismo, se utilizará la API TraCI de SUMO, la cual permite la interacción y control de simulaciones de tráfico en tiempo real,
     integrando la lógica del sistema con el entorno de simulación; en la versión #version_alcance es la base del simulador 3D comparativo.],
-    [Informe final], [IEEE 1063-2001 \ ISO/IEC/IEEE 26512:2018], [El informe final se elaborará considerando el estándar IEEE 1063-2001, el cual
-    define la estructura y contenido de la documentación orientada al usuario, incluyendo apartados como descripción del sistema, instrucciones de uso
-    y guías operativas, asegurando que el producto sea comprensible y fácil de utilizar. Por su parte, el estándar ISO/IEC/IEEE 26512:2018 establece
-    lineamientos para la creación y organización de documentación técnica más completa, abarcando aspectos como instalación, mantenimiento y soporte,
-    garantizando consistencia, calidad y utilidad a lo largo del ciclo de vida del sistema.],
+    [Memoria del trabajo de grado], [Formato de memoria del Departamento de Ingeniería de Sistemas (PUJ) \ Referencias en estilo IEEE], [La memoria
+    sigue la estructura que pide el formato de trabajo de grado del programa (descripción general, contexto, análisis, diseño, desarrollo,
+    resultados y conclusiones), con un máximo de 60 páginas, y cita las fuentes en estilo IEEE. En la versión inicial de la propuesta este
+    entregable se llamaba informe final y se asociaba a IEEE 1063 e ISO/IEC/IEEE 26512, que son estándares de manuales de usuario. Como la
+    memoria no es un manual de usuario, en la versión 2.1 se asoció al formato del departamento, y las instrucciones de instalación y uso quedaron
+    en el README del repositorio.],
   ),
   caption: [Entregables, estándares asociados y justificación.],
 ) <tabEntregables>
@@ -564,7 +566,7 @@ Se adopta la etapa de evaluación de CRISP-DM, adaptada para modelos de simulaci
 
 - Reporte de validación del pipeline con métricas de error (GEH, RMSE) y análisis de sensibilidad.
 - Documentación del alcance y las limitaciones del módulo: zonas cubiertas, modos soportados y supuestos adoptados en el procesamiento.
-- Conclusiones del proyecto documentadas en el informe final, incluyendo alcance, limitaciones y líneas de trabajo futuro.
+- Conclusiones del proyecto documentadas en la memoria del trabajo de grado, incluyendo alcance, limitaciones y líneas de trabajo futuro.
 
 // ───────────────────────────────────────────── 4. Aspectos generales
 
