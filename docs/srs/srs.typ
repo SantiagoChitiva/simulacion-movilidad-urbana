@@ -54,7 +54,7 @@
     line(length: 100%)
     grid(
       columns: (1fr, auto),
-      [*Grupo 3* #h(.4cm) Ingeniería de Sistemas PUJ],
+      [*Grupo 3* (#info.codigo) #h(.4cm) Ingeniería de Sistemas PUJ],
       [#counter(page).display()]
     )
   }

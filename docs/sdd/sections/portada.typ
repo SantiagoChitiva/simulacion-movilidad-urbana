@@ -24,6 +24,10 @@
 
   #text(size: 12pt, weight: "bold")[Generación de Escenarios de Movilidad Urbana para la Toma de Decisiones en Localidades de Bogotá]
 
+  #v(0.5em)
+
+  #text(size: 12pt)[Proyecto #info.codigo -- #info.nombreEmpresa]
+
   #v(3em)
 
   #text(size:14pt)[*Estándar base:* IEEE Std 1016]

@@ -6,7 +6,7 @@
 
   #text(size: 18pt, weight: "bold")[ #info.nombreProyecto ] // comentario 1: es la forma de identificar el proyecto en el que se esta trabajando, este deberia ser creativo
 
-  #text(size: 12pt)[ #info.nombreEmpresa ] // comentario 2: es la forma de indentificar el grupo de trabajo
+  #text(size: 12pt)[ #info.nombreEmpresa -- Proyecto #info.codigo ] // comentario 2: es la forma de indentificar el grupo de trabajo
 
   #v(4cm)
 

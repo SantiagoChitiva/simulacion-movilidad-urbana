@@ -304,7 +304,7 @@ crítico.
     [F5.1], [Elaboración y actualización del SPMP], [12 h], [1–3, 11], [—], [F5.2], [v2.0],
     [F5.2], [Elaboración del SRS], [16 h], [3–4, 11], [F5.1], [—], [v2.0],
     [F5.3], [Elaboración del SDD], [16 h], [5–6, 15], [F5.2], [—], [v1.0 (20/10/2026)],
-    [F5.4], [Elaboración del Plan de Pruebas], [10 h], [6–7], [F5.2], [—], [Pendiente],
+    [F5.4], [Elaboración del Plan de Pruebas], [10 h], [6–7], [F5.2], [—], [Completado (documento de control de calidad)],
     [F5.5], [Elaboración del Informe Final (memoria del trabajo de grado)], [18 h], [14–16], [F4.3], [—], [Borrador],
     [F5.6], [Reuniones de equipo (lunes) y con director (quincenal)], [8 h], [1–16], [—], [Todos], [En curso],
   )),

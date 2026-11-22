@@ -1,4 +1,5 @@
 #let info = (
+  codigo: "ISIST-2610-03",
   nombreProyecto: "Generación de Escenarios Movilidad",
   nombreEmpresa: "Grupo 3",
   logoEmpresaUri: "/figures/logo_javeriana.png",

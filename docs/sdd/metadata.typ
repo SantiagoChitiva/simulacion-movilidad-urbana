@@ -1,6 +1,7 @@
 #let info = (
+  codigo: "ISIST-2610-03",
   nombreProyecto: "Generación de Escenarios de Movilidad Urbana para la Toma de Decisiones en Localidades de Bogotá",
-  nombreEmpresa: "Empresa EFSS",
+  nombreEmpresa: "Grupo 3",
   logoEmpresaUri: "/figures/logo_javeriana.png",
   version: "2.2",
   fecha: "18 de noviembre de 2026",
