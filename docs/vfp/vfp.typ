@@ -2,8 +2,10 @@
 // Compilar: typst compile vfp.typ  (o desde Python: typst.compile("vfp.typ", root="."))
 
 #let titulo = [Generación de Escenarios de Movilidad Urbana para la Toma de Decisiones en Localidades de Bogotá]
-#let version = "2.0"
-#let fecha = "13/10/2026"
+#let version = "2.1"
+#let fecha = "22/11/2026"
+#let version_alcance = "2.0"
+#let codigo = "ISIST-2610-03"
 
 #set document(title: "Propuesta para Proyecto de Grado -- Generación de Escenarios de Movilidad Urbana")
 #set text(lang: "es", size: 11pt)
@@ -55,6 +57,7 @@
 #set text(size: 10pt)
 #table(
   columns: (1fr), stroke: 0.8pt, inset: 7pt,
+  [#campo[CÓDIGO DEL PROYECTO] \ #align(center)[#codigo (Grupo 3)]],
   [#campo[TÍTULO] \ #align(center)[#titulo]],
   [#campo[OBJETIVO GENERAL] \ Diseñar un sistema para la automatización de escenarios de simulación de movilidad urbana en Bogotá, que facilite el
   análisis y la evaluación de políticas de movilidad a partir de datos de transporte.],
@@ -72,7 +75,7 @@
       [Pontificia Universidad Javeriana; Profesor Departamento de Sistemas],
     )],
 )
-#align(right)[Versión original: 6/2/2026 · Versión #version (actualización de alcance): #fecha]
+#align(right)[Código del proyecto: #codigo · Versión original: 6/2/2026 · Versión 2.0 (actualización de alcance): 13/10/2026 · Versión #version (cierre): #fecha]
 #set text(size: 11pt)
 
 #pagebreak()
@@ -116,6 +119,10 @@
     [1.7], [02/10/2026], [Actualización de los objetivos específicos, entregables y resultados esperados para reflejar las nuevas funcionalidades de análisis de intersecciones y simulación 3D.], [Samuel Campos, Erick Salazar],
 
     [2.0], [13/10/2026], [Actualización del alcance del proyecto y consolidación de la propuesta de grado. Inclusión de los cambios de alcance, nuevas funcionalidades, ajustes metodológicos y ampliación del marco teórico.], [Todos],
+
+    [2.1], [22/11/2026], [Actualización de cierre. Código del proyecto (ISIST-2610-03), estado final de los cambios de alcance (reporte 3D,
+    programa del semáforo propuesto, buses del GTFS y validación GEH implementados), sprints 9 y 10, fuentes del primer objetivo específico
+    ajustadas a las que se usaron y documento de control de calidad como entregable de pruebas.], [Todos],
   ),
   caption: [Historial de cambios del documento.],
 ) <tabHistorial>
@@ -216,7 +223,7 @@ cumple dos funciones principales:
 - permite al usuario parametrizar y lanzar nuevas simulaciones desde la misma interfaz, definiendo variables como el período horario, los modos de
   transporte activos y las estrategias o políticas de movilidad a simular, sin necesidad de editar archivos XML manualmente.
 
-*Ampliación (versión #version).* Para que el sistema apoye decisiones de control de tráfico, el módulo web incorpora dos herramientas:
+*Ampliación (versión #version_alcance).* Para que el sistema apoye decisiones de control de tráfico, el módulo web incorpora dos herramientas:
 - *Análisis de intersecciones:*
   - consulta de cada semáforo con sus volúmenes simulados por acceso;
   - edición de su programa o cálculo con el método de Webster, y comparación de programas;
@@ -268,8 +275,8 @@ mediante una interfaz web que permita visualizar los resultados de las simulacio
 
 === Objetivos Específicos
 
-- Analizar y comparar las fuentes de datos de movilidad disponibles para Bogotá (incluyendo los datos de la Encuesta de Movilidad 2023 y datasets
-  complementarios como los mapas de densidad poblacional y movilidad del programa Data for Good de Meta) con el fin de determinar cuáles fuentes, o
+- Analizar y comparar las fuentes de datos de movilidad disponibles para Bogotá (Encuesta de Movilidad 2023, aforos vehiculares de hora de máxima
+  demanda y datasets complementarios) con el fin de determinar cuáles fuentes, o
   combinación de ellas, permiten construir matrices origen–destino suficientemente representativas para alimentar los escenarios de simulación,
   reconociendo las limitaciones de periodicidad y cobertura de cada fuente como parte del alcance del sistema.
 - Desarrollar un módulo de procesamiento de datos que automatice la transformación de los registros de la encuesta en archivos de entrada válidos para
@@ -278,7 +285,7 @@ mediante una interfaz web que permita visualizar los resultados de las simulacio
   archivos producidos frente a los patrones de movilidad reportados en la encuesta y ejecutando el escenario resultante en SUMO.
 - Desarrollar un módulo web que permita visualizar de forma interactiva los resultados generados por SUMO y parametrizar nuevas simulaciones desde una
   interfaz gráfica, eliminando la necesidad de interacción directa con la línea de comandos o con archivos de configuración en formato XML.
-- _(Versión #version)_ Incorporar al módulo web el análisis de intersecciones y un simulador 3D comparativo que permita evaluar la instalación de un
+- _(Versión #version_alcance)_ Incorporar al módulo web el análisis de intersecciones y un simulador 3D comparativo que permita evaluar la instalación de un
   semáforo en un cruce sin señalizar. El simulador muestra lado a lado el escenario actual y el escenario con el semáforo propuesto, con indicadores de
   fluidez y de seguridad (TTC, DRAC, PET) para los actores observados.
 
@@ -302,13 +309,13 @@ procesamiento de datos orientado a la generación de insumos para simulación de
     decisiones de diseño arquitectónico. ISO/IEC/IEEE 42010 provee el marco conceptual para describir arquitecturas mediante vistas. C4 y UML para
     diagramar la arquitectura y UML para el diseño detallado, p. ej., Estructura (diagramas de clases), Comportamiento (diagramas de secuencia),
     Persistencia (diagramas Entidad-Relación).],
-    [Plan de pruebas], [ISO/IEC/IEEE 29119-1:2022], [El plan de pruebas se basará en el estándar ISO/IEC/IEEE 29119, ya que define apartados clave
+    [Documento de control de calidad (plan y reporte de pruebas)], [ISO/IEC/IEEE 29119-1:2022 \ ISO/IEC/IEEE 29119-3], [El documento de control de calidad reúne el plan y el reporte de pruebas y se basa en el estándar ISO/IEC/IEEE 29119, ya que define apartados clave
     como la planificación de pruebas, el diseño de casos, la ejecución, la gestión de defectos y la trazabilidad. Esto permite estructurar el proceso de
     pruebas, asegurar la cobertura de los requisitos y garantizar la calidad del sistema.],
     [Código fuente], [PEP 8 (código en Python) \ API TraCI (API de SUMO)], [El código fuente se desarrollará siguiendo la guía de estilo PEP 8 para
     Python, con el fin de asegurar legibilidad, consistencia y buenas prácticas en la escritura del código, facilitando su mantenimiento y
     colaboración. Asimismo, se utilizará la API TraCI de SUMO, la cual permite la interacción y control de simulaciones de tráfico en tiempo real,
-    integrando la lógica del sistema con el entorno de simulación; en la versión #version es la base del simulador 3D comparativo.],
+    integrando la lógica del sistema con el entorno de simulación; en la versión #version_alcance es la base del simulador 3D comparativo.],
     [Informe final], [IEEE 1063-2001 \ ISO/IEC/IEEE 26512:2018], [El informe final se elaborará considerando el estándar IEEE 1063-2001, el cual
     define la estructura y contenido de la documentación orientada al usuario, incluyendo apartados como descripción del sistema, instrucciones de uso
     y guías operativas, asegurando que el producto sea comprensible y fácil de utilizar. Por su parte, el estándar ISO/IEC/IEEE 26512:2018 establece
@@ -318,10 +325,11 @@ procesamiento de datos orientado a la generación de insumos para simulación de
   caption: [Entregables, estándares asociados y justificación.],
 ) <tabEntregables>
 
-== Cambios de alcance (versión #version)
+== Cambios de alcance (versiones 2.0 y 2.1)
 
-Esta versión de la propuesta conserva el problema, la justificación, el objetivo general y el marco metodológico aprobados. Se actualizan el alcance y
-las fases con lo construido hasta la fecha y lo que se planea desarrollar:
+La versión 2.0 de la propuesta conservó el problema, la justificación, el objetivo general y el marco metodológico aprobados, y amplió el alcance
+con la herramienta de semaforización y el simulador 3D. La versión 2.1 registra el estado final de cada cambio al cierre del proyecto, como se ve en
+la @tabCambios.
 
 #figure(
   table(
@@ -335,16 +343,25 @@ las fases con lo construido hasta la fecha y lo que se planea desarrollar:
     [Simulador 3D comparativo], [Pantalla partida sin / con semáforo propuesto, red 3D y edificios reales, actor en tercera persona, HUD de velocidad,
     acción, decisiones y riesgo (TTC, DRAC, PET), minimapa 2D y selección de vías.], [Implementado],
     [Reporte de la comparación 3D y programa editable del semáforo propuesto], [Exportar las métricas de ambos escenarios y ajustar el ciclo del
-    semáforo propuesto desde el visor.], [Por desarrollar],
-    [Transporte público real], [Buses, paradas y rutas desde GTFS (`gtfs2pt`); hoy los viajes en transporte público se representan como caminata.],
-    [Por desarrollar],
-    [Validación GEH / RMSE], [Comparación de los volúmenes simulados con los aforos HMD (Fase 4).], [Por desarrollar],
+    semáforo propuesto desde el visor, con Webster calculado con los volúmenes de la zona.], [Implementado (sprint 10)],
+    [Transporte público real], [Buses del SITP y de TransMilenio troncal desde el GTFS de SIMUR, ruteados por sus paradas con duarouter (gtfs2pt tardó
+    más de 3 horas sin terminar). Los viajes de la encuesta en transporte público usan esos buses.], [Implementado (sprint 10)],
+    [Validación GEH / RMSE], [Comparación de los volúmenes simulados con 33 puntos de aforo HMD, divididos en grupos de calibración y de control.],
+    [Implementado (sprint 10). El criterio de GEH menor que 5 en el 85 % de los puntos no se alcanza (2 de 33).],
+    [Usabilidad para perfiles no técnicos], [Tarjeta de cruces con el porqué en palabras, cierres con un clic, ficha del semáforo en palabras, tema claro
+    y oscuro y resumen del viaje en el 3D.], [Implementado (sprint 9)],
+    [Ventana de la tarde y demanda ampliada], [Simulación de 16:00 a 19:00, encuesta completa con viajes que entran y salen de Usaquén, tráfico de paso y
+    asignación iterativa como opciones de la demanda.], [Implementado (sprint 10)],
+    [Estudio de 30 semillas], [Comparación sin y con semáforo propuesto en los 59 cruces prioritarios y recomendados, con intervalos de confianza.],
+    [Implementado (sprint 10)],
+    [Matrices O/D en formato de SUMO], [Se reemplazaron por viajes entre zonas TAZ que duarouter rutea directamente.], [Reemplazado],
   ),
-  caption: [Cambios de alcance de la versión #version.],
+  caption: [Cambios de alcance y su estado al cierre.],
 ) <tabCambios>
 
 Fuera del alcance siguen la integración con APIs comerciales de tráfico, el despliegue institucional, la calibración para otras localidades y el uso de
-los programas semafóricos reales de la Secretaría Distrital de Movilidad: los programas se generan con netconvert a partir de OpenStreetMap.
+los tiempos de los programas semafóricos reales de la Secretaría Distrital de Movilidad, que no se publican. Los programas se generan con netconvert a
+partir de OpenStreetMap, y de los semáforos de la SDM solo se usan su ubicación y sus fases.
 
 // ───────────────────────────────────────────── 2. Análisis de impacto
 
@@ -364,7 +381,7 @@ A mediano plazo, el sistema puede convertirse en una herramienta de apoyo para l
 real. Intervenciones como el día sin carro, restricciones vehiculares por pico y placa, cierres temporales de vías por obras o eventos, o
 modificaciones en la sincronización de semáforos, podrían evaluarse de manera controlada y cuantitativa antes de aplicarse en la ciudad. Esto
 reduciría la incertidumbre en la toma de decisiones y podría contribuir a intervenciones más efectivas y mejor fundamentadas. El simulador 3D
-comparativo de la versión #version permite además comunicar el efecto de una intervención (por ejemplo, un semáforo nuevo) a públicos no técnicos de
+comparativo de la versión #version_alcance permite además comunicar el efecto de una intervención (por ejemplo, un semáforo nuevo) a públicos no técnicos de
 forma visual y concreta.
 
 A largo plazo, el proyecto tiene el potencial de fortalecer la capacidad institucional y académica de Bogotá en el uso de simulación de tráfico como
@@ -442,7 +459,7 @@ Se implementa un pipeline ETL (Extract, Transform, Load) adaptado a los requerim
 
 - Pipeline ETL documentado y reproducible, con scripts versionados en el repositorio del proyecto.
 - Matrices origen-destino por modo y período horario, en formato compatible con SUMO (OD2Trips).
-- Red vial de Bogotá procesada y lista para simulación, en formato `.net.xml` de SUMO (en la versión #version, red 3D de Usaquén con elevación).
+- Red vial de Bogotá procesada y lista para simulación, en formato `.net.xml` de SUMO (en la versión #version_alcance, red 3D de Usaquén con elevación).
 - Archivos de tipos de vehículos (passenger, bus, motorcycle, bicycle) calibrados con parámetros representativos del contexto bogotano.
 - Reporte de calidad del dato: métricas de completitud, consistencia y cobertura geográfica del modelo de demanda resultante.
 
@@ -469,7 +486,7 @@ incremento y una retrospectiva.
 La adaptación principal de Scrum consiste en reemplazar la definición de "done" convencional (software funcional) por una definición específica para
 modelos de simulación: un incremento se considera terminado cuando el componente simulado reproduce los aforos observados con un error GEH menor a 5 en
 al menos el 85% de los puntos de conteo, criterio estándar en la validación de modelos de tráfico. Para los incrementos de software del módulo web
-(Sprints 5 a 8), un incremento se considera terminado cuando sus pruebas automatizadas pasan y su flujo se demuestra en el visor.
+(Sprints 5 a 10), un incremento se considera terminado cuando sus pruebas automatizadas pasan y su flujo se demuestra en el visor.
 
 === Actividades
 
@@ -484,12 +501,12 @@ al menos el 85% de los puntos de conteo, criterio estándar en la validación de
 - *Sprint 5:* desarrollo del módulo web: implementación del backend con FastAPI para exponer los resultados de SUMO, desarrollo del frontend de
   visualización interactiva (métricas de congestión, tiempos de viaje, flujos por segmento de vía) e implementación del formulario de parametrización
   de nuevas simulaciones desde la interfaz gráfica.
-- *Sprint 6 _(v#version)_:* análisis de intersecciones y semaforización en el módulo web:
+- *Sprint 6 _(v#version_alcance)_:* análisis de intersecciones y semaforización en el módulo web:
   - ficha de cada semáforo con volúmenes por acceso;
   - edición de programas y método de Webster;
   - recorte de zonas y comparación de programas;
   - priorización de cruces sin semáforo.
-- *Sprint 7 _(v#version)_:* simulador 3D comparativo del semáforo propuesto:
+- *Sprint 7 _(v#version_alcance)_:* simulador 3D comparativo del semáforo propuesto:
   - dos simulaciones en lockstep controladas por TraCI;
   - escena 3D con la red y los edificios reales;
   - seguimiento en tercera persona de vehículos y peatones;
@@ -500,8 +517,13 @@ al menos el 85% de los puntos de conteo, criterio estándar en la validación de
   - priorización de cruces candidatos con las reglas y la evidencia del proyecto Semáforos de Barranquilla: siniestros de la Secretaría Distrital
     de Movilidad, colegios y centros de salud de OSM, tramos largos sin semáforo y volumen simulado, calibrados con los cruces que ya tienen
     semáforo.
-- *Sprint 8 _(v#version, por desarrollar)_:* reporte exportable de la comparación 3D, programa editable del semáforo propuesto y transporte público con
-  buses y paradas reales desde GTFS.
+- *Sprint 8 _(v#version_alcance)_:* estabilidad del simulador 3D. El reporte exportable de la comparación 3D, el programa editable del semáforo
+  propuesto y el transporte público con GTFS pasaron al sprint 10.
+- *Sprint 9 (v2.1):* usabilidad para perfiles no técnicos, con la tarjeta de cruces, los cierres con un clic, la ficha del semáforo en palabras, la
+  comparación de programas con SUMO, la entrada simultánea del actor en los dos lados del 3D y el resumen del viaje.
+- *Sprint 10 (v2.1):* cierre de pendientes, con la validación GEH contra 33 puntos de aforo, los buses del GTFS, la ventana de la tarde, la encuesta
+  completa, el tráfico de paso, la reanudación de corridas, el reporte CSV y PDF del 3D, el programa del semáforo propuesto, los semáforos reales de la
+  SDM y el estudio de 30 semillas.
 
 === Resultados esperados
 
@@ -513,7 +535,7 @@ al menos el 85% de los puntos de conteo, criterio estándar en la validación de
 - Código fuente del pipeline de simulación versionado y documentado.
 - Módulo web funcional: interfaz de visualización interactiva de métricas de SUMO y formulario de parametrización de simulaciones operativo, con prueba
   funcional aprobada por el director.
-- _(v#version)_ Simulador 3D comparativo operativo sobre los cruces prioritarios de Usaquén, con comparaciones documentadas (métricas de fluidez,
+- _(v#version_alcance)_ Simulador 3D comparativo operativo sobre los cruces prioritarios de Usaquén, con comparaciones documentadas (métricas de fluidez,
   conflictos y riesgo en ambos escenarios) que alimentan los resultados de control de tráfico.
 
 == Fase 4: Evaluación y análisis de resultados
@@ -535,7 +557,7 @@ Se adopta la etapa de evaluación de CRISP-DM, adaptada para modelos de simulaci
 - Verificación de coherencia de los archivos generados: matrices O/D, red vial y archivos de rutas frente a los patrones de movilidad de la encuesta.
 - Ejecución del escenario resultante en SUMO para confirmar que los insumos producidos por el pipeline son válidos y ejecutables.
 - Identificación de limitaciones del modelo: zonas con menor fidelidad, modos con menor cobertura de datos, supuestos simplificadores (en la versión
-  #version, entre ellos el tráfico de fondo sintético y los programas semafóricos generados por netconvert).
+  #version_alcance, entre ellos el tráfico de fondo sintético y los programas semafóricos generados por netconvert).
 - Documentación de conclusiones y recomendaciones para trabajo futuro.
 
 === Resultados esperados
@@ -666,7 +688,7 @@ Integrado de Transporte Público), transporte privado (automóviles y motociclet
 tiene causas estructurales: alta motorización, oferta vial limitada por la topografía y la urbanización histórica, concentración de empleos en pocas
 zonas, y alta dependencia del vehículo particular.
 
-=== Control semafórico y medidas sustitutas de seguridad _(v#version)_
+=== Control semafórico y medidas sustitutas de seguridad _(v#version_alcance)_
 
 Un semáforo asigna el derecho de paso entre los movimientos de una intersección mediante un programa de fases, cada una con su duración y el estado
 (verde, amarillo o rojo) de cada movimiento. El método de Webster @webster estima el ciclo que minimiza la demora media:

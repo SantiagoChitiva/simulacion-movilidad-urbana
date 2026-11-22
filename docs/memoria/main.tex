@@ -23,11 +23,10 @@
 
 \setstretch{1.15}
 
-\pagenumbering{roman}
 \pagestyle{fancy}
 
 \fancyhead[R]{Memoria Trabajo de Grado}
-\fancyhead[LO]{\ifthenelse{\isodd{\value{page}}}{\textbf{Pontificia Universidad Javeriana}}{\textbf{Ingeniería de Sistemas} \\ código}}
+\fancyhead[LO]{\ifthenelse{\isodd{\value{page}}}{\textbf{Pontificia Universidad Javeriana}}{\textbf{Ingeniería de Sistemas} \\ ISIST-2610-03}}
 \fancyfoot[R]{Página \thepage }
 \fancyfoot[C]{}
 \renewcommand{\footrulewidth}{1pt}
@@ -73,13 +72,10 @@
     \renewcommand{\listtablename}{LISTA DE TABLAS}
     \def\tablename{Tabla}
     
+    \pagenumbering{alph}
     \include{sections/covers/cover.tex}
-    
-    \newpage
-    \thispagestyle{empty}
-    \mbox{}
-    \newpage
-    
+
+    \pagenumbering{roman}
     \include{sections/covers/secondCover.tex}
     \include{sections/covers/thirdCover.tex}
     \include{sections/covers/resolucion.tex}
