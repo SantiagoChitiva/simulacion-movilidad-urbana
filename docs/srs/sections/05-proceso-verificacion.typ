@@ -344,8 +344,9 @@ alcances en las colas, que se reportan pero no deciden.
 El sistema se considerará verificado y listo para la entrega al director del proyecto cuando se cumplan simultáneamente los siguientes criterios:
 
 + Todos los casos de prueba de requerimientos funcionales (CP-001 a CP-016, CP-017b a CP-020b, CP-029 a CP-039, CP-043 y CP-044) aplicables a la versión
-  entregada han sido ejecutados y su resultado es *Pasa*. La suite automatizada de `simulation-service/test/` (121 pruebas en v2.2, todas aprobadas el
-  2026-10-28) pasa completa. El CI no la ejecuta todavía.
+  entregada han sido ejecutados y su resultado es *Pasa*. La suite automatizada de `simulation-service/test/` (192 pruebas, todas aprobadas el
+  2026-11-22) pasa completa, y el CI la ejecuta en cada cambio. El reporte de ejecución está en el documento de control de calidad
+  (`docs/testing/`).
 + Los casos de prueba de desempeño (CP-017 y CP-018) han sido ejecutados en la máquina de referencia definida en @tabHardwareDesc y su resultado es *Pasa*.
 + Al menos el 85% de los puntos de aforo HMD de Usaquén obtienen un GEH < 5 en la simulación de validación (criterio del requerimiento RF-014).
 + Los jobs de CI en GitHub Actions para Ubuntu y Windows están en estado *verde* (todos los steps exitosos) en el último commit de la rama principal.

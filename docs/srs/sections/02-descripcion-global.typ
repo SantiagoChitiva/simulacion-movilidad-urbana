@@ -175,7 +175,7 @@ No se requieren tarjetas gráficas dedicadas, aceleradores GPU, dispositivos de 
     [pytest],
     [9.1.1],
     [pypi.org],
-    [Ejecución de las pruebas de `simulation-service/test/` (121 pruebas). El CI solo ejecuta las pruebas de la raíz, que son un marcador de posición.],
+    [Ejecución de las pruebas de `simulation-service/test/` (192 pruebas al cierre). El CI las ejecuta en un trabajo propio con Python 3.12 sobre Ubuntu.],
 
     [GitHub Actions],
     [--],

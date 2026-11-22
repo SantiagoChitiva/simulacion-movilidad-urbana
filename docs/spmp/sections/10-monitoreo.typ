@@ -52,9 +52,9 @@ cuantitativas y validaciones técnicas específicas para proyectos de simulació
   retrasos tempranos y sobrecarga de trabajo. Frecuencia: seguimiento diario. Responsable: Scrum Master.
 - *Cobertura de pruebas unitarias.* Mide el porcentaje de código cubierto por pruebas automatizadas. Unidad: porcentaje de líneas cubiertas. Objetivo:
   garantizar calidad y estabilidad del pipeline. Frecuencia: automática por commit mediante CI. Responsable: Responsable de pruebas.
-- *Pruebas automatizadas (v2.0).* Número de pruebas de `simulation-service/test/` y cuántas pasan; en la versión 2.0 son 99 y pasan todas. Objetivo:
-  detectar regresiones en el pipeline, la API y el simulador. Frecuencia: por commit. Responsable: Responsable de pruebas. Estas pruebas aún no corren
-  en el CI (ver R10).
+- *Pruebas automatizadas (v2.0).* Número de pruebas de `simulation-service/test/` y cuántas pasan; en la versión 2.0 eran 99 y al cierre son 192, y pasan todas. Objetivo:
+  detectar regresiones en el pipeline, la API y el simulador. Frecuencia: por commit. Responsable: Responsable de pruebas. Desde el sprint 10 corren en el CI
+  en un trabajo propio sobre Ubuntu (ver R10).
 - *Validación GEH.* Mide el porcentaje de puntos de aforo cuya simulación alcanza valores GEH menores a 5. Unidad: porcentaje de puntos válidos.
   Objetivo: validar la calibración del modelo de tráfico. Frecuencia: al cierre de cada sprint de simulación. Responsable: Responsable de simulación y
   Responsable de pruebas.
